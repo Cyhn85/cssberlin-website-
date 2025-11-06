@@ -247,6 +247,7 @@ img {
     display: flex;
     align-items: center;
     gap: var(--spacing-md);
+    margin-left: auto;
 }
 
 .nav-link-special {
