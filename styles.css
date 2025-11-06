@@ -130,8 +130,8 @@ img {
     max-width: 1400px;
     margin: 0 auto;
     padding: var(--spacing-lg) var(--spacing-xl);
-    display: grid;
-    grid-template-columns: 300px 1fr auto;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
     gap: var(--spacing-xl);
 }
@@ -1239,13 +1239,11 @@ img {
 /* Large Tablets & Small Desktops */
 @media (max-width: 1200px) {
     .header-container {
-        grid-template-columns: 280px 1fr auto;
         gap: var(--spacing-lg);
     }
 
-    .logo-css,
-    .logo-berlin {
-        font-size: 32px;
+    .logo-characters span {
+        font-size: 40px;
     }
 
     .products-grid {
@@ -1256,7 +1254,7 @@ img {
 /* Tablets */
 @media (max-width: 1024px) {
     .header-container {
-        grid-template-columns: 1fr;
+        flex-direction: column;
         gap: var(--spacing-md);
     }
 
