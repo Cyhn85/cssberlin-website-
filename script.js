@@ -332,6 +332,18 @@ function initProducts() {
 // ATTACH EVENT LISTENERS TO PRODUCTS
 // ============================================
 function attachProductEventListeners() {
+    // Product card click - go to product detail
+    document.querySelectorAll('.product-card').forEach(card => {
+        card.addEventListener('click', function(e) {
+            // Don't navigate if clicking on buttons
+            if (e.target.closest('.wishlist-btn, .buy-btn, .negotiate-btn')) {
+                return;
+            }
+            window.location.href = 'product.html';
+        });
+        card.style.cursor = 'pointer';
+    });
+
     // Wishlist buttons
     document.querySelectorAll('.wishlist-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
