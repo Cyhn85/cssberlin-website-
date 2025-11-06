@@ -139,55 +139,63 @@ img {
 /* Logo Section - Prominent with Slogan */
 .logo-section {
     display: flex;
-    flex-direction: column;
-    gap: var(--spacing-xs);
+    align-items: center;
+    gap: var(--spacing-md);
 }
 
-.logo {
+/* Free-floating Characters */
+.logo-characters {
     display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.logo-css {
-    font-size: 36px;
-    font-weight: var(--font-weight-black);
-    color: var(--primary-green);
-    letter-spacing: 2px;
-}
-
-.logo-berlin {
-    font-size: 18px;
-    font-weight: var(--font-weight-semibold);
-    color: var(--text-secondary);
-    letter-spacing: 3px;
-    padding-left: 2px;
-}
-
-.slogan {
-    font-size: 16px;
-    color: var(--text-primary);
-    font-weight: var(--font-weight-medium);
-    letter-spacing: 0.5px;
-    margin-top: var(--spacing-xs);
-}
-
-.slogan-highlight {
-    color: var(--primary-green);
-    font-weight: var(--font-weight-black);
-    font-size: 20px;
+    gap: 8px;
     position: relative;
-    display: inline-block;
 }
 
-/* Tree branch effect for C, S, S letters */
-.slogan-highlight::before {
-    content: '🌿';
-    position: absolute;
-    top: -8px;
-    left: 50%;
-    transform: translateX(-50%) scale(0.7);
-    opacity: 0.8;
+.logo-characters span {
+    font-size: 48px;
+    font-weight: var(--font-weight-black);
+    display: inline-block;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.char-c {
+    color: #2D5016;
+    transform: rotate(-5deg);
+    animation: float-c 3s ease-in-out infinite;
+}
+
+.char-s {
+    color: #4A7C2C;
+    transform: rotate(3deg) translateY(-5px);
+    animation: float-s 3s ease-in-out infinite 0.5s;
+}
+
+.char-s2 {
+    color: #6BA83E;
+    transform: rotate(-3deg) translateY(3px);
+    animation: float-s2 3s ease-in-out infinite 1s;
+}
+
+@keyframes float-c {
+    0%, 100% { transform: rotate(-5deg) translateY(0); }
+    50% { transform: rotate(-8deg) translateY(-8px); }
+}
+
+@keyframes float-s {
+    0%, 100% { transform: rotate(3deg) translateY(-5px); }
+    50% { transform: rotate(5deg) translateY(-12px); }
+}
+
+@keyframes float-s2 {
+    0%, 100% { transform: rotate(-3deg) translateY(3px); }
+    50% { transform: rotate(-6deg) translateY(-5px); }
+}
+
+.slogan-text {
+    font-size: 18px;
+    color: var(--text-primary);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 1px;
 }
 
 /* Main Navigation - Alle | Damen | Herren | Kinder */
@@ -362,12 +370,13 @@ img {
     align-items: center;
     justify-content: center;
     gap: var(--spacing-md);
-    font-size: 15px;
-    font-weight: var(--font-weight-medium);
-    padding: var(--spacing-md) var(--spacing-2xl);
+    font-size: 18px;
+    font-weight: var(--font-weight-semibold);
+    padding: var(--spacing-lg) var(--spacing-2xl);
     cursor: pointer;
     transition: all var(--transition-base);
     white-space: nowrap;
+    min-height: 60px;
 }
 
 .news-item:hover {
@@ -1037,12 +1046,13 @@ img {
     align-items: center;
     justify-content: center;
     gap: var(--spacing-md);
-    font-size: 15px;
-    font-weight: var(--font-weight-medium);
+    font-size: 18px;
+    font-weight: var(--font-weight-semibold);
     padding: 0 var(--spacing-2xl);
     cursor: pointer;
     transition: all var(--transition-base);
     white-space: nowrap;
+    min-height: 60px;
 }
 
 .footer-news-item:hover {
