@@ -457,14 +457,8 @@ function initWishlistButton() {
     if (!wishlistBtn) return;
 
     wishlistBtn.addEventListener('click', function() {
-        if (wishlist.length === 0) {
-            showNotification('Deine Wunschliste ist leer', 'info');
-            return;
-        }
-
-        showNotification(`Du hast ${wishlist.length} Artikel in deiner Wunschliste`, 'info');
-        // Could open wishlist modal/page here
-        console.log('Wunschliste:', wishlist);
+        // Navigate to wishlist page
+        window.location.href = 'wunschliste.html';
     });
 }
 
