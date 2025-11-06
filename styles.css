@@ -332,7 +332,7 @@ img {
    NEWS BANNER BELOW HEADER
    ============================================ */
 .news-banner {
-    background: var(--primary-green);
+    background: linear-gradient(90deg, #FF8C42 0%, #2D5016 100%);
     color: var(--text-white);
     overflow: hidden;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -1006,7 +1006,7 @@ img {
 
 /* Footer News Banner - Sliding Campaign News */
 .footer-news-banner {
-    background: var(--primary-green);
+    background: linear-gradient(90deg, #FF8C42 0%, #2D5016 100%);
     color: var(--text-white);
     overflow: hidden;
     padding: var(--spacing-md) 0;
