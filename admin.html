@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - CSS Berlin</title>
+    <link rel="stylesheet" href="admin-styles.css">
+</head>
+<body>
+    <div class="admin-wrapper">
+        <!-- Sidebar Navigation -->
+        <aside class="admin-sidebar">
+            <div class="admin-logo">
+                <div class="logo">
+                    <span class="logo-css">CSS</span>
+                    <span class="logo-berlin">Berlin</span>
+                </div>
+                <p class="admin-subtitle">Admin Panel</p>
+            </div>
+
+            <nav class="admin-nav">
+                <a href="#dashboard" class="nav-item active" data-section="dashboard">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="#products" class="nav-item" data-section="products">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                    </svg>
+                    <span>Produkte</span>
+                </a>
+
+                <a href="#orders" class="nav-item" data-section="orders">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span>Bestellungen</span>
+                </a>
+
+                <a href="#users" class="nav-item" data-section="users">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <span>Benutzer</span>
+                </a>
+
+                <a href="#kozmik-oda" class="nav-item kozmik-special" data-section="kozmik-oda">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="4 17 10 11 4 5"></polyline>
+                        <line x1="12" y1="19" x2="20" y2="19"></line>
+                    </svg>
+                    <span>Kozmik Oda</span>
+                </a>
+
+                <a href="#settings" class="nav-item" data-section="settings">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M12 1v6m0 6v6M5.64 5.64l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M5.64 18.36l4.24-4.24m4.24-4.24l4.24-4.24"></path>
+                    </svg>
+                    <span>Einstellungen</span>
+                </a>
+            </nav>
+
+            <div class="admin-logout">
+                <button class="logout-btn" onclick="logout()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    Abmelden
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="admin-main">
+            <!-- Header -->
+            <header class="admin-header">
+                <h1 id="pageTitle">Dashboard</h1>
+                <div class="admin-user-info">
+                    <div class="user-avatar">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    <div class="user-details">
+                        <span class="user-name" id="adminName">Admin</span>
+                        <span class="user-role">Super Admin</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Section -->
+            <section id="section-dashboard" class="content-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <h3>1,234</h3>
+                            <p>Aktive Produkte</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="20" cy="21" r="1"></circle>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <h3>456</h3>
+                            <p>Bestellungen</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <h3>8,921</h3>
+                            <p>Benutzer</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                            </svg>
+                        </div>
+                        <div class="stat-info">
+                            <h3>248.5t</h3>
+                            <p>CO₂ Gespart</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-charts">
+                    <div class="chart-card">
+                        <h3>Umsatzentwicklung</h3>
+                        <div class="chart-placeholder">
+                            <p>Chart wird geladen...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Products Section -->
+            <section id="section-products" class="content-section">
+                <div class="section-header">
+                    <h2>Produktverwaltung</h2>
+                    <button class="btn-primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Neues Produkt
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Produkt</th>
+                                <th>Kategorie</th>
+                                <th>Preis</th>
+                                <th>Status</th>
+                                <th>Aktionen</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#1001</td>
+                                <td>Zara Elegante Blazer Jacke</td>
+                                <td>Damen</td>
+                                <td>45.00€</td>
+                                <td><span class="badge badge-success">Aktiv</span></td>
+                                <td>
+                                    <button class="action-btn">Bearbeiten</button>
+                                    <button class="action-btn danger">Löschen</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Orders Section -->
+            <section id="section-orders" class="content-section">
+                <h2>Bestellungsverwaltung</h2>
+                <p>Bestellungen werden hier angezeigt...</p>
+            </section>
+
+            <!-- Users Section -->
+            <section id="section-users" class="content-section">
+                <h2>Benutzerverwaltung</h2>
+                <p>Benutzer werden hier verwaltet...</p>
+            </section>
+
+            <!-- KOZMIK ODA - Terminal Section -->
+            <section id="section-kozmik-oda" class="content-section">
+                <div class="kozmik-header">
+                    <h2>🌌 Kozmik Oda - Cosmic Terminal</h2>
+                    <p class="kozmik-subtitle">Direct access to CSS Berlin system</p>
+                </div>
+
+                <div class="terminal-container">
+                    <div class="terminal-header">
+                        <div class="terminal-buttons">
+                            <span class="terminal-btn close"></span>
+                            <span class="terminal-btn minimize"></span>
+                            <span class="terminal-btn maximize"></span>
+                        </div>
+                        <div class="terminal-title">css-berlin@kozmik-oda ~ /admin</div>
+                        <div class="terminal-actions">
+                            <button onclick="clearTerminal()" title="Clear">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="1 4 1 10 7 10"></polyline>
+                                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="terminal-body" id="terminal">
+                        <div class="terminal-welcome">
+                            <pre>
+ ██████╗███████╗███████╗    ██████╗ ███████╗██████╗ ██╗     ██╗███╗   ██╗
+██╔════╝██╔════╝██╔════╝    ██╔══██╗██╔════╝██╔══██╗██║     ██║████╗  ██║
+██║     ███████╗███████╗    ██████╔╝█████╗  ██████╔╝██║     ██║██╔██╗ ██║
+██║     ╚════██║╚════██║    ██╔══██╗██╔══╝  ██╔══██╗██║     ██║██║╚██╗██║
+╚██████╗███████║███████║    ██████╔╝███████╗██║  ██║███████╗██║██║ ╚████║
+ ╚═════╝╚══════╝╚══════╝    ╚═════╝ ╚══════╝╚═╝  ╚═╝╚══════╝╚═╝╚═╝  ╚═══╝
+                            </pre>
+                            <p class="terminal-info">Kozmik Oda v1.0.0 - Climate Smart Solutions</p>
+                            <p class="terminal-info">Type 'help' for available commands</p>
+                            <p class="terminal-info">---</p>
+                        </div>
+                        <div id="terminalOutput"></div>
+                        <div class="terminal-input-line">
+                            <span class="terminal-prompt">admin@css-berlin:~$</span>
+                            <input type="text" id="terminalInput" class="terminal-input" autofocus autocomplete="off" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="terminal-help">
+                    <h3>Verfügbare Befehle:</h3>
+                    <ul>
+                        <li><code>help</code> - Liste aller Befehle anzeigen</li>
+                        <li><code>status</code> - Systemstatus anzeigen</li>
+                        <li><code>products</code> - Produktstatistiken anzeigen</li>
+                        <li><code>users</code> - Benutzerstatistiken anzeigen</li>
+                        <li><code>analytics</code> - Website-Analyse anzeigen</li>
+                        <li><code>backup</code> - Datenbank-Backup erstellen</li>
+                        <li><code>clear</code> - Terminal leeren</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="section-settings" class="content-section">
+                <h2>Einstellungen</h2>
+                <div class="settings-grid">
+                    <div class="setting-card">
+                        <h3>Allgemein</h3>
+                        <form class="setting-form">
+                            <div class="form-group">
+                                <label>Website-Name</label>
+                                <input type="text" value="CSS Berlin - Climate Smart Solutions" />
+                            </div>
+                            <div class="form-group">
+                                <label>Admin E-Mail</label>
+                                <input type="email" id="adminEmail" value="admin@cssberlin.com" />
+                            </div>
+                            <button type="submit" class="btn-primary">Speichern</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Check login before loading admin panel
+        window.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('adminToken') || sessionStorage.getItem('adminToken');
+            if (!token) {
+                // Not logged in, redirect to login page
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+    <script src="admin-script.js"></script>
+</body>
+</html>

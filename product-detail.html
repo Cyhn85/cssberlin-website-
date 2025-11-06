@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elegante Blazer Jacke - CSS Berlin</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Product Detail Specific Styles */
+        .breadcrumb-container {
+            background: #FAFAFA;
+            padding: 16px 0;
+        }
+
+        .breadcrumb {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #757575;
+        }
+
+        .breadcrumb a {
+            color: #2D5016;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb a:hover {
+            color: #4A7C2C;
+            text-decoration: underline;
+        }
+
+        .product-detail-section {
+            max-width: 1400px;
+            margin: 48px auto;
+            padding: 0 32px;
+        }
+
+        .product-detail-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: start;
+        }
+
+        /* LEFT BLOCK: Image Gallery */
+        .product-gallery {
+            position: sticky;
+            top: 100px;
+        }
+
+        .main-image-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 3/4;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #F5F5F5;
+            margin-bottom: 16px;
+        }
+
+        .main-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .wishlist-btn-large {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .wishlist-btn-large:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+
+        .wishlist-btn-large svg {
+            stroke: #F44336;
+            transition: all 0.3s ease;
+        }
+
+        .wishlist-btn-large.active svg {
+            fill: #F44336;
+        }
+
+        .carbon-badge-large {
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-radius: 100px;
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+
+        .carbon-badge-large.champion {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.95) 0%, rgba(255, 193, 7, 0.95) 100%);
+        }
+
+        .thumbnail-gallery {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .thumbnail {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 12px;
+            object-fit: cover;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .thumbnail:hover {
+            border-color: #2D5016;
+        }
+
+        .thumbnail.active {
+            border-color: #2D5016;
+        }
+
+        /* SELLER INFO BELOW IMAGES */
+        .seller-info-card {
+            margin-top: 24px;
+            padding: 24px;
+            background: #FAFAFA;
+            border-radius: 16px;
+            border: 1px solid #E0E0E0;
+        }
+
+        .seller-info-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .seller-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2D5016 0%, #4A7C2C 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .seller-info-text {
+            flex: 1;
+        }
+
+        .seller-name-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .seller-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #212121;
+        }
+
+        .seller-badge {
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .champion-seller {
+            background: linear-gradient(135deg, #FFD700 0%, #FFC107 100%);
+        }
+
+        .seller-stats {
+            font-size: 14px;
+            color: #757575;
+            display: flex;
+            gap: 16px;
+        }
+
+        .seller-stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .seller-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .btn-seller {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-seller-primary {
+            background: #2D5016;
+            color: white;
+        }
+
+        .btn-seller-primary:hover {
+            background: #4A7C2C;
+        }
+
+        .btn-seller-secondary {
+            background: white;
+            color: #2D5016;
+            border: 2px solid #2D5016;
+        }
+
+        .btn-seller-secondary:hover {
+            background: #E8F5E9;
+        }
+
+        /* RIGHT BLOCK: Product Details */
+        .product-details {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .product-header {
+            padding-bottom: 24px;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        .product-brand-large {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #757575;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .product-title-large {
+            font-size: 32px;
+            font-weight: 900;
+            color: #212121;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stars {
+            color: #FFD700;
+            font-size: 18px;
+        }
+
+        .rating-count {
+            font-size: 14px;
+            color: #757575;
+        }
+
+        /* Price Section */
+        .price-section {
+            background: #FAFAFA;
+            padding: 24px;
+            border-radius: 16px;
+        }
+
+        .price-main {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .current-price-large {
+            font-size: 40px;
+            font-weight: 900;
+            color: #2D5016;
+        }
+
+        .original-price {
+            font-size: 20px;
+            color: #9E9E9E;
+            text-decoration: line-through;
+        }
+
+        .discount-badge {
+            padding: 6px 12px;
+            background: #F44336;
+            color: white;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .new-price-comparison {
+            font-size: 14px;
+            color: #757575;
+        }
+
+        .retailer-link {
+            color: #2D5016;
+            text-decoration: underline;
+        }
+
+        .retailer-link:hover {
+            color: #4A7C2C;
+        }
+
+        .divider {
+            margin: 0 8px;
+            color: #E0E0E0;
+        }
+
+        /* Carbon Impact */
+        .carbon-impact-section {
+            background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+            padding: 24px;
+            border-radius: 16px;
+        }
+
+        .carbon-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .carbon-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2D5016;
+        }
+
+        .carbon-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .carbon-stat-item {
+            text-align: center;
+        }
+
+        .carbon-number {
+            display: block;
+            font-size: 32px;
+            font-weight: 900;
+            color: #2D5016;
+        }
+
+        .carbon-label {
+            font-size: 14px;
+            color: #757575;
+        }
+
+        .carbon-confidence {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            color: #757575;
+        }
+
+        .confidence-bar {
+            flex: 1;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 100px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: #2D5016;
+            border-radius: 100px;
+        }
+
+        /* Product Specs */
+        .product-specs {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .spec-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        .spec-row:last-child {
+            border-bottom: none;
+        }
+
+        .spec-label {
+            font-weight: 600;
+            color: #757575;
+            font-size: 14px;
+        }
+
+        .spec-value {
+            font-weight: 500;
+            color: #212121;
+            font-size: 15px;
+        }
+
+        .size-options {
+            display: flex;
+            gap: 8px;
+        }
+
+        .size-btn {
+            width: 48px;
+            height: 48px;
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            background: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .size-btn:hover {
+            border-color: #2D5016;
+        }
+
+        .size-btn.active {
+            border-color: #2D5016;
+            background: #2D5016;
+            color: white;
+        }
+
+        .size-btn.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .condition-very-good {
+            color: #4CAF50;
+            font-weight: 600;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .btn-large {
+            padding: 18px 24px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #2D5016;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #4A7C2C;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(45, 80, 22, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #2D5016;
+            border: 2px solid #2D5016;
+        }
+
+        .btn-secondary:hover {
+            background: #E8F5E9;
+            transform: translateY(-2px);
+        }
+
+        /* Info Boxes */
+        .negotiation-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px;
+            background: #FFF3E0;
+            border-radius: 12px;
+            font-size: 14px;
+            color: #757575;
+        }
+
+        .negotiation-info svg {
+            flex-shrink: 0;
+            stroke: #FF9800;
+        }
+
+        .shipping-info-box {
+            background: #FAFAFA;
+            padding: 24px;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .info-row {
+            display: flex;
+            gap: 16px;
+        }
+
+        .info-row svg {
+            flex-shrink: 0;
+            stroke: #2D5016;
+        }
+
+        .info-title {
+            font-weight: 700;
+            color: #212121;
+            margin-bottom: 4px;
+        }
+
+        .info-text {
+            font-size: 14px;
+            color: #757575;
+        }
+
+        /* Product Description */
+        .product-description {
+            padding: 24px;
+            background: #FAFAFA;
+            border-radius: 16px;
+        }
+
+        .product-description h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #212121;
+            margin-bottom: 16px;
+        }
+
+        .product-description p {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #757575;
+            margin-bottom: 16px;
+        }
+
+        .product-description ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .product-description ul li {
+            font-size: 15px;
+            color: #757575;
+            padding-left: 24px;
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .product-description ul li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #2D5016;
+            font-weight: 700;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .product-detail-container {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .product-gallery {
+                position: relative;
+                top: 0;
+            }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .product-title-large {
+                font-size: 24px;
+            }
+
+            .current-price-large {
+                font-size: 32px;
+            }
+
+            .thumbnail-gallery {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header V3 -->
+    <header class="header">
+        <div class="header-container">
+            <!-- Logo + Slogan -->
+            <div class="logo-section">
+                <div class="logo">
+                    <span class="logo-css">CSS</span>
+                    <span class="logo-berlin">Berlin</span>
+                </div>
+                <p class="slogan">Climate Smart Solutions</p>
+            </div>
+
+            <!-- Main Navigation -->
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link">Alle</a>
+                <a href="#" class="nav-link">Damen</a>
+                <a href="#" class="nav-link">Herren</a>
+                <a href="#" class="nav-link">Kinder</a>
+            </nav>
+
+            <!-- Right Actions -->
+            <div class="header-actions">
+                <a href="#" class="nav-link-special">Sale</a>
+                <a href="#" class="nav-link-special neu-link">Neu</a>
+
+                <button class="icon-btn" title="Benachrichtigungen">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                    <span class="notification-badge">3</span>
+                </button>
+
+                <button class="icon-btn" title="Verhandlungen">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        <path d="M8 10h.01M12 10h.01M16 10h.01"></path>
+                    </svg>
+                    <span class="negotiation-count">2</span>
+                </button>
+
+                <button class="icon-btn" title="Wunschliste">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                </button>
+
+                <button class="icon-btn" title="Warenkorb">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                </button>
+
+                <button class="user-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span>Anmelden</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-container">
+            <div class="search-bar-wrapper">
+                <button class="category-filter-btn" id="categoryFilterBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <span>Kategorien</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="chevron">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="search-bar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                    <input type="text" placeholder="Suche nach nachhaltiger Mode, Marken, Artikeln..." id="searchInput">
+                    <button class="search-btn">Suchen</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-container">
+        <div class="breadcrumb">
+            <a href="index.html">Home</a>
+            <span>/</span>
+            <a href="#">Damen</a>
+            <span>/</span>
+            <a href="#">Jacken & Mäntel</a>
+            <span>/</span>
+            <span>Elegante Blazer Jacke</span>
+        </div>
+    </div>
+
+    <!-- Product Detail Section -->
+    <section class="product-detail-section">
+        <div class="product-detail-container">
+            <!-- LEFT BLOCK: Image Gallery + Seller Info -->
+            <div class="product-gallery">
+                <!-- Main Image -->
+                <div class="main-image-container">
+                    <img id="mainImage" src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&h=750&fit=crop" alt="Elegante Blazer Jacke">
+                    <button class="wishlist-btn-large">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </button>
+                    <div class="carbon-badge-large champion">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                        </svg>
+                        <span>-18.5kg CO₂</span>
+                    </div>
+                </div>
+
+                <!-- Thumbnail Gallery -->
+                <div class="thumbnail-gallery">
+                    <img class="thumbnail active" src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=150&h=150&fit=crop" alt="Thumbnail 1" data-full="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&h=750&fit=crop">
+                    <img class="thumbnail" src="https://images.unsplash.com/photo-1594633313593-bab3825d0caf?w=150&h=150&fit=crop" alt="Thumbnail 2" data-full="https://images.unsplash.com/photo-1594633313593-bab3825d0caf?w=600&h=750&fit=crop">
+                    <img class="thumbnail" src="https://images.unsplash.com/photo-1591369822096-ffd140ec948f?w=150&h=150&fit=crop" alt="Thumbnail 3" data-full="https://images.unsplash.com/photo-1591369822096-ffd140ec948f?w=600&h=750&fit=crop">
+                    <img class="thumbnail" src="https://images.unsplash.com/photo-1613221931828-bc2e3f7c0e9c?w=150&h=150&fit=crop" alt="Thumbnail 4" data-full="https://images.unsplash.com/photo-1613221931828-bc2e3f7c0e9c?w=600&h=750&fit=crop">
+                </div>
+
+                <!-- SELLER INFO CARD - BELOW IMAGES -->
+                <div class="seller-info-card">
+                    <div class="seller-info-header">
+                        <div class="seller-avatar">AM</div>
+                        <div class="seller-info-text">
+                            <div class="seller-name-row">
+                                <span class="seller-name">Anna M.</span>
+                                <span class="seller-badge champion-seller">Champion</span>
+                            </div>
+                            <div class="seller-stats">
+                                <div class="seller-stat">
+                                    <span>⭐ 4.9</span>
+                                </div>
+                                <div class="seller-stat">
+                                    <span>📦 147 Verkäufe</span>
+                                </div>
+                                <div class="seller-stat">
+                                    <span>🌱 -2.8t CO₂</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="seller-actions">
+                        <button class="btn-seller btn-seller-primary">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                            Nachricht senden
+                        </button>
+                        <button class="btn-seller btn-seller-secondary">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            Profil ansehen
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT BLOCK: Product Details -->
+            <div class="product-details">
+                <!-- Product Header -->
+                <div class="product-header">
+                    <div class="product-brand-large">ZARA</div>
+                    <h1 class="product-title-large">Elegante Blazer Jacke</h1>
+                    <div class="product-rating">
+                        <div class="stars">★★★★★</div>
+                        <span class="rating-count">(47 Bewertungen)</span>
+                    </div>
+                </div>
+
+                <!-- Price Section -->
+                <div class="price-section">
+                    <div class="price-main">
+                        <span class="current-price-large">45.00€</span>
+                        <span class="original-price">89.95€</span>
+                        <span class="discount-badge">-50%</span>
+                    </div>
+                    <div class="new-price-comparison">
+                        <span>Neupreis bei: </span>
+                        <a href="#" class="retailer-link">Zara.com (89.95€)</a>
+                        <span class="divider">|</span>
+                        <a href="#" class="retailer-link">Zalando (94.95€)</a>
+                    </div>
+                </div>
+
+                <!-- Carbon Impact Section -->
+                <div class="carbon-impact-section">
+                    <div class="carbon-header">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="color: #FFD700;">
+                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                        </svg>
+                        <span class="carbon-title">Dein CO₂ Impact</span>
+                    </div>
+                    <div class="carbon-stats">
+                        <div class="carbon-stat-item">
+                            <span class="carbon-number">18.5 kg</span>
+                            <span class="carbon-label">CO₂ gespart</span>
+                        </div>
+                        <div class="carbon-stat-item">
+                            <span class="carbon-number">2.3</span>
+                            <span class="carbon-label">Bäume gepflanzt</span>
+                        </div>
+                    </div>
+                    <div class="carbon-confidence">
+                        <span class="confidence-label">Datengenauigkeit:</span>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" style="width: 85%"></div>
+                        </div>
+                        <span class="confidence-text">85%</span>
+                    </div>
+                </div>
+
+                <!-- Product Specifications -->
+                <div class="product-specs">
+                    <div class="spec-row">
+                        <span class="spec-label">Größe:</span>
+                        <div class="size-options">
+                            <button class="size-btn">S</button>
+                            <button class="size-btn active">M</button>
+                            <button class="size-btn">L</button>
+                            <button class="size-btn disabled">XL</button>
+                        </div>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Zustand:</span>
+                        <span class="spec-value condition-very-good">Sehr gut</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Material:</span>
+                        <span class="spec-value">65% Polyester, 35% Baumwolle</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">Farbe:</span>
+                        <span class="spec-value">Beige</span>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="btn-primary btn-large">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                        Kaufen
+                    </button>
+                    <button class="btn-secondary btn-large">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            <path d="M8 10h.01M12 10h.01M16 10h.01"></path>
+                        </svg>
+                        Verhandeln
+                    </button>
+                </div>
+
+                <!-- Negotiation Info -->
+                <div class="negotiation-info">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                    <span>Du kannst bis zu 15% Rabatt verhandeln (5 kostenlose Verhandlungen pro Tag)</span>
+                </div>
+
+                <!-- Shipping Info -->
+                <div class="shipping-info-box">
+                    <div class="info-row">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="1" y="3" width="15" height="13"></rect>
+                            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                            <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                            <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                        </svg>
+                        <div>
+                            <div class="info-title">Versand</div>
+                            <div class="info-text">Versandkosten werden vom Käufer getragen (ca. 4.99€)</div>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 11l3 3L22 4"></path>
+                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                        </svg>
+                        <div>
+                            <div class="info-title">Käuferschutz</div>
+                            <div class="info-text">14 Tage Rückgaberecht</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Description -->
+                <div class="product-description">
+                    <h3>Produktbeschreibung</h3>
+                    <p>Eleganter Blazer von Zara in sehr gutem Zustand. Perfekt für Business-Anlässe oder elegante Freizeitoutfits. Der Blazer wurde nur wenige Male getragen und wurde professionell gereinigt.</p>
+                    <ul>
+                        <li>Klassischer Schnitt mit modernem Twist</li>
+                        <li>Zwei Knöpfe vorne</li>
+                        <li>Zwei Taschen mit Klappen</li>
+                        <li>Leicht tailliert</li>
+                        <li>Gefüttert</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+    <script>
+        // Thumbnail gallery functionality
+        document.querySelectorAll('.thumbnail').forEach(thumb => {
+            thumb.addEventListener('click', function() {
+                document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById('mainImage').src = this.dataset.full;
+            });
+        });
+
+        // Wishlist toggle
+        document.querySelector('.wishlist-btn-large').addEventListener('click', function() {
+            this.classList.toggle('active');
+        });
+
+        // Size selection
+        document.querySelectorAll('.size-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (!this.classList.contains('disabled')) {
+                    document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
