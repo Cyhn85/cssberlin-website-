@@ -397,6 +397,10 @@ function updateAuthUI() {
     const registerBtn = document.querySelector('.register-btn');
     const divider = document.querySelector('.header-divider');
 
+    // Get icons that should be hidden for guests
+    const messagesBtn = document.querySelector('button[title="Verhandlungen"]');
+    const notificationsBtn = document.querySelector('button[title="Benachrichtigungen"]');
+
     if (currentUser && userBtn) {
         // User is logged in
         userBtn.innerHTML = `
@@ -417,6 +421,14 @@ function updateAuthUI() {
         // Hide register button and divider
         if (registerBtn) registerBtn.style.display = 'none';
         if (divider) divider.style.display = 'none';
+
+        // Show messages and notifications icons
+        if (messagesBtn) messagesBtn.style.display = 'flex';
+        if (notificationsBtn) notificationsBtn.style.display = 'flex';
+    } else {
+        // Guest user - hide messages and notifications
+        if (messagesBtn) messagesBtn.style.display = 'none';
+        if (notificationsBtn) notificationsBtn.style.display = 'none';
     }
 
     // Update wishlist count
@@ -518,6 +530,89 @@ function extractProductData(productCard) {
     };
 }
 
+// ============================================
+// NEGOTIATIONS MANAGEMENT
+// ============================================
+
+/**
+ * Add product to negotiations list
+ */
+function addToNegotiations(productId, productData) {
+    if (!isLoggedIn()) {
+        return false;
+    }
+
+    const currentUser = getCurrentUser();
+    const user = getUserById(currentUser.userId);
+
+    if (!user.negotiations) user.negotiations = [];
+
+    // Check if already in negotiations
+    if (!user.negotiations.find(item => item.productId === productId)) {
+        user.negotiations.push({
+            productId,
+            ...productData,
+            startedAt: new Date().toISOString(),
+            status: 'active' // active, completed, cancelled
+        });
+
+        updateUser(user.id, { negotiations: user.negotiations });
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Get user negotiations
+ */
+function getNegotiations() {
+    if (!isLoggedIn()) return [];
+
+    const currentUser = getCurrentUser();
+    const user = getUserById(currentUser.userId);
+    return user.negotiations || [];
+}
+
+/**
+ * Remove from negotiations
+ */
+function removeFromNegotiations(productId) {
+    if (!isLoggedIn()) return false;
+
+    const currentUser = getCurrentUser();
+    const user = getUserById(currentUser.userId);
+
+    if (user.negotiations) {
+        user.negotiations = user.negotiations.filter(item => item.productId !== productId);
+        updateUser(user.id, { negotiations: user.negotiations });
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Update negotiation status
+ */
+function updateNegotiationStatus(productId, status) {
+    if (!isLoggedIn()) return false;
+
+    const currentUser = getCurrentUser();
+    const user = getUserById(currentUser.userId);
+
+    if (user.negotiations) {
+        const negotiation = user.negotiations.find(item => item.productId === productId);
+        if (negotiation) {
+            negotiation.status = status;
+            updateUser(user.id, { negotiations: user.negotiations });
+            return true;
+        }
+    }
+
+    return false;
+}
+
 // Make functions available globally
 window.addToWishlist = addToWishlist;
 window.removeFromWishlist = removeFromWishlist;
@@ -527,3 +622,7 @@ window.getWishlist = getWishlist;
 window.isLoggedIn = isLoggedIn;
 window.getCurrentUser = getCurrentUser;
 window.logout = logout;
+window.addToNegotiations = addToNegotiations;
+window.getNegotiations = getNegotiations;
+window.removeFromNegotiations = removeFromNegotiations;
+window.updateNegotiationStatus = updateNegotiationStatus;

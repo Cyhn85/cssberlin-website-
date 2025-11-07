@@ -397,12 +397,36 @@ function handleNegotiateClick(productId) {
     const product = sampleProducts.find(p => p.id === productId);
     if (!product) return;
 
-    showNotification(`Verhandlung für "${product.name}" gestartet!`, 'info');
+    // Check if user is logged in
+    if (!window.isLoggedIn || !window.isLoggedIn()) {
+        // Save redirect info
+        sessionStorage.setItem('redirect_after_login', 'messages.html');
+        sessionStorage.setItem('negotiate_product', productId.toString());
 
-    // Could open negotiation modal here
-    // showNegotiationModal(product);
+        if (confirm('Bitte melden Sie sich an, um eine Verhandlung zu starten.')) {
+            window.location.href = 'login.html';
+        }
+        return;
+    }
 
-    console.log('Verhandlung gestartet für:', product);
+    // Add to negotiations list
+    if (window.addToNegotiations) {
+        window.addToNegotiations(productId, {
+            name: product.name,
+            price: product.price,
+            image: product.image,
+            brand: product.brand,
+            size: product.size,
+            condition: product.condition
+        });
+    }
+
+    showNotification(`Verhandlung für "${product.name}" gestartet! Sie können jetzt mit dem Verkäufer chatten.`, 'success');
+
+    // Redirect to messages page after short delay
+    setTimeout(() => {
+        window.location.href = 'messages.html';
+    }, 1500);
 }
 
 // ============================================
