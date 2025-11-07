@@ -473,8 +473,8 @@ img {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: var(--spacing-2xl);
-    padding: var(--spacing-lg) 0;
+    gap: var(--spacing-xl);
+    padding: var(--spacing-md) 0;
     position: relative;
 }
 
@@ -714,18 +714,19 @@ img {
 .products-section {
     max-width: 1400px;
     margin: 0 auto;
-    padding: var(--spacing-3xl) var(--spacing-xl);
+    padding: var(--spacing-lg) var(--spacing-xl);
 }
 
 .section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: var(--spacing-xl);
+    margin-bottom: var(--spacing-lg);
+    padding-top: var(--spacing-md);
 }
 
 .section-header h2 {
-    font-size: 32px;
+    font-size: 24px;
     font-weight: var(--font-weight-bold);
     color: var(--text-primary);
 }
