@@ -921,7 +921,7 @@
 
                 <!-- Action Buttons -->
                 <div class="action-buttons" style="display: flex; gap: 12px; align-items: stretch;">
-                    <button class="btn-secondary btn-large" style="flex: 0 0 calc(50% - 54px);">
+                    <button id="addToCartBtn" class="btn-secondary btn-large" style="flex: 0 0 calc(50% - 54px);">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="9" cy="21" r="1"></circle>
                             <circle cx="20" cy="21" r="1"></circle>
@@ -929,7 +929,7 @@
                         </svg>
                         In den Warenkorb
                     </button>
-                    <button class="btn-primary btn-large" style="flex: 0 0 calc(50% - 54px);">
+                    <button id="buyNowBtn" class="btn-primary btn-large" style="flex: 0 0 calc(50% - 54px);">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
                         </svg>
@@ -942,7 +942,7 @@
                     </button>
                 </div>
                 <div class="action-buttons" style="display: flex; gap: 12px; margin-top: 12px;">
-                    <button class="btn-secondary btn-large" style="flex: 1;">
+                    <button id="negotiateBtn" class="btn-secondary btn-large" style="flex: 1;">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                             <path d="M8 10h.01M12 10h.01M16 10h.01"></path>
@@ -1072,6 +1072,106 @@
                     this.classList.add('active');
                 }
             });
+        });
+
+        // Add to Cart functionality
+        document.getElementById('addToCartBtn').addEventListener('click', function() {
+            // Get selected size
+            const selectedSize = document.querySelector('.size-btn.active');
+            if (!selectedSize) {
+                alert('Bitte wählen Sie eine Größe aus.');
+                return;
+            }
+
+            // Add to cart (localStorage for now)
+            let cart = JSON.parse(localStorage.getItem('cssberlin_cart') || '[]');
+            const cartItem = {
+                ...productData,
+                size: selectedSize.textContent,
+                quantity: 1,
+                addedAt: new Date().toISOString()
+            };
+
+            // Check if item already exists
+            const existingItem = cart.find(item => item.id === productData.id && item.size === selectedSize.textContent);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push(cartItem);
+            }
+
+            localStorage.setItem('cssberlin_cart', JSON.stringify(cart));
+
+            // Show success message
+            this.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> Hinzugefügt!';
+            this.style.background = '#4CAF50';
+
+            setTimeout(() => {
+                this.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg> In den Warenkorb';
+                this.style.background = '';
+            }, 2000);
+        });
+
+        // Buy Now functionality
+        document.getElementById('buyNowBtn').addEventListener('click', function() {
+            // Get selected size
+            const selectedSize = document.querySelector('.size-btn.active');
+            if (!selectedSize) {
+                alert('Bitte wählen Sie eine Größe aus.');
+                return;
+            }
+
+            // Check if user is logged in
+            if (!isLoggedIn()) {
+                if (confirm('Sie müssen angemeldet sein, um zu kaufen. Möchten Sie sich jetzt anmelden?')) {
+                    sessionStorage.setItem('redirect_after_login', window.location.href);
+                    window.location.href = 'login.html';
+                }
+                return;
+            }
+
+            // Store purchase info and redirect to checkout
+            const purchaseData = {
+                ...productData,
+                size: selectedSize.textContent,
+                quantity: 1
+            };
+            sessionStorage.setItem('checkout_item', JSON.stringify(purchaseData));
+
+            // Redirect to checkout page (to be created)
+            // For now, show alert
+            alert('Weiterleitung zur Kasse... (Stripe/PayPal Integration wird hinzugefügt)');
+            // window.location.href = 'checkout.html';
+        });
+
+        // Negotiate functionality
+        document.getElementById('negotiateBtn').addEventListener('click', function() {
+            // Check if user is logged in
+            if (!isLoggedIn()) {
+                if (confirm('Sie müssen angemeldet sein, um zu verhandeln. Möchten Sie sich jetzt anmelden?')) {
+                    sessionStorage.setItem('redirect_after_login', window.location.href);
+                    window.location.href = 'login.html';
+                }
+                return;
+            }
+
+            // Add to negotiations and redirect to messages
+            const negotiationData = {
+                name: productData.name,
+                price: productData.price,
+                image: productData.image,
+                category: productData.category,
+                seller: 'Anna M.',
+                sellerAvatar: 'AM'
+            };
+
+            if (addToNegotiations(productData.id, negotiationData)) {
+                alert('Verhandlung gestartet! Sie werden zur Nachrichten-Seite weitergeleitet.');
+                window.location.href = 'messages.html';
+            } else {
+                alert('Diese Verhandlung wurde bereits gestartet.');
+                window.location.href = 'messages.html';
+            }
         });
     </script>
 </body>
