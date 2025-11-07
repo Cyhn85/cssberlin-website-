@@ -898,12 +898,7 @@
                 <div class="product-specs">
                     <div class="spec-row">
                         <span class="spec-label">Größe:</span>
-                        <div class="size-options">
-                            <button class="size-btn">S</button>
-                            <button class="size-btn active">M</button>
-                            <button class="size-btn">L</button>
-                            <button class="size-btn disabled">XL</button>
-                        </div>
+                        <span class="spec-value">M</span>
                     </div>
                     <div class="spec-row">
                         <span class="spec-label">Zustand:</span>
@@ -1012,7 +1007,8 @@
             name: 'Elegante Blazer Jacke',
             price: '45.00€',
             image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&h=750&fit=crop',
-            category: 'Damen'
+            category: 'Damen',
+            size: 'M'
         };
 
         // Thumbnail gallery functionality
@@ -1064,41 +1060,24 @@
             });
         }
 
-        // Size selection
-        document.querySelectorAll('.size-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                if (!this.classList.contains('disabled')) {
-                    document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                }
-            });
-        });
-
         // Add to Cart functionality
         document.getElementById('addToCartBtn').addEventListener('click', function() {
-            // Get selected size
-            const selectedSize = document.querySelector('.size-btn.active');
-            if (!selectedSize) {
-                alert('Bitte wählen Sie eine Größe aus.');
-                return;
-            }
-
             // Add to cart (localStorage for now)
             let cart = JSON.parse(localStorage.getItem('cssberlin_cart') || '[]');
             const cartItem = {
                 ...productData,
-                size: selectedSize.textContent,
                 quantity: 1,
                 addedAt: new Date().toISOString()
             };
 
             // Check if item already exists
-            const existingItem = cart.find(item => item.id === productData.id && item.size === selectedSize.textContent);
+            const existingItem = cart.find(item => item.id === productData.id);
             if (existingItem) {
-                existingItem.quantity += 1;
-            } else {
-                cart.push(cartItem);
+                alert('Dieses Produkt befindet sich bereits in Ihrem Warenkorb.');
+                return;
             }
+
+            cart.push(cartItem);
 
             localStorage.setItem('cssberlin_cart', JSON.stringify(cart));
 
@@ -1114,13 +1093,6 @@
 
         // Buy Now functionality
         document.getElementById('buyNowBtn').addEventListener('click', function() {
-            // Get selected size
-            const selectedSize = document.querySelector('.size-btn.active');
-            if (!selectedSize) {
-                alert('Bitte wählen Sie eine Größe aus.');
-                return;
-            }
-
             // Check if user is logged in
             if (!isLoggedIn()) {
                 if (confirm('Sie müssen angemeldet sein, um zu kaufen. Möchten Sie sich jetzt anmelden?')) {
@@ -1133,7 +1105,6 @@
             // Store purchase info and redirect to checkout
             const purchaseData = {
                 ...productData,
-                size: selectedSize.textContent,
                 quantity: 1
             };
             sessionStorage.setItem('checkout_item', JSON.stringify(purchaseData));
