@@ -259,7 +259,7 @@ function createProductCard(product) {
                 <button class="wishlist-btn ${inWishlist ? 'active' : ''}"
                         data-product-id="${product.id}"
                         title="${inWishlist ? 'Von Wunschliste entfernen' : 'Zur Wunschliste hinzufügen'}">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="${inWishlist ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="${inWishlist ? '#F44336' : 'none'}" stroke="${inWishlist ? '#F44336' : 'currentColor'}" stroke-width="2">
                         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                     </svg>
                 </button>
@@ -375,11 +375,13 @@ function attachProductEventListeners() {
                 // Update button UI
                 if (isAdded) {
                     this.classList.add('active');
-                    this.querySelector('svg').setAttribute('fill', 'currentColor');
+                    this.querySelector('svg').setAttribute('fill', '#F44336');
+                    this.querySelector('svg').setAttribute('stroke', '#F44336');
                     this.title = 'Von Wunschliste entfernen';
                 } else {
                     this.classList.remove('active');
                     this.querySelector('svg').setAttribute('fill', 'none');
+                    this.querySelector('svg').setAttribute('stroke', 'currentColor');
                     this.title = 'Zur Wunschliste hinzufügen';
                 }
             }
