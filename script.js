@@ -243,7 +243,8 @@ document.addEventListener('DOMContentLoaded', function() {
 // PRODUCT CARD CREATION - V3 WITH 2 BUTTONS
 // ============================================
 function createProductCard(product) {
-    const isInWishlist = wishlist.includes(product.id);
+    // Check if product is in wishlist using auth.js function
+    const inWishlist = typeof window.isInWishlist === 'function' ? window.isInWishlist(product.id) : false;
 
     const discount = Math.round(((product.newPrice - product.price) / product.newPrice) * 100);
 
@@ -255,10 +256,10 @@ function createProductCard(product) {
                      loading="lazy"
                      onerror="this.src='https://via.placeholder.com/400x533?text=Bild+nicht+verfügbar'">
 
-                <button class="wishlist-btn ${isInWishlist ? 'active' : ''}"
+                <button class="wishlist-btn ${inWishlist ? 'active' : ''}"
                         data-product-id="${product.id}"
-                        title="${isInWishlist ? 'Von Wunschliste entfernen' : 'Zur Wunschliste hinzufügen'}">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="${isInWishlist ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2">
+                        title="${inWishlist ? 'Von Wunschliste entfernen' : 'Zur Wunschliste hinzufügen'}">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="${inWishlist ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2">
                         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                     </svg>
                 </button>
