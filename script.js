@@ -482,9 +482,8 @@ function handleBuyClick(productId) {
     // Store in session for checkout page
     sessionStorage.setItem('checkout_item', JSON.stringify(purchaseData));
 
-    // Redirect to checkout (will be created)
-    alert('Weiterleitung zur Kasse... (Stripe/PayPal Integration wird hinzugefügt)');
-    // window.location.href = 'checkout.html';
+    // Redirect to checkout
+    window.location.href = 'checkout.html';
 }
 
 // ============================================
