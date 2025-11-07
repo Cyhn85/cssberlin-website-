@@ -333,6 +333,9 @@ function initProducts() {
 
     // Attach event listeners
     attachProductEventListeners();
+
+    // Update cart button states
+    updateCartButtonStates();
 }
 
 // ============================================
@@ -394,7 +397,7 @@ function attachProductEventListeners() {
             e.preventDefault();
             e.stopPropagation();
             const productId = parseInt(this.dataset.productId);
-            handleAddToCart(productId);
+            handleAddToCart(productId, this);
         });
     });
 
@@ -418,9 +421,9 @@ function attachProductEventListeners() {
 }
 
 // ============================================
-// ADD TO CART HANDLER
+// ADD TO CART HANDLER - WITH TOGGLE
 // ============================================
-function handleAddToCart(productId) {
+function handleAddToCart(productId, buttonElement) {
     const product = sampleProducts.find(p => p.id === productId);
     if (!product) return;
 
@@ -428,25 +431,44 @@ function handleAddToCart(productId) {
     let cart = JSON.parse(localStorage.getItem('cssberlin_cart') || '[]');
 
     // Check if already in cart
-    const existingItem = cart.find(item => item.id === productId);
-    if (existingItem) {
-        return; // Silently ignore, no alert
+    const existingItemIndex = cart.findIndex(item => item.id === productId);
+
+    if (existingItemIndex > -1) {
+        // Remove from cart (toggle off)
+        cart.splice(existingItemIndex, 1);
+        localStorage.setItem('cssberlin_cart', JSON.stringify(cart));
+
+        // Update button UI - back to default
+        if (buttonElement) {
+            buttonElement.style.background = 'white';
+            buttonElement.style.borderColor = '#2D5016';
+            buttonElement.style.color = '#2D5016';
+            buttonElement.querySelector('svg').setAttribute('stroke', '#2D5016');
+        }
+    } else {
+        // Add to cart (toggle on)
+        const cartItem = {
+            id: product.id,
+            name: product.name,
+            price: product.price.toFixed(2) + '€',
+            image: product.image,
+            category: product.brand,
+            size: product.size,
+            quantity: 1,
+            addedAt: new Date().toISOString()
+        };
+
+        cart.push(cartItem);
+        localStorage.setItem('cssberlin_cart', JSON.stringify(cart));
+
+        // Update button UI - show as active
+        if (buttonElement) {
+            buttonElement.style.background = '#4CAF50';
+            buttonElement.style.borderColor = '#4CAF50';
+            buttonElement.style.color = 'white';
+            buttonElement.querySelector('svg').setAttribute('stroke', 'white');
+        }
     }
-
-    // Add to cart
-    const cartItem = {
-        id: product.id,
-        name: product.name,
-        price: product.price.toFixed(2) + '€',
-        image: product.image,
-        category: product.brand,
-        size: product.size,
-        quantity: 1,
-        addedAt: new Date().toISOString()
-    };
-
-    cart.push(cartItem);
-    localStorage.setItem('cssberlin_cart', JSON.stringify(cart));
 
     // Update cart count in header
     updateCartCountInHeader();
@@ -459,6 +481,23 @@ function updateCartCountInHeader() {
     if (cartCountElement) {
         cartCountElement.textContent = cart.length;
     }
+}
+
+// Update cart button states on page load
+function updateCartButtonStates() {
+    const cart = JSON.parse(localStorage.getItem('cssberlin_cart') || '[]');
+    const cartProductIds = cart.map(item => item.id);
+
+    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+        const productId = parseInt(btn.dataset.productId);
+        if (cartProductIds.includes(productId)) {
+            // Product is in cart - show as active (green)
+            btn.style.background = '#4CAF50';
+            btn.style.borderColor = '#4CAF50';
+            btn.style.color = 'white';
+            btn.querySelector('svg').setAttribute('stroke', 'white');
+        }
+    });
 }
 
 // Update negotiation count in header
@@ -674,6 +713,9 @@ function initLoadMore() {
 
             // Re-attach event listeners to new products
             attachProductEventListeners();
+
+            // Update cart button states for new products
+            updateCartButtonStates();
 
             // Reset button
             this.disabled = false;
