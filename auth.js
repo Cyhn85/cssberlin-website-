@@ -45,36 +45,56 @@ if (document.getElementById('registerForm')) {
         submitBtn.textContent = 'Wird registriert...';
 
         try {
-            // Call backend API
-            const response = await fetch('http://195.201.146.224:8000/api/auth/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    firstName,
-                    lastName,
-                    email,
-                    password,
-                    newsletter
-                })
-            });
+            // Check if email already exists
+            const existingUsers = JSON.parse(localStorage.getItem('cssberlin_users') || '[]');
+            const emailExists = existingUsers.find(u => u.email === email);
 
-            const data = await response.json();
-
-            if (response.ok && data.success) {
-                // Success - show email verification message
-                alert('✅ Registrierung erfolgreich!\n\nBitte überprüfen Sie Ihre E-Mails zur Bestätigung.\n\nÜberprüfen Sie auch Ihren Spam-Ordner.');
-                window.location.href = 'login.html';
-            } else {
-                // Error from backend
-                showError(data.detail || data.message || 'Registrierung fehlgeschlagen');
+            if (emailExists) {
+                showError('Diese E-Mail-Adresse ist bereits registriert');
                 submitBtn.disabled = false;
                 submitBtn.textContent = originalText;
+                return;
             }
+
+            // Generate verification code (6-digit)
+            const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+            // Create new user (unverified)
+            const newUser = {
+                id: Date.now(),
+                firstName,
+                lastName,
+                email,
+                password, // In production, this should be hashed
+                newsletter,
+                verified: false,
+                verificationCode,
+                createdAt: new Date().toISOString(),
+                wishlist: [],
+                negotiations: []
+            };
+
+            // Save to localStorage
+            existingUsers.push(newUser);
+            localStorage.setItem('cssberlin_users', JSON.stringify(existingUsers));
+
+            // Simulate sending email with verification code
+            console.log('📧 Verification Email Sent:');
+            console.log('To:', email);
+            console.log('Code:', verificationCode);
+            console.log('---');
+
+            // Store email for verification page
+            sessionStorage.setItem('pending_verification_email', email);
+
+            // Success message
+            alert(`✅ Registrierung erfolgreich!\n\n📧 Ein Bestätigungscode wurde an ${email} gesendet.\n\nBitte überprüfen Sie Ihre E-Mails.\n\n🔐 Ihr Code: ${verificationCode}\n\n(In der Konsole sichtbar für Demo-Zwecke)`);
+
+            // Redirect to verification page
+            window.location.href = 'verify-email.html';
         } catch (error) {
             console.error('Registration error:', error);
-            showError('Verbindungsfehler. Bitte versuchen Sie es später erneut.');
+            showError('Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.');
             submitBtn.disabled = false;
             submitBtn.textContent = originalText;
         }

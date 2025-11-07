@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Mail Bestätigen - CSS Berlin</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .auth-container {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-2xl);
+        }
+
+        .auth-card {
+            max-width: 500px;
+            width: 100%;
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            padding: var(--spacing-2xl);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .auth-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto var(--spacing-md);
+            background: var(--accent-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-icon svg {
+            width: 32px;
+            height: 32px;
+            color: var(--primary-green);
+        }
+
+        .auth-header h1 {
+            font-size: 28px;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .auth-header p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .email-display {
+            background: #f0f8f0;
+            padding: var(--spacing-md);
+            border-radius: var(--radius-md);
+            text-align: center;
+            margin: var(--spacing-lg) 0;
+            font-weight: 600;
+            color: var(--primary-green);
+        }
+
+        .code-input-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: var(--spacing-xl) 0;
+        }
+
+        .code-digit {
+            width: 50px;
+            height: 60px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            transition: all var(--transition-base);
+        }
+
+        .code-digit:focus {
+            outline: none;
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.1);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary-green);
+            color: white;
+            font-size: 16px;
+            font-weight: var(--font-weight-semibold);
+            border: none;
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            margin-top: var(--spacing-md);
+        }
+
+        .submit-btn:hover {
+            background: var(--primary-green-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .resend-link {
+            text-align: center;
+            margin-top: var(--spacing-lg);
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .resend-link button {
+            background: none;
+            border: none;
+            color: var(--primary-green);
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 0;
+        }
+
+        .resend-link button:hover {
+            color: var(--primary-green-hover);
+        }
+
+        .error-message {
+            display: none;
+            padding: var(--spacing-md);
+            background: #ffebee;
+            border: 1px solid var(--error);
+            border-radius: var(--radius-md);
+            color: var(--error);
+            margin-bottom: var(--spacing-lg);
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .success-message {
+            display: none;
+            padding: var(--spacing-md);
+            background: #d4edda;
+            border: 1px solid #28a745;
+            border-radius: var(--radius-md);
+            color: #155724;
+            margin-bottom: var(--spacing-lg);
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            padding: var(--spacing-md);
+            border-radius: var(--radius-md);
+            margin-top: var(--spacing-lg);
+            font-size: 13px;
+            color: #1565c0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo-section">
+                <a href="index.html" style="text-decoration: none; display: flex; flex-direction: column; align-items: flex-start; gap: 4px;">
+                    <div style="font-size: 32px; font-weight: 900; background: linear-gradient(135deg, #FF8C42, #2D5016); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 2px;">
+                        CSS Berlin
+                    </div>
+                    <div style="font-size: 13px; font-weight: 600; color: #666; letter-spacing: 0.5px; text-align: center; width: 100%;">
+                        Climate Smart Solutions
+                    </div>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="auth-container">
+        <div class="auth-card">
+            <!-- Header -->
+            <div class="auth-header">
+                <div class="auth-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                </div>
+                <h1>E-Mail bestätigen</h1>
+                <p>Wir haben einen 6-stelligen Code an folgende E-Mail-Adresse gesendet:</p>
+                <div class="email-display" id="emailDisplay"></div>
+            </div>
+
+            <!-- Messages -->
+            <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage"></div>
+
+            <!-- Code Input Form -->
+            <form id="verifyForm">
+                <div class="code-input-container">
+                    <input type="text" maxlength="1" class="code-digit" id="digit1" autocomplete="off" required>
+                    <input type="text" maxlength="1" class="code-digit" id="digit2" autocomplete="off" required>
+                    <input type="text" maxlength="1" class="code-digit" id="digit3" autocomplete="off" required>
+                    <input type="text" maxlength="1" class="code-digit" id="digit4" autocomplete="off" required>
+                    <input type="text" maxlength="1" class="code-digit" id="digit5" autocomplete="off" required>
+                    <input type="text" maxlength="1" class="code-digit" id="digit6" autocomplete="off" required>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">Bestätigen</button>
+            </form>
+
+            <!-- Resend Link -->
+            <div class="resend-link">
+                Keinen Code erhalten? <button type="button" id="resendBtn">Code erneut senden</button>
+            </div>
+
+            <!-- Info Box -->
+            <div class="info-box">
+                💡 Tipp: Überprüfen Sie auch Ihren Spam-Ordner
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 CSS Berlin. Alle Rechte vorbehalten.</p>
+                <div class="footer-links-bottom">
+                    <a href="impressum.html">Impressum</a>
+                    <a href="datenschutz.html">Datenschutz</a>
+                    <a href="agb.html">AGB</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Get email from session storage
+        const email = sessionStorage.getItem('pending_verification_email');
+
+        if (!email) {
+            alert('Keine ausstehende Verifizierung gefunden.');
+            window.location.href = 'registrieren.html';
+        }
+
+        document.getElementById('emailDisplay').textContent = email;
+
+        // Auto-focus on first digit
+        document.getElementById('digit1').focus();
+
+        // Handle digit input
+        const digitInputs = document.querySelectorAll('.code-digit');
+        digitInputs.forEach((input, index) => {
+            input.addEventListener('input', function(e) {
+                // Only allow numbers
+                this.value = this.value.replace(/[^0-9]/g, '');
+
+                // Auto-focus next input
+                if (this.value && index < digitInputs.length - 1) {
+                    digitInputs[index + 1].focus();
+                }
+            });
+
+            input.addEventListener('keydown', function(e) {
+                // Handle backspace
+                if (e.key === 'Backspace' && !this.value && index > 0) {
+                    digitInputs[index - 1].focus();
+                }
+            });
+
+            // Handle paste
+            input.addEventListener('paste', function(e) {
+                e.preventDefault();
+                const pasteData = e.clipboardData.getData('text').replace(/[^0-9]/g, '');
+
+                for (let i = 0; i < pasteData.length && index + i < digitInputs.length; i++) {
+                    digitInputs[index + i].value = pasteData[i];
+                }
+
+                const nextIndex = Math.min(index + pasteData.length, digitInputs.length - 1);
+                digitInputs[nextIndex].focus();
+            });
+        });
+
+        // Handle form submission
+        document.getElementById('verifyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Get code from inputs
+            const code = Array.from(digitInputs).map(input => input.value).join('');
+
+            if (code.length !== 6) {
+                showError('Bitte geben Sie alle 6 Ziffern ein');
+                return;
+            }
+
+            // Get users from localStorage
+            const users = JSON.parse(localStorage.getItem('cssberlin_users') || '[]');
+            const user = users.find(u => u.email === email);
+
+            if (!user) {
+                showError('Benutzer nicht gefunden');
+                return;
+            }
+
+            // Verify code
+            if (user.verificationCode === code) {
+                // Mark as verified
+                user.verified = true;
+                user.verifiedAt = new Date().toISOString();
+                delete user.verificationCode;
+
+                // Save updated users
+                localStorage.setItem('cssberlin_users', JSON.stringify(users));
+
+                // Clear session storage
+                sessionStorage.removeItem('pending_verification_email');
+
+                // Show success
+                showSuccess('✅ E-Mail erfolgreich bestätigt!');
+
+                // Redirect to login after 2 seconds
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+            } else {
+                showError('❌ Ungültiger Code. Bitte versuchen Sie es erneut.');
+                // Clear inputs
+                digitInputs.forEach(input => input.value = '');
+                digitInputs[0].focus();
+            }
+        });
+
+        // Handle resend button
+        document.getElementById('resendBtn').addEventListener('click', function() {
+            // Get users from localStorage
+            const users = JSON.parse(localStorage.getItem('cssberlin_users') || '[]');
+            const user = users.find(u => u.email === email);
+
+            if (!user) {
+                showError('Benutzer nicht gefunden');
+                return;
+            }
+
+            // Generate new code
+            const newCode = Math.floor(100000 + Math.random() * 900000).toString();
+            user.verificationCode = newCode;
+
+            // Save updated users
+            localStorage.setItem('cssberlin_users', JSON.stringify(users));
+
+            // Simulate sending email
+            console.log('📧 Verification Email Resent:');
+            console.log('To:', email);
+            console.log('Code:', newCode);
+            console.log('---');
+
+            // Show success message
+            showSuccess(`✅ Code wurde erneut gesendet!\n\n🔐 Neuer Code: ${newCode}`);
+            alert(`📧 Ein neuer Code wurde an ${email} gesendet.\n\n🔐 Ihr Code: ${newCode}\n\n(In der Konsole sichtbar für Demo-Zwecke)`);
+        });
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('show');
+            successDiv.classList.remove('show');
+        }
+
+        function showSuccess(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.classList.add('show');
+            errorDiv.classList.remove('show');
+        }
+    </script>
+</body>
+</html>
