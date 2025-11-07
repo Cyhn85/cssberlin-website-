@@ -350,7 +350,32 @@ function attachProductEventListeners() {
             e.preventDefault();
             e.stopPropagation();
             const productId = parseInt(this.dataset.productId);
-            toggleWishlist(productId, this);
+
+            // Get product data from product card
+            const productCard = this.closest('.product-card');
+            const product = productsData.find(p => p.id === productId);
+
+            if (product) {
+                const productData = {
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    category: product.category
+                };
+
+                const isAdded = toggleWishlist(productId, productData);
+
+                // Update button UI
+                if (isAdded) {
+                    this.classList.add('active');
+                    this.querySelector('svg').setAttribute('fill', 'currentColor');
+                    this.title = 'Von Wunschliste entfernen';
+                } else {
+                    this.classList.remove('active');
+                    this.querySelector('svg').setAttribute('fill', 'none');
+                    this.title = 'Zur Wunschliste hinzufügen';
+                }
+            }
         });
     });
 
