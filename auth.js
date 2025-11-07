@@ -38,35 +38,46 @@ if (document.getElementById('registerForm')) {
             return;
         }
 
-        // Create user object
-        const user = {
-            id: generateUserId(),
-            firstName,
-            lastName,
-            email,
-            password: hashPassword(password), // Simple hash (in production use bcrypt)
-            newsletter,
-            createdAt: new Date().toISOString(),
-            wishlist: []
-        };
+        // Show loading
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Wird registriert...';
 
-        // Check if user exists
-        const users = getUsers();
-        if (users.find(u => u.email === email)) {
-            showError('E-Mail bereits registriert');
-            return;
+        try {
+            // Call backend API
+            const response = await fetch('http://195.201.146.224:8000/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    firstName,
+                    lastName,
+                    email,
+                    password,
+                    newsletter
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                // Success - show email verification message
+                alert('✅ Registrierung erfolgreich!\n\nBitte überprüfen Sie Ihre E-Mails zur Bestätigung.\n\nÜberprüfen Sie auch Ihren Spam-Ordner.');
+                window.location.href = 'login.html';
+            } else {
+                // Error from backend
+                showError(data.detail || data.message || 'Registrierung fehlgeschlagen');
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        } catch (error) {
+            console.error('Registration error:', error);
+            showError('Verbindungsfehler. Bitte versuchen Sie es später erneut.');
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
         }
-
-        // Save user
-        users.push(user);
-        localStorage.setItem('cssberlin_users', JSON.stringify(users));
-
-        // Auto login
-        login(user);
-
-        // Redirect to home
-        alert('Registrierung erfolgreich! Willkommen bei CSS Berlin.');
-        window.location.href = 'index.html';
     });
 }
 
@@ -81,26 +92,51 @@ if (document.getElementById('loginForm')) {
         const password = document.getElementById('password').value;
         const remember = document.getElementById('remember').checked;
 
-        // Find user
-        const users = getUsers();
-        const user = users.find(u =>
-            u.email === email && u.password === hashPassword(password)
-        );
+        // Show loading
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Wird angemeldet...';
 
-        if (!user) {
-            showError('E-Mail oder Passwort falsch');
-            return;
+        try {
+            // Call backend API
+            const response = await fetch('http://195.201.146.224:8000/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email,
+                    password
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                // Success - login user
+                login(data.user, remember);
+
+                // Check if redirected from another page
+                const redirectUrl = sessionStorage.getItem('redirect_after_login') || 'index.html';
+                sessionStorage.removeItem('redirect_after_login');
+
+                // Show success message
+                setTimeout(() => {
+                    window.location.href = redirectUrl;
+                }, 100);
+            } else {
+                // Error from backend
+                showError(data.detail || data.message || 'Anmeldung fehlgeschlagen');
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            showError('Verbindungsfehler. Bitte versuchen Sie es später erneut.');
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
         }
-
-        // Login
-        login(user, remember);
-
-        // Check if redirected from wishlist
-        const redirectUrl = sessionStorage.getItem('redirect_after_login') || 'index.html';
-        sessionStorage.removeItem('redirect_after_login');
-
-        alert('Anmeldung erfolgreich! Willkommen zurück.');
-        window.location.href = redirectUrl;
     });
 }
 
