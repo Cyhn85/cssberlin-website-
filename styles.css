@@ -7,15 +7,17 @@
    CSS VARIABLES
    ============================================ */
 :root {
-    /* Colors - Orange to Green Theme (Eco Friendly) */
+    /* Colors - Orange to Pistachio Green Theme (Eco Friendly) */
     --primary-orange: #FF8C42;
     --primary-orange-hover: #FF7A29;
     --primary-green: #2D5016;
-    --primary-green-hover: #4A7C2C;
-    --primary-green-light: #6BA83E;
-    --secondary-green: #8BC34A;
+    --primary-green-hover: #A8D08D; /* Fıstık yeşili */
+    --primary-green-light: #C5E1A5; /* Açık fıstık yeşili */
+    --secondary-green: #9CCC65; /* Fıstık yeşili ton */
     --accent-green: #E8F5E9;
     --accent-orange: #FFF3E0;
+    --fuchsia: #E91E63; /* Fuşya renk */
+    --fuchsia-hover: #C2185B; /* Koyu fuşya */
 
     /* Text Colors */
     --text-primary: #212121;
@@ -345,10 +347,10 @@ img {
 
 .icon-btn:hover,
 .icon-btn:active {
-    background: var(--primary-green);
+    background: var(--primary-green-hover); /* Fıstık yeşili */
     color: var(--text-white);
     transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(45, 80, 22, 0.3);
+    box-shadow: 0 4px 12px rgba(168, 208, 141, 0.4);
 }
 
 .notification-badge,
@@ -391,10 +393,10 @@ img {
 
 .user-btn:hover,
 .user-btn:active {
-    background: var(--primary-green);
+    background: var(--primary-green-hover); /* Fıstık yeşili */
     color: var(--text-white);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(45, 80, 22, 0.3);
+    box-shadow: 0 4px 12px rgba(168, 208, 141, 0.4);
 }
 
 /* ============================================
@@ -819,13 +821,17 @@ img {
 
 .wishlist-btn:hover {
     background: var(--bg-primary);
-    color: var(--error);
+    color: var(--fuchsia);
     transform: scale(1.1);
 }
 
 .wishlist-btn.active {
-    background: var(--error);
+    background: var(--fuchsia);
     color: var(--text-white);
+}
+
+.wishlist-btn.active:hover {
+    background: var(--fuchsia-hover);
 }
 
 .wishlist-btn svg {
@@ -963,9 +969,9 @@ img {
 
 .buy-btn:hover,
 .buy-btn:active {
-    background: var(--primary-green);
+    background: var(--primary-green-hover); /* Fıstık yeşili */
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(45, 80, 22, 0.4);
+    box-shadow: 0 6px 16px rgba(168, 208, 141, 0.5);
 }
 
 .buy-btn svg {
@@ -993,11 +999,11 @@ img {
 
 .negotiate-btn:hover,
 .negotiate-btn:active {
-    background: var(--primary-green);
+    background: var(--primary-green-hover); /* Fıstık yeşili */
     color: var(--text-white);
-    border-color: var(--primary-green);
+    border-color: var(--primary-green-hover);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(45, 80, 22, 0.3);
+    box-shadow: 0 4px 12px rgba(168, 208, 141, 0.4);
 }
 
 .negotiate-btn svg {
