@@ -461,6 +461,20 @@ function updateCartCountInHeader() {
     }
 }
 
+// Update negotiation count in header
+function updateNegotiationCountInHeader() {
+    const negotiationCountElement = document.getElementById('negotiationCount');
+    if (negotiationCountElement) {
+        if (typeof window.getNegotiations === 'function') {
+            const negotiations = window.getNegotiations();
+            const activeNegotiations = negotiations.filter(n => n.status === 'active');
+            negotiationCountElement.textContent = activeNegotiations.length;
+        } else {
+            negotiationCountElement.textContent = '0';
+        }
+    }
+}
+
 // ============================================
 // BUY BUTTON HANDLER
 // ============================================
@@ -516,6 +530,9 @@ function handleNegotiateClick(productId) {
             condition: product.condition
         });
     }
+
+    // Update negotiation count in header before redirect
+    updateNegotiationCountInHeader();
 
     // Redirect to messages page
     window.location.href = 'messages.html';

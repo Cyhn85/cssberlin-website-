@@ -80,7 +80,7 @@
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                         <path d="M8 10h.01M12 10h.01M16 10h.01"></path>
                     </svg>
-                    <span class="negotiation-count" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">2</span>
+                    <span class="negotiation-count" id="negotiationCount" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">0</span>
                 </button>
 
                 <button class="icon-btn" id="wishlistBtn" title="Wunschliste" onclick="window.location.href='wunschliste.html'" style="width: 40px; height: 40px; padding: 8px;">
@@ -389,8 +389,23 @@
             }
         }
 
+        // Update negotiation count on page load
+        function updateNegotiationCount() {
+            const negotiationCountElement = document.getElementById('negotiationCount');
+            if (negotiationCountElement) {
+                if (typeof window.getNegotiations === 'function') {
+                    const negotiations = window.getNegotiations();
+                    const activeNegotiations = negotiations.filter(n => n.status === 'active');
+                    negotiationCountElement.textContent = activeNegotiations.length;
+                } else {
+                    negotiationCountElement.textContent = '0';
+                }
+            }
+        }
+
         // Initialize on page load
         updateCartCount();
+        updateNegotiationCount();
     </script>
 </body>
 </html>
