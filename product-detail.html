@@ -723,7 +723,7 @@
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                         <path d="M8 10h.01M12 10h.01M16 10h.01"></path>
                     </svg>
-                    <span class="negotiation-count" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">2</span>
+                    <span class="negotiation-count" id="negotiationCount" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">0</span>
                 </button>
 
                 <button class="icon-btn" id="wishlistBtn" title="Wunschliste" onclick="window.location.href='wunschliste.html'" style="width: 40px; height: 40px; padding: 8px;">
@@ -1106,8 +1106,23 @@
             }
         }
 
-        // Initialize cart count on page load
+        // Update negotiation count
+        function updateNegotiationCount() {
+            const negotiationCountElement = document.getElementById('negotiationCount');
+            if (negotiationCountElement) {
+                if (typeof window.getNegotiations === 'function') {
+                    const negotiations = window.getNegotiations();
+                    const activeNegotiations = negotiations.filter(n => n.status === 'active');
+                    negotiationCountElement.textContent = activeNegotiations.length;
+                } else {
+                    negotiationCountElement.textContent = '0';
+                }
+            }
+        }
+
+        // Initialize cart count and negotiation count on page load
         updateCartCount();
+        updateNegotiationCount();
 
         // Buy Now functionality
         document.getElementById('buyNowBtn').addEventListener('click', function() {
@@ -1154,13 +1169,14 @@
                 sellerAvatar: 'AM'
             };
 
-            if (addToNegotiations(productData.id, negotiationData)) {
-                alert('Verhandlung gestartet! Sie werden zur Nachrichten-Seite weitergeleitet.');
-                window.location.href = 'messages.html';
-            } else {
-                alert('Diese Verhandlung wurde bereits gestartet.');
-                window.location.href = 'messages.html';
-            }
+            // Add to negotiations (returns true if new, false if already exists)
+            addToNegotiations(productData.id, negotiationData);
+
+            // Update negotiation count before redirect
+            updateNegotiationCount();
+
+            // Redirect to messages page
+            window.location.href = 'messages.html';
         });
     </script>
 </body>
