@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wishlist Test - CSS Berlin</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-panel {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #2D5016;
+        }
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: 600;
+        }
+        .status.success { background: #d4edda; color: #155724; }
+        .status.error { background: #f8d7da; color: #721c24; }
+        .status.info { background: #d1ecf1; color: #0c5460; }
+        button {
+            padding: 12px 24px;
+            margin: 10px 10px 10px 0;
+            background: #2D5016;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        button:hover { background: #1F3A0E; }
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 13px;
+        }
+        .test-result {
+            margin: 10px 0;
+            padding: 10px;
+            border-left: 4px solid #2D5016;
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-panel">
+        <h1>❤️ Wishlist Function Test</h1>
+
+        <div id="results"></div>
+
+        <button onclick="runTests()">Tests ausführen</button>
+        <button onclick="testIndexPage()">Index.html öffnen</button>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        function log(message, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.textContent = message;
+            results.appendChild(div);
+        }
+
+        function runTests() {
+            document.getElementById('results').innerHTML = '';
+
+            log('🔍 Teste 1: Prüfe ob auth.js geladen wurde...', 'info');
+
+            // Test 1: Check if functions exist
+            if (typeof toggleWishlist === 'function') {
+                log('✅ toggleWishlist() Funktion gefunden!', 'success');
+            } else {
+                log('❌ toggleWishlist() Funktion NICHT gefunden!', 'error');
+                return;
+            }
+
+            if (typeof isInWishlist === 'function') {
+                log('✅ isInWishlist() Funktion gefunden!', 'success');
+            } else {
+                log('❌ isInWishlist() Funktion NICHT gefunden!', 'error');
+                return;
+            }
+
+            if (typeof getWishlist === 'function') {
+                log('✅ getWishlist() Funktion gefunden!', 'success');
+            } else {
+                log('❌ getWishlist() Funktion NICHT gefunden!', 'error');
+                return;
+            }
+
+            // Test 2: Test toggleWishlist
+            log('🔍 Teste 2: Teste toggleWishlist() Funktion...', 'info');
+
+            const testProduct = {
+                id: 999,
+                name: 'Test Produkt',
+                price: '25.00€',
+                image: 'test.jpg',
+                category: 'Test'
+            };
+
+            try {
+                const result1 = toggleWishlist(999, testProduct);
+                if (result1) {
+                    log('✅ Produkt zur Wishlist hinzugefügt!', 'success');
+                } else {
+                    log('❌ toggleWishlist() gab false zurück', 'error');
+                }
+
+                const result2 = isInWishlist(999);
+                if (result2) {
+                    log('✅ isInWishlist() bestätigt: Produkt ist in der Liste!', 'success');
+                } else {
+                    log('❌ isInWishlist() sagt Produkt ist NICHT in der Liste!', 'error');
+                }
+
+                const wishlist = getWishlist();
+                log(`📋 Aktuelle Wishlist hat ${wishlist.length} Produkte`, 'info');
+
+                // Remove test product
+                toggleWishlist(999, testProduct);
+                log('✅ Test Produkt wieder entfernt', 'success');
+
+            } catch (error) {
+                log(`❌ Fehler beim Test: ${error.message}`, 'error');
+                console.error(error);
+            }
+
+            // Test 3: Check window globals
+            log('🔍 Teste 3: Prüfe window.* Funktionen...', 'info');
+
+            if (window.toggleWishlist) {
+                log('✅ window.toggleWishlist existiert!', 'success');
+            } else {
+                log('❌ window.toggleWishlist existiert NICHT!', 'error');
+            }
+
+            if (window.isInWishlist) {
+                log('✅ window.isInWishlist existiert!', 'success');
+            } else {
+                log('❌ window.isInWishlist existiert NICHT!', 'error');
+            }
+
+            log('✅ Alle Tests abgeschlossen!', 'success');
+        }
+
+        function testIndexPage() {
+            window.open('index.html', '_blank');
+        }
+
+        // Auto-run tests on page load
+        window.addEventListener('load', () => {
+            setTimeout(runTests, 500);
+        });
+    </script>
+</body>
+</html>

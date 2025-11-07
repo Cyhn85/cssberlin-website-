@@ -575,20 +575,16 @@
 
         // Remove item from cart
         function removeFromCart(index) {
-            if (confirm('Möchten Sie dieses Produkt aus dem Warenkorb entfernen?')) {
-                let cart = JSON.parse(localStorage.getItem('cssberlin_cart') || '[]');
-                cart.splice(index, 1);
-                localStorage.setItem('cssberlin_cart', JSON.stringify(cart));
-                loadCart();
-            }
+            let cart = JSON.parse(localStorage.getItem('cssberlin_cart') || '[]');
+            cart.splice(index, 1);
+            localStorage.setItem('cssberlin_cart', JSON.stringify(cart));
+            loadCart();
         }
 
         // Clear cart
         document.getElementById('clearCartBtn').addEventListener('click', function() {
-            if (confirm('Möchten Sie den gesamten Warenkorb leeren?')) {
-                localStorage.removeItem('cssberlin_cart');
-                loadCart();
-            }
+            localStorage.removeItem('cssberlin_cart');
+            loadCart();
         });
 
         // Checkout

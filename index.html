@@ -379,5 +379,18 @@
 
     <script src="auth.js"></script>
     <script src="script.js"></script>
+    <script>
+        // Update cart count on page load
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cssberlin_cart') || '[]');
+            const cartCountElement = document.getElementById('cartCount');
+            if (cartCountElement) {
+                cartCountElement.textContent = cart.length;
+            }
+        }
+
+        // Initialize on page load
+        updateCartCount();
+    </script>
 </body>
 </html>

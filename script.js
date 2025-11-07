@@ -287,24 +287,30 @@ function createProductCard(product) {
                     <span class="product-new-price">Neupreis: ${product.newPrice.toFixed(2)}€</span>
                 </div>
 
-                <!-- V3: 2-Button Layout -->
-                <div class="product-actions">
-                    <button class="buy-btn" data-product-id="${product.id}">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <!-- V3: 3-Button Layout -->
+                <div class="product-actions" style="display: flex; gap: 8px;">
+                    <button class="add-to-cart-btn" data-product-id="${product.id}" style="flex: 1; padding: 12px; background: white; border: 2px solid #2D5016; color: #2D5016; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.3s ease;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="9" cy="21" r="1"></circle>
                             <circle cx="20" cy="21" r="1"></circle>
                             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                         </svg>
+                        Warenkorb
+                    </button>
+                    <button class="buy-btn" data-product-id="${product.id}" style="flex: 1; padding: 12px; background: #2D5016; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.3s ease;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                        </svg>
                         Kaufen
                     </button>
-                    <button class="negotiate-btn" data-product-id="${product.id}">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                            <path d="M8 10h.01M12 10h.01M16 10h.01"></path>
-                        </svg>
-                        Verhandeln
-                    </button>
                 </div>
+                <button class="negotiate-btn" data-product-id="${product.id}" style="width: 100%; padding: 12px; background: #FF8C42; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 8px; transition: all 0.3s ease;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        <path d="M8 10h.01M12 10h.01M16 10h.01"></path>
+                    </svg>
+                    Verhandeln
+                </button>
             </div>
         </div>
     `;
@@ -380,6 +386,16 @@ function attachProductEventListeners() {
         });
     });
 
+    // Add to Cart buttons
+    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const productId = parseInt(this.dataset.productId);
+            handleAddToCart(productId);
+        });
+    });
+
     // Buy buttons
     document.querySelectorAll('.buy-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
@@ -400,17 +416,64 @@ function attachProductEventListeners() {
 }
 
 // ============================================
+// ADD TO CART HANDLER
+// ============================================
+function handleAddToCart(productId) {
+    const product = sampleProducts.find(p => p.id === productId);
+    if (!product) return;
+
+    // Get existing cart
+    let cart = JSON.parse(localStorage.getItem('cssberlin_cart') || '[]');
+
+    // Check if already in cart
+    const existingItem = cart.find(item => item.id === productId);
+    if (existingItem) {
+        return; // Silently ignore, no alert
+    }
+
+    // Add to cart
+    const cartItem = {
+        id: product.id,
+        name: product.name,
+        price: product.price.toFixed(2) + '€',
+        image: product.image,
+        category: product.brand,
+        size: product.size,
+        quantity: 1,
+        addedAt: new Date().toISOString()
+    };
+
+    cart.push(cartItem);
+    localStorage.setItem('cssberlin_cart', JSON.stringify(cart));
+
+    // Update cart count in header
+    updateCartCountInHeader();
+}
+
+// Update cart count in header
+function updateCartCountInHeader() {
+    const cart = JSON.parse(localStorage.getItem('cssberlin_cart') || '[]');
+    const cartCountElement = document.getElementById('cartCount');
+    if (cartCountElement) {
+        cartCountElement.textContent = cart.length;
+    }
+}
+
+// ============================================
 // BUY BUTTON HANDLER
 // ============================================
 function handleBuyClick(productId) {
     const product = sampleProducts.find(p => p.id === productId);
     if (!product) return;
 
-    // Add to cart (simulate)
-    showNotification(`"${product.name}" wurde in den Warenkorb gelegt!`, 'success');
-
-    // Simulate cart update
-    console.log('Produkt zum Warenkorb hinzugefügt:', product);
+    // Direct buy - check login first
+    if (!window.isLoggedIn || !window.isLoggedIn()) {
+        if (confirm('Sie müssen angemeldet sein, um zu kaufen. Möchten Sie sich jetzt anmelden?')) {
+            sessionStorage.setItem('redirect_after_login', window.location.href);
+            window.location.href = 'login.html';
+        }
+        return;
+    }
 
     // Could trigger cart modal here
     // showCartModal(product);
@@ -447,12 +510,8 @@ function handleNegotiateClick(productId) {
         });
     }
 
-    showNotification(`Verhandlung für "${product.name}" gestartet! Sie können jetzt mit dem Verkäufer chatten.`, 'success');
-
-    // Redirect to messages page after short delay
-    setTimeout(() => {
-        window.location.href = 'messages.html';
-    }, 1500);
+    // Redirect to messages page
+    window.location.href = 'messages.html';
 }
 
 // ============================================
@@ -466,13 +525,11 @@ function toggleWishlist(productId, button) {
         wishlist.splice(index, 1);
         button.classList.remove('active');
         button.querySelector('svg').setAttribute('fill', 'none');
-        showNotification('Aus Wunschliste entfernt', 'info');
     } else {
         // Add to wishlist
         wishlist.push(productId);
         button.classList.add('active');
         button.querySelector('svg').setAttribute('fill', 'currentColor');
-        showNotification('Zur Wunschliste hinzugefügt', 'success');
     }
 
     // Save to localStorage
@@ -603,7 +660,7 @@ function initLoadMore() {
                 Mehr Produkte laden
             `;
 
-            showNotification('8 neue Produkte geladen', 'success');
+            // Products loaded
 
             currentPage++;
         }, 1000);
@@ -834,10 +891,7 @@ function performSearch(query) {
         }
     });
 
-    // Show notification if no results
-    if (visibleCount === 0) {
-        showNotification(`Keine Ergebnisse für "${query}"`, 'info');
-    }
+    // No notification needed for search results
 }
 
 // ============================================
