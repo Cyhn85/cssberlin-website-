@@ -732,12 +732,13 @@
                     <span class="wishlist-count" id="wishlistCount" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">0</span>
                 </button>
 
-                <button class="icon-btn" title="Warenkorb" style="width: 40px; height: 40px; padding: 8px;">
+                <button class="icon-btn" title="Warenkorb" onclick="window.location.href='warenkorb.html'" style="width: 40px; height: 40px; padding: 8px;">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <circle cx="9" cy="21" r="1"></circle>
                         <circle cx="20" cy="21" r="1"></circle>
                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                     </svg>
+                    <span class="cart-count" id="cartCount" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">0</span>
                 </button>
 
                 <a href="login.html" class="user-btn" style="padding: 8px 14px; gap: 6px;">
@@ -1081,6 +1082,9 @@
 
             localStorage.setItem('cssberlin_cart', JSON.stringify(cart));
 
+            // Update cart count in header
+            updateCartCount();
+
             // Show success message
             this.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> Hinzugefügt!';
             this.style.background = '#4CAF50';
@@ -1090,6 +1094,18 @@
                 this.style.background = '';
             }, 2000);
         });
+
+        // Update cart count
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cssberlin_cart') || '[]');
+            const cartCountElement = document.getElementById('cartCount');
+            if (cartCountElement) {
+                cartCountElement.textContent = cart.length;
+            }
+        }
+
+        // Initialize cart count on page load
+        updateCartCount();
 
         // Buy Now functionality
         document.getElementById('buyNowBtn').addEventListener('click', function() {
