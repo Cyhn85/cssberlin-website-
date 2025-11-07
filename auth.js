@@ -484,8 +484,7 @@ function protectWishlistPage() {
             // Save current page to redirect back after login
             sessionStorage.setItem('redirect_after_login', 'wunschliste.html');
 
-            // Redirect to login
-            alert('Bitte melden Sie sich an, um Ihre Wunschliste zu sehen.');
+            // Redirect to login silently for smoother UX
             window.location.href = 'login.html';
         }
     }
