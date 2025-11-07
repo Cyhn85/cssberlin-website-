@@ -468,17 +468,13 @@ function handleBuyClick(productId) {
     const product = sampleProducts.find(p => p.id === productId);
     if (!product) return;
 
-    // Direct buy - check login first
-    if (!window.isLoggedIn || !window.isLoggedIn()) {
-        if (confirm('Sie müssen angemeldet sein, um zu kaufen. Möchten Sie sich jetzt anmelden?')) {
-            sessionStorage.setItem('redirect_after_login', window.location.href);
-            window.location.href = 'login.html';
-        }
-        return;
-    }
+    // Direct buy - add to cart and go to checkout
+    handleAddToCart(productId);
 
-    // Could trigger cart modal here
-    // showCartModal(product);
+    // Redirect to cart page
+    setTimeout(() => {
+        window.location.href = 'warenkorb.html';
+    }, 100);
 }
 
 // ============================================
