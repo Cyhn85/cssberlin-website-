@@ -119,41 +119,53 @@ if (document.getElementById('loginForm')) {
         submitBtn.textContent = 'Wird angemeldet...';
 
         try {
-            // Call backend API
-            const response = await fetch('http://195.201.146.224:8000/api/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email,
-                    password
-                })
-            });
+            // Get users from localStorage
+            const users = JSON.parse(localStorage.getItem('cssberlin_users') || '[]');
 
-            const data = await response.json();
+            // Find user by email
+            const user = users.find(u => u.email === email);
 
-            if (response.ok && data.success) {
-                // Success - login user
-                login(data.user, remember);
-
-                // Check if redirected from another page
-                const redirectUrl = sessionStorage.getItem('redirect_after_login') || 'index.html';
-                sessionStorage.removeItem('redirect_after_login');
-
-                // Show success message
-                setTimeout(() => {
-                    window.location.href = redirectUrl;
-                }, 100);
-            } else {
-                // Error from backend
-                showError(data.detail || data.message || 'Anmeldung fehlgeschlagen');
+            if (!user) {
+                showError('E-Mail oder Passwort ist falsch');
                 submitBtn.disabled = false;
                 submitBtn.textContent = originalText;
+                return;
             }
+
+            // Check password
+            if (user.password !== password) {
+                showError('E-Mail oder Passwort ist falsch');
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+                return;
+            }
+
+            // Check if email is verified
+            if (!user.verified) {
+                showError('Bitte bestätigen Sie zuerst Ihre E-Mail-Adresse');
+                sessionStorage.setItem('pending_verification_email', email);
+
+                setTimeout(() => {
+                    window.location.href = 'verify-email.html';
+                }, 2000);
+                return;
+            }
+
+            // Success - login user
+            login(user, remember);
+
+            // Check if redirected from another page
+            const redirectUrl = sessionStorage.getItem('redirect_after_login') || 'index.html';
+            sessionStorage.removeItem('redirect_after_login');
+
+            // Success message
+            alert(`✅ Willkommen zurück, ${user.firstName}!`);
+
+            // Redirect
+            window.location.href = redirectUrl;
         } catch (error) {
             console.error('Login error:', error);
-            showError('Verbindungsfehler. Bitte versuchen Sie es später erneut.');
+            showError('Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.');
             submitBtn.disabled = false;
             submitBtn.textContent = originalText;
         }
