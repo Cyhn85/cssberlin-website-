@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zur Kasse - CSS Berlin</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .checkout-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 40px;
+        }
+
+        .checkout-section {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .checkout-section h2 {
+            font-size: 24px;
+            color: #2D5016;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #2D5016;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .order-summary {
+            position: sticky;
+            top: 100px;
+        }
+
+        .order-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .order-item img {
+            width: 80px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .order-item-details {
+            flex: 1;
+        }
+
+        .order-item-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .order-item-meta {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .order-item-price {
+            font-weight: 700;
+            color: #2D5016;
+            font-size: 18px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .summary-row.total {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2D5016;
+            padding-top: 15px;
+            margin-top: 15px;
+            border-top: 2px solid #2D5016;
+        }
+
+        .payment-methods {
+            display: grid;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .payment-option {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .payment-option:hover {
+            border-color: #2D5016;
+            background: #f9f9f9;
+        }
+
+        .payment-option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #2D5016;
+        }
+
+        .payment-option-content {
+            flex: 1;
+        }
+
+        .payment-option-title {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .payment-option-desc {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .place-order-btn {
+            width: 100%;
+            padding: 18px;
+            background: #2D5016;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .place-order-btn:hover {
+            background: #1F3A0E;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(45, 80, 22, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+            }
+
+            .order-summary {
+                position: static;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- News Banner at Top -->
+    <div class="news-banner" style="position: sticky; top: 0; z-index: 999;">
+        <div class="news-slider" id="newsSlider">
+            <div class="news-item" data-link="co2-impact.html">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                </svg>
+                <span>🌍 248.5 Tonnen CO₂ gespart - Jeder Kauf zählt für unseren Planeten!</span>
+            </div>
+            <div class="news-item" data-link="/campaign/3for2-shipping">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                </svg>
+                <span>📦 2 Produkte kaufen, 3. Produkt Versand GRATIS!</span>
+            </div>
+            <div class="news-item" data-link="/leaderboard">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                </svg>
+                <span>🏆 CO₂ Rangliste - Wer spart am meisten? Klick für die Top 100!</span>
+            </div>
+            <div class="news-item" data-link="/trees">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2v20M5 9l7-7 7 7M12 22l-3-3h6l-3 3z"></path>
+                </svg>
+                <span>🌳 8,234 Bäume gepflanzt - Dein Beitrag macht den Unterschied!</span>
+            </div>
+            <div class="news-item" data-link="/sale">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 6v6l4 2" stroke="white" fill="none"></path>
+                </svg>
+                <span>🔥 Sale: 780 neue Produkte - Bis zu 70% Rabatt diese Woche!</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header" style="position: sticky; top: 40px; z-index: 998; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <div class="header-container">
+            <!-- Left Side: New Logo Design -->
+            <a href="index.html" style="text-decoration: none; display: flex; flex-direction: column; align-items: flex-start; gap: 4px;">
+                <div style="font-size: 38px; font-weight: 900; background: linear-gradient(135deg, #FF8C42, #2D5016); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 2px;">
+                    CSS Berlin
+                </div>
+                <div style="font-size: 15px; font-weight: 600; color: #666; letter-spacing: 0.5px; text-align: center; width: 100%;">
+                    Climate Smart Solutions
+                </div>
+            </a>
+
+            <!-- Right Actions -->
+            <div class="header-actions" style="gap: 8px; margin-left: auto;">
+                <a href="inserieren.html" class="inserieren-btn" title="Artikel inserieren" style="padding: 8px 16px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"></path>
+                    </svg>
+                    <span>Inserieren</span>
+                </a>
+
+                <button class="icon-btn" title="Benachrichtigungen" style="width: 40px; height: 40px; padding: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                    <span class="notification-badge" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">2</span>
+                </button>
+
+                <button class="icon-btn" title="Verhandlungen" onclick="window.location.href='messages.html'" style="width: 40px; height: 40px; padding: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        <path d="M8 10h.01M12 10h.01M16 10h.01"></path>
+                    </svg>
+                    <span class="negotiation-count" id="negotiationCount" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">0</span>
+                </button>
+
+                <button class="icon-btn" id="wishlistBtn" title="Wunschliste" onclick="window.location.href='wunschliste.html'" style="width: 40px; height: 40px; padding: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                    <span class="wishlist-count" id="wishlistCount" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">0</span>
+                </button>
+
+                <button class="icon-btn" title="Warenkorb" onclick="window.location.href='warenkorb.html'" style="width: 40px; height: 40px; padding: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-count" id="cartCount" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">0</span>
+                </button>
+
+                <a href="login.html" class="user-btn" style="padding: 8px 14px; gap: 6px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span style="font-size: 14px;">Anmelden</span>
+                </a>
+
+                <span class="header-divider" style="padding: 0 4px; font-size: 16px; color: #999; font-weight: 300;">/</span>
+
+                <a href="registrieren.html" class="register-btn" style="padding: 8px 14px; gap: 6px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="8.5" cy="7" r="4"></circle>
+                        <line x1="20" y1="8" x2="20" y2="14"></line>
+                        <line x1="23" y1="11" x2="17" y2="11"></line>
+                    </svg>
+                    <span style="font-size: 14px;">Registrieren</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- News Banner -->
+    
+    </div>
+
+    <!-- Header -->
+    
+
+    <div class="checkout-container">
+        <!-- Left: Checkout Form -->
+        <div>
+            <div class="checkout-section">
+                <h2>📍 Lieferadresse</h2>
+                <form id="checkoutForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Vorname *</label>
+                            <input type="text" id="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Nachname *</label>
+                            <input type="text" id="lastName" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>E-Mail *</label>
+                        <input type="email" id="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Telefon *</label>
+                        <input type="tel" id="phone" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Straße und Hausnummer *</label>
+                        <input type="text" id="street" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Postleitzahl *</label>
+                            <input type="text" id="postalCode" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Stadt *</label>
+                            <input type="text" id="city" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Land *</label>
+                        <select id="country" required>
+                            <option value="DE">Deutschland</option>
+                            <option value="AT">Österreich</option>
+                            <option value="CH">Schweiz</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+
+            <div class="checkout-section" style="margin-top: 20px;">
+                <h2>💳 Zahlungsmethode</h2>
+                <div class="payment-methods">
+                    <label class="payment-option">
+                        <input type="radio" name="payment" value="stripe" checked>
+                        <div class="payment-option-content">
+                            <div class="payment-option-title">💳 Kreditkarte (Stripe)</div>
+                            <div class="payment-option-desc">Visa, Mastercard, Amex</div>
+                        </div>
+                    </label>
+
+                    <label class="payment-option">
+                        <input type="radio" name="payment" value="paypal">
+                        <div class="payment-option-content">
+                            <div class="payment-option-title">🅿️ PayPal</div>
+                            <div class="payment-option-desc">Zahlen Sie sicher mit PayPal</div>
+                        </div>
+                    </label>
+
+                    <label class="payment-option">
+                        <input type="radio" name="payment" value="klarna">
+                        <div class="payment-option-content">
+                            <div class="payment-option-title">💰 Klarna</div>
+                            <div class="payment-option-desc">Jetzt kaufen, später bezahlen</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Order Summary -->
+        <div class="order-summary">
+            <div class="checkout-section">
+                <h2>📦 Bestellübersicht</h2>
+                <div id="orderItems"></div>
+
+                <div class="summary-row">
+                    <span>Zwischensumme:</span>
+                    <span id="subtotal">0,00€</span>
+                </div>
+                <div class="summary-row">
+                    <span>Versand:</span>
+                    <span id="shipping">4,99€</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Gesamt:</span>
+                    <span id="total">0,00€</span>
+                </div>
+
+                <button class="place-order-btn" onclick="placeOrder()">
+                    🔒 Zahlungspflichtig bestellen
+                </button>
+
+                <div style="margin-top: 15px; padding: 15px; background: #f0f8f0; border-radius: 8px; text-align: center; font-size: 13px; color: #666;">
+                    🔒 Sichere Zahlung • 🌱 CO₂ neutral versandt
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        // Load checkout items
+        function loadCheckoutItems() {
+            // Try to get single item checkout
+            const singleItem = sessionStorage.getItem('checkout_item');
+            // Try to get cart checkout
+            const cartItems = localStorage.getItem('cssberlin_cart');
+
+            let items = [];
+
+            if (singleItem) {
+                // Single item checkout (from Kaufen button)
+                items = [JSON.parse(singleItem)];
+            } else if (cartItems) {
+                // Cart checkout (from Zur Kasse button)
+                items = JSON.parse(cartItems);
+            }
+
+            if (items.length === 0) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            displayOrderItems(items);
+            calculateTotal(items);
+        }
+
+        function displayOrderItems(items) {
+            const container = document.getElementById('orderItems');
+            container.innerHTML = items.map(item => `
+                <div class="order-item">
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="order-item-details">
+                        <div class="order-item-name">${item.name}</div>
+                        <div class="order-item-meta">
+                            📏 Größe: ${item.size || 'M'} • ${item.category}
+                        </div>
+                        <div class="order-item-price">${item.price}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function calculateTotal(items) {
+            const subtotal = items.reduce((sum, item) => {
+                const price = parseFloat(item.price.replace('€', '').replace(',', '.'));
+                return sum + price;
+            }, 0);
+
+            const shipping = 4.99;
+            const total = subtotal + shipping;
+
+            document.getElementById('subtotal').textContent = subtotal.toFixed(2).replace('.', ',') + '€';
+            document.getElementById('total').textContent = total.toFixed(2).replace('.', ',') + '€';
+        }
+
+        function placeOrder() {
+            const form = document.getElementById('checkoutForm');
+
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+
+            alert(`✅ Vielen Dank für Ihre Bestellung!\n\n🔄 Sie werden zu ${paymentMethod.toUpperCase()} weitergeleitet...\n\n(Integration wird hinzugefügt)`);
+
+            // Clear checkout data
+            sessionStorage.removeItem('checkout_item');
+
+            // If from cart, clear cart
+            if (!sessionStorage.getItem('checkout_item')) {
+                localStorage.removeItem('cssberlin_cart');
+            }
+
+            // Redirect to confirmation
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 2000);
+        }
+
+        // Auto-fill if logged in
+        window.addEventListener('load', () => {
+            loadCheckoutItems();
+
+            if (isLoggedIn()) {
+                const user = getCurrentUser();
+                document.getElementById('firstName').value = user.firstName || '';
+                document.getElementById('lastName').value = user.lastName || '';
+                document.getElementById('email').value = user.email || '';
+            }
+        });
+    </script>
+</body>
+</html>

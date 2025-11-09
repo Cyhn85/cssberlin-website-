@@ -243,8 +243,8 @@ document.addEventListener('DOMContentLoaded', function() {
 // PRODUCT CARD CREATION - V3 WITH 2 BUTTONS
 // ============================================
 function createProductCard(product) {
-    // Check if product is in wishlist using auth.js function
-    const inWishlist = typeof window.isInWishlist === 'function' ? window.isInWishlist(product.id) : false;
+    // Check if product is in wishlist
+    const inWishlist = wishlist.includes(product.id);
 
     const discount = Math.round(((product.newPrice - product.price) / product.newPrice) * 100);
 
@@ -287,19 +287,20 @@ function createProductCard(product) {
                     <span class="product-new-price">Neupreis: ${product.newPrice.toFixed(2)}€</span>
                 </div>
 
-                <!-- V3: 3-Button Layout -->
+                <!-- V3: 2-Button Layout (Icon Cart + Full Kaufen) -->
                 <div class="product-actions" style="display: flex; gap: 8px;">
-                    <button class="add-to-cart-btn" data-product-id="${product.id}" style="flex: 1; padding: 12px; background: white; border: 2px solid #2D5016; color: #2D5016; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.3s ease;">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <button class="add-to-cart-btn" data-product-id="${product.id}" title="In den Warenkorb" style="width: 48px; padding: 12px; background: white; border: 2px solid #2D5016; color: #2D5016; border-radius: 8px; cursor: pointer; font-weight: 600; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="9" cy="21" r="1"></circle>
                             <circle cx="20" cy="21" r="1"></circle>
                             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                         </svg>
-                        Warenkorb
                     </button>
-                    <button class="buy-btn" data-product-id="${product.id}" style="flex: 1; padding: 12px; background: #2D5016; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.3s ease;">
+                    <button class="buy-btn" data-product-id="${product.id}" style="flex: 1; padding: 12px; background: #2D5016; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.3s ease;">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
                         </svg>
                         Kaufen
                     </button>
@@ -361,32 +362,12 @@ function attachProductEventListeners() {
             e.stopPropagation();
             const productId = parseInt(this.dataset.productId);
 
-            // Get product data from product card
-            const productCard = this.closest('.product-card');
-            const product = productsData.find(p => p.id === productId);
+            // Get product data
+            const product = sampleProducts.find(p => p.id === productId);
 
             if (product) {
-                const productData = {
-                    name: product.name,
-                    price: product.price,
-                    image: product.image,
-                    category: product.category
-                };
-
-                const isAdded = toggleWishlist(productId, productData);
-
-                // Update button UI
-                if (isAdded) {
-                    this.classList.add('active');
-                    this.querySelector('svg').setAttribute('fill', '#F44336');
-                    this.querySelector('svg').setAttribute('stroke', '#F44336');
-                    this.title = 'Von Wunschliste entfernen';
-                } else {
-                    this.classList.remove('active');
-                    this.querySelector('svg').setAttribute('fill', 'none');
-                    this.querySelector('svg').setAttribute('stroke', 'currentColor');
-                    this.title = 'Zur Wunschliste hinzufügen';
-                }
+                // Toggle wishlist
+                toggleWishlist(productId, this);
             }
         });
     });
@@ -588,11 +569,15 @@ function toggleWishlist(productId, button) {
         wishlist.splice(index, 1);
         button.classList.remove('active');
         button.querySelector('svg').setAttribute('fill', 'none');
+        button.querySelector('svg').setAttribute('stroke', 'currentColor');
+        button.title = 'Zur Wunschliste hinzufügen';
     } else {
         // Add to wishlist
         wishlist.push(productId);
         button.classList.add('active');
-        button.querySelector('svg').setAttribute('fill', 'currentColor');
+        button.querySelector('svg').setAttribute('fill', '#F44336');
+        button.querySelector('svg').setAttribute('stroke', '#F44336');
+        button.title = 'Von Wunschliste entfernen';
     }
 
     // Save to localStorage
@@ -600,6 +585,8 @@ function toggleWishlist(productId, button) {
 
     // Update header wishlist count
     updateWishlistCount();
+
+    return index === -1; // Return true if added, false if removed
 }
 
 // ============================================

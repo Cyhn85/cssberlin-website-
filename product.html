@@ -7,169 +7,156 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header-container">
-            <div class="logo-section">
-                <div class="logo-characters">
-                    <span class="char-c">C</span>
-                    <span class="char-s">S</span>
-                    <span class="char-s2">S</span>
-                </div>
-                <p class="slogan-text">Climate Smart Solutions</p>
+    <!-- News Banner at Top -->
+    <div class="news-banner" style="position: sticky; top: 0; z-index: 999;">
+        <div class="news-slider" id="newsSlider">
+            <div class="news-item" data-link="co2-impact.html">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                </svg>
+                <span>🌍 248.5 Tonnen CO₂ gespart - Jeder Kauf zählt für unseren Planeten!</span>
             </div>
+            <div class="news-item" data-link="/campaign/3for2-shipping">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                </svg>
+                <span>📦 2 Produkte kaufen, 3. Produkt Versand GRATIS!</span>
+            </div>
+            <div class="news-item" data-link="/leaderboard">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                </svg>
+                <span>🏆 CO₂ Rangliste - Wer spart am meisten? Klick für die Top 100!</span>
+            </div>
+            <div class="news-item" data-link="/trees">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2v20M5 9l7-7 7 7M12 22l-3-3h6l-3 3z"></path>
+                </svg>
+                <span>🌳 8,234 Bäume gepflanzt - Dein Beitrag macht den Unterschied!</span>
+            </div>
+            <div class="news-item" data-link="/sale">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 6v6l4 2" stroke="white" fill="none"></path>
+                </svg>
+                <span>🔥 Sale: 780 neue Produkte - Bis zu 70% Rabatt diese Woche!</span>
+            </div>
+        </div>
+    </div>
 
-            <div class="header-actions">
-                <a href="inserieren.html" class="inserieren-btn" title="Artikel inserieren">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <!-- Header -->
+    <header class="header" style="position: sticky; top: 40px; z-index: 998; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <div class="header-container">
+            <!-- Left Side: New Logo Design -->
+            <a href="index.html" style="text-decoration: none; display: flex; flex-direction: column; align-items: flex-start; gap: 4px;">
+                <div style="font-size: 38px; font-weight: 900; background: linear-gradient(135deg, #FF8C42, #2D5016); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 2px;">
+                    CSS Berlin
+                </div>
+                <div style="font-size: 15px; font-weight: 600; color: #666; letter-spacing: 0.5px; text-align: center; width: 100%;">
+                    Climate Smart Solutions
+                </div>
+            </a>
+
+            <!-- Right Actions -->
+            <div class="header-actions" style="gap: 8px; margin-left: auto;">
+                <a href="inserieren.html" class="inserieren-btn" title="Artikel inserieren" style="padding: 8px 16px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M12 5v14M5 12h14"></path>
                     </svg>
                     <span>Inserieren</span>
                 </a>
 
-                <button class="icon-btn" title="Benachrichtigungen">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <button class="icon-btn" title="Benachrichtigungen" style="width: 40px; height: 40px; padding: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
                         <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
                     </svg>
-                    <span class="notification-badge">3</span>
+                    <span class="notification-badge" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">2</span>
                 </button>
 
-                <button class="icon-btn" title="Verhandlungen">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <button class="icon-btn" title="Verhandlungen" onclick="window.location.href='messages.html'" style="width: 40px; height: 40px; padding: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                         <path d="M8 10h.01M12 10h.01M16 10h.01"></path>
                     </svg>
-                    <span class="negotiation-count">2</span>
+                    <span class="negotiation-count" id="negotiationCount" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">0</span>
                 </button>
 
-                <button class="icon-btn" id="wishlistBtn" title="Wunschliste">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <button class="icon-btn" id="wishlistBtn" title="Wunschliste" onclick="window.location.href='wunschliste.html'" style="width: 40px; height: 40px; padding: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                     </svg>
-                    <span class="wishlist-count" id="wishlistCount">0</span>
+                    <span class="wishlist-count" id="wishlistCount" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">0</span>
                 </button>
 
-                <button class="icon-btn" title="Warenkorb">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <button class="icon-btn" title="Warenkorb" onclick="window.location.href='warenkorb.html'" style="width: 40px; height: 40px; padding: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <circle cx="9" cy="21" r="1"></circle>
                         <circle cx="20" cy="21" r="1"></circle>
                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                     </svg>
+                    <span class="cart-count" id="cartCount" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">0</span>
                 </button>
 
-                <button class="user-btn">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <a href="login.html" class="user-btn" style="padding: 8px 14px; gap: 6px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
                     </svg>
-                    <span>Anmelden</span>
-                </button>
+                    <span style="font-size: 14px;">Anmelden</span>
+                </a>
+
+                <span class="header-divider" style="padding: 0 4px; font-size: 16px; color: #999; font-weight: 300;">/</span>
+
+                <a href="registrieren.html" class="register-btn" style="padding: 8px 14px; gap: 6px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="8.5" cy="7" r="4"></circle>
+                        <line x1="20" y1="8" x2="20" y2="14"></line>
+                        <line x1="23" y1="11" x2="17" y2="11"></line>
+                    </svg>
+                    <span style="font-size: 14px;">Registrieren</span>
+                </a>
             </div>
         </div>
     </header>
 
-    <!-- Breadcrumb -->
-    <div style="background: #f5f5f5; padding: 12px 0;">
-        <div style="max-width: 1400px; margin: 0 auto; padding: 0 32px; font-size: 14px; color: #666;">
-            <a href="index.html" style="color: #2D5016; text-decoration: none;">Home</a>
-            <span style="margin: 0 8px;">›</span>
-            <a href="damen.html" style="color: #2D5016; text-decoration: none;">Damen</a>
-            <span style="margin: 0 8px;">›</span>
-            <span>Produktdetails</span>
-        </div>
-    </div>
-
-    <!-- Product Detail Container -->
-    <div style="max-width: 1400px; margin: 40px auto; padding: 0 32px;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start;">
-
-            <!-- Left: Image Gallery -->
-            <div>
-                <div style="position: sticky; top: 20px;">
-                    <!-- Main Image -->
-                    <div style="background: #f9f9f9; border-radius: 12px; overflow: hidden; margin-bottom: 16px; aspect-ratio: 3/4;">
-                        <img id="mainImage" src="https://via.placeholder.com/600x800/2D5016/FFFFFF?text=Produkt+Bild"
+                    <!-- Main Image - Square -->
+                    <div style="background: #f9f9f9; border-radius: 12px; overflow: hidden; margin-bottom: 12px; aspect-ratio: 1/1; position: relative; width: 420px; height: 420px;">
+                        <img id="mainImage" src="https://via.placeholder.com/420x420/2D5016/FFFFFF?text=Produkt+Bild"
                              alt="Produkt" style="width: 100%; height: 100%; object-fit: cover;">
+
+                        <!-- Wishlist Button on Image -->
+                        <button id="productWishlistBtn" class="wishlist-btn-image" style="position: absolute; bottom: 12px; right: 12px; width: 44px; height: 44px; background: white; border: none; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: all 0.3s ease; z-index: 10;">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
                     </div>
 
                     <!-- Thumbnail Gallery -->
-                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
                         <div style="background: #f9f9f9; border-radius: 8px; overflow: hidden; aspect-ratio: 1; cursor: pointer; border: 2px solid #2D5016;">
-                            <img src="https://via.placeholder.com/150/2D5016/FFFFFF?text=1" style="width: 100%; height: 100%; object-fit: cover;">
+                            <img src="https://via.placeholder.com/100/2D5016/FFFFFF?text=1" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
                         <div style="background: #f9f9f9; border-radius: 8px; overflow: hidden; aspect-ratio: 1; cursor: pointer;">
-                            <img src="https://via.placeholder.com/150/4A7C2C/FFFFFF?text=2" style="width: 100%; height: 100%; object-fit: cover;">
+                            <img src="https://via.placeholder.com/100/4A7C2C/FFFFFF?text=2" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
                         <div style="background: #f9f9f9; border-radius: 8px; overflow: hidden; aspect-ratio: 1; cursor: pointer;">
-                            <img src="https://via.placeholder.com/150/6BA83E/FFFFFF?text=3" style="width: 100%; height: 100%; object-fit: cover;">
+                            <img src="https://via.placeholder.com/100/6BA83E/FFFFFF?text=3" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
                         <div style="background: #f9f9f9; border-radius: 8px; overflow: hidden; aspect-ratio: 1; cursor: pointer;">
-                            <img src="https://via.placeholder.com/150/8BC34A/FFFFFF?text=4" style="width: 100%; height: 100%; object-fit: cover;">
+                            <img src="https://via.placeholder.com/100/8BC34A/FFFFFF?text=4" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Right: Product Info -->
+            <!-- Middle: Beschreibung Column -->
             <div>
-                <!-- CO2 Badge -->
-                <div style="display: inline-block; background: linear-gradient(135deg, #2D5016, #4A7C2C); color: white; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-bottom: 16px;">
-                    🌱 12.5 kg CO₂ gespart
-                </div>
-
-                <!-- Title & Price -->
-                <h1 style="font-size: 32px; font-weight: 700; color: #212121; margin-bottom: 8px;">
-                    Elegante Damen Blazer Jacke
-                </h1>
-
-                <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 24px;">
-                    <span style="font-size: 36px; font-weight: 700; color: #2D5016;">€ 45,00</span>
-                    <span style="font-size: 20px; color: #999; text-decoration: line-through;">€ 89,00</span>
-                    <span style="background: #FF8C42; color: white; padding: 4px 12px; border-radius: 4px; font-size: 14px; font-weight: 600;">-49%</span>
-                </div>
-
-                <!-- Seller Info -->
-                <div style="background: #f5f5f5; padding: 16px; border-radius: 12px; margin-bottom: 24px;">
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #2D5016, #4A7C2C); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 18px;">
-                            JD
-                        </div>
-                        <div style="flex: 1;">
-                            <div style="font-weight: 600; color: #212121; margin-bottom: 4px;">Julia Dietrich</div>
-                            <div style="font-size: 13px; color: #666;">⭐ 4.9 (127 Bewertungen) • Aktiv vor 2 Stunden</div>
-                        </div>
-                        <button style="background: white; border: 2px solid #2D5016; color: #2D5016; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;">
-                            Profil ansehen
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Product Details -->
+                <!-- Description - IN MIDDLE COLUMN -->
                 <div style="margin-bottom: 24px;">
-                    <h3 style="font-size: 16px; font-weight: 700; color: #212121; margin-bottom: 12px;">Produktdetails</h3>
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
-                        <div style="background: #f9f9f9; padding: 12px; border-radius: 8px;">
-                            <div style="font-size: 12px; color: #666; margin-bottom: 4px;">Marke</div>
-                            <div style="font-weight: 600; color: #212121;">Zara</div>
-                        </div>
-                        <div style="background: #f9f9f9; padding: 12px; border-radius: 8px;">
-                            <div style="font-size: 12px; color: #666; margin-bottom: 4px;">Größe</div>
-                            <div style="font-weight: 600; color: #212121;">M / 38</div>
-                        </div>
-                        <div style="background: #f9f9f9; padding: 12px; border-radius: 8px;">
-                            <div style="font-size: 12px; color: #666; margin-bottom: 4px;">Zustand</div>
-                            <div style="font-weight: 600; color: #212121;">Sehr gut</div>
-                        </div>
-                        <div style="background: #f9f9f9; padding: 12px; border-radius: 8px;">
-                            <div style="font-size: 12px; color: #666; margin-bottom: 4px;">Farbe</div>
-                            <div style="font-weight: 600; color: #212121;">Schwarz</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Description -->
-                <div style="margin-bottom: 32px;">
                     <h3 style="font-size: 16px; font-weight: 700; color: #212121; margin-bottom: 12px;">Beschreibung</h3>
                     <p style="color: #666; line-height: 1.6; font-size: 15px;">
                         Elegante schwarze Blazer-Jacke von Zara in sehr gutem Zustand. Perfekt für Business oder besondere Anlässe.
@@ -178,20 +165,22 @@
                     </p>
                 </div>
 
-                <!-- Action Buttons -->
-                <div style="display: grid; grid-template-columns: 1fr auto; gap: 12px; margin-bottom: 16px;">
-                    <button style="background: #FF8C42; color: white; padding: 16px; border-radius: 12px; font-weight: 700; font-size: 16px; border: none; cursor: pointer; transition: all 0.3s;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="vertical-align: middle; margin-right: 8px;">
+                <!-- Action Buttons - MOVED TO MIDDLE COLUMN -->
+                <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+                    <button id="addToCartBtn" style="width: 56px; padding: 16px; background: white; border: 2px solid #2D5016; color: #2D5016; border-radius: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s;" title="In den Warenkorb">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="9" cy="21" r="1"></circle>
                             <circle cx="20" cy="21" r="1"></circle>
                             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                         </svg>
-                        In den Warenkorb
                     </button>
-                    <button style="background: white; border: 2px solid #FF8C42; color: #FF8C42; padding: 16px; border-radius: 12px; font-weight: 700; cursor: pointer; width: 60px;">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    <button id="buyNowBtn" style="flex: 1; padding: 16px; background: #2D5016; color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
                         </svg>
+                        Kaufen
                     </button>
                 </div>
 
@@ -203,7 +192,7 @@
                     Verkäufer kontaktieren
                 </button>
 
-                <!-- Shipping & Return Info -->
+                <!-- Shipping Info Card - MOVED TO MIDDLE COLUMN -->
                 <div style="background: #E8F5E9; padding: 16px; border-radius: 12px; border-left: 4px solid #2D5016;">
                     <div style="display: flex; gap: 12px; align-items: start; margin-bottom: 12px;">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2D5016" stroke-width="2">
@@ -223,6 +212,64 @@
                         <div>
                             <div style="font-weight: 600; color: #2D5016; margin-bottom: 4px;">14 Tage Rückgaberecht</div>
                             <div style="font-size: 13px; color: #4A7C2C;">Käuferschutz inklusive</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Product Info -->
+            <div>
+                <!-- CO2 Badge -->
+                <div style="display: inline-block; background: linear-gradient(135deg, #2D5016, #4A7C2C); color: white; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-bottom: 16px;">
+                    🌱 12.5 kg CO₂ gespart
+                </div>
+
+                <!-- Title & Price -->
+                <h1 style="font-size: 26px; font-weight: 700; color: #212121; margin-bottom: 8px;">
+                    Elegante Damen Blazer Jacke
+                </h1>
+
+                <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px;">
+                    <span style="font-size: 30px; font-weight: 700; color: #2D5016;">€ 45,00</span>
+                    <span style="font-size: 18px; color: #999; text-decoration: line-through;">€ 89,00</span>
+                    <span style="background: #FF8C42; color: white; padding: 4px 10px; border-radius: 4px; font-size: 13px; font-weight: 600;">-49%</span>
+                </div>
+
+                <!-- Seller Info -->
+                <div style="background: #f5f5f5; padding: 16px; border-radius: 12px; margin-bottom: 16px;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #2D5016, #4A7C2C); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 18px;">
+                            JD
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 600; color: #212121; margin-bottom: 4px;">Julia Dietrich</div>
+                            <div style="font-size: 13px; color: #666;">⭐ 4.9 (127 Bewertungen) • Aktiv vor 2 Stunden</div>
+                        </div>
+                        <button style="background: white; border: 2px solid #2D5016; color: #2D5016; padding: 8px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                            Profil ansehen
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product Details - MOVED BELOW SELLER -->
+                <div style="background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 16px; margin-bottom: 24px;">
+                    <h3 style="font-size: 14px; font-weight: 700; color: #212121; margin-bottom: 12px;">Produktdetails</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div style="background: #f9f9f9; padding: 10px; border-radius: 8px;">
+                            <div style="font-size: 10px; color: #666; margin-bottom: 4px;">Marke</div>
+                            <div style="font-weight: 600; color: #212121; font-size: 13px;">Zara</div>
+                        </div>
+                        <div style="background: #f9f9f9; padding: 10px; border-radius: 8px;">
+                            <div style="font-size: 10px; color: #666; margin-bottom: 4px;">Größe</div>
+                            <div style="font-weight: 600; color: #212121; font-size: 13px;">M / 38</div>
+                        </div>
+                        <div style="background: #f9f9f9; padding: 10px; border-radius: 8px;">
+                            <div style="font-size: 10px; color: #666; margin-bottom: 4px;">Zustand</div>
+                            <div style="font-weight: 600; color: #212121; font-size: 13px;">Sehr gut</div>
+                        </div>
+                        <div style="background: #f9f9f9; padding: 10px; border-radius: 8px;">
+                            <div style="font-size: 10px; color: #666; margin-bottom: 4px;">Farbe</div>
+                            <div style="font-weight: 600; color: #212121; font-size: 13px;">Schwarz</div>
                         </div>
                     </div>
                 </div>
@@ -365,5 +412,182 @@
     </footer>
 
     <script src="script.js"></script>
+    <script>
+        // Product ID (dynamically set this based on actual product)
+        const currentProductId = 1;
+
+        // Initialize wishlist button state
+        function initWishlistButton() {
+            const wishlistBtn = document.getElementById('productWishlistBtn');
+            if (!wishlistBtn) return;
+
+            const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+
+            if (wishlist.includes(currentProductId)) {
+                wishlistBtn.classList.add('active');
+                wishlistBtn.querySelector('svg').setAttribute('fill', '#F44336');
+                wishlistBtn.querySelector('svg').setAttribute('stroke', '#F44336');
+                wishlistBtn.style.background = '#fff5f5';
+            }
+        }
+
+        // Update wishlist count in header
+        function updateWishlistCount() {
+            const wishlistCountElement = document.getElementById('wishlistCount');
+            if (!wishlistCountElement) return;
+
+            const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+            const count = wishlist.length;
+            wishlistCountElement.textContent = count;
+
+            if (count > 0) {
+                wishlistCountElement.classList.add('active');
+            } else {
+                wishlistCountElement.classList.remove('active');
+            }
+        }
+
+        // Toggle wishlist on product page - Same as main page
+        const productWishlistBtn = document.getElementById('productWishlistBtn');
+        if (productWishlistBtn) {
+            productWishlistBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+                const index = wishlist.indexOf(currentProductId);
+                const svg = this.querySelector('svg');
+
+                if (index > -1) {
+                    // Remove from wishlist
+                    wishlist.splice(index, 1);
+                    localStorage.setItem('wishlist', JSON.stringify(wishlist));
+
+                    // Update button UI - back to default
+                    this.classList.remove('active');
+                    svg.setAttribute('fill', 'none');
+                    svg.setAttribute('stroke', 'currentColor');
+                    this.style.background = 'white';
+                    this.title = 'Zur Wunschliste hinzufügen';
+                } else {
+                    // Add to wishlist
+                    wishlist.push(currentProductId);
+                    localStorage.setItem('wishlist', JSON.stringify(wishlist));
+
+                    // Update button UI - show as active
+                    this.classList.add('active');
+                    svg.setAttribute('fill', '#F44336');
+                    svg.setAttribute('stroke', '#F44336');
+                    this.style.background = '#fff5f5';
+                    this.title = 'Von Wunschliste entfernen';
+                }
+
+                // Update header wishlist count
+                updateWishlistCount();
+            });
+        }
+
+        // Update cart count in header
+        function updateCartCountInHeader() {
+            const cart = JSON.parse(localStorage.getItem('cssberlin_cart') || '[]');
+            const cartCountElement = document.getElementById('cartCount');
+            if (cartCountElement) {
+                cartCountElement.textContent = cart.length;
+            }
+        }
+
+        // Add to cart button toggle - Same as main page
+        document.getElementById('addToCartBtn').addEventListener('click', function() {
+            let cart = JSON.parse(localStorage.getItem('cssberlin_cart') || '[]');
+            const existingItemIndex = cart.findIndex(item => item.id === currentProductId);
+            const svg = this.querySelector('svg');
+
+            if (existingItemIndex > -1) {
+                // Remove from cart (toggle off)
+                cart.splice(existingItemIndex, 1);
+                localStorage.setItem('cssberlin_cart', JSON.stringify(cart));
+
+                // Update button UI - back to default
+                this.style.background = 'white';
+                this.style.borderColor = '#2D5016';
+                this.style.color = '#2D5016';
+                svg.setAttribute('stroke', '#2D5016');
+            } else {
+                // Add to cart (toggle on)
+                const cartItem = {
+                    id: currentProductId,
+                    name: 'Elegante Damen Blazer Jacke',
+                    price: '45.00€',
+                    image: document.getElementById('mainImage').src,
+                    category: 'Zara',
+                    size: 'M',
+                    quantity: 1,
+                    addedAt: new Date().toISOString()
+                };
+
+                cart.push(cartItem);
+                localStorage.setItem('cssberlin_cart', JSON.stringify(cart));
+
+                // Update button UI - show as active
+                this.style.background = '#4CAF50';
+                this.style.borderColor = '#4CAF50';
+                this.style.color = 'white';
+                svg.setAttribute('stroke', 'white');
+            }
+
+            // Update cart count in header
+            updateCartCountInHeader();
+        });
+
+        // Buy now button
+        document.getElementById('buyNowBtn').addEventListener('click', function() {
+            const purchaseData = {
+                id: currentProductId,
+                name: 'Elegante Damen Blazer Jacke',
+                price: '45,00€',
+                image: document.getElementById('mainImage').src,
+                category: 'Zara',
+                size: 'M',
+                quantity: 1
+            };
+
+            sessionStorage.setItem('checkout_item', JSON.stringify(purchaseData));
+            window.location.href = 'checkout.html';
+        });
+
+        // Initialize cart button state
+        function initCartButton() {
+            const cart = JSON.parse(localStorage.getItem('cssberlin_cart') || '[]');
+            const existingItem = cart.find(item => item.id === currentProductId);
+            const addToCartBtn = document.getElementById('addToCartBtn');
+
+            if (existingItem) {
+                const svg = addToCartBtn.querySelector('svg');
+                addToCartBtn.style.background = '#4CAF50';
+                addToCartBtn.style.borderColor = '#4CAF50';
+                addToCartBtn.style.color = 'white';
+                svg.setAttribute('stroke', 'white');
+            }
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', function() {
+            initWishlistButton();
+            initCartButton();
+            updateWishlistCount();
+            updateCartCountInHeader();
+        });
+
+        // Hover effect for wishlist button
+        if (productWishlistBtn) {
+            productWishlistBtn.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.1)';
+            });
+
+            productWishlistBtn.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        }
+    </script>
 </body>
 </html>
