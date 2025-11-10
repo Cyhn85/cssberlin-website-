@@ -244,7 +244,11 @@ async function processProduct() {
 
         clearTimeout(timeoutId);
 
+        console.log('[DEBUG] Response status:', response.status);
+        console.log('[DEBUG] Response headers:', Object.fromEntries(response.headers.entries()));
+
         const data = await response.json();
+        console.log('[DEBUG] Response data:', data);
 
         if (data.success) {
             updateStep('step2', 'complete');
