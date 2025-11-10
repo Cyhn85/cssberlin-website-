@@ -60,13 +60,17 @@ function handleFiles(files) {
     Array.from(files).forEach(file => {
         // Validate file type
         if (!validTypes.includes(file.type)) {
-            alert(`${file.name} ist kein gültiges Bildformat (nur JPG, PNG, WEBP)`);
+            if (typeof toast !== 'undefined') {
+                toast.error('Ungültiges Format', `${file.name} ist kein gültiges Bildformat (nur JPG, PNG, WEBP)`, 4000);
+            }
             return;
         }
 
         // Validate file size
         if (file.size > maxSize) {
-            alert(`${file.name} ist zu groß (max. 5MB)`);
+            if (typeof toast !== 'undefined') {
+                toast.error('Datei zu groß', `${file.name} ist zu groß (max. 5MB)`, 4000);
+            }
             return;
         }
 
@@ -134,7 +138,9 @@ function initializeForm() {
 
         // Validate images
         if (uploadedImages.length === 0) {
-            alert('Bitte laden Sie mindestens ein Bild hoch!');
+            if (typeof toast !== 'undefined') {
+                toast.warning('Keine Bilder', 'Bitte laden Sie mindestens ein Bild hoch!', 4000);
+            }
             return;
         }
 
@@ -170,7 +176,9 @@ function initializeForm() {
 
         } catch (error) {
             console.error('Upload error:', error);
-            alert('Fehler beim Hochladen. Bitte versuchen Sie es erneut.');
+            if (typeof toast !== 'undefined') {
+                toast.error('Upload Fehler', 'Fehler beim Hochladen. Bitte versuchen Sie es erneut.', 5000);
+            }
         } finally {
             submitBtn.disabled = false;
             loadingSpinner.classList.remove('show');

@@ -20,8 +20,12 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!window.isLoggedIn || !window.isLoggedIn()) {
         // Redirect to login
         sessionStorage.setItem('redirect_after_login', 'messages.html');
-        alert('Bitte melden Sie sich an, um Nachrichten zu sehen.');
-        window.location.href = 'login.html';
+        if (typeof toast !== 'undefined') {
+            toast.info('Anmeldung erforderlich', 'Bitte melden Sie sich an, um Nachrichten zu sehen. Weiterleitung...', 3000);
+        }
+        setTimeout(() => {
+            window.location.href = 'login.html';
+        }, 1000);
         return;
     }
 

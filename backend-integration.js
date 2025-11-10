@@ -1,19 +1,19 @@
 /**
  * CSS Berlin - Backend Integration
  * Connects admin panel to FastAPI backend
+ *
+ * IMPORTANT: This file requires api-config.js to be loaded first!
+ * api-config.js provides automatic environment detection.
  */
 
-// API Configuration
-const API_CONFIG = {
-    // Local development
-    LOCAL: 'http://localhost:8000',
+// API_CONFIG is now provided by api-config.js (loaded first)
+// It automatically detects localhost vs production
+if (typeof API_CONFIG === 'undefined') {
+    console.error('[BACKEND-INTEGRATION] ERROR: api-config.js must be loaded before this file!');
+    throw new Error('api-config.js dependency missing');
+}
 
-    // Production (Hetzner)
-    PRODUCTION: 'http://195.201.146.224:8000',
-
-    // Use local by default, can be changed via UI
-    current: 'http://localhost:8000'
-};
+console.log('[BACKEND-INTEGRATION] Using API:', API_CONFIG.current);
 
 // Global state
 let motorStatus = {

@@ -259,7 +259,7 @@ img {
     align-items: center;
     gap: var(--spacing-sm);
     padding: var(--spacing-sm) var(--spacing-md);
-    background: var(--primary-green);
+    background: var(--primary-orange);
     color: var(--text-white);
     border-radius: var(--radius-lg);
     font-weight: var(--font-weight-semibold);
@@ -269,7 +269,7 @@ img {
 }
 
 .inserieren-btn:hover {
-    background: var(--primary-green-hover);
+    background: var(--primary-orange-hover);
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
 }
@@ -1472,4 +1472,440 @@ img {
 .social-links,
 .payment-methods {
     display: none !important;
+}
+
+/* ============================================
+   OFFER SYSTEM STYLES
+   Vinted-style negotiation UI components
+   ============================================ */
+
+/* Offer Product Info in Modal */
+.offer-product-info {
+    display: flex;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.offer-product-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+}
+
+.offer-product-details h3 {
+    font-size: 16px;
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.offer-product-brand {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+/* Offer Price Display */
+.offer-price-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md);
+    background: var(--accent-green);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.offer-price-label {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.offer-price-value {
+    font-size: 20px;
+    font-weight: var(--font-weight-bold);
+    color: var(--primary-green);
+}
+
+/* Offer Form Inputs */
+.offer-form-group {
+    margin-bottom: var(--spacing-lg);
+}
+
+.offer-form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.offer-input,
+.offer-textarea {
+    width: 100%;
+    padding: var(--spacing-md);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 15px;
+    font-family: var(--font-primary);
+    transition: all var(--transition-base);
+}
+
+.offer-input:focus,
+.offer-textarea:focus {
+    outline: none;
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 4px var(--accent-green);
+}
+
+.offer-discount-display {
+    font-size: 14px;
+    margin-top: var(--spacing-xs);
+    font-weight: var(--font-weight-semibold);
+}
+
+.offer-validation-error {
+    color: var(--error);
+    font-size: 13px;
+    margin-top: var(--spacing-xs);
+    display: none;
+}
+
+.offer-validation-error.show {
+    display: block;
+}
+
+.offer-daily-limit {
+    padding: var(--spacing-sm);
+    background: var(--accent-green);
+    border-radius: var(--radius-md);
+    text-align: center;
+    font-size: 14px;
+}
+
+.offer-info-box {
+    background: var(--bg-secondary);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.offer-info-box p {
+    font-size: 14px;
+    margin-bottom: var(--spacing-xs);
+    color: var(--text-primary);
+}
+
+/* Offer Modal */
+.offer-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-base);
+}
+
+.offer-modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.offer-modal-content {
+    background: var(--bg-primary);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-2xl);
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-xl);
+    transform: scale(0.9);
+    transition: all var(--transition-base);
+}
+
+.offer-modal-overlay.show .offer-modal-content {
+    transform: scale(1);
+}
+
+.offer-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.offer-modal-header h2 {
+    font-size: 22px;
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+}
+
+.offer-modal-close {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-full);
+    background: var(--bg-secondary);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: var(--text-secondary);
+    transition: all var(--transition-fast);
+}
+
+.offer-modal-close:hover {
+    background: var(--error);
+    color: white;
+}
+
+.offer-modal-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-xl);
+}
+
+.offer-submit-btn {
+    padding: var(--spacing-md) var(--spacing-xl);
+    background: var(--primary-green);
+    color: white;
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: 16px;
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.offer-submit-btn:hover {
+    background: var(--primary-green-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.offer-submit-btn:disabled {
+    background: var(--text-light);
+    cursor: not-allowed;
+    transform: none;
+}
+
+.offer-cancel-btn {
+    padding: var(--spacing-md) var(--spacing-xl);
+    background: transparent;
+    color: var(--text-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    font-size: 16px;
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.offer-cancel-btn:hover {
+    border-color: var(--error);
+    color: var(--error);
+}
+
+/* Offer Action Buttons */
+.btn-accept,
+.btn-counter,
+.btn-decline,
+.btn-details {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.btn-accept {
+    background: var(--success);
+    color: white;
+}
+
+.btn-accept:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-counter {
+    background: var(--primary-orange);
+    color: white;
+}
+
+.btn-counter:hover {
+    background: var(--primary-orange-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-decline {
+    background: transparent;
+    color: var(--error);
+    border: 2px solid var(--error);
+}
+
+.btn-decline:hover {
+    background: var(--error);
+    color: white;
+}
+
+.btn-details {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-details:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--primary-green);
+}
+
+/* Notification Dropdown */
+.notification-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 380px;
+    max-height: 500px;
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    margin-top: var(--spacing-sm);
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all var(--transition-base);
+    z-index: 1000;
+}
+
+.notification-dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.notification-dropdown-header {
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification-dropdown-header h3 {
+    font-size: 16px;
+    font-weight: var(--font-weight-bold);
+}
+
+.notification-mark-all {
+    font-size: 13px;
+    color: var(--primary-green);
+    cursor: pointer;
+    font-weight: var(--font-weight-semibold);
+}
+
+.notification-mark-all:hover {
+    text-decoration: underline;
+}
+
+.notification-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.notification-item {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.notification-item:hover {
+    background: var(--bg-secondary);
+}
+
+.notification-item.unread {
+    background: var(--accent-green);
+}
+
+.notification-item-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-xs);
+}
+
+.notification-item-title {
+    font-size: 14px;
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+}
+
+.notification-item-time {
+    font-size: 12px;
+    color: var(--text-light);
+}
+
+.notification-item-message {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.notification-empty {
+    padding: var(--spacing-3xl) var(--spacing-lg);
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+/* Offer Expiry Warning */
+.offer-expires {
+    font-size: 12px;
+    color: var(--warning);
+    font-weight: var(--font-weight-semibold);
+    margin-top: var(--spacing-xs);
+}
+
+/* Responsive - Offer System */
+@media (max-width: 768px) {
+    .offer-modal-content {
+        width: 95%;
+        padding: var(--spacing-lg);
+    }
+
+    .offer-modal-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .notification-dropdown {
+        width: calc(100vw - 40px);
+        right: 20px;
+    }
+
+    .offer-product-info {
+        flex-direction: column;
+    }
+
+    .offer-product-image {
+        width: 100%;
+        height: 200px;
+    }
 }

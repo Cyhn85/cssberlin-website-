@@ -773,10 +773,8 @@
         // Handle logout
         function handleLogout(e) {
             e.preventDefault();
-
-            if (confirm('Möchten Sie sich wirklich abmelden?')) {
-                logout();
-            }
+            // Directly logout (auth.js will show toast)
+            logout();
         }
 
         // Section navigation

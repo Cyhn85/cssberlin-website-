@@ -504,7 +504,9 @@
 
             const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
 
-            alert(`✅ Vielen Dank für Ihre Bestellung!\n\n🔄 Sie werden zu ${paymentMethod.toUpperCase()} weitergeleitet...\n\n(Integration wird hinzugefügt)`);
+            if (typeof toast !== 'undefined') {
+                toast.success('Bestellung erfolgreich', `Vielen Dank! Sie werden zu ${paymentMethod.toUpperCase()} weitergeleitet...`, 3000);
+            }
 
             // Clear checkout data
             sessionStorage.removeItem('checkout_item');

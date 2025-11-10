@@ -593,22 +593,26 @@
             const cart = JSON.parse(localStorage.getItem('cssberlin_cart') || '[]');
 
             if (cart.length === 0) {
-                alert('Ihr Warenkorb ist leer!');
+                if (typeof toast !== 'undefined') {
+                    toast.warning('Warenkorb leer', 'Ihr Warenkorb ist leer!', 3000);
+                }
                 return;
             }
 
             if (!isLoggedIn()) {
-                if (confirm('Sie müssen angemeldet sein, um zur Kasse zu gehen. Möchten Sie sich jetzt anmelden?')) {
-                    sessionStorage.setItem('redirect_after_login', 'warenkorb.html');
-                    window.location.href = 'login.html';
+                if (typeof toast !== 'undefined') {
+                    toast.info('Anmeldung erforderlich', 'Sie müssen angemeldet sein. Weiterleitung zum Login...', 3000);
                 }
+                sessionStorage.setItem('redirect_after_login', 'warenkorb.html');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1000);
                 return;
             }
 
             // Store cart in session for checkout
             sessionStorage.setItem('checkout_items', JSON.stringify(cart));
-            alert('Weiterleitung zur Kasse... (Stripe/PayPal Integration wird hinzugefügt)');
-            // window.location.href = 'checkout.html';
+            window.location.href = 'checkout.html';
         });
 
         // Initialize

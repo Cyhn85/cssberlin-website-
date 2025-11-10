@@ -35,16 +35,16 @@ function createPaymentModal(productData) {
         <div id="paymentModal" class="payment-modal">
             <div class="payment-modal-overlay" onclick="closePaymentModal()"></div>
             <div class="payment-modal-content">
-                <button class="payment-modal-close" onclick="closePaymentModal()">×</button>
+                <button class="payment-modal-close" onclick="closePaymentModal()">ï¿½</button>
 
-                <h2 style="margin: 0 0 24px 0; font-size: 24px; color: #212121;">Zahlung wählen</h2>
+                <h2 style="margin: 0 0 24px 0; font-size: 24px; color: #212121;">Zahlung wï¿½hlen</h2>
 
                 <!-- Product Summary -->
                 <div class="payment-product-summary">
                     <img src="${productData.image}" alt="${productData.title}">
                     <div>
                         <h3>${productData.title}</h3>
-                        <p class="payment-price">¬${productData.price.toFixed(2)}</p>
+                        <p class="payment-price">ï¿½${productData.price.toFixed(2)}</p>
                     </div>
                 </div>
 
@@ -62,7 +62,7 @@ function createPaymentModal(productData) {
                             </div>
                             <div>
                                 <strong>Kreditkarte</strong>
-                                <span class="payment-commission">1,4% + ¬0,25</span>
+                                <span class="payment-commission">1,4% + ï¿½0,25</span>
                             </div>
                         </div>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -82,7 +82,7 @@ function createPaymentModal(productData) {
                             </div>
                             <div>
                                 <strong>PayPal</strong>
-                                <span class="payment-commission">2,49% + ¬0,35</span>
+                                <span class="payment-commission">2,49% + ï¿½0,35</span>
                             </div>
                         </div>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -99,9 +99,9 @@ function createPaymentModal(productData) {
                                 </svg>
                             </div>
                             <div>
-                                <strong>Klarna - Später bezahlen</strong>
-                                <span class="payment-commission">3,29% + ¬0,25</span>
-                                <small style="display: block; color: #FFB3C7; margin-top: 4px;">30 Tage später oder Ratenzahlung</small>
+                                <strong>Klarna - Spï¿½ter bezahlen</strong>
+                                <span class="payment-commission">3,29% + ï¿½0,25</span>
+                                <small style="display: block; color: #FFB3C7; margin-top: 4px;">30 Tage spï¿½ter oder Ratenzahlung</small>
                             </div>
                         </div>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -117,8 +117,8 @@ function createPaymentModal(productData) {
                         <path d="M9 12l2 2 4-4"/>
                     </svg>
                     <div style="font-size: 13px; color: #757575;">
-                        <strong style="color: #4CAF50;">SSL-verschlüsselt</strong><br>
-                        Ihre Zahlung ist sicher und geschützt
+                        <strong style="color: #4CAF50;">SSL-verschlï¿½sselt</strong><br>
+                        Ihre Zahlung ist sicher und geschï¿½tzt
                     </div>
                 </div>
             </div>
@@ -141,7 +141,7 @@ function closePaymentModal() {
 // ========================================
 
 async function handleStripePayment(productData) {
-    console.log('=ã Stripe payment initiated for:', productData);
+    console.log('=ï¿½ Stripe payment initiated for:', productData);
 
     try {
         // Show loading
@@ -167,7 +167,9 @@ async function handleStripePayment(productData) {
 
     } catch (error) {
         console.error('L Stripe payment error:', error);
-        alert('Fehler bei der Stripe-Zahlung. Bitte versuchen Sie es erneut.');
+        if (typeof toast !== 'undefined') {
+            toast.error('Stripe Zahlung Fehler', 'Fehler bei der Stripe-Zahlung. Bitte versuchen Sie es erneut.', 5000);
+        }
         hidePaymentLoading();
     }
 }
@@ -203,7 +205,9 @@ async function handlePayPalPayment(productData) {
 
     } catch (error) {
         console.error('L PayPal payment error:', error);
-        alert('Fehler bei der PayPal-Zahlung. Bitte versuchen Sie es erneut.');
+        if (typeof toast !== 'undefined') {
+            toast.error('PayPal Zahlung Fehler', 'Fehler bei der PayPal-Zahlung. Bitte versuchen Sie es erneut.', 5000);
+        }
         hidePaymentLoading();
     }
 }
@@ -225,7 +229,7 @@ async function handleKlarnaPayment(productData) {
             body: JSON.stringify({
                 product_id: productData.id,
                 quantity: 1,
-                payment_method: 'pay_later'  // 30 Tage später
+                payment_method: 'pay_later'  // 30 Tage spï¿½ter
             })
         });
 
@@ -244,7 +248,9 @@ async function handleKlarnaPayment(productData) {
 
     } catch (error) {
         console.error('L Klarna payment error:', error);
-        alert('Fehler bei der Klarna-Zahlung. Bitte versuchen Sie es erneut.');
+        if (typeof toast !== 'undefined') {
+            toast.error('Klarna Zahlung Fehler', 'Fehler bei der Klarna-Zahlung. Bitte versuchen Sie es erneut.', 5000);
+        }
         hidePaymentLoading();
     }
 }
@@ -318,7 +324,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const productData = {
                 id: 1, // TODO: Get from URL or page
                 title: document.querySelector('h1').textContent,
-                price: parseFloat(document.querySelector('.price-large').textContent.replace('¬', '').replace(',', '.')),
+                price: parseFloat(document.querySelector('.price-large').textContent.replace('ï¿½', '').replace(',', '.')),
                 image: document.querySelector('.main-image-container img').src
             };
 

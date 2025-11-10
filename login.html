@@ -415,6 +415,7 @@
 
     <script src="toast.js"></script>
     <script src="auth.js"></script>
+    <script src="auth-admin.js"></script>
 
     <script>
         // Google OAuth Configuration
@@ -476,8 +477,22 @@
             // Login user
             login(user, false);
 
+            // Admin email constant
+            const ADMIN_EMAIL = 'info@cssberlin.de';
+
+            // Check if user is admin
+            let redirectUrl;
+            if (user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+                // Admin user - redirect to admin panel
+                sessionStorage.setItem('adminToken', 'user_admin_' + Date.now());
+                redirectUrl = 'admin.html';
+                console.log('✅ Admin login detected - redirecting to admin panel');
+            } else {
+                redirectUrl = 'index.html';
+            }
+
             setTimeout(() => {
-                window.location.href = 'index.html';
+                window.location.href = redirectUrl;
             }, 1000);
         }
 

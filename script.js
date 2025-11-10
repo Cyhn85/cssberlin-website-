@@ -4,6 +4,24 @@
 // ============================================
 
 // ============================================
+// ENVIRONMENT CONFIGURATION
+// ============================================
+// Auto-detect backend API URL based on hostname
+const API_BASE_URL = (function() {
+    const hostname = window.location.hostname;
+
+    // Local development
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        return 'http://localhost:8000';
+    }
+
+    // Production environment
+    return 'https://api.cssberlin.de';
+})();
+
+console.log('[CONFIG] API Base URL:', API_BASE_URL);
+
+// ============================================
 // SAMPLE PRODUCTS DATA
 // ============================================
 const sampleProducts = [
@@ -228,7 +246,9 @@ const productsPerPage = 16;
 // INITIALIZE APP
 // ============================================
 document.addEventListener('DOMContentLoaded', function() {
-    initProducts();
+    // Check if page has a specific category filter
+    const category = window.pageCategory || null;
+    initProducts(category);
     initNewsSlider();
     initFooterNewsSlider();
     initLoadMore();
@@ -237,6 +257,7 @@ document.addEventListener('DOMContentLoaded', function() {
     updateWishlistCount();
     initMegaMenus();
     initSearch();
+    hideMessageIconForGuests();
 });
 
 // ============================================
@@ -320,23 +341,66 @@ function createProductCard(product) {
 // ============================================
 // INITIALIZE PRODUCTS
 // ============================================
-function initProducts() {
+async function initProducts(category = null) {
     const productsGrid = document.getElementById('productsGrid');
     if (!productsGrid) return;
 
-    // Load first 16 products
-    const productsToShow = sampleProducts.slice(0, productsPerPage);
+    try {
+        // Build API URL with optional category filter
+        let apiUrl = `${API_BASE_URL}/api/products?limit=16`;
+        if (category) {
+            apiUrl += `&category=${encodeURIComponent(category)}`;
+        }
 
-    productsToShow.forEach(product => {
-        const productCard = createProductCard(product);
-        productsGrid.innerHTML += productCard;
-    });
+        console.log('[API] Fetching products from:', apiUrl);
 
-    // Attach event listeners
-    attachProductEventListeners();
+        // Fetch products from backend API
+        const response = await fetch(apiUrl);
+        const data = await response.json();
 
-    // Update cart button states
-    updateCartButtonStates();
+        // Transform backend data to frontend format
+        const products = data.products.map(p => ({
+            id: p.id,
+            brand: p.brand || 'Unbekannt',
+            name: p.title || '',
+            size: p.size || '',
+            condition: p.condition || 'Gebraucht',
+            price: p.price || 0,
+            newPrice: p.original_price || (p.price * 2),
+            carbonSaved: Math.round((p.price || 0) * 0.4 * 10) / 10,
+            tier: 'champion',
+            image: (p.images && p.images.length > 0) ? p.images[0] : 'https://images.unsplash.com/photo-1542272454315-7f6f36d69c8d?w=500',
+            sale: false
+        }));
+
+        // Store products globally for wishlist/cart functionality
+        window.loadedProducts = products;
+
+        // Display products
+        products.forEach(product => {
+            const productCard = createProductCard(product);
+            productsGrid.innerHTML += productCard;
+        });
+
+        // Attach event listeners
+        attachProductEventListeners();
+
+        // Update cart button states
+        updateCartButtonStates();
+
+        const categoryInfo = category ? ` (category: ${category})` : '';
+        console.log(`Loaded ${products.length} products from backend${categoryInfo}`);
+    } catch (error) {
+        console.error('Error loading products:', error);
+        // Fallback to sample products if API fails
+        const productsToShow = sampleProducts.slice(0, productsPerPage);
+        productsToShow.forEach(product => {
+            const productCard = createProductCard(product);
+            productsGrid.innerHTML += productCard;
+        });
+        attachProductEventListeners();
+        updateCartButtonStates();
+    }
 }
 
 // ============================================
@@ -363,7 +427,8 @@ function attachProductEventListeners() {
             const productId = parseInt(this.dataset.productId);
 
             // Get product data
-            const product = sampleProducts.find(p => p.id === productId);
+            const allProducts = window.loadedProducts || sampleProducts;
+            const product = allProducts.find(p => p.id === productId);
 
             if (product) {
                 // Toggle wishlist
@@ -767,6 +832,29 @@ function initWishlist() {
 }
 
 // ============================================
+// HIDE MESSAGE ICON FOR GUESTS
+// ============================================
+function hideMessageIconForGuests() {
+    // Check if user is logged in
+    const loggedIn = window.isLoggedIn && window.isLoggedIn();
+
+    // Find all message/negotiation icon buttons
+    const messageButtons = document.querySelectorAll('[title="Verhandlungen"], .icon-btn[onclick*="messages.html"]');
+
+    messageButtons.forEach(button => {
+        if (!loggedIn) {
+            // Hide the button for non-logged-in users
+            button.style.display = 'none';
+        } else {
+            // Show the button for logged-in users
+            button.style.display = '';
+        }
+    });
+
+    console.log(`Message icon ${loggedIn ? 'visible' : 'hidden'} for ${loggedIn ? 'logged-in' : 'guest'} users`);
+}
+
+// ============================================
 // NOTIFICATION SYSTEM
 // ============================================
 function showNotification(message, type = 'info') {
@@ -917,34 +1005,71 @@ function initSearch() {
     });
 }
 
-function performSearch(query) {
-    const productCards = document.querySelectorAll('.product-card');
+async function performSearch(query) {
+    const productsGrid = document.getElementById('productsGrid');
+    if (!productsGrid) return;
+
     const lowerQuery = query.toLowerCase().trim();
 
     if (lowerQuery === '') {
-        // Show all products
-        productCards.forEach(card => {
-            card.style.display = 'block';
-        });
+        // Reload all products when search is empty
+        await initProducts();
         return;
     }
 
-    // Filter products
-    let visibleCount = 0;
-    productCards.forEach(card => {
-        const title = card.querySelector('.product-title')?.textContent.toLowerCase() || '';
-        const brand = card.querySelector('.product-brand')?.textContent.toLowerCase() || '';
-        const category = card.dataset.category?.toLowerCase() || '';
+    try {
+        // Search using backend API (uses environment-aware API_BASE_URL)
+        const response = await fetch(`${API_BASE_URL}/api/search?q=${encodeURIComponent(lowerQuery)}`);
+        const data = await response.json();
 
-        if (title.includes(lowerQuery) || brand.includes(lowerQuery) || category.includes(lowerQuery)) {
-            card.style.display = 'block';
-            visibleCount++;
-        } else {
-            card.style.display = 'none';
+        // Transform backend data to frontend format
+        const products = data.products.map(p => ({
+            id: p.id,
+            brand: p.brand || 'Unbekannt',
+            name: p.title || '',
+            size: p.size || '',
+            condition: p.condition || 'Gebraucht',
+            price: p.price || 0,
+            newPrice: p.original_price || (p.price * 2),
+            carbonSaved: Math.round((p.price || 0) * 0.4 * 10) / 10,
+            tier: 'champion',
+            image: (p.images && p.images.length > 0) ? p.images[0] : 'https://images.unsplash.com/photo-1542272454315-7f6f36d69c8d?w=500',
+            sale: false
+        }));
+
+        // Clear grid and display search results
+        productsGrid.innerHTML = '';
+
+        if (products.length === 0) {
+            productsGrid.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #757575;">Keine Produkte gefunden</p>';
+            return;
         }
-    });
 
-    // No notification needed for search results
+        products.forEach(product => {
+            const productCard = createProductCard(product);
+            productsGrid.innerHTML += productCard;
+        });
+
+        // Attach event listeners to new cards
+        attachProductEventListeners();
+        updateCartButtonStates();
+
+        console.log(`Search "${lowerQuery}": ${products.length} results`);
+    } catch (error) {
+        console.error('Error searching products:', error);
+        // Fallback to client-side filtering on existing cards
+        const productCards = document.querySelectorAll('.product-card');
+        productCards.forEach(card => {
+            const title = card.querySelector('.product-title')?.textContent.toLowerCase() || '';
+            const brand = card.querySelector('.product-brand')?.textContent.toLowerCase() || '';
+
+            if (title.includes(lowerQuery) || brand.includes(lowerQuery)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
 }
 
 // ============================================

@@ -205,7 +205,7 @@ if (document.getElementById('loginForm')) {
             // Success - login user
             login(user, remember);
 
-            // Check if redirected from another page
+            // Redirect to appropriate page
             const redirectUrl = sessionStorage.getItem('redirect_after_login') || 'index.html';
             sessionStorage.removeItem('redirect_after_login');
 
@@ -255,9 +255,19 @@ function login(user, remember = false) {
  * Logout user
  */
 function logout() {
+    // Show logout toast
+    if (typeof toast !== 'undefined') {
+        toast.success('Abgemeldet', 'Sie wurden erfolgreich abgemeldet.', 2000);
+    }
+
+    // Clear session
     localStorage.removeItem('cssberlin_session');
     sessionStorage.removeItem('cssberlin_session');
-    window.location.href = 'index.html';
+
+    // Redirect after short delay
+    setTimeout(() => {
+        window.location.href = 'index.html';
+    }, 500);
 }
 
 /**

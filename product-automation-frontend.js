@@ -157,9 +157,21 @@ async function processProduct() {
     const productSize = document.getElementById('productSize').value.trim();
     const productPrice = document.getElementById('productPrice').value;
     const productCondition = document.getElementById('productCondition').value;
+    const productCategory = document.getElementById('productCategory').value;
 
     if (!productName || !productBrand) {
         showNotification('Ürün adı ve marka zorunludur!', 'warning');
+        return;
+    }
+
+    if (!productCategory) {
+        showNotification('Ana kategori seçimi zorunludur!', 'warning');
+        return;
+    }
+
+    // Validate price (optional but must be positive if provided)
+    if (productPrice && (isNaN(productPrice) || parseFloat(productPrice) <= 0)) {
+        showNotification('Fiyat pozitif bir sayı olmalıdır!', 'warning');
         return;
     }
 
@@ -183,12 +195,36 @@ async function processProduct() {
             formData.append('images', file);
         });
 
+        // Get selected platforms
+        const platforms = [];
+        if (document.getElementById('platformCSSBerlin')?.checked) {
+            platforms.push('cssberlin');
+        }
+        if (document.getElementById('platformVinted')?.checked) {
+            platforms.push('vinted');
+        }
+        if (document.getElementById('platformKleinanzeigen')?.checked) {
+            platforms.push('kleinanzeigen');
+        }
+        if (document.getElementById('platformEbay')?.checked) {
+            platforms.push('ebay');
+        }
+
+        // Validate: At least one platform must be selected
+        if (platforms.length === 0) {
+            showNotification('Lütfen en az bir platform seçin!', 'warning');
+            statusDiv.style.display = 'none';
+            return;
+        }
+
         // Add product data
         formData.append('name', productName);
         formData.append('brand', productBrand);
         formData.append('size', productSize);
         formData.append('price', productPrice);
         formData.append('condition', productCondition);
+        formData.append('category', productCategory);
+        formData.append('platforms', JSON.stringify(platforms));
         formData.append('aiOptions', JSON.stringify(aiOptions));
 
         updateStep('step1', 'complete');
@@ -196,10 +232,17 @@ async function processProduct() {
         // Step 2-5: Process with backend
         updateStep('step2', 'active');
 
+        // Add timeout to fetch (30 seconds)
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000);
+
         const response = await fetch(`${API_CONFIG.current}/api/automation/process`, {
             method: 'POST',
-            body: formData
+            body: formData,
+            signal: controller.signal
         });
+
+        clearTimeout(timeoutId);
 
         const data = await response.json();
 
@@ -222,7 +265,18 @@ async function processProduct() {
 
     } catch (error) {
         console.error('Processing error:', error);
-        showNotification('Hata: ' + error.message, 'error');
+
+        // Handle different error types
+        let errorMessage = 'Hata: ';
+        if (error.name === 'AbortError') {
+            errorMessage += 'İşlem zaman aşımına uğradı (30 saniye). Lütfen tekrar deneyin.';
+        } else if (error.message.includes('fetch')) {
+            errorMessage += 'Backend sunucusuna bağlanılamıyor. Sunucunun çalıştığından emin olun.';
+        } else {
+            errorMessage += error.message;
+        }
+
+        showNotification(errorMessage, 'error');
         statusDiv.style.display = 'none';
     }
 }

@@ -522,76 +522,228 @@
 
             // Initialize filter buttons
             initializeFilters();
+
+            // Auto-refresh every 30 seconds
+            setInterval(() => {
+                const activeFilter = document.querySelector('.status-btn.active');
+                const filter = activeFilter ? activeFilter.dataset.filter : 'all';
+                loadNegotiations(filter);
+            }, 30000);
         });
 
         /**
-         * Load and display negotiations
+         * Load and display negotiations (API VERSION)
          */
-        function loadNegotiations(filter = 'all') {
-            const negotiations = window.getNegotiations ? window.getNegotiations() : [];
+        async function loadNegotiations(filter = 'all') {
+            const currentUser = window.getCurrentUser ? window.getCurrentUser() : null;
+            if (!currentUser) {
+                console.error('User not logged in');
+                return;
+            }
+
             const negotiationsList = document.getElementById('negotiationsList');
             const emptyState = document.getElementById('emptyState');
             const totalNegotiations = document.getElementById('totalNegotiations');
             const negotiationCount = document.getElementById('negotiationCount');
 
-            // Filter negotiations
-            let filteredNegotiations = negotiations;
-            if (filter !== 'all') {
-                filteredNegotiations = negotiations.filter(n => n.status === filter);
+            try {
+                // Fetch offers from API
+                const response = await fetch(`http://localhost:8000/api/offers/user/${currentUser.userId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to load offers');
+                }
+
+                const data = await response.json();
+                const offers = data.offers || [];
+
+                // Filter by status
+                let filteredOffers = offers;
+                if (filter === 'active') {
+                    filteredOffers = offers.filter(o => o.status === 'pending' || o.status === 'countered');
+                } else if (filter === 'completed') {
+                    filteredOffers = offers.filter(o => o.status === 'accepted');
+                } else if (filter === 'cancelled') {
+                    filteredOffers = offers.filter(o => o.status === 'declined' || o.status === 'expired');
+                }
+
+                // Update counts
+                totalNegotiations.textContent = filteredOffers.length;
+                const activeCount = offers.filter(o => o.status === 'pending' || o.status === 'countered').length;
+                negotiationCount.textContent = activeCount;
+
+                if (filteredOffers.length === 0) {
+                    negotiationsList.style.display = 'none';
+                    emptyState.style.display = 'block';
+                    return;
+                }
+
+                negotiationsList.style.display = 'flex';
+                emptyState.style.display = 'none';
+
+                // Render offers
+                renderOffers(filteredOffers, currentUser);
+
+            } catch (error) {
+                console.error('Error loading offers:', error);
+                if (typeof toast !== 'undefined') {
+                    toast.error('Fehler', 'Angebote konnten nicht geladen werden', 5000);
+                }
             }
+        }
 
-            // Update counts
-            totalNegotiations.textContent = filteredNegotiations.length;
-            negotiationCount.textContent = negotiations.filter(n => n.status === 'active').length;
+        /**
+         * Render offers in the list
+         */
+        function renderOffers(offers, currentUser) {
+            const negotiationsList = document.getElementById('negotiationsList');
 
-            if (filteredNegotiations.length === 0) {
-                negotiationsList.style.display = 'none';
-                emptyState.style.display = 'block';
-                return;
-            }
-
-            negotiationsList.style.display = 'flex';
-            emptyState.style.display = 'none';
-
-            // Render negotiations
-            negotiationsList.innerHTML = filteredNegotiations.map(negotiation => {
-                const startedDate = new Date(negotiation.startedAt);
-                const timeAgo = getTimeAgo(startedDate);
-                const isInactive = negotiation.status === 'cancelled' || negotiation.status === 'completed';
+            negotiationsList.innerHTML = offers.map(offer => {
+                const timeAgo = getTimeAgo(new Date(offer.created_at));
+                const statusClass = getOfferStatusClass(offer.status);
+                const statusText = getOfferStatusText(offer.status);
+                const isBuyer = offer.buyer_id === currentUser.userId;
+                const discount = calculateDiscount(offer);
 
                 return `
-                    <div class="negotiation-item ${isInactive ? 'inactive' : ''}" data-product-id="${negotiation.productId}">
+                    <div class="negotiation-item ${statusClass}" data-offer-id="${offer.id}">
                         <div class="negotiation-item-image">
-                            <img src="${negotiation.image}" alt="${negotiation.name}">
-                            <span class="status-badge ${negotiation.status}">${getStatusText(negotiation.status)}</span>
+                            <img src="${offer.product_image || '/images/placeholder.jpg'}" alt="${offer.product_name}">
+                            <span class="status-badge ${statusClass}">${statusText}</span>
                         </div>
                         <div class="negotiation-item-info">
-                            <div class="negotiation-item-name">${negotiation.name}</div>
+                            <div class="negotiation-item-name">${offer.product_name}</div>
                             <div class="negotiation-item-details">
-                                ${negotiation.brand ? `<span>${negotiation.brand}</span>` : ''}
-                                ${negotiation.size ? `<span>Größe ${negotiation.size}</span>` : ''}
-                                ${negotiation.condition ? `<span>${negotiation.condition}</span>` : ''}
+                                <span>Original: ${offer.product_price.toFixed(2)}€</span>
+                                <span>Angebot: ${offer.offer_amount.toFixed(2)}€</span>
+                                <span>${discount}% Rabatt</span>
                             </div>
-                            <div class="negotiation-item-price">${negotiation.price.toFixed(2)}€</div>
-                            <div class="negotiation-started">Gestartet ${timeAgo}</div>
+                            <div class="negotiation-started">
+                                ${isBuyer ? 'Gesendet' : 'Erhalten'} ${timeAgo}
+                            </div>
+                            ${offer.expires_at ? `
+                                <div class="offer-expires" style="font-size: 12px; color: #FF9800; margin-top: 4px;">
+                                    Läuft ab: ${formatExpiryDate(offer.expires_at)}
+                                </div>
+                            ` : ''}
                         </div>
                         <div class="negotiation-item-actions">
-                            ${negotiation.status === 'active' ? `
-                                <button class="negotiation-action-btn btn-chat" onclick="openChat(${negotiation.productId})">
-                                    Chat öffnen
-                                </button>
-                                <button class="negotiation-action-btn btn-cancel" onclick="cancelNegotiation(${negotiation.productId})">
-                                    Abbrechen
-                                </button>
-                            ` : `
-                                <button class="negotiation-action-btn btn-cancel" onclick="removeNegotiation(${negotiation.productId})">
-                                    Entfernen
-                                </button>
-                            `}
+                            ${renderOfferActions(offer, currentUser)}
                         </div>
                     </div>
                 `;
             }).join('');
+        }
+
+        /**
+         * Render action buttons for offer
+         */
+        function renderOfferActions(offer, currentUser) {
+            const isBuyer = offer.buyer_id === currentUser.userId;
+            const status = offer.status;
+
+            if (status === 'pending' && !isBuyer) {
+                // Seller can accept/decline/counter
+                return `
+                    <button class="negotiation-action-btn btn-accept"
+                            onclick="offerModal.acceptOffer(${offer.id})">
+                        Annehmen
+                    </button>
+                    <button class="negotiation-action-btn btn-counter"
+                            onclick='offerModal.showCounterOfferModal(${offer.id}, ${JSON.stringify(offer).replace(/'/g, "\\'")})'>
+                        Gegenangebot
+                    </button>
+                    <button class="negotiation-action-btn btn-decline"
+                            onclick="offerModal.declineOffer(${offer.id})">
+                        Ablehnen
+                    </button>
+                `;
+            } else if (status === 'countered' && isBuyer) {
+                // Buyer can accept/decline counter-offer
+                return `
+                    <button class="negotiation-action-btn btn-accept"
+                            onclick="offerModal.acceptOffer(${offer.id})">
+                        Annehmen
+                    </button>
+                    <button class="negotiation-action-btn btn-decline"
+                            onclick="offerModal.declineOffer(${offer.id})">
+                        Ablehnen
+                    </button>
+                `;
+            } else if (status === 'accepted' || status === 'declined' || status === 'expired') {
+                return `
+                    <button class="negotiation-action-btn btn-details"
+                            onclick="viewOfferDetails(${offer.id})">
+                        Details
+                    </button>
+                `;
+            }
+
+            return '';
+        }
+
+        /**
+         * Calculate discount percentage
+         */
+        function calculateDiscount(offer) {
+            const discount = ((offer.product_price - offer.offer_amount) / offer.product_price) * 100;
+            return Math.round(discount);
+        }
+
+        /**
+         * Format expiry date
+         */
+        function formatExpiryDate(expiryDate) {
+            const date = new Date(expiryDate);
+            const now = new Date();
+            const diffMs = date - now;
+            const diffDays = Math.ceil(diffMs / 86400000);
+
+            if (diffDays < 0) return 'Abgelaufen';
+            if (diffDays === 0) return 'Heute';
+            if (diffDays === 1) return 'Morgen';
+            return `in ${diffDays} Tagen`;
+        }
+
+        /**
+         * Get offer status class
+         */
+        function getOfferStatusClass(status) {
+            const statusMap = {
+                'pending': 'active',
+                'countered': 'active',
+                'accepted': 'completed',
+                'declined': 'cancelled',
+                'expired': 'cancelled'
+            };
+            return statusMap[status] || 'active';
+        }
+
+        /**
+         * Get offer status text
+         */
+        function getOfferStatusText(status) {
+            const statusMap = {
+                'pending': 'Ausstehend',
+                'countered': 'Gegenangebot',
+                'accepted': 'Akzeptiert',
+                'declined': 'Abgelehnt',
+                'expired': 'Abgelaufen'
+            };
+            return statusMap[status] || status;
+        }
+
+        /**
+         * View offer details
+         */
+        function viewOfferDetails(offerId) {
+            // Could open a modal with full offer details
+            console.log('View details for offer:', offerId);
         }
 
         /**
@@ -671,5 +823,10 @@
             }
         }
     </script>
+
+    <!-- Offer System Scripts -->
+    <script src="toast.js"></script>
+    <script src="js/offer-modal.js"></script>
+    <script src="js/offer-notifications.js"></script>
 </body>
 </html>

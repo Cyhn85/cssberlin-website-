@@ -7,9 +7,14 @@
 // ============================================
 // BACKEND API CONFIGURATION - KOZMIK ODA
 // ============================================
-const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:8000'
-    : 'http://195.201.146.224:8000';
+// API_BASE is now provided by api-config.js (loaded first in kozmik-oda.html)
+// api-config.js provides automatic environment detection
+if (typeof API_BASE === 'undefined') {
+    console.error('[KOZMIK-ODA] ERROR: api-config.js must be loaded before this file!');
+    throw new Error('api-config.js dependency missing');
+}
+
+console.log('[KOZMIK-ODA] Using API:', API_BASE);
 
 const HETZNER_API = {
     baseURL: API_BASE,
@@ -297,7 +302,6 @@ const TERMINALS = [
 // INITIALIZATION
 // ============================================
 document.addEventListener('DOMContentLoaded', function() {
-    checkLogin();
     initTopNavigation();
     initKozmikOda();
     checkMotorStatus();
@@ -309,14 +313,10 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ============================================
-// LOGIN CHECK
+// NO LOGIN REQUIRED FOR KOZMIK ODA
 // ============================================
-function checkLogin() {
-    const token = localStorage.getItem('adminToken') || sessionStorage.getItem('adminToken');
-    if (!token) {
-        window.location.href = 'login.html';
-    }
-}
+// Kozmik Oda is a standalone terminal control panel
+// No authentication required - direct access from launcher
 
 // ============================================
 // TOP NAVIGATION
@@ -788,7 +788,9 @@ async function oneClickPublish() {
             btn.style.background = '#10b981';
 
             const productCount = data.count || 156;
-            alert(`Başarılı! ${productCount} ürün yayınlandı!`);
+            if (typeof toast !== 'undefined') {
+                toast.success('Yayınlama Başarılı', `${productCount} ürün başarıyla yayınlandı!`, 5000);
+            }
 
             // Telegram ve WhatsApp bildirimi gönder
             const notificationMessage = `🎉 YENİ ÜRÜN YAYINLANDI!\n\n✅ ${productCount} ürün başarıyla yayınlandı\n⏰ ${new Date().toLocaleString('tr-TR')}\n💰 Toplam değer: €${data.totalValue || '~5,000'}\n\n🌐 https://cyhn85.github.io/cssberlin-website-/`;
@@ -820,7 +822,9 @@ async function oneClickPublish() {
         `;
         btn.style.background = '#ef4444';
 
-        alert('Yayınlama sırasında hata oluştu. Lütfen Motor bağlantısını kontrol edin.');
+        if (typeof toast !== 'undefined') {
+            toast.error('Yayınlama Hatası', 'Yayınlama sırasında hata oluştu. Lütfen Motor bağlantısını kontrol edin.', 5000);
+        }
 
         setTimeout(() => {
             btn.innerHTML = originalText;
@@ -954,7 +958,9 @@ function saveTelegramSettings(event) {
         enabled, token, chatId
     }));
 
-    alert('✓ Telegram ayarları kaydedildi!');
+    if (typeof toast !== 'undefined') {
+        toast.success('Telegram Ayarları', 'Telegram ayarları kaydedildi!', 3000);
+    }
 
     return false; // Formun submit olmasını engelle
 }
@@ -973,7 +979,9 @@ function saveWhatsAppSettings(event) {
         enabled, phone
     }));
 
-    alert('✓ WhatsApp ayarları kaydedildi!');
+    if (typeof toast !== 'undefined') {
+        toast.success('WhatsApp Ayarları', 'WhatsApp ayarları kaydedildi!', 3000);
+    }
 
     return false; // Formun submit olmasını engelle
 }
@@ -983,9 +991,13 @@ async function testTelegram() {
 
     try {
         await sendTelegramNotification(testMessage);
-        alert('✓ Test bildirimi gönderildi! Telegram\'ı kontrol edin.');
+        if (typeof toast !== 'undefined') {
+            toast.success('Test Başarılı', 'Test bildirimi gönderildi! Telegram\'ı kontrol edin.', 3000);
+        }
     } catch (error) {
-        alert('✗ Test bildirimi gönderilemedi: ' + error.message);
+        if (typeof toast !== 'undefined') {
+            toast.error('Test Başarısız', 'Test bildirimi gönderilemedi: ' + error.message, 5000);
+        }
     }
 }
 
@@ -994,9 +1006,13 @@ async function testWhatsApp() {
 
     try {
         await sendWhatsAppNotification(testMessage);
-        alert('✓ Test bildirimi gönderildi! WhatsApp\'ı kontrol edin.');
+        if (typeof toast !== 'undefined') {
+            toast.success('Test Başarılı', 'Test bildirimi gönderildi! WhatsApp\'ı kontrol edin.', 3000);
+        }
     } catch (error) {
-        alert('✗ Test bildirimi gönderilemedi: ' + error.message);
+        if (typeof toast !== 'undefined') {
+            toast.error('Test Başarısız', 'Test bildirimi gönderilemedi: ' + error.message, 5000);
+        }
     }
 }
 
@@ -1031,15 +1047,10 @@ function loadSettings() {
 }
 
 // ============================================
-// LOGOUT
+// NO LOGOUT - KOZMIK ODA IS STANDALONE
 // ============================================
-function logout() {
-    if (confirm('Çıkış yapmak istediğinize emin misiniz?')) {
-        localStorage.removeItem('adminToken');
-        sessionStorage.removeItem('adminToken');
-        window.location.href = 'login.html';
-    }
-}
+// Kozmik Oda runs independently - no logout needed
+// Simply close the browser window to exit
 
 // ============================================
 // CONSOLE INFO
@@ -1238,4 +1249,43 @@ window.addEventListener('DOMContentLoaded', async () => {
 });
 
 console.log('%c🚀 Kozmik Motor Functions Loaded', 'color: #10b981; font-size: 14px; font-weight: bold;');
+
+// ============================================
+// TAB NAVIGATION
+// ============================================
+function initTopNavigation() {
+    const navItems = document.querySelectorAll('.top-nav-item');
+    const panels = document.querySelectorAll('.content-panel');
+
+    console.log(`Found ${navItems.length} nav items and ${panels.length} panels`);
+
+    navItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Remove active from all
+            navItems.forEach(nav => nav.classList.remove('active'));
+            panels.forEach(panel => panel.classList.remove('active'));
+
+            // Add active to clicked
+            this.classList.add('active');
+            const panelId = 'panel-' + this.dataset.panel;
+            const targetPanel = document.getElementById(panelId);
+
+            console.log(`Switching to panel: ${panelId}`);
+
+            if (targetPanel) {
+                targetPanel.classList.add('active');
+            } else {
+                console.error(`Panel not found: ${panelId}`);
+            }
+        });
+    });
+
+    console.log('✅ Tab navigation initialized');
+}
+
+// Initialize immediately (script is loaded at end of body)
+console.log('🚀 Initializing admin panel...');
+initTopNavigation();
 
