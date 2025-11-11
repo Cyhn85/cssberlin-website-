@@ -365,43 +365,44 @@
     </div>
 
     <script>
-        // NOTE: This is a DEMO - uses static data
-        // In production, this would fetch from /api/scraped/list
-
         let currentPage = 1;
         const itemsPerPage = 12;
         let allProducts = [];
         let filteredProducts = [];
-
-        // Demo data (replace with actual API call)
-        const demoProducts = [
-            {
-                id: 1,
-                title: "Nike LeBron 16 Watch The Throne",
-                price: 72.87,
-                currency: "GBP",
-                platform: "ebay_uk",
-                image: "https://i.ebayimg.com/images/g/-QIAAeSwkNFo99eH/s-l225.jpg",
-                condition: "Pre-owned - Good",
-                location: "US",
-                shipping_cost: 31.35,
-                seller_username: "knockoutsneakers",
-                link: "https://www.ebay.co.uk/itm/336245014101"
-            },
-            // Add more demo products as needed
-        ];
+        let stats = {};
+        let availablePlatforms = [];
 
         async function loadProducts() {
-            // TODO: Replace with actual API call
-            // const response = await fetch('http://localhost:8000/api/scraped/list');
-            // allProducts = await response.json();
+            try {
+                // Load products from JSON file
+                const response = await fetch('scraped-products.json');
+                const data = await response.json();
 
-            // For now, use demo data
-            allProducts = demoProducts;
-            filteredProducts = allProducts;
+                allProducts = data.products;
+                stats = data.stats;
+                filteredProducts = allProducts;
 
-            renderProducts();
-            updateStats();
+                // Get unique platforms for filter
+                availablePlatforms = [...new Set(allProducts.map(p => p.platform))].sort();
+
+                // Populate platform filter
+                const platformFilter = document.getElementById('platformFilter');
+                availablePlatforms.forEach(platform => {
+                    const option = document.createElement('option');
+                    option.value = platform;
+                    option.textContent = platform.toUpperCase().replace('_', ' ');
+                    platformFilter.appendChild(option);
+                });
+
+                renderProducts();
+                updateStats();
+
+                console.log(`✅ Loaded ${allProducts.length} products from ${availablePlatforms.length} platforms`);
+            } catch (error) {
+                console.error('Error loading products:', error);
+                document.getElementById('productsContainer').innerHTML =
+                    '<div class="no-products">Ürünler yüklenemedi. Lütfen daha sonra tekrar deneyin.</div>';
+            }
         }
 
         function renderProducts() {
@@ -449,11 +450,11 @@
         }
 
         function updateStats() {
-            document.getElementById('totalProducts').textContent = allProducts.length;
-            document.getElementById('totalPlatforms').textContent = new Set(allProducts.map(p => p.platform)).size;
-            const avgPrice = allProducts.reduce((sum, p) => sum + p.price, 0) / allProducts.length;
-            document.getElementById('avgPrice').textContent = `€${avgPrice.toFixed(2)}`;
-            document.getElementById('todayCount').textContent = '0'; // TODO: Calculate
+            // Use stats from JSON file
+            document.getElementById('totalProducts').textContent = stats.total_products || allProducts.length;
+            document.getElementById('totalPlatforms').textContent = Object.keys(stats.platforms || {}).length;
+            document.getElementById('avgPrice').textContent = `€${(stats.avg_price || 0).toFixed(2)}`;
+            document.getElementById('todayCount').textContent = stats.today_count || 0;
         }
 
         function applyFilters() {
