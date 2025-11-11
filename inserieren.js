@@ -4,7 +4,12 @@
  */
 
 // API Configuration
-const API_BASE_URL = 'http://195.201.146.224:8000';
+// Auto-detect environment: use API_CONFIG if available, otherwise use domain-based detection
+const API_BASE_URL = typeof API_CONFIG !== 'undefined'
+    ? API_CONFIG.current
+    : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? 'http://localhost:8000'
+        : 'https://api.cssberlin.de';
 
 // State
 let uploadedImages = [];
@@ -217,22 +222,34 @@ async function processAndUploadProduct(productData, images) {
             }
         });
 
-        // Add images
-        images.forEach((imageData, index) => {
-            formData.append(`image_${index}`, imageData.file);
+        // Add images with correct field name (backend expects 'images')
+        images.forEach((imageData) => {
+            formData.append('images', imageData.file);
         });
 
-        const response = await fetch(`${API_BASE_URL}/api/products/upload`, {
+        console.log('[INSERT-DEBUG] Sending to:', `${API_BASE_URL}/api/automation/process`);
+        console.log('[INSERT-DEBUG] Form data keys:', Array.from(formData.keys()));
+
+        const response = await fetch(`${API_BASE_URL}/api/automation/process`, {
             method: 'POST',
             body: formData
         });
+
+        console.log('[INSERT-DEBUG] Response status:', response.status);
+        console.log('[INSERT-DEBUG] Response headers:', Object.fromEntries(response.headers.entries()));
 
         if (!response.ok) {
             throw new Error('API upload failed');
         }
 
         const result = await response.json();
-        console.log('Upload successful:', result);
+        console.log('[INSERT-DEBUG] Response data:', result);
+
+        if (result.success) {
+            console.log('[INSERT-DEBUG] Upload successful! Product ID:', result.product_id);
+        } else {
+            console.error('[INSERT-DEBUG] Upload failed:', result.error || result.message);
+        }
 
     } catch (error) {
         console.error('API upload failed, saving locally:', error);
