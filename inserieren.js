@@ -16,9 +16,31 @@ let uploadedImages = [];
 
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
+    // Check if user is logged in
+    checkAuthAndRedirect();
+
     initializeImageUpload();
     initializeForm();
 });
+
+/**
+ * Check if user is logged in, redirect to login if not
+ */
+function checkAuthAndRedirect() {
+    // Check localStorage for user session
+    const user = localStorage.getItem('user');
+    const userSession = localStorage.getItem('userSession');
+
+    if (!user && !userSession) {
+        // User not logged in, redirect to login page
+        console.log('[AUTH] User not logged in, redirecting to login...');
+        window.location.href = 'login.html?redirect=inserieren.html';
+        return false;
+    }
+
+    console.log('[AUTH] User logged in, allowing access');
+    return true;
+}
 
 /**
  * Initialize Image Upload Functionality
