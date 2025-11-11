@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kazınan Ürünler - Kozmik Oda</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .products-viewer-container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .viewer-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .viewer-header h1 {
+            font-size: 36px;
+            background: linear-gradient(135deg, #2D5016, #FF6B35);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .stat-card .value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #2D5016;
+        }
+
+        .filters {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .filter-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .filter-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: #333;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .filter-group input:focus,
+        .filter-group select:focus {
+            outline: none;
+            border-color: #2D5016;
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #2D5016;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #3d6a1f;
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #f5f5f5;
+        }
+
+        .product-content {
+            padding: 16px;
+        }
+
+        .product-platform {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #FF6B35;
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 12px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .product-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2D5016;
+            margin-bottom: 8px;
+        }
+
+        .product-meta {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .product-condition {
+            display: inline-block;
+            padding: 4px 8px;
+            background: #f0f0f0;
+            border-radius: 6px;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .product-link {
+            display: block;
+            text-align: center;
+            padding: 10px;
+            background: #2D5016;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .product-link:hover {
+            background: #3d6a1f;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin: 40px 0;
+        }
+
+        .pagination button {
+            padding: 10px 20px;
+            border: 2px solid #2D5016;
+            background: white;
+            color: #2D5016;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            background: #2D5016;
+            color: white;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .pagination-info {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #2D5016;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-top: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .no-products {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Same header as other pages -->
+    <header>
+        <nav class="container">
+            <div class="logo">
+                <a href="index.html">CSS Berlin</a>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Ana Sayfa</a>
+                <a href="kozmik-oda.html">Kozmik Oda</a>
+                <a href="kozmik-products-viewer.html" class="active">Kazınan Ürünler</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="products-viewer-container">
+        <div class="viewer-header">
+            <h1>🛸 Kazınan Ürünler</h1>
+            <p>Terminal 1 (eBay) - Toplanan ürünleri inceleyin</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <h3>Toplam Ürün</h3>
+                <div class="value" id="totalProducts">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Platformlar</h3>
+                <div class="value" id="totalPlatforms">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Ortalama Fiyat</h3>
+                <div class="value" id="avgPrice">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Bugün Kazınan</h3>
+                <div class="value" id="todayCount">-</div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label>Platform</label>
+                    <select id="platformFilter">
+                        <option value="">Tümü</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Min Fiyat (EUR)</label>
+                    <input type="number" id="minPrice" placeholder="0">
+                </div>
+                <div class="filter-group">
+                    <label>Max Fiyat (EUR)</label>
+                    <input type="number" id="maxPrice" placeholder="1000">
+                </div>
+                <div class="filter-group">
+                    <label>Arama</label>
+                    <input type="text" id="searchInput" placeholder="Nike, Adidas...">
+                </div>
+            </div>
+            <div class="filter-actions">
+                <button class="btn btn-secondary" onclick="resetFilters()">Sıfırla</button>
+                <button class="btn btn-primary" onclick="applyFilters()">Filtrele</button>
+            </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div id="productsContainer">
+            <div class="loading">Ürünler yükleniyor...</div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination" id="pagination" style="display: none;">
+            <button id="prevBtn" onclick="previousPage()">← Önceki</button>
+            <span class="pagination-info" id="paginationInfo"></span>
+            <button id="nextBtn" onclick="nextPage()">Sonraki →</button>
+        </div>
+    </div>
+
+    <script>
+        // NOTE: This is a DEMO - uses static data
+        // In production, this would fetch from /api/scraped/list
+
+        let currentPage = 1;
+        const itemsPerPage = 12;
+        let allProducts = [];
+        let filteredProducts = [];
+
+        // Demo data (replace with actual API call)
+        const demoProducts = [
+            {
+                id: 1,
+                title: "Nike LeBron 16 Watch The Throne",
+                price: 72.87,
+                currency: "GBP",
+                platform: "ebay_uk",
+                image: "https://i.ebayimg.com/images/g/-QIAAeSwkNFo99eH/s-l225.jpg",
+                condition: "Pre-owned - Good",
+                location: "US",
+                shipping_cost: 31.35,
+                seller_username: "knockoutsneakers",
+                link: "https://www.ebay.co.uk/itm/336245014101"
+            },
+            // Add more demo products as needed
+        ];
+
+        async function loadProducts() {
+            // TODO: Replace with actual API call
+            // const response = await fetch('http://localhost:8000/api/scraped/list');
+            // allProducts = await response.json();
+
+            // For now, use demo data
+            allProducts = demoProducts;
+            filteredProducts = allProducts;
+
+            renderProducts();
+            updateStats();
+        }
+
+        function renderProducts() {
+            const container = document.getElementById('productsContainer');
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const pageProducts = filteredProducts.slice(start, end);
+
+            if (pageProducts.length === 0) {
+                container.innerHTML = '<div class="no-products">Ürün bulunamadı</div>';
+                document.getElementById('pagination').style.display = 'none';
+                return;
+            }
+
+            const html = `
+                <div class="products-grid">
+                    ${pageProducts.map(product => `
+                        <div class="product-card">
+                            <img src="${product.image}" alt="${product.title}" class="product-image"
+                                 onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
+                            <div class="product-content">
+                                <span class="product-platform">${product.platform.replace('_', ' ')}</span>
+                                <h3 class="product-title">${product.title}</h3>
+                                <div class="product-price">${product.currency} ${product.price.toFixed(2)}</div>
+                                ${product.shipping_cost ? `<div class="product-meta">+ ${product.shipping_cost.toFixed(2)} shipping</div>` : ''}
+                                <div class="product-condition">${product.condition || 'Used'}</div>
+                                ${product.location ? `<div class="product-meta">📍 ${product.location}</div>` : ''}
+                                ${product.seller_username ? `<div class="product-meta">👤 ${product.seller_username}</div>` : ''}
+                                <a href="${product.link}" target="_blank" class="product-link">eBay'de Gör</a>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            container.innerHTML = html;
+
+            // Update pagination
+            const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+            document.getElementById('paginationInfo').textContent =
+                `Sayfa ${currentPage} / ${totalPages} (${filteredProducts.length} ürün)`;
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = currentPage === totalPages;
+            document.getElementById('pagination').style.display = 'flex';
+        }
+
+        function updateStats() {
+            document.getElementById('totalProducts').textContent = allProducts.length;
+            document.getElementById('totalPlatforms').textContent = new Set(allProducts.map(p => p.platform)).size;
+            const avgPrice = allProducts.reduce((sum, p) => sum + p.price, 0) / allProducts.length;
+            document.getElementById('avgPrice').textContent = `€${avgPrice.toFixed(2)}`;
+            document.getElementById('todayCount').textContent = '0'; // TODO: Calculate
+        }
+
+        function applyFilters() {
+            const platform = document.getElementById('platformFilter').value;
+            const minPrice = parseFloat(document.getElementById('minPrice').value) || 0;
+            const maxPrice = parseFloat(document.getElementById('maxPrice').value) || Infinity;
+            const search = document.getElementById('searchInput').value.toLowerCase();
+
+            filteredProducts = allProducts.filter(p => {
+                if (platform && p.platform !== platform) return false;
+                if (p.price < minPrice || p.price > maxPrice) return false;
+                if (search && !p.title.toLowerCase().includes(search)) return false;
+                return true;
+            });
+
+            currentPage = 1;
+            renderProducts();
+        }
+
+        function resetFilters() {
+            document.getElementById('platformFilter').value = '';
+            document.getElementById('minPrice').value = '';
+            document.getElementById('maxPrice').value = '';
+            document.getElementById('searchInput').value = '';
+            filteredProducts = allProducts;
+            currentPage = 1;
+            renderProducts();
+        }
+
+        function previousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                renderProducts();
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function nextPage() {
+            const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderProducts();
+                window.scrollTo(0, 0);
+            }
+        }
+
+        // Load on page load
+        loadProducts();
+    </script>
+</body>
+</html>
