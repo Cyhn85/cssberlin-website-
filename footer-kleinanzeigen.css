@@ -3,6 +3,219 @@
    Modern, Clean, Gradient Design
    ======================================== */
 
+/* ==================
+   PRE-FOOTER SECTION - COMPACT DESIGN
+   ================== */
+
+.pre-footer {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    padding: 20px 24px;
+    border-top: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.pre-footer-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+}
+
+/* Newsletter Section - Inline Compact */
+.newsletter-section {
+    flex: 1;
+    min-width: 300px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.newsletter-heading {
+    font-size: 16px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #2D5016, #FF8C42);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.newsletter-subheading {
+    display: none; /* Hide subheading to save space */
+}
+
+.newsletter-form {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 250px;
+}
+
+.newsletter-input-group {
+    display: flex;
+    gap: 8px;
+    flex: 1;
+}
+
+.newsletter-input {
+    flex: 1;
+    padding: 10px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    min-width: 200px;
+}
+
+.newsletter-input:focus {
+    outline: none;
+    border-color: #2D5016;
+    box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.1);
+}
+
+.newsletter-submit-btn {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #2D5016, #3d6a1f);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.newsletter-submit-btn:hover {
+    background: linear-gradient(135deg, #3d6a1f, #2D5016);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(45, 80, 22, 0.3);
+}
+
+.newsletter-submit-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.newsletter-privacy {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #666;
+}
+
+.newsletter-privacy a {
+    color: #FF8C42;
+    text-decoration: none;
+}
+
+.newsletter-privacy a:hover {
+    text-decoration: underline;
+}
+
+.newsletter-message {
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+/* Trust Badges - Compact Horizontal */
+.trust-badges {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.trust-badge-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    min-width: 80px;
+}
+
+.trust-badge-item svg {
+    width: 32px;
+    height: 32px;
+    stroke: #2D5016;
+    transition: all 0.2s ease;
+}
+
+.trust-badge-item span {
+    font-size: 11px;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.trust-badge-item:hover svg {
+    stroke: #FF8C42;
+    transform: scale(1.1);
+}
+
+/* Responsive Pre-Footer */
+@media (max-width: 1024px) {
+    .newsletter-section {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    .trust-badges {
+        justify-content: center;
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .pre-footer {
+        padding: 16px 16px;
+    }
+
+    .pre-footer-container {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .newsletter-form {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
+
+    .newsletter-input-group {
+        flex-direction: column;
+    }
+
+    .newsletter-input,
+    .newsletter-submit-btn {
+        width: 100%;
+    }
+
+    .trust-badges {
+        gap: 16px;
+    }
+
+    .trust-badge-item {
+        min-width: 70px;
+    }
+
+    .trust-badge-item svg {
+        width: 28px;
+        height: 28px;
+    }
+}
+
 /* Main Footer Container */
 .footer {
     background: linear-gradient(135deg, #2D5016 0%, #1a2f0c 50%, #0f1908 100%);
