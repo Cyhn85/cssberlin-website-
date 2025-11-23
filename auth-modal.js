@@ -431,7 +431,6 @@ class AuthModal {
         const registerFields = document.getElementById('registerFields');
         const submitBtn = document.getElementById('authSubmitBtn');
         const footerText = document.getElementById('authFooterText');
-        const switchLink = document.getElementById('authSwitchLink');
 
         if (this.currentView === 'login') {
             title.textContent = 'Willkommen zurück!';
@@ -471,8 +470,32 @@ class AuthModal {
         const user = users.find(u => u.email === email && u.password === password);
 
         if (user) {
-            // Login successful
-            login(user, false);
+            // Check if email is verified
+            if (!user.verified && user.loginMethod !== 'google') {
+                toast.error('E-Mail nicht bestätigt', 'Bitte bestätigen Sie zuerst Ihre E-Mail-Adresse.', 3000);
+                sessionStorage.setItem('pending_verification_email', email);
+                this.close();
+                setTimeout(() => {
+                    window.location.href = 'verify-email.html';
+                }, 1000);
+                return;
+            }
+
+            // Login successful - use existing login function from auth.js
+            if (typeof login === 'function') {
+                login(user, false);
+            } else {
+                // Fallback if auth.js not loaded
+                const session = {
+                    userId: user.id,
+                    email: user.email,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    loginTime: new Date().toISOString()
+                };
+                sessionStorage.setItem('cssberlin_session', JSON.stringify(session));
+            }
+
             toast.success('Erfolgreich angemeldet!', `Willkommen zurück, ${user.firstName}!`, 2000);
 
             // Check for admin
@@ -483,9 +506,17 @@ class AuthModal {
                     window.location.href = 'admin.html';
                 }, 1000);
             } else {
+                // Check for redirect after login
+                const redirectUrl = sessionStorage.getItem('redirect_after_login') || null;
+                sessionStorage.removeItem('redirect_after_login');
+
                 this.close();
                 setTimeout(() => {
-                    window.location.reload();
+                    if (redirectUrl) {
+                        window.location.href = redirectUrl;
+                    } else {
+                        window.location.reload();
+                    }
                 }, 1000);
             }
         } else {
@@ -523,13 +554,18 @@ class AuthModal {
             return;
         }
 
-        // Create new user
+        // Generate verification code (6-digit)
+        const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+        // Create new user (unverified)
         const newUser = {
             id: 'user_' + Date.now(),
             firstName,
             lastName,
             email,
             password,
+            verified: false,
+            verificationCode,
             createdAt: new Date().toISOString(),
             wishlist: [],
             negotiations: [],
@@ -539,14 +575,62 @@ class AuthModal {
         users.push(newUser);
         localStorage.setItem('cssberlin_users', JSON.stringify(users));
 
-        // Auto login
-        login(newUser, false);
-        toast.success('Konto erstellt!', `Willkommen bei CSS Berlin, ${firstName}!`, 2000);
+        // Send verification email via EmailJS
+        if (typeof emailjs !== 'undefined') {
+            try {
+                const templateParams = {
+                    to_email: email,
+                    to_name: `${firstName} ${lastName}`,
+                    from_name: 'CSS Berlin',
+                    subject: 'E-Mail Bestätigung - CSS Berlin',
+                    verification_code: verificationCode,
+                    message: `Hallo ${firstName},
+
+vielen Dank für Ihre Registrierung bei CSS Berlin!
+
+Ihr Bestätigungscode lautet: ${verificationCode}
+
+Bitte geben Sie diesen Code auf der Bestätigungsseite ein, um Ihr Konto zu aktivieren.
+
+Der Code ist 24 Stunden gültig.
+
+Mit freundlichen Grüßen
+Ihr CSS Berlin Team
+Climate Smart Solutions`
+                };
+
+                emailjs.send(
+                    'service_x3phsl7',
+                    'template_icqfar5',
+                    templateParams,
+                    'ZOprGu7EjDZmGl4ql'
+                ).then(() => {
+                    console.log('✅ Verification email sent');
+                }).catch((err) => {
+                    console.error('❌ Email error:', err);
+                    console.log('📧 Verification Code (Fallback):', verificationCode);
+                });
+            } catch (e) {
+                console.error('Email send error:', e);
+                console.log('📧 Verification Code (Fallback):', verificationCode);
+            }
+        } else {
+            console.log('📧 Verification Code (Demo):', verificationCode);
+        }
+
+        // Store email for verification page
+        sessionStorage.setItem('pending_verification_email', email);
+
+        toast.success(
+            'Registrierung erfolgreich!',
+            `Ein Bestätigungscode wurde an ${email} gesendet.`,
+            3000
+        );
 
         this.close();
         setTimeout(() => {
-            window.location.reload();
-        }, 1000);
+            window.location.href = 'verify-email.html';
+        }, 1500);
     }
 
     handleGoogleAuth() {
