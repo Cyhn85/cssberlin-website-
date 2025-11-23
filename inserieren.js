@@ -14,6 +14,48 @@ const API_BASE_URL = typeof API_CONFIG !== 'undefined'
 // State
 let uploadedImages = [];
 
+// Brand Database - Vinted Style
+const BRAND_DATABASE = {
+    popular: [
+        { name: 'Nike', count: 2450, category: 'Sport' },
+        { name: 'Adidas', count: 2180, category: 'Sport' },
+        { name: 'Zara', count: 1890, category: 'Fashion' },
+        { name: 'H&M', count: 1720, category: 'Fashion' },
+        { name: 'Tommy Hilfiger', count: 1340, category: 'Premium' },
+        { name: 'Ralph Lauren', count: 1120, category: 'Premium' },
+        { name: 'Levi\'s', count: 980, category: 'Denim' },
+        { name: 'Gucci', count: 890, category: 'Luxury' },
+        { name: 'Puma', count: 850, category: 'Sport' },
+        { name: 'The North Face', count: 780, category: 'Outdoor' }
+    ],
+    all: [
+        'Nike', 'Adidas', 'Zara', 'H&M', 'Tommy Hilfiger', 'Ralph Lauren',
+        'Levi\'s', 'Gucci', 'Puma', 'The North Face', 'Mango', 'Massimo Dutti',
+        'Calvin Klein', 'Hugo Boss', 'Lacoste', 'Burberry', 'Prada', 'Versace',
+        'Diesel', 'Replay', 'G-Star Raw', 'Armani', 'Michael Kors', 'Coach',
+        'Converse', 'Vans', 'New Balance', 'Reebok', 'Fila', 'Champion',
+        'Under Armour', 'Columbia', 'Patagonia', 'Jack Wolfskin', 'Mammut',
+        'Esprit', 's.Oliver', 'Tom Tailor', 'Marc O\'Polo', 'Gant',
+        'Ted Baker', 'Superdry', 'Hollister', 'Abercrombie & Fitch',
+        'Uniqlo', 'Cos', 'Arket', '& Other Stories', 'Weekday',
+        'Bershka', 'Pull & Bear', 'Stradivarius', 'Reserved', 'Primark'
+    ]
+};
+
+// Subcategory Database
+const SUBCATEGORIES = {
+    'Herren': ['T-Shirts', 'Hemden', 'Pullover', 'Jacken', 'Hosen', 'Jeans', 'Anzüge', 'Shorts', 'Unterwäsche'],
+    'Damen': ['Kleider', 'Blusen', 'Tops', 'Röcke', 'Hosen', 'Jacken', 'Pullover', 'Jumpsuits', 'Unterwäsche'],
+    'Kinder': ['Babykleidung', 'Mädchen', 'Jungen', 'Schulkleidung', 'Jacken', 'Schuhe'],
+    'Schuhe': ['Sneaker', 'Stiefel', 'Sandalen', 'Pumps', 'Loafer', 'Sportschuhe', 'Flip-Flops'],
+    'Accessoires': ['Taschen', 'Gürtel', 'Schals', 'Mützen', 'Sonnenbrillen', 'Schmuck', 'Uhren'],
+    'Sportbekleidung': ['Fitness', 'Laufen', 'Yoga', 'Fußball', 'Basketball', 'Tennis', 'Schwimmen'],
+    'Taschen': ['Handtaschen', 'Rucksäcke', 'Umhängetaschen', 'Clutches', 'Shopper', 'Geldbörsen']
+};
+
+// State
+let selectedSubcategory = '';
+
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
     // Check if user is logged in
@@ -21,6 +63,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     initializeImageUpload();
     initializeForm();
+    initializeBrandAutocomplete();
+    initializeSubcategories();
+    initializePopularBrands();
 });
 
 /**
@@ -400,3 +445,214 @@ function showSuccess() {
 
 // Make removeImage available globally
 window.removeImage = removeImage;
+
+/**
+ * Initialize Brand Autocomplete - Vinted Style
+ */
+function initializeBrandAutocomplete() {
+    const brandInput = document.getElementById('brand');
+    const dropdown = document.getElementById('brandDropdown');
+
+    if (!brandInput || !dropdown) return;
+
+    let selectedIndex = -1;
+
+    brandInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+
+        if (query.length < 1) {
+            dropdown.classList.remove('show');
+            return;
+        }
+
+        // Filter brands
+        const matchingBrands = BRAND_DATABASE.all.filter(brand =>
+            brand.toLowerCase().includes(query)
+        ).slice(0, 10);
+
+        // Also check popular brands for count display
+        const popularMatches = BRAND_DATABASE.popular.filter(brand =>
+            brand.name.toLowerCase().includes(query)
+        );
+
+        if (matchingBrands.length === 0) {
+            dropdown.classList.remove('show');
+            return;
+        }
+
+        // Render dropdown
+        let html = '<div class="autocomplete-section-title">Markenvorschläge</div>';
+
+        matchingBrands.forEach((brand, index) => {
+            const popular = popularMatches.find(p => p.name === brand);
+            const initials = brand.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+
+            html += `
+                <div class="autocomplete-item ${index === selectedIndex ? 'selected' : ''}"
+                     data-brand="${brand}"
+                     onclick="selectBrand('${brand.replace(/'/g, "\\'")}')">
+                    <div class="autocomplete-item-logo">${initials}</div>
+                    <div class="autocomplete-item-text">
+                        <div class="autocomplete-item-name">${highlightMatch(brand, query)}</div>
+                        ${popular ? `<div class="autocomplete-item-count">${popular.count} Artikel</div>` : ''}
+                    </div>
+                </div>
+            `;
+        });
+
+        dropdown.innerHTML = html;
+        dropdown.classList.add('show');
+        selectedIndex = -1;
+    });
+
+    // Keyboard navigation
+    brandInput.addEventListener('keydown', (e) => {
+        const items = dropdown.querySelectorAll('.autocomplete-item');
+
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+            updateSelection(items, selectedIndex);
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            selectedIndex = Math.max(selectedIndex - 1, 0);
+            updateSelection(items, selectedIndex);
+        } else if (e.key === 'Enter' && selectedIndex >= 0) {
+            e.preventDefault();
+            const selectedBrand = items[selectedIndex].dataset.brand;
+            selectBrand(selectedBrand);
+        } else if (e.key === 'Escape') {
+            dropdown.classList.remove('show');
+        }
+    });
+
+    // Close dropdown on outside click
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.autocomplete-wrapper')) {
+            dropdown.classList.remove('show');
+        }
+    });
+}
+
+/**
+ * Update autocomplete selection
+ */
+function updateSelection(items, index) {
+    items.forEach((item, i) => {
+        item.classList.toggle('selected', i === index);
+    });
+
+    // Scroll into view
+    if (items[index]) {
+        items[index].scrollIntoView({ block: 'nearest' });
+    }
+}
+
+/**
+ * Highlight matching text
+ */
+function highlightMatch(text, query) {
+    const regex = new RegExp(`(${query})`, 'gi');
+    return text.replace(regex, '<strong style="color: var(--primary-green);">$1</strong>');
+}
+
+/**
+ * Select brand from autocomplete
+ */
+function selectBrand(brand) {
+    const brandInput = document.getElementById('brand');
+    const dropdown = document.getElementById('brandDropdown');
+
+    brandInput.value = brand;
+    dropdown.classList.remove('show');
+
+    // Visual feedback
+    brandInput.style.borderColor = 'var(--primary-green)';
+    setTimeout(() => {
+        brandInput.style.borderColor = '';
+    }, 1000);
+}
+
+// Make selectBrand available globally
+window.selectBrand = selectBrand;
+
+/**
+ * Initialize Popular Brands Quick Select
+ */
+function initializePopularBrands() {
+    const popularBrandsContainer = document.getElementById('popularBrands');
+    if (!popularBrandsContainer) return;
+
+    popularBrandsContainer.addEventListener('click', (e) => {
+        const chip = e.target.closest('.popular-brand-chip');
+        if (chip) {
+            const brand = chip.dataset.brand;
+            selectBrand(brand);
+        }
+    });
+}
+
+/**
+ * Initialize Dynamic Subcategories
+ */
+function initializeSubcategories() {
+    const categorySelect = document.getElementById('category');
+    const subcategoryWrapper = document.getElementById('subcategoryWrapper');
+    const subcategoryChips = document.getElementById('subcategoryChips');
+
+    if (!categorySelect || !subcategoryWrapper) return;
+
+    categorySelect.addEventListener('change', (e) => {
+        const category = e.target.value;
+        const subcategories = SUBCATEGORIES[category];
+
+        if (subcategories && subcategories.length > 0) {
+            // Render subcategory chips
+            subcategoryChips.innerHTML = subcategories.map(sub => `
+                <span class="subcategory-chip" data-subcategory="${sub}">${sub}</span>
+            `).join('');
+
+            subcategoryWrapper.classList.add('show');
+            selectedSubcategory = '';
+
+            // Add click handlers
+            subcategoryChips.querySelectorAll('.subcategory-chip').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    // Toggle selection
+                    const isSelected = chip.classList.contains('selected');
+
+                    // Remove all selections
+                    subcategoryChips.querySelectorAll('.subcategory-chip').forEach(c => {
+                        c.classList.remove('selected');
+                    });
+
+                    if (!isSelected) {
+                        chip.classList.add('selected');
+                        selectedSubcategory = chip.dataset.subcategory;
+                    } else {
+                        selectedSubcategory = '';
+                    }
+                });
+            });
+        } else {
+            subcategoryWrapper.classList.remove('show');
+            selectedSubcategory = '';
+        }
+    });
+}
+
+/**
+ * Get form data including subcategory
+ */
+function getProductFormData() {
+    return {
+        name: document.getElementById('productName').value,
+        brand: document.getElementById('brand').value,
+        category: document.getElementById('category').value,
+        subcategory: selectedSubcategory,
+        condition: document.getElementById('condition').value,
+        size: document.getElementById('size').value,
+        price: parseFloat(document.getElementById('price').value),
+        description: document.getElementById('description').value || ''
+    };
+}

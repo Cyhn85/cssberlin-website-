@@ -148,15 +148,121 @@
         }
 
         .status-badge.pending {
-            background: var(--warning);
+            background: #FF9800;
         }
 
-        .status-badge.completed {
-            background: var(--info);
+        .status-badge.active {
+            background: #2196F3;
         }
 
-        .status-badge.cancelled {
-            background: var(--error);
+        .status-badge.completed,
+        .status-badge.accepted {
+            background: #4CAF50;
+        }
+
+        .status-badge.cancelled,
+        .status-badge.declined {
+            background: #F44336;
+        }
+
+        .status-badge.expired {
+            background: #9E9E9E;
+        }
+
+        /* Vinted-style status colors for items */
+        .negotiation-item.status-accepted {
+            border-left: 4px solid #4CAF50;
+            background: linear-gradient(to right, rgba(76, 175, 80, 0.05), transparent);
+        }
+
+        .negotiation-item.status-pending {
+            border-left: 4px solid #FF9800;
+        }
+
+        .negotiation-item.status-countered {
+            border-left: 4px solid #2196F3;
+            background: linear-gradient(to right, rgba(33, 150, 243, 0.05), transparent);
+        }
+
+        .negotiation-item.status-declined,
+        .negotiation-item.status-expired {
+            border-left: 4px solid #9E9E9E;
+            opacity: 0.7;
+        }
+
+        /* Buy Now button for accepted offers */
+        .btn-buy-now {
+            background: linear-gradient(135deg, #4CAF50, #2D5016) !important;
+            color: white !important;
+            font-weight: 700;
+            animation: pulse-green 2s infinite;
+        }
+
+        @keyframes pulse-green {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(76, 175, 80, 0); }
+        }
+
+        .btn-accept {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-accept:hover {
+            background: #43A047;
+        }
+
+        .btn-counter {
+            background: #2196F3;
+            color: white;
+        }
+
+        .btn-counter:hover {
+            background: #1E88E5;
+        }
+
+        .btn-decline {
+            background: transparent;
+            border: 1px solid #F44336;
+            color: #F44336;
+        }
+
+        .btn-decline:hover {
+            background: #F44336;
+            color: white;
+        }
+
+        .btn-details {
+            background: #9E9E9E;
+            color: white;
+        }
+
+        /* Negotiated price display */
+        .negotiated-price {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .original-price-crossed {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .final-price {
+            font-size: 20px;
+            font-weight: 700;
+            color: #4CAF50;
+        }
+
+        .discount-badge {
+            background: #FF8C42;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
         }
 
         .negotiation-item-info {
@@ -609,24 +715,33 @@
                 const statusText = getOfferStatusText(offer.status);
                 const isBuyer = offer.buyer_id === currentUser.userId;
                 const discount = calculateDiscount(offer);
+                const finalPrice = offer.counter_amount || offer.offer_amount;
 
                 return `
-                    <div class="negotiation-item ${statusClass}" data-offer-id="${offer.id}">
+                    <div class="negotiation-item status-${offer.status}" data-offer-id="${offer.id}">
                         <div class="negotiation-item-image">
                             <img src="${offer.product_image || '/images/placeholder.jpg'}" alt="${offer.product_name}">
-                            <span class="status-badge ${statusClass}">${statusText}</span>
+                            <span class="status-badge ${offer.status}">${statusText}</span>
                         </div>
                         <div class="negotiation-item-info">
                             <div class="negotiation-item-name">${offer.product_name}</div>
-                            <div class="negotiation-item-details">
-                                <span>Original: ${offer.product_price.toFixed(2)}€</span>
-                                <span>Angebot: ${offer.offer_amount.toFixed(2)}€</span>
-                                <span>${discount}% Rabatt</span>
-                            </div>
+                            ${offer.status === 'accepted' ? `
+                                <div class="negotiated-price">
+                                    <span class="original-price-crossed">${offer.product_price.toFixed(2)}€</span>
+                                    <span class="final-price">${finalPrice.toFixed(2)}€</span>
+                                    <span class="discount-badge">-${discount}%</span>
+                                </div>
+                            ` : `
+                                <div class="negotiation-item-details">
+                                    <span>Original: ${offer.product_price.toFixed(2)}€</span>
+                                    <span>Angebot: ${offer.offer_amount.toFixed(2)}€</span>
+                                    <span>${discount}% Rabatt</span>
+                                </div>
+                            `}
                             <div class="negotiation-started">
                                 ${isBuyer ? 'Gesendet' : 'Erhalten'} ${timeAgo}
                             </div>
-                            ${offer.expires_at ? `
+                            ${offer.expires_at && offer.status !== 'accepted' ? `
                                 <div class="offer-expires" style="font-size: 12px; color: #FF9800; margin-top: 4px;">
                                     Läuft ab: ${formatExpiryDate(offer.expires_at)}
                                 </div>
@@ -663,6 +778,18 @@
                         Ablehnen
                     </button>
                 `;
+            } else if (status === 'pending' && isBuyer) {
+                // Buyer waiting for response
+                return `
+                    <button class="negotiation-action-btn btn-chat"
+                            onclick="openChat('${offer.product_id}')">
+                        Nachricht
+                    </button>
+                    <button class="negotiation-action-btn btn-cancel"
+                            onclick="offerModal.declineOffer(${offer.id})">
+                        Zurückziehen
+                    </button>
+                `;
             } else if (status === 'countered' && isBuyer) {
                 // Buyer can accept/decline counter-offer
                 return `
@@ -675,7 +802,25 @@
                         Ablehnen
                     </button>
                 `;
-            } else if (status === 'accepted' || status === 'declined' || status === 'expired') {
+            } else if (status === 'accepted') {
+                // Show Buy Now button for accepted offers
+                const offerData = JSON.stringify(offer).replace(/'/g, "\\'");
+                return `
+                    <button class="negotiation-action-btn btn-buy-now"
+                            onclick='buyNegotiatedItem(${offerData})'>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="margin-right: 6px;">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                        Jetzt kaufen
+                    </button>
+                    <button class="negotiation-action-btn btn-chat"
+                            onclick="openChat('${offer.product_id}')">
+                        Nachricht
+                    </button>
+                `;
+            } else if (status === 'declined' || status === 'expired') {
                 return `
                     <button class="negotiation-action-btn btn-details"
                             onclick="viewOfferDetails(${offer.id})">
@@ -685,6 +830,40 @@
             }
 
             return '';
+        }
+
+        /**
+         * Buy negotiated item - add to cart and go to checkout
+         */
+        function buyNegotiatedItem(offer) {
+            if (typeof offerModal !== 'undefined' && offerModal.showBuyNowForOffer) {
+                offerModal.showBuyNowForOffer(offer.id, offer);
+            } else {
+                // Fallback: manually add to cart
+                const finalPrice = offer.counter_amount || offer.offer_amount;
+                const cartItem = {
+                    id: offer.product_id,
+                    name: offer.product_name,
+                    originalPrice: offer.product_price,
+                    price: finalPrice,
+                    image: offer.product_image || '/images/placeholder.jpg',
+                    quantity: 1,
+                    isNegotiated: true,
+                    offerId: offer.id
+                };
+
+                const cart = JSON.parse(localStorage.getItem('cssberlin_cart') || '[]');
+                const existingIndex = cart.findIndex(item => item.id === offer.product_id);
+
+                if (existingIndex > -1) {
+                    cart[existingIndex] = cartItem;
+                } else {
+                    cart.push(cartItem);
+                }
+
+                localStorage.setItem('cssberlin_cart', JSON.stringify(cart));
+                window.location.href = 'checkout.html';
+            }
         }
 
         /**
