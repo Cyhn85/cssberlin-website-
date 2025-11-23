@@ -121,12 +121,12 @@ img {
    HEADER STYLES - V3 NEW LAYOUT
    ============================================ */
 .header {
-    background: var(--bg-primary);
-    border-bottom: 1px solid var(--border-color);
+    background: linear-gradient(135deg, #FF8C42 0%, #2D5016 100%);
+    border-bottom: none;
     position: sticky;
     top: 0;
     z-index: 1000;
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-md);
 }
 
 .header-container {
