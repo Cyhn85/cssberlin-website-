@@ -509,8 +509,8 @@ function handleAddToCart(productId, buttonElement) {
 
         // Update button UI - show as active
         if (buttonElement) {
-            buttonElement.style.background = '#4CAF50';
-            buttonElement.style.borderColor = '#4CAF50';
+            buttonElement.style.background = '#2D5016';
+            buttonElement.style.borderColor = '#2D5016';
             buttonElement.style.color = 'white';
             buttonElement.querySelector('svg').setAttribute('stroke', 'white');
         }
@@ -538,8 +538,8 @@ function updateCartButtonStates() {
         const productId = parseInt(btn.dataset.productId);
         if (cartProductIds.includes(productId)) {
             // Product is in cart - show as active (green)
-            btn.style.background = '#4CAF50';
-            btn.style.borderColor = '#4CAF50';
+            btn.style.background = '#2D5016';
+            btn.style.borderColor = '#2D5016';
             btn.style.color = 'white';
             btn.querySelector('svg').setAttribute('stroke', 'white');
         }
@@ -865,7 +865,7 @@ function showNotification(message, type = 'info') {
         position: fixed;
         top: 80px;
         right: 20px;
-        background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#F44336' : type === 'warning' ? '#FF9800' : '#2196F3'};
+        background: ${type === 'success' ? '#2D5016' : type === 'error' ? '#F44336' : type === 'warning' ? '#FF8C42' : '#FF8C42'};
         color: white;
         padding: 16px 24px;
         border-radius: 8px;

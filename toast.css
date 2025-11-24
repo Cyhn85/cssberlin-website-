@@ -44,7 +44,7 @@
 
 /* Toast Types */
 .toast.success {
-    border-left: 4px solid #4CAF50;
+    border-left: 4px solid #2D5016;
 }
 
 .toast.error {
@@ -52,11 +52,11 @@
 }
 
 .toast.warning {
-    border-left: 4px solid #FF9800;
+    border-left: 4px solid #FF8C42;
 }
 
 .toast.info {
-    border-left: 4px solid #2196F3;
+    border-left: 4px solid #FF8C42;
 }
 
 /* Toast Icon */
@@ -72,7 +72,7 @@
 
 .toast.success .toast-icon {
     background: #E8F5E9;
-    color: #4CAF50;
+    color: #2D5016;
 }
 
 .toast.error .toast-icon {
@@ -82,12 +82,12 @@
 
 .toast.warning .toast-icon {
     background: #FFF3E0;
-    color: #FF9800;
+    color: #FF8C42;
 }
 
 .toast.info .toast-icon {
-    background: #E3F2FD;
-    color: #2196F3;
+    background: #FFF3E0;
+    color: #FF8C42;
 }
 
 .toast-icon svg {
@@ -157,7 +157,7 @@
 }
 
 .toast.success .toast-progress {
-    color: #4CAF50;
+    color: #2D5016;
 }
 
 .toast.error .toast-progress {
@@ -165,11 +165,11 @@
 }
 
 .toast.warning .toast-progress {
-    color: #FF9800;
+    color: #FF8C42;
 }
 
 .toast.info .toast-progress {
-    color: #2196F3;
+    color: #FF8C42;
 }
 
 @keyframes toast-progress {

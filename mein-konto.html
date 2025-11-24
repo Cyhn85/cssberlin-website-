@@ -242,11 +242,11 @@
         }
 
         .stat-icon.blue {
-            background: linear-gradient(135deg, #E3F2FD, #BBDEFB);
+            background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
         }
 
         .stat-icon.red {
-            background: linear-gradient(135deg, #FFEBEE, #FFCDD2);
+            background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
         }
 
         .stat-info h3 {
@@ -435,6 +435,316 @@
             .account-sidebar.mobile-open {
                 display: block;
             }
+        }
+
+        /* Orders/Negotiations Tabs */
+        .orders-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #E0E0E0;
+            padding-bottom: 12px;
+        }
+
+        .orders-tab, .negotiations-tab {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            font-weight: 600;
+            color: #757575;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .orders-tab:hover, .negotiations-tab:hover {
+            background: #F5F5F5;
+            color: #2D5016;
+        }
+
+        .orders-tab.active, .negotiations-tab.active {
+            background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+            color: #2D5016;
+        }
+
+        .tab-badge {
+            background: #FF8C42;
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 10px;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 48px 20px;
+            color: #757575;
+        }
+
+        .empty-state svg {
+            color: #E0E0E0;
+            margin-bottom: 16px;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            color: #333;
+            margin: 0 0 8px 0;
+        }
+
+        .empty-state p {
+            margin: 0 0 16px 0;
+        }
+
+        .btn-primary-sm {
+            display: inline-block;
+            background: linear-gradient(135deg, #FF8C42, #FF6B1A);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary-sm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 140, 66, 0.4);
+        }
+
+        /* Order/Negotiation Card */
+        .order-card, .negotiation-card {
+            background: white;
+            border: 2px solid #E0E0E0;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .order-card:hover, .negotiation-card:hover {
+            border-color: #2D5016;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-card-header, .negotiation-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .order-product-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .order-product-info {
+            flex: 1;
+        }
+
+        .order-product-name {
+            font-weight: 600;
+            color: #333;
+            margin: 0 0 4px 0;
+            font-size: 15px;
+        }
+
+        .order-product-price {
+            color: #FF8C42;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .order-status {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .order-status.pending { background: #FFF3E0; color: #FF8C42; }
+        .order-status.paid { background: #E8F5E9; color: #2D5016; }
+        .order-status.shipped { background: #FFF3E0; color: #FF8C42; }
+        .order-status.delivered { background: #E8F5E9; color: #2D5016; }
+
+        /* Negotiation specific */
+        .negotiation-offer {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #F5F5F5;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .offer-amount {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2D5016;
+        }
+
+        .offer-original {
+            font-size: 14px;
+            color: #757575;
+            text-decoration: line-through;
+        }
+
+        .offer-discount {
+            background: #FFEBEE;
+            color: #D32F2F;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Negotiation Actions (Vinted-style) */
+        .negotiation-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-accept {
+            flex: 1;
+            min-width: 100px;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #2D5016, #4A7C2C);
+            color: white;
+        }
+
+        .btn-accept:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(45, 80, 22, 0.4);
+        }
+
+        .btn-counter {
+            flex: 1;
+            min-width: 100px;
+            padding: 10px 16px;
+            border: 2px solid #FF8C42;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            color: #FF8C42;
+        }
+
+        .btn-counter:hover {
+            background: #FFF3E0;
+        }
+
+        .btn-decline {
+            flex: 1;
+            min-width: 100px;
+            padding: 10px 16px;
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            color: #757575;
+        }
+
+        .btn-decline:hover {
+            border-color: #D32F2F;
+            color: #D32F2F;
+            background: #FFEBEE;
+        }
+
+        /* Shipping Info */
+        .shipping-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #E8F5E9;
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+
+        .shipping-info svg {
+            color: #2D5016;
+        }
+
+        .tracking-link {
+            color: #FF8C42;
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .tracking-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Counter Offer Modal */
+        .counter-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .counter-modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .counter-modal h3 {
+            margin: 0 0 16px 0;
+            font-size: 18px;
+        }
+
+        .counter-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+
+        .counter-input:focus {
+            outline: none;
+            border-color: #FF8C42;
+        }
+
+        .counter-modal-actions {
+            display: flex;
+            gap: 8px;
         }
     </style>
 </head>
@@ -693,13 +1003,108 @@
                 <!-- Bestellungen Section -->
                 <div class="content-section" id="section-bestellungen" style="display: none;">
                     <h2>Meine Bestellungen</h2>
-                    <p>Sie haben noch keine Bestellungen.</p>
+
+                    <!-- Tabs: Verkauft / Gekauft -->
+                    <div class="orders-tabs">
+                        <button class="orders-tab active" data-tab="gekauft">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                <line x1="3" y1="6" x2="21" y2="6"></line>
+                                <path d="M16 10a4 4 0 0 1-8 0"></path>
+                            </svg>
+                            Gekauft
+                            <span class="tab-badge" id="gekauftBadge">0</span>
+                        </button>
+                        <button class="orders-tab" data-tab="verkauft">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                            </svg>
+                            Verkauft
+                            <span class="tab-badge" id="verkauftBadge">0</span>
+                        </button>
+                    </div>
+
+                    <!-- Gekauft Tab Content -->
+                    <div class="orders-tab-content active" id="tab-gekauft">
+                        <div class="orders-list" id="gekauftList">
+                            <div class="empty-state">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="64" height="64">
+                                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                                </svg>
+                                <h3>Keine Käufe</h3>
+                                <p>Sie haben noch nichts gekauft.</p>
+                                <a href="index.html" class="btn-primary-sm">Jetzt shoppen</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Verkauft Tab Content -->
+                    <div class="orders-tab-content" id="tab-verkauft" style="display: none;">
+                        <div class="orders-list" id="verkauftList">
+                            <div class="empty-state">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="64" height="64">
+                                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                </svg>
+                                <h3>Keine Verkäufe</h3>
+                                <p>Sie haben noch nichts verkauft.</p>
+                                <a href="inserieren.html" class="btn-primary-sm">Artikel inserieren</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Verhandlungen Section -->
                 <div class="content-section" id="section-verhandlungen" style="display: none;">
                     <h2>Verhandlungen</h2>
-                    <p>Sie haben keine aktiven Verhandlungen.</p>
+
+                    <!-- Tabs: Eingehend / Ausgehend -->
+                    <div class="orders-tabs">
+                        <button class="negotiations-tab active" data-tab="eingehend">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                <polyline points="17 1 21 5 17 9"></polyline>
+                                <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                            </svg>
+                            Eingehend
+                            <span class="tab-badge" id="eingehendBadge">0</span>
+                        </button>
+                        <button class="negotiations-tab" data-tab="ausgehend">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                <polyline points="7 23 3 19 7 15"></polyline>
+                                <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                            </svg>
+                            Ausgehend
+                            <span class="tab-badge" id="ausgehendBadge">0</span>
+                        </button>
+                    </div>
+
+                    <!-- Eingehend Tab Content (Angebote die ich erhalten habe) -->
+                    <div class="negotiations-tab-content active" id="tab-eingehend">
+                        <div class="negotiations-list" id="eingehendList">
+                            <div class="empty-state">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="64" height="64">
+                                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                </svg>
+                                <h3>Keine eingehenden Angebote</h3>
+                                <p>Sie haben keine Preisangebote erhalten.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ausgehend Tab Content (Angebote die ich gesendet habe) -->
+                    <div class="negotiations-tab-content" id="tab-ausgehend" style="display: none;">
+                        <div class="negotiations-list" id="ausgehendList">
+                            <div class="empty-state">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="64" height="64">
+                                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                </svg>
+                                <h3>Keine ausgehenden Angebote</h3>
+                                <p>Sie haben keine Preisangebote gesendet.</p>
+                                <a href="index.html" class="btn-primary-sm">Produkte durchsuchen</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Einstellungen Section -->
@@ -712,23 +1117,27 @@
     </div>
 
     <!-- Scripts -->
-    <script src="toast.js"></script>
+    <script src="api-client.js"></script>
+    <script src="toast.js"></script>    <!-- API Configuration (MUST load first) -->
+    <script src="api-config.js"></script>
+    <script src="api-client.js"></script>
+
+
     <script src="auth.js"></script>
     <script>
         // Load user data
-        function loadUserData() {
+        async function loadUserData() {
             try {
                 // Check if auth functions are available
                 if (typeof getCurrentUser !== 'function') {
                     console.error('Auth functions not loaded. Please ensure auth.js is loaded.');
-                    setTimeout(loadUserData, 100); // Retry after 100ms
+                    setTimeout(loadUserData, 100);
                     return;
                 }
 
                 const currentUser = getCurrentUser();
 
                 if (!currentUser) {
-                    // Not logged in, redirect to login
                     console.log('No user found, redirecting to login...');
                     window.location.href = 'login.html';
                     return;
@@ -745,17 +1154,43 @@
                 const avatar = (currentUser.firstName || 'U').charAt(0).toUpperCase();
                 document.getElementById('userAvatar').textContent = avatar;
 
-                // Load stats
-                const wishlist = getWishlist();
-                const negotiations = getNegotiations();
+                // Load stats from localStorage (fallback)
+                const wishlist = getWishlist ? getWishlist() : [];
+                const negotiations = getNegotiations ? getNegotiations() : [];
 
-                document.getElementById('totalOrders').textContent = '0'; // TODO: Implement orders
-                document.getElementById('totalMessages').textContent = '0'; // TODO: Implement messages count
+                // Try to load from API
+                let offersCount = 0;
+                let shipmentsCount = 0;
+
+                try {
+                    if (api && api.isLoggedIn()) {
+                        // Load offers from API
+                        const offersResponse = await api.getOffers();
+                        if (offersResponse && offersResponse.offers) {
+                            offersCount = offersResponse.offers.length;
+                            // Update negotiations from API
+                            renderOffersFromAPI(offersResponse.offers, currentUser.id);
+                        }
+
+                        // Load shipments from API
+                        const shipmentsResponse = await api.getShipments();
+                        if (shipmentsResponse && shipmentsResponse.shipments) {
+                            shipmentsCount = shipmentsResponse.shipments.length;
+                            renderShipmentsFromAPI(shipmentsResponse.shipments, currentUser.id);
+                        }
+                    }
+                } catch (apiError) {
+                    console.log('API not available, using localStorage:', apiError);
+                }
+
+                // Update stats
+                document.getElementById('totalOrders').textContent = shipmentsCount;
+                document.getElementById('totalMessages').textContent = '0';
                 document.getElementById('totalWishlist').textContent = wishlist.length;
-                document.getElementById('totalNegotiations').textContent = negotiations.length;
+                document.getElementById('totalNegotiations').textContent = offersCount || negotiations.length;
 
                 // Update badges
-                document.getElementById('ordersBadge').textContent = '0';
+                document.getElementById('ordersBadge').textContent = shipmentsCount;
                 document.getElementById('messagesBadge').textContent = '0';
                 document.getElementById('wishlistBadge').textContent = wishlist.length;
                 document.getElementById('negotiationsBadge').textContent = negotiations.length;
@@ -812,6 +1247,474 @@
 
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', loadUserData);
+
+        // ============== ORDERS TAB HANDLERS ==============
+        document.querySelectorAll('.orders-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabName = this.dataset.tab;
+
+                // Update active tab
+                document.querySelectorAll('.orders-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+
+                // Show/hide content
+                document.querySelectorAll('.orders-tab-content').forEach(content => {
+                    content.style.display = 'none';
+                });
+                document.getElementById('tab-' + tabName).style.display = 'block';
+            });
+        });
+
+        // ============== NEGOTIATIONS TAB HANDLERS ==============
+        document.querySelectorAll('.negotiations-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabName = this.dataset.tab;
+
+                // Update active tab
+                document.querySelectorAll('.negotiations-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+
+                // Show/hide content
+                document.querySelectorAll('.negotiations-tab-content').forEach(content => {
+                    content.style.display = 'none';
+                });
+                document.getElementById('tab-' + tabName).style.display = 'block';
+            });
+        });
+
+        // ============== LOAD NEGOTIATIONS ==============
+        function loadNegotiations() {
+            const negotiations = getNegotiations();
+            const currentUser = getCurrentUser();
+            if (!currentUser) return;
+
+            // Separate incoming and outgoing
+            const eingehend = negotiations.filter(n => n.sellerId === currentUser.id);
+            const ausgehend = negotiations.filter(n => n.buyerId === currentUser.id);
+
+            // Update badges
+            document.getElementById('eingehendBadge').textContent = eingehend.filter(n => n.status === 'pending').length;
+            document.getElementById('ausgehendBadge').textContent = ausgehend.filter(n => n.status === 'pending' || n.status === 'countered').length;
+
+            // Render eingehend (incoming offers I received as seller)
+            renderNegotiationsList('eingehendList', eingehend, true);
+
+            // Render ausgehend (offers I sent as buyer)
+            renderNegotiationsList('ausgehendList', ausgehend, false);
+        }
+
+        function renderNegotiationsList(containerId, negotiations, isSeller) {
+            const container = document.getElementById(containerId);
+
+            if (!negotiations || negotiations.length === 0) {
+                return; // Keep empty state
+            }
+
+            const html = negotiations.map(neg => {
+                const discount = Math.round((1 - neg.offerAmount / neg.originalPrice) * 100);
+                const statusLabel = getStatusLabel(neg.status);
+
+                return `
+                    <div class="negotiation-card" data-negotiation-id="${neg.id}">
+                        <div class="negotiation-card-header">
+                            <img src="${neg.productImage || 'https://via.placeholder.com/60'}" alt="${neg.productName}" class="order-product-image">
+                            <div class="order-product-info">
+                                <p class="order-product-name">${neg.productName}</p>
+                                <span class="order-status ${neg.status}">${statusLabel}</span>
+                            </div>
+                        </div>
+
+                        <div class="negotiation-offer">
+                            <span class="offer-amount">${neg.counterAmount || neg.offerAmount} €</span>
+                            <span class="offer-original">${neg.originalPrice} €</span>
+                            <span class="offer-discount">-${discount}%</span>
+                        </div>
+
+                        ${neg.message ? `<p style="color: #757575; font-size: 14px; margin-bottom: 12px;">"${neg.message}"</p>` : ''}
+
+                        ${neg.status === 'pending' && isSeller ? `
+                            <div class="negotiation-actions">
+                                <button class="btn-accept" onclick="acceptNegotiation('${neg.id}')">
+                                    ✓ Annehmen
+                                </button>
+                                <button class="btn-counter" onclick="showCounterModal('${neg.id}', ${neg.originalPrice})">
+                                    ↔ Gegenangebot
+                                </button>
+                                <button class="btn-decline" onclick="declineNegotiation('${neg.id}')">
+                                    ✗ Ablehnen
+                                </button>
+                            </div>
+                        ` : ''}
+
+                        ${neg.status === 'countered' && !isSeller ? `
+                            <div class="negotiation-actions">
+                                <button class="btn-accept" onclick="acceptCounterOffer('${neg.id}')">
+                                    ✓ Gegenangebot annehmen (${neg.counterAmount} €)
+                                </button>
+                                <button class="btn-decline" onclick="declineNegotiation('${neg.id}')">
+                                    ✗ Ablehnen
+                                </button>
+                            </div>
+                        ` : ''}
+
+                        ${neg.status === 'accepted' ? `
+                            <div style="padding: 12px; background: #E8F5E9; border-radius: 8px; color: #2D5016; font-weight: 600;">
+                                ✓ Angebot angenommen - Warten auf Zahlung
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = html;
+        }
+
+        function getStatusLabel(status) {
+            const labels = {
+                'pending': 'Ausstehend',
+                'accepted': 'Angenommen',
+                'declined': 'Abgelehnt',
+                'countered': 'Gegenangebot',
+                'expired': 'Abgelaufen'
+            };
+            return labels[status] || status;
+        }
+
+        // ============== NEGOTIATION ACTIONS ==============
+        function acceptNegotiation(negotiationId) {
+            const negotiations = getNegotiations();
+            const index = negotiations.findIndex(n => n.id === negotiationId);
+
+            if (index !== -1) {
+                negotiations[index].status = 'accepted';
+                localStorage.setItem('cssberlin_negotiations', JSON.stringify(negotiations));
+                toast.success('Angebot angenommen', 'Der Käufer wird benachrichtigt.');
+                loadNegotiations();
+                loadUserData();
+            }
+        }
+
+        function declineNegotiation(negotiationId) {
+            const negotiations = getNegotiations();
+            const index = negotiations.findIndex(n => n.id === negotiationId);
+
+            if (index !== -1) {
+                negotiations[index].status = 'declined';
+                localStorage.setItem('cssberlin_negotiations', JSON.stringify(negotiations));
+                toast.info('Angebot abgelehnt');
+                loadNegotiations();
+                loadUserData();
+            }
+        }
+
+        function acceptCounterOffer(negotiationId) {
+            const negotiations = getNegotiations();
+            const index = negotiations.findIndex(n => n.id === negotiationId);
+
+            if (index !== -1) {
+                negotiations[index].status = 'accepted';
+                negotiations[index].offerAmount = negotiations[index].counterAmount;
+                localStorage.setItem('cssberlin_negotiations', JSON.stringify(negotiations));
+                toast.success('Gegenangebot angenommen', 'Sie können jetzt kaufen.');
+                loadNegotiations();
+                loadUserData();
+            }
+        }
+
+        // ============== COUNTER OFFER MODAL ==============
+        let currentCounterNegotiationId = null;
+
+        function showCounterModal(negotiationId, originalPrice) {
+            currentCounterNegotiationId = negotiationId;
+
+            const modal = document.createElement('div');
+            modal.className = 'counter-modal';
+            modal.id = 'counterModal';
+            modal.innerHTML = `
+                <div class="counter-modal-content">
+                    <h3>Gegenangebot senden</h3>
+                    <p style="color: #757575; margin-bottom: 16px;">Originalpreis: ${originalPrice} €</p>
+                    <input type="number" class="counter-input" id="counterAmountInput" placeholder="Ihr Preis in €" step="0.01">
+                    <div class="counter-modal-actions">
+                        <button class="btn-decline" onclick="closeCounterModal()" style="flex: 1;">Abbrechen</button>
+                        <button class="btn-accept" onclick="submitCounterOffer()" style="flex: 1;">Senden</button>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(modal);
+
+            // Close on background click
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeCounterModal();
+            });
+        }
+
+        function closeCounterModal() {
+            const modal = document.getElementById('counterModal');
+            if (modal) modal.remove();
+            currentCounterNegotiationId = null;
+        }
+
+        function submitCounterOffer() {
+            const amount = parseFloat(document.getElementById('counterAmountInput').value);
+
+            if (!amount || amount <= 0) {
+                toast.error('Ungültiger Betrag', 'Bitte geben Sie einen gültigen Preis ein.');
+                return;
+            }
+
+            const negotiations = getNegotiations();
+            const index = negotiations.findIndex(n => n.id === currentCounterNegotiationId);
+
+            if (index !== -1) {
+                negotiations[index].counterAmount = amount;
+                negotiations[index].status = 'countered';
+                localStorage.setItem('cssberlin_negotiations', JSON.stringify(negotiations));
+                toast.success('Gegenangebot gesendet', `${amount} € wurde dem Käufer vorgeschlagen.`);
+                closeCounterModal();
+                loadNegotiations();
+            }
+        }
+
+        // Load negotiations when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(loadNegotiations, 200);
+        });
+
+        // ============== API RENDER FUNCTIONS ==============
+
+        // Render offers from API
+        function renderOffersFromAPI(offers, currentUserId) {
+            // Separate incoming (as seller) and outgoing (as buyer)
+            const eingehend = offers.filter(o => o.seller_id === currentUserId);
+            const ausgehend = offers.filter(o => o.buyer_id === currentUserId);
+
+            // Update badges
+            document.getElementById('eingehendBadge').textContent = eingehend.filter(o => o.status === 'pending').length;
+            document.getElementById('ausgehendBadge').textContent = ausgehend.filter(o => o.status === 'pending' || o.status === 'countered').length;
+
+            // Render eingehend
+            if (eingehend.length > 0) {
+                const eingehendHtml = eingehend.map(offer => renderOfferCard(offer, true)).join('');
+                document.getElementById('eingehendList').innerHTML = eingehendHtml;
+            }
+
+            // Render ausgehend
+            if (ausgehend.length > 0) {
+                const ausgehendHtml = ausgehend.map(offer => renderOfferCard(offer, false)).join('');
+                document.getElementById('ausgehendList').innerHTML = ausgehendHtml;
+            }
+        }
+
+        // Render single offer card
+        function renderOfferCard(offer, isSeller) {
+            const discount = Math.round((1 - offer.offer_amount / offer.product_price) * 100);
+            const statusLabels = {
+                'pending': 'Ausstehend',
+                'accepted': 'Angenommen',
+                'declined': 'Abgelehnt',
+                'countered': 'Gegenangebot',
+                'expired': 'Abgelaufen'
+            };
+
+            return `
+                <div class="negotiation-card" data-offer-id="${offer.id}">
+                    <div class="negotiation-card-header">
+                        <img src="${offer.product_image || 'https://via.placeholder.com/60'}" alt="${offer.product_name}" class="order-product-image">
+                        <div class="order-product-info">
+                            <p class="order-product-name">${offer.product_name}</p>
+                            <span class="order-status ${offer.status}">${statusLabels[offer.status] || offer.status}</span>
+                        </div>
+                    </div>
+
+                    <div class="negotiation-offer">
+                        <span class="offer-amount">${offer.counter_amount || offer.offer_amount} €</span>
+                        <span class="offer-original">${offer.product_price} €</span>
+                        <span class="offer-discount">-${discount}%</span>
+                    </div>
+
+                    ${offer.message ? `<p style="color: #757575; font-size: 14px; margin-bottom: 12px;">"${offer.message}"</p>` : ''}
+
+                    ${offer.status === 'pending' && isSeller ? `
+                        <div class="negotiation-actions">
+                            <button class="btn-accept" onclick="acceptOfferAPI(${offer.id})">
+                                ✓ Annehmen
+                            </button>
+                            <button class="btn-counter" onclick="showCounterModalAPI(${offer.id}, ${offer.product_price})">
+                                ↔ Gegenangebot
+                            </button>
+                            <button class="btn-decline" onclick="declineOfferAPI(${offer.id})">
+                                ✗ Ablehnen
+                            </button>
+                        </div>
+                    ` : ''}
+
+                    ${offer.status === 'countered' && !isSeller ? `
+                        <div class="negotiation-actions">
+                            <button class="btn-accept" onclick="acceptOfferAPI(${offer.id})">
+                                ✓ Gegenangebot annehmen (${offer.counter_amount} €)
+                            </button>
+                            <button class="btn-decline" onclick="declineOfferAPI(${offer.id})">
+                                ✗ Ablehnen
+                            </button>
+                        </div>
+                    ` : ''}
+
+                    ${offer.status === 'accepted' ? `
+                        <div style="padding: 12px; background: #E8F5E9; border-radius: 8px; color: #2D5016; font-weight: 600;">
+                            ✓ Angebot angenommen - Warten auf Zahlung
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        // Render shipments from API
+        function renderShipmentsFromAPI(shipments, currentUserId) {
+            // Separate gekauft (as buyer) and verkauft (as seller)
+            const gekauft = shipments.filter(s => s.buyer_id === currentUserId || !s.is_seller);
+            const verkauft = shipments.filter(s => s.seller_id === currentUserId || s.is_seller);
+
+            // Update badges
+            document.getElementById('gekauftBadge').textContent = gekauft.length;
+            document.getElementById('verkauftBadge').textContent = verkauft.length;
+
+            // Render gekauft
+            if (gekauft.length > 0) {
+                const gekauftHtml = gekauft.map(s => renderShipmentCard(s, false)).join('');
+                document.getElementById('gekauftList').innerHTML = gekauftHtml;
+            }
+
+            // Render verkauft
+            if (verkauft.length > 0) {
+                const verkauftHtml = verkauft.map(s => renderShipmentCard(s, true)).join('');
+                document.getElementById('verkauftList').innerHTML = verkauftHtml;
+            }
+        }
+
+        // Render single shipment card
+        function renderShipmentCard(shipment, isSeller) {
+            const statusLabels = {
+                'pending': 'Vorbereitet',
+                'shipped': 'Versendet',
+                'in_transit': 'Unterwegs',
+                'out_for_delivery': 'In Zustellung',
+                'delivered': 'Zugestellt'
+            };
+
+            return `
+                <div class="order-card">
+                    <div class="order-card-header">
+                        <img src="${shipment.product_image || 'https://via.placeholder.com/60'}" alt="${shipment.product_name}" class="order-product-image">
+                        <div class="order-product-info">
+                            <p class="order-product-name">${shipment.product_name}</p>
+                            <p class="order-product-price">${shipment.product_price?.toFixed(2) || '0.00'} €</p>
+                        </div>
+                        <span class="order-status ${shipment.status}">${statusLabels[shipment.status] || shipment.status}</span>
+                    </div>
+
+                    ${shipment.tracking_number ? `
+                        <div class="shipping-info">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                <rect x="1" y="3" width="15" height="13"></rect>
+                                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                                <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                                <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                            </svg>
+                            <span>${shipment.carrier?.toUpperCase() || ''}: ${shipment.tracking_number}</span>
+                            <a href="versand-tracking.html?tracking=${shipment.tracking_number}" class="tracking-link">
+                                Verfolgen →
+                            </a>
+                        </div>
+                    ` : `
+                        <div class="shipping-info" style="background: #FFF3E0;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            <span>Warten auf Versand...</span>
+                        </div>
+                    `}
+                </div>
+            `;
+        }
+
+        // ============== API OFFER ACTIONS ==============
+
+        async function acceptOfferAPI(offerId) {
+            try {
+                await api.acceptOffer(offerId);
+                toast.success('Angebot angenommen', 'Der Käufer wird benachrichtigt.');
+                loadUserData();
+            } catch (error) {
+                console.error('Error accepting offer:', error);
+                toast.error('Fehler', 'Angebot konnte nicht angenommen werden.');
+            }
+        }
+
+        async function declineOfferAPI(offerId) {
+            try {
+                await api.declineOffer(offerId);
+                toast.info('Angebot abgelehnt');
+                loadUserData();
+            } catch (error) {
+                console.error('Error declining offer:', error);
+                toast.error('Fehler', 'Angebot konnte nicht abgelehnt werden.');
+            }
+        }
+
+        // Counter offer modal for API
+        let currentAPIOfferId = null;
+
+        function showCounterModalAPI(offerId, originalPrice) {
+            currentAPIOfferId = offerId;
+
+            const modal = document.createElement('div');
+            modal.className = 'counter-modal';
+            modal.id = 'counterModalAPI';
+            modal.innerHTML = `
+                <div class="counter-modal-content">
+                    <h3>Gegenangebot senden</h3>
+                    <p style="color: #757575; margin-bottom: 16px;">Originalpreis: ${originalPrice} €</p>
+                    <input type="number" class="counter-input" id="counterAmountAPI" placeholder="Ihr Preis in €" step="0.01">
+                    <div class="counter-modal-actions">
+                        <button class="btn-decline" onclick="closeCounterModalAPI()" style="flex: 1;">Abbrechen</button>
+                        <button class="btn-accept" onclick="submitCounterOfferAPI()" style="flex: 1;">Senden</button>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(modal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeCounterModalAPI();
+            });
+        }
+
+        function closeCounterModalAPI() {
+            const modal = document.getElementById('counterModalAPI');
+            if (modal) modal.remove();
+            currentAPIOfferId = null;
+        }
+
+        async function submitCounterOfferAPI() {
+            const amount = parseFloat(document.getElementById('counterAmountAPI').value);
+
+            if (!amount || amount <= 0) {
+                toast.error('Ungültiger Betrag', 'Bitte geben Sie einen gültigen Preis ein.');
+                return;
+            }
+
+            try {
+                await api.counterOffer(currentAPIOfferId, amount);
+                toast.success('Gegenangebot gesendet', `${amount} € wurde dem Käufer vorgeschlagen.`);
+                closeCounterModalAPI();
+                loadUserData();
+            } catch (error) {
+                console.error('Error sending counter offer:', error);
+                toast.error('Fehler', 'Gegenangebot konnte nicht gesendet werden.');
+            }
+        }
     </script>
 </body>
 </html>

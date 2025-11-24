@@ -535,7 +535,7 @@ class OfferModalManager {
             display.style.color = '#F44336';
         } else {
             display.textContent = `💰 ${discount.toFixed(1)}% Rabatt (${savings}€ Ersparnis)`;
-            display.style.color = '#4CAF50';
+            display.style.color = '#2D5016';
         }
     }
 
@@ -636,7 +636,7 @@ class OfferModalManager {
         const modalHTML = `
             <div class="offer-modal-overlay" id="purchasePromptModal">
                 <div class="offer-modal-content" style="max-width: 400px;">
-                    <div class="offer-modal-header" style="background: linear-gradient(135deg, #4CAF50, #2D5016); color: white;">
+                    <div class="offer-modal-header" style="background: linear-gradient(135deg, #2D5016, #4A7C2C); color: white;">
                         <h2 style="display: flex; align-items: center; gap: 8px;">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
@@ -657,7 +657,7 @@ class OfferModalManager {
                             <div style="text-decoration: line-through; color: #999; font-size: 14px;">
                                 ${cartItem.originalPrice.toFixed(2)}€
                             </div>
-                            <div style="font-size: 28px; font-weight: 700; color: #4CAF50;">
+                            <div style="font-size: 28px; font-weight: 700; color: #2D5016;">
                                 ${cartItem.price.toFixed(2)}€
                             </div>
                             <div style="font-size: 14px; color: #FF8C42; font-weight: 600;">
@@ -672,7 +672,7 @@ class OfferModalManager {
 
                     <div class="offer-modal-actions" style="flex-direction: column; gap: 12px;">
                         <button class="offer-submit-btn" onclick="window.location.href='warenkorb.html'"
-                                style="width: 100%; background: #4CAF50;">
+                                style="width: 100%; background: #2D5016;">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="margin-right: 8px;">
                                 <circle cx="9" cy="21" r="1"></circle>
                                 <circle cx="20" cy="21" r="1"></circle>

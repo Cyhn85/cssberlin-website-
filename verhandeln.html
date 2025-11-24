@@ -148,16 +148,16 @@
         }
 
         .status-badge.pending {
-            background: #FF9800;
+            background: #FF8C42;
         }
 
         .status-badge.active {
-            background: #2196F3;
+            background: #FF8C42;
         }
 
         .status-badge.completed,
         .status-badge.accepted {
-            background: #4CAF50;
+            background: #2D5016;
         }
 
         .status-badge.cancelled,
@@ -171,17 +171,17 @@
 
         /* Vinted-style status colors for items */
         .negotiation-item.status-accepted {
-            border-left: 4px solid #4CAF50;
-            background: linear-gradient(to right, rgba(76, 175, 80, 0.05), transparent);
+            border-left: 4px solid #2D5016;
+            background: linear-gradient(to right, rgba(45, 80, 22, 0.05), transparent);
         }
 
         .negotiation-item.status-pending {
-            border-left: 4px solid #FF9800;
+            border-left: 4px solid #FF8C42;
         }
 
         .negotiation-item.status-countered {
-            border-left: 4px solid #2196F3;
-            background: linear-gradient(to right, rgba(33, 150, 243, 0.05), transparent);
+            border-left: 4px solid #FF8C42;
+            background: linear-gradient(to right, rgba(255, 140, 66, 0.05), transparent);
         }
 
         .negotiation-item.status-declined,
@@ -192,33 +192,33 @@
 
         /* Buy Now button for accepted offers */
         .btn-buy-now {
-            background: linear-gradient(135deg, #4CAF50, #2D5016) !important;
+            background: linear-gradient(135deg, #2D5016, #4A7C2C) !important;
             color: white !important;
             font-weight: 700;
             animation: pulse-green 2s infinite;
         }
 
         @keyframes pulse-green {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4); }
-            50% { box-shadow: 0 0 0 8px rgba(76, 175, 80, 0); }
+            0%, 100% { box-shadow: 0 0 0 0 rgba(45, 80, 22, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(45, 80, 22, 0); }
         }
 
         .btn-accept {
-            background: #4CAF50;
+            background: #2D5016;
             color: white;
         }
 
         .btn-accept:hover {
-            background: #43A047;
+            background: #4A7C2C;
         }
 
         .btn-counter {
-            background: #2196F3;
+            background: #FF8C42;
             color: white;
         }
 
         .btn-counter:hover {
-            background: #1E88E5;
+            background: #FF7A29;
         }
 
         .btn-decline {
@@ -253,7 +253,7 @@
         .final-price {
             font-size: 20px;
             font-weight: 700;
-            color: #4CAF50;
+            color: #2D5016;
         }
 
         .discount-badge {
@@ -606,7 +606,11 @@
         <div class="footer-bottom">
             <p>&copy; 2025 CSS Berlin - Climate Smart Solutions. Alle Rechte vorbehalten.</p>
         </div>
-    </footer>
+    </footer>    <!-- API Configuration (MUST load first) -->
+    <script src="api-config.js"></script>
+    <script src="api-client.js"></script>
+
+
 
     <script src="auth.js"></script>
     <script>
@@ -742,7 +746,7 @@
                                 ${isBuyer ? 'Gesendet' : 'Erhalten'} ${timeAgo}
                             </div>
                             ${offer.expires_at && offer.status !== 'accepted' ? `
-                                <div class="offer-expires" style="font-size: 12px; color: #FF9800; margin-top: 4px;">
+                                <div class="offer-expires" style="font-size: 12px; color: #FF8C42; margin-top: 4px;">
                                     Läuft ab: ${formatExpiryDate(offer.expires_at)}
                                 </div>
                             ` : ''}

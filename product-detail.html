@@ -199,7 +199,7 @@
         }
 
         .champion-seller {
-            background: linear-gradient(135deg, #FFD700 0%, #FFC107 100%);
+            background: linear-gradient(135deg, #FF8C42 0%, #FF7A29 100%);
         }
 
         .seller-stats {
@@ -481,7 +481,7 @@
         }
 
         .condition-very-good {
-            color: #4CAF50;
+            color: #2D5016;
             font-weight: 600;
         }
 
@@ -541,7 +541,7 @@
 
         .negotiation-info svg {
             flex-shrink: 0;
-            stroke: #FF9800;
+            stroke: #FF8C42;
         }
 
         .shipping-info-box {
@@ -645,6 +645,128 @@
             .thumbnail-gallery {
                 grid-template-columns: repeat(4, 1fr);
                 gap: 8px;
+            }
+        }
+
+        /* Similar Products Section */
+        .similar-products-section {
+            background: #FAFAFA;
+            padding: 60px 0 80px;
+            margin-top: 60px;
+        }
+
+        .similar-products-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        .similar-products-container h2 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2D5016;
+            margin-bottom: 32px;
+        }
+
+        .similar-products-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .similar-product-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .similar-product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        .similar-product-image {
+            width: 100%;
+            aspect-ratio: 3/4;
+            object-fit: cover;
+            background: #f5f5f5;
+        }
+
+        .similar-product-info {
+            padding: 16px;
+        }
+
+        .similar-product-brand {
+            font-size: 12px;
+            color: #757575;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .similar-product-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #212121;
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .similar-product-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2D5016;
+        }
+
+        .similar-product-wishlist {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+
+        .similar-product-wishlist:hover {
+            transform: scale(1.1);
+            background: white;
+        }
+
+        .loading-spinner {
+            text-align: center;
+            padding: 40px;
+            color: #757575;
+            grid-column: 1 / -1;
+        }
+
+        @media (max-width: 1200px) {
+            .similar-products-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .similar-products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+
+            .similar-products-container h2 {
+                font-size: 24px;
             }
         }
     </style>
@@ -986,7 +1108,23 @@
         </div>
     </section>
 
-    <script src="auth.js"></script>
+    <!-- Similar Products Section -->
+    <section class="similar-products-section">
+        <div class="similar-products-container">
+            <h2>Ähnliche Produkte</h2>
+            <div class="similar-products-grid" id="similarProductsGrid">
+                <!-- Will be populated by JavaScript -->
+                <div class="loading-spinner">Ähnliche Produkte werden geladen...</div>
+            </div>
+        </div>
+    </section>
+
+    <script src="auth.js"></script>    <!-- API Configuration (MUST load first) -->
+    <script src="api-config.js"></script>
+    <script src="api-client.js"></script>
+    <script src="auth-gate.js"></script>  <!-- Login gate system -->
+    <script src="favorites.js"></script>  <!-- Favorites system -->
+
     <script src="script.js"></script>
     <script src="payment.js"></script>
     <script>
@@ -1009,35 +1147,39 @@
             });
         });
 
-        // Wishlist toggle for large button (on image)
+        // Wishlist toggle for large button (on image) - WITH AUTH GATE
         document.querySelector('.wishlist-btn-large').addEventListener('click', function() {
-            const isAdded = toggleWishlist(productData.id, productData);
+            authGate.requireAuth('Zu Favoriten hinzufügen', () => {
+                const isAdded = toggleWishlist(productData.id, productData);
 
-            // Update both wishlist buttons
-            document.querySelectorAll('.wishlist-btn-large, .wishlist-btn-action').forEach(btn => {
-                if (isAdded) {
-                    btn.classList.add('active');
-                    btn.querySelector('svg').setAttribute('fill', '#F44336');
-                } else {
-                    btn.classList.remove('active');
-                    btn.querySelector('svg').setAttribute('fill', 'none');
-                }
+                // Update both wishlist buttons
+                document.querySelectorAll('.wishlist-btn-large, .wishlist-btn-action').forEach(btn => {
+                    if (isAdded) {
+                        btn.classList.add('active');
+                        btn.querySelector('svg').setAttribute('fill', '#F44336');
+                    } else {
+                        btn.classList.remove('active');
+                        btn.querySelector('svg').setAttribute('fill', 'none');
+                    }
+                });
             });
         });
 
-        // Wishlist toggle for action button (next to cart/buy buttons)
+        // Wishlist toggle for action button (next to cart/buy buttons) - WITH AUTH GATE
         document.querySelector('.wishlist-btn-action').addEventListener('click', function() {
-            const isAdded = toggleWishlist(productData.id, productData);
+            authGate.requireAuth('Zu Favoriten hinzufügen', () => {
+                const isAdded = toggleWishlist(productData.id, productData);
 
-            // Update both wishlist buttons
-            document.querySelectorAll('.wishlist-btn-large, .wishlist-btn-action').forEach(btn => {
-                if (isAdded) {
-                    btn.classList.add('active');
-                    btn.querySelector('svg').setAttribute('fill', '#F44336');
-                } else {
-                    btn.classList.remove('active');
-                    btn.querySelector('svg').setAttribute('fill', 'none');
-                }
+                // Update both wishlist buttons
+                document.querySelectorAll('.wishlist-btn-large, .wishlist-btn-action').forEach(btn => {
+                    if (isAdded) {
+                        btn.classList.add('active');
+                        btn.querySelector('svg').setAttribute('fill', '#F44336');
+                    } else {
+                        btn.classList.remove('active');
+                        btn.querySelector('svg').setAttribute('fill', 'none');
+                    }
+                });
             });
         });
 
@@ -1075,7 +1217,7 @@
 
             // Show success message
             this.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> Hinzugefügt!';
-            this.style.background = '#4CAF50';
+            this.style.background = '#2D5016';
 
             setTimeout(() => {
                 this.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg> In den Warenkorb';
@@ -1110,58 +1252,126 @@
         updateCartCount();
         updateNegotiationCount();
 
-        // Buy Now functionality
+        // Buy Now functionality - WITH AUTH GATE
         document.getElementById('buyNowBtn').addEventListener('click', function() {
-            // Check if user is logged in
-            if (!isLoggedIn()) {
-                if (confirm('Sie müssen angemeldet sein, um zu kaufen. Möchten Sie sich jetzt anmelden?')) {
-                    sessionStorage.setItem('redirect_after_login', window.location.href);
-                    window.location.href = 'login.html';
-                }
-                return;
-            }
+            authGate.requireAuth('Kaufen', () => {
+                // Store purchase info and redirect to checkout
+                const purchaseData = {
+                    ...productData,
+                    quantity: 1
+                };
+                sessionStorage.setItem('checkout_item', JSON.stringify(purchaseData));
 
-            // Store purchase info and redirect to checkout
-            const purchaseData = {
-                ...productData,
-                quantity: 1
-            };
-            sessionStorage.setItem('checkout_item', JSON.stringify(purchaseData));
-
-            // Redirect to checkout page (to be created)
-            window.location.href = 'checkout.html';
+                // Redirect to checkout page
+                window.location.href = 'checkout.html';
+            });
         });
 
-        // Negotiate functionality
+        // Negotiate functionality - WITH AUTH GATE
         document.getElementById('negotiateBtn').addEventListener('click', function() {
-            // Check if user is logged in
-            if (!isLoggedIn()) {
-                if (confirm('Sie müssen angemeldet sein, um zu verhandeln. Möchten Sie sich jetzt anmelden?')) {
-                    sessionStorage.setItem('redirect_after_login', window.location.href);
-                    window.location.href = 'login.html';
-                }
-                return;
-            }
+            authGate.requireAuth('Verhandeln', () => {
+                // Add to negotiations and redirect to messages
+                const negotiationData = {
+                    name: productData.name,
+                    price: productData.price,
+                    image: productData.image,
+                    category: productData.category,
+                    seller: 'Anna M.',
+                    sellerAvatar: 'AM'
+                };
 
-            // Add to negotiations and redirect to messages
-            const negotiationData = {
-                name: productData.name,
-                price: productData.price,
-                image: productData.image,
-                category: productData.category,
-                seller: 'Anna M.',
-                sellerAvatar: 'AM'
-            };
+                // Add to negotiations (returns true if new, false if already exists)
+                addToNegotiations(productData.id, negotiationData);
 
-            // Add to negotiations (returns true if new, false if already exists)
-            addToNegotiations(productData.id, negotiationData);
+                // Update negotiation count before redirect
+                updateNegotiationCount();
 
-            // Update negotiation count before redirect
-            updateNegotiationCount();
-
-            // Redirect to messages page
-            window.location.href = 'messages.html';
+                // Redirect to messages page
+                window.location.href = 'messages.html';
+            });
         });
+
+        // Load Similar Products
+        async function loadSimilarProducts() {
+            const container = document.getElementById('similarProductsGrid');
+
+            try {
+                // Get products from same category
+                const response = await fetch(window.API_CONFIG.BASE_URL + '/api/products?category=' + productData.category + '&limit=8');
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const products = data.products || [];
+
+                    // Filter out current product
+                    const similarProducts = products.filter(p => p.id !== productData.id).slice(0, 4);
+
+                    if (similarProducts.length === 0) {
+                        container.innerHTML = '<p class="loading-spinner">Keine ähnlichen Produkte gefunden</p>';
+                        return;
+                    }
+
+                    // Render products
+                    container.innerHTML = similarProducts.map(product => {
+                        const image = Array.isArray(product.images) && product.images.length > 0
+                            ? product.images[0]
+                            : 'https://via.placeholder.com/300x400?text=No+Image';
+
+                        return `
+                            <div class="similar-product-card" onclick="window.location.href='product-detail.html?id=${product.id}'">
+                                <button class="similar-product-wishlist" onclick="event.stopPropagation(); authGate.requireAuth('Zu Favoriten hinzufügen', () => favoritesManager.toggleFavorite(${product.id}, ${JSON.stringify(product).replace(/"/g, '&quot;')}))">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F44336" stroke-width="2">
+                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                    </svg>
+                                </button>
+                                <img src="${image}" alt="${product.name}" class="similar-product-image" loading="lazy">
+                                <div class="similar-product-info">
+                                    <div class="similar-product-brand">${product.brand || 'Unbekannt'}</div>
+                                    <div class="similar-product-name">${product.name}</div>
+                                    <div class="similar-product-price">${product.price}€</div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+
+                } else {
+                    // Fallback: Show mock products
+                    showMockSimilarProducts(container);
+                }
+            } catch (error) {
+                console.error('Error loading similar products:', error);
+                showMockSimilarProducts(container);
+            }
+        }
+
+        // Show mock similar products if API fails
+        function showMockSimilarProducts(container) {
+            const mockProducts = [
+                { id: 2, name: 'Klassischer Trenchcoat', brand: 'H&M', price: '39.00', image: 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=300&h=400&fit=crop' },
+                { id: 3, name: 'Business Anzugjacke', brand: 'Mango', price: '52.00', image: 'https://images.unsplash.com/photo-1594938291221-94f18cbb5660?w=300&h=400&fit=crop' },
+                { id: 4, name: 'Eleganter Mantel', brand: 'Zara', price: '48.00', image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=300&h=400&fit=crop' },
+                { id: 5, name: 'Wollblazer Grau', brand: 'Reserved', price: '35.00', image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=300&h=400&fit=crop' }
+            ];
+
+            container.innerHTML = mockProducts.map(product => `
+                <div class="similar-product-card" onclick="window.location.href='product-detail.html?id=${product.id}'">
+                    <button class="similar-product-wishlist" onclick="event.stopPropagation(); authGate.requireAuth('Zu Favoriten hinzufügen', () => favoritesManager.addFavorite(${product.id}, ${JSON.stringify(product).replace(/"/g, '&quot;')}))">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F44336" stroke-width="2">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </button>
+                    <img src="${product.image}" alt="${product.name}" class="similar-product-image" loading="lazy">
+                    <div class="similar-product-info">
+                        <div class="similar-product-brand">${product.brand}</div>
+                        <div class="similar-product-name">${product.name}</div>
+                        <div class="similar-product-price">${product.price}€</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Load similar products on page load
+        loadSimilarProducts();
     </script>
 </body>
 </html>

@@ -112,12 +112,12 @@ function createPaymentModal(productData) {
 
                 <!-- Security Badge -->
                 <div class="payment-security" style="margin-top: 24px; padding: 16px; background: #F5F5F5; border-radius: 12px; display: flex; align-items: center; gap: 12px;">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2D5016" stroke-width="2">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                         <path d="M9 12l2 2 4-4"/>
                     </svg>
                     <div style="font-size: 13px; color: #757575;">
-                        <strong style="color: #4CAF50;">SSL-verschl�sselt</strong><br>
+                        <strong style="color: #2D5016;">SSL-verschl�sselt</strong><br>
                         Ihre Zahlung ist sicher und gesch�tzt
                     </div>
                 </div>
