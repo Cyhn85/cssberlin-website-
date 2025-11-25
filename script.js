@@ -15,8 +15,8 @@ const API_BASE_URL = (function() {
         return 'http://localhost:8000';
     }
 
-    // Production environment
-    return 'https://api.cssberlin.de';
+    // Production environment - Hetzner backend
+    return 'http://195.201.146.224:8000';
 })();
 
 console.log('[CONFIG] API Base URL:', API_BASE_URL);
