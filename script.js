@@ -261,13 +261,18 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ============================================
-// PRODUCT CARD CREATION - V3 WITH 2 BUTTONS
+// PRODUCT CARD CREATION - V4 WITH SELLER INFO
 // ============================================
 function createProductCard(product) {
     // Check if product is in wishlist
     const inWishlist = wishlist.includes(product.id);
 
     const discount = Math.round(((product.newPrice - product.price) / product.newPrice) * 100);
+
+    // Generate seller info (mock data for now, will be replaced with API data)
+    const seller = product.seller || generateMockSeller();
+    const uploadedAgo = product.uploadedAgo || generateUploadTime();
+    const location = product.location || seller.location || 'Berlin';
 
     return `
         <div class="product-card" data-product-id="${product.id}">
@@ -291,9 +296,39 @@ function createProductCard(product) {
                     </svg>
                     <span>-${product.carbonSaved}kg CO₂</span>
                 </div>
+
+                <!-- Quick View Button -->
+                <button class="quick-view-btn" data-product-id="${product.id}" title="Schnellansicht">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    Schnellansicht
+                </button>
             </div>
 
             <div class="product-info">
+                <!-- ⭐ NEW: Seller Info Section -->
+                <div class="product-seller-info">
+                    <div class="seller-avatar-mini" style="background: ${seller.avatarColor}">
+                        ${seller.initials}
+                    </div>
+                    <div class="seller-details">
+                        <div class="seller-name-line">
+                            <span class="seller-name">${seller.name}</span>
+                            ${seller.verified ? '<svg class="verified-badge" width="14" height="14" viewBox="0 0 24 24" fill="#2196F3"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></svg>' : ''}
+                            ${seller.badge ? `<span class="seller-badge seller-badge-${seller.badge}">${getBadgeIcon(seller.badge)}</span>` : ''}
+                        </div>
+                        <div class="seller-meta">
+                            <span>⭐ ${seller.rating.toFixed(1)}</span>
+                            <span>•</span>
+                            <span>📍 ${location}</span>
+                            <span>•</span>
+                            <span>🕐 ${uploadedAgo}</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="product-brand">${product.brand}</div>
                 <h3 class="product-title">${product.name}</h3>
 
@@ -308,7 +343,7 @@ function createProductCard(product) {
                     <span class="product-new-price">Neupreis: ${product.newPrice.toFixed(2)}€</span>
                 </div>
 
-                <!-- V3: 2-Button Layout (Icon Cart + Full Kaufen) -->
+                <!-- V4: 2-Button Layout (Icon Cart + Full Kaufen) -->
                 <div class="product-actions" style="display: flex; gap: 8px;">
                     <button class="add-to-cart-btn" data-product-id="${product.id}" title="In den Warenkorb" style="width: 48px; padding: 12px; background: white; border: 2px solid #2D5016; color: #2D5016; border-radius: 8px; cursor: pointer; font-weight: 600; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -336,6 +371,64 @@ function createProductCard(product) {
             </div>
         </div>
     `;
+}
+
+// ============================================
+// HELPER: Generate Mock Seller Data
+// ============================================
+function generateMockSeller() {
+    const firstNames = ['Anna', 'Lisa', 'Maria', 'Sophie', 'Julia', 'Laura', 'Sarah', 'Emma', 'Max', 'Leon', 'Tim', 'Paul', 'Lukas', 'Felix', 'Jonas'];
+    const lastInitials = ['K', 'M', 'S', 'B', 'W', 'H', 'F', 'G', 'L', 'P'];
+    const locations = ['Berlin', 'Hamburg', 'München', 'Köln', 'Frankfurt', 'Stuttgart', 'Düsseldorf', 'Leipzig', 'Dortmund', 'Essen'];
+    const badges = ['champion', 'pro', 'verified', 'eco', null, null]; // null = no badge
+    const colors = ['#FF8C42', '#2D5016', '#2196F3', '#9C27B0', '#FF5722', '#4CAF50', '#00BCD4', '#FFC107'];
+
+    const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+    const lastInitial = lastInitials[Math.floor(Math.random() * lastInitials.length)];
+    const name = `${firstName} ${lastInitial}.`;
+    const initials = `${firstName.charAt(0)}${lastInitial}`;
+
+    return {
+        name: name,
+        initials: initials,
+        rating: (4.0 + Math.random() * 1.0).toFixed(1),
+        verified: Math.random() > 0.4, // 60% verified
+        badge: badges[Math.floor(Math.random() * badges.length)],
+        location: locations[Math.floor(Math.random() * locations.length)],
+        avatarColor: colors[Math.floor(Math.random() * colors.length)]
+    };
+}
+
+// ============================================
+// HELPER: Generate Upload Time
+// ============================================
+function generateUploadTime() {
+    const options = [
+        'vor 1 Std.',
+        'vor 2 Std.',
+        'vor 3 Std.',
+        'vor 5 Std.',
+        'vor 8 Std.',
+        'vor 12 Std.',
+        'vor 1 Tag',
+        'vor 2 Tagen',
+        'vor 3 Tagen',
+        'vor 1 Woche'
+    ];
+    return options[Math.floor(Math.random() * options.length)];
+}
+
+// ============================================
+// HELPER: Get Badge Icon
+// ============================================
+function getBadgeIcon(badgeType) {
+    const badges = {
+        'champion': '🏆',
+        'pro': '⭐',
+        'verified': '✓',
+        'eco': '🌱'
+    };
+    return badges[badgeType] || '';
 }
 
 // ============================================
@@ -411,12 +504,22 @@ function attachProductEventListeners() {
     document.querySelectorAll('.product-card').forEach(card => {
         card.addEventListener('click', function(e) {
             // Don't navigate if clicking on buttons
-            if (e.target.closest('.wishlist-btn, .buy-btn, .negotiate-btn')) {
+            if (e.target.closest('.wishlist-btn, .buy-btn, .negotiate-btn, .quick-view-btn, .add-to-cart-btn')) {
                 return;
             }
             window.location.href = 'product.html';
         });
         card.style.cursor = 'pointer';
+    });
+
+    // Quick View buttons
+    document.querySelectorAll('.quick-view-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const productId = parseInt(this.dataset.productId);
+            handleQuickView(productId);
+        });
     });
 
     // Wishlist buttons
@@ -1073,9 +1176,22 @@ async function performSearch(query) {
 }
 
 // ============================================
+// QUICK VIEW HANDLER
+// ============================================
+function handleQuickView(productId) {
+    const allProducts = window.loadedProducts || sampleProducts;
+    const product = allProducts.find(p => p.id === productId);
+    if (!product) return;
+
+    // For now, just redirect to product detail page
+    // TODO: Implement modal quick view in future
+    window.location.href = `product-detail.html?id=${productId}`;
+}
+
+// ============================================
 // CONSOLE INFO
 // ============================================
-console.log('%cCSS Berlin V3', 'color: #2D5016; font-size: 24px; font-weight: bold;');
-console.log('%cClimate Smart Solutions', 'color: #757575; font-size: 14px;');
+console.log('%cCSS Berlin V4', 'color: #2D5016; font-size: 24px; font-weight: bold;');
+console.log('%cClimate Smart Solutions - With Seller Info', 'color: #757575; font-size: 14px;');
 console.log(`Loaded ${sampleProducts.length} products`);
 console.log(`Wishlist: ${wishlist.length} items`);

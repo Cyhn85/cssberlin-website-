@@ -881,6 +881,37 @@ img {
     background: linear-gradient(135deg, rgba(76, 175, 80, 0.95) 0%, rgba(139, 195, 74, 0.95) 100%);
 }
 
+/* Quick View Button */
+.quick-view-btn {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(45, 80, 22, 0.95);
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    z-index: 3;
+    backdrop-filter: blur(10px);
+}
+
+.product-card:hover .quick-view-btn {
+    transform: translateY(0);
+}
+
+.quick-view-btn:hover {
+    background: rgba(45, 80, 22, 1);
+}
+
 /* Product Info */
 .product-info {
     padding: var(--spacing-lg);
@@ -888,6 +919,93 @@ img {
     flex-direction: column;
     gap: var(--spacing-sm);
     flex: 1;
+}
+
+/* ⭐ NEW: Seller Info Styles */
+.product-seller-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: rgba(245, 245, 245, 0.5);
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.seller-avatar-mini {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.seller-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.seller-name-line {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.seller-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.verified-badge {
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+}
+
+.seller-badge {
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+.seller-badge-champion {
+    color: #FFD700;
+}
+
+.seller-badge-pro {
+    color: #FF8C42;
+}
+
+.seller-badge-verified {
+    color: #2196F3;
+}
+
+.seller-badge-eco {
+    color: #4CAF50;
+}
+
+.seller-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #666;
+}
+
+.seller-meta span {
+    white-space: nowrap;
 }
 
 .product-brand {
