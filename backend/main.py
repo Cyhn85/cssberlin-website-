@@ -44,7 +44,8 @@ app.add_middleware(
         "http://127.0.0.1:5500",
         "https://cssberlin.de",
         "https://www.cssberlin.de",
-        "https://css-berlin.pages.dev"
+        "https://css-berlin.pages.dev",
+        "https://cssberlin-website.pages.dev"
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -949,6 +950,96 @@ async def check_favorite(
     favorite = result.scalar_one_or_none()
 
     return {"is_favorite": favorite is not None}
+
+
+# ============================================================================
+# GOOGLE OAUTH ENDPOINTS
+# ============================================================================
+
+@app.post("/api/auth/google", response_model=Token)
+async def google_oauth(
+    token: dict,
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Google OAuth login
+    Frontend sends Google token, backend verifies and creates/logs in user
+    """
+    try:
+        from google.oauth2 import id_token
+        from google.auth.transport import requests as google_requests
+
+        # Verify Google token
+        GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "")
+
+        if not GOOGLE_CLIENT_ID:
+            raise HTTPException(
+                status_code=status.HTTP_501_NOT_IMPLEMENTED,
+                detail="Google OAuth ist derzeit nicht konfiguriert"
+            )
+
+        idinfo = id_token.verify_oauth2_token(
+            token.get("credential"),
+            google_requests.Request(),
+            GOOGLE_CLIENT_ID
+        )
+
+        # Get user info from Google
+        email = idinfo.get("email")
+        name = idinfo.get("name", "")
+
+        if not email:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Keine E-Mail von Google erhalten"
+            )
+
+        # Check if user exists
+        from sqlalchemy import select
+        result = await db.execute(
+            select(User).where(User.email == email)
+        )
+        user = result.scalar_one_or_none()
+
+        # Create new user if doesn't exist
+        if not user:
+            user = User(
+                email=email,
+                username=name or email.split("@")[0],
+                password_hash=get_password_hash(os.urandom(32).hex()),  # Random password
+                is_verified=True  # Google emails are verified
+            )
+            db.add(user)
+            await db.commit()
+            await db.refresh(user)
+
+        # Create access token
+        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = create_access_token(
+            data={"sub": user.email},
+            expires_delta=access_token_expires
+        )
+
+        return {
+            "access_token": access_token,
+            "token_type": "bearer",
+            "user": {
+                "id": user.id,
+                "email": user.email,
+                "username": user.username
+            }
+        }
+
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=f"Ungültiges Google-Token: {str(e)}"
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Google OAuth-Fehler: {str(e)}"
+        )
 
 
 if __name__ == "__main__":
