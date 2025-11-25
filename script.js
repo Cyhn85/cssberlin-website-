@@ -10,13 +10,14 @@
 const API_BASE_URL = (function() {
     const hostname = window.location.hostname;
 
-    // Local development
+    // Local development - direct backend connection
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
         return 'http://localhost:8000';
     }
 
-    // Production environment - Hetzner backend
-    return 'http://195.201.146.224:8000';
+    // Production - use Cloudflare Pages Function proxy (HTTPS)
+    // All /api/* requests are proxied to backend via functions/api/[[path]].js
+    return '';  // Empty string = relative URL (same origin)
 })();
 
 console.log('[CONFIG] API Base URL:', API_BASE_URL);
