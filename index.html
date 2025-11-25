@@ -444,5 +444,41 @@
     <!-- Auth Gate & Favorites System -->
     <script src="auth-gate.js"></script>
     <script src="favorites.js"></script>
+
+    <script>
+        // Update header on page load
+        document.addEventListener('DOMContentLoaded', async () => {
+            await authGate.checkAuthStatus();
+
+            const userBtn = document.querySelector('.user-btn');
+            const registerBtn = document.querySelector('.register-btn');
+            const headerDivider = document.querySelector('.header-divider');
+
+            if (authGate.isAuthenticated && authGate.currentUser) {
+                // Hide login/register buttons
+                if (userBtn) userBtn.style.display = 'none';
+                if (registerBtn) registerBtn.style.display = 'none';
+                if (headerDivider) headerDivider.style.display = 'none';
+
+                // Create user menu
+                const userMenu = document.createElement('div');
+                userMenu.className = 'user-menu-dropdown';
+                userMenu.style.cssText = 'position: relative; display: inline-block;';
+                userMenu.innerHTML = `
+                    <button class="user-menu-btn" style="padding: 8px 14px; gap: 6px; color: white; display: flex; align-items: center; background: none; border: none; cursor: pointer;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <span style="font-size: 14px;">${authGate.currentUser.username || authGate.currentUser.email.split('@')[0]}</span>
+                    </button>
+                `;
+
+                if (registerBtn && registerBtn.parentNode) {
+                    registerBtn.parentNode.insertBefore(userMenu, registerBtn);
+                }
+            }
+        });
+    </script>
 </body>
 </html>
