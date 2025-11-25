@@ -33,17 +33,18 @@
             width: 64px;
             height: 64px;
             margin: 0 auto var(--spacing-md);
-            background: var(--accent-green);
+            background: linear-gradient(135deg, rgba(255, 140, 66, 0.1) 0%, rgba(45, 80, 22, 0.1) 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            border: 2px solid #2D5016;
         }
 
         .auth-icon svg {
             width: 32px;
             height: 32px;
-            color: var(--primary-green);
+            color: #2D5016;  /* Doğa yeşili */
         }
 
         .auth-header h1 {
@@ -113,20 +114,20 @@
         .submit-btn {
             width: 100%;
             padding: 14px;
-            background: var(--primary-green);
+            background: #2D5016;  /* Doğa yeşili - brand rengi */
             color: white;
             font-size: 16px;
             font-weight: var(--font-weight-semibold);
             border: none;
             border-radius: var(--radius-lg);
             cursor: pointer;
-            transition: all var(--transition-base);
+            transition: all 0.3s ease;
         }
 
         .submit-btn:hover {
-            background: var(--primary-green-hover);
+            background: #4A7C2C;  /* Hover: daha açık yeşil */
             transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
+            box-shadow: 0 4px 12px rgba(45, 80, 22, 0.3);
         }
 
         .auth-divider {
@@ -366,15 +367,15 @@
                     width: 100%;
                     padding: 12px 24px;
                     background: white;
-                    border: 2px solid #E0E0E0;
+                    border: 2px solid #2D5016;
                     border-radius: 8px;
                     font-size: 15px;
                     font-weight: 600;
                     color: #333;
                     cursor: pointer;
                     transition: all 0.3s ease;
-                " onmouseover="this.style.background='#F5F5F5'; this.style.borderColor='#C0C0C0';"
-                   onmouseout="this.style.background='white'; this.style.borderColor='#E0E0E0';">
+                " onmouseover="this.style.background='rgba(45, 80, 22, 0.05)'; this.style.borderColor='#2D5016';"
+                   onmouseout="this.style.background='white'; this.style.borderColor='#2D5016';">
                     <svg width="20" height="20" viewBox="0 0 24 24">
                         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                         <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -416,7 +417,7 @@
     <script src="toast.js"></script>    <!-- API Configuration (MUST load first) -->
     <script src="api-config.js"></script>
     <script src="api-client.js"></script>
-
+    <script src="script.js"></script>  <!-- For hideMessageIconForGuests() -->
 
     <script src="auth.js"></script>
     <script src="auth-admin.js"></script>
