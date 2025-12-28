@@ -316,12 +316,12 @@
 }
 
 .social-icon:hover {
-    background: white;
+    background: #2D5016;
     transform: scale(1.1);
 }
 
 .social-icon:hover svg {
-    fill: #2D5016;
+    fill: white;
 }
 
 .social-icon svg {
@@ -432,12 +432,15 @@
     color: rgba(255, 255, 255, 0.85);
     text-decoration: none;
     font-size: 13px;
-    transition: color 0.3s ease;
+    transition: all 0.3s ease;
+    padding: 4px 8px;
+    border-radius: 4px;
 }
 
 .footer-bottom-links a:hover {
     color: white;
-    text-decoration: underline;
+    background: #2D5016;
+    text-decoration: none;
 }
 
 .footer-bottom-links span {

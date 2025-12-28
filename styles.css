@@ -1656,12 +1656,15 @@ img {
     font-size: 13px;
     color: rgba(255, 255, 255, 0.85);
     text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 4px;
     transition: color var(--transition-fast);
 }
 
 .footer-links-compact a:hover {
-    color: var(--text-white);
-    text-decoration: underline;
+    color: white;
+    background: #2D5016;
+    text-decoration: none;
 }
 
 .footer-links-compact .separator {
