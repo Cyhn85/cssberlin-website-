@@ -2536,3 +2536,236 @@ img {
         height: 200px;
     }
 }
+
+/* ============================================
+   USER DASHBOARD BAR
+   Header ile Kategori arasindaki kullanici paneli
+   ============================================ */
+
+.user-dashboard-bar {
+    background: linear-gradient(135deg, #f8f4f0 0%, #fff9f5 100%);
+    border-bottom: 1px solid rgba(232, 133, 76, 0.15);
+    padding: 10px 0;
+    position: sticky;
+    top: 90px; /* Header altinda */
+    z-index: 997;
+}
+
+.user-dashboard-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Sol taraf - Kullanici aksiyonlari */
+.dashboard-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Dashboard ikon butonlari */
+.dashboard-icon-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: white;
+    border: 1px solid rgba(232, 133, 76, 0.2);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+.dashboard-icon-btn:hover {
+    background: var(--accent-orange);
+    border-color: var(--primary-orange);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(232, 133, 76, 0.2);
+}
+
+.dashboard-icon-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--primary-orange);
+    fill: none;
+    stroke-width: 2;
+}
+
+.dashboard-icon-btn:hover svg {
+    stroke: var(--primary-orange-hover);
+}
+
+.dashboard-icon-btn .label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.dashboard-icon-btn .badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    background: var(--primary-orange);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Sag taraf - Inserieren ve Dil */
+.dashboard-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Inserieren butonu - Dashboard versiyonu */
+.dashboard-inserieren-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, var(--primary-green) 0%, #3d6b1e 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(45, 80, 22, 0.3);
+}
+
+.dashboard-inserieren-btn:hover {
+    background: linear-gradient(135deg, #3d6b1e 0%, var(--primary-green) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(45, 80, 22, 0.4);
+}
+
+.dashboard-inserieren-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Dil secici - Dashboard versiyonu */
+.dashboard-lang-selector {
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 1px solid rgba(232, 133, 76, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.dashboard-lang-btn {
+    padding: 10px 14px;
+    background: transparent;
+    border: none;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--text-secondary);
+}
+
+.dashboard-lang-btn.active {
+    background: var(--primary-orange);
+    color: white;
+}
+
+.dashboard-lang-btn:hover:not(.active) {
+    background: var(--accent-orange);
+    color: var(--primary-orange);
+}
+
+/* Ayirici cizgi */
+.dashboard-divider {
+    width: 1px;
+    height: 32px;
+    background: rgba(232, 133, 76, 0.2);
+    margin: 0 8px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .user-dashboard-bar {
+        top: 80px;
+        padding: 8px 0;
+    }
+
+    .user-dashboard-container {
+        padding: 0 12px;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .dashboard-actions {
+        width: 100%;
+        justify-content: space-between;
+        gap: 4px;
+    }
+
+    .dashboard-icon-btn {
+        padding: 8px 10px;
+        flex: 1;
+        justify-content: center;
+    }
+
+    .dashboard-icon-btn .label {
+        display: none;
+    }
+
+    .dashboard-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .dashboard-inserieren-btn {
+        flex: 1;
+        justify-content: center;
+        padding: 10px 16px;
+    }
+
+    .dashboard-inserieren-btn span {
+        display: none;
+    }
+
+    .dashboard-lang-selector {
+        flex-shrink: 0;
+    }
+
+    .dashboard-lang-btn {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-icon-btn {
+        padding: 8px;
+    }
+
+    .dashboard-icon-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .dashboard-inserieren-btn {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+}
