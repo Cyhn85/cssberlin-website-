@@ -324,13 +324,13 @@
             <!-- Login Form -->
             <form id="loginForm">
                 <div class="form-group">
-                    <label class="form-label" for="email">E-Mail</label>
-                    <input type="email" id="email" class="form-input" placeholder="ihre@email.de" required>
+                    <label class="form-label" for="loginEmail">E-Mail</label>
+                    <input type="email" id="loginEmail" class="form-input" placeholder="ihre@email.de" required>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="password">Passwort</label>
-                    <input type="password" id="password" class="form-input" placeholder="Ihr Passwort" required>
+                    <label class="form-label" for="loginPassword">Passwort</label>
+                    <input type="password" id="loginPassword" class="form-input" placeholder="Ihr Passwort" required>
                 </div>
 
                 <div class="form-options">
@@ -369,9 +369,11 @@
     <!-- EmailJS for Direct Email Sending -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
-    <script src="toast.js"></script>    <!-- API Configuration (MUST load first) -->
+    <script src="toast.js"></script>
+    <!-- API Configuration (MUST load first) -->
     <script src="api-config.js"></script>
     <script src="api-client.js"></script>
+    <script src="auth.js"></script>
     <script src="script.js"></script>
     <script src="auth-admin.js"></script>
 </body>
