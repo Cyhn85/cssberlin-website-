@@ -121,7 +121,7 @@ img {
    HEADER STYLES - V3 NEW LAYOUT
    ============================================ */
 .header {
-    background: linear-gradient(135deg, #FF8C42 0%, #2D5016 100%);
+    background: linear-gradient(135deg, #F5A855 0%, #E8854C 50%, #C46A3D 100%);
     border-bottom: none;
     position: sticky;
     top: 0;
