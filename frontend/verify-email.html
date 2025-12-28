@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Mail Bestätigen - CSS Berlin</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="toast.css">
+    <style>
+        .auth-container {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-2xl);
+        }
+
+        .auth-card {
+            max-width: 500px;
+            width: 100%;
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            padding: var(--spacing-2xl);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .auth-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto var(--spacing-md);
+            background: var(--accent-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-icon svg {
+            width: 32px;
+            height: 32px;
+            color: var(--primary-green);
+        }
+
+        .auth-header h1 {
+            font-size: 28px;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .auth-header p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .email-display {
+            background: #f0f8f0;
+            padding: var(--spacing-md);
+            border-radius: var(--radius-md);
+            text-align: center;
+            margin: var(--spacing-lg) 0;
+            font-weight: 600;
+            color: var(--primary-green);
+        }
+
+        .code-input-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: var(--spacing-xl) 0;
+        }
+
+        .code-digit {
+            width: 50px;
+            height: 60px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            transition: all var(--transition-base);
+        }
+
+        .code-digit:focus {
+            outline: none;
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.1);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary-green);
+            color: white;
+            font-size: 16px;
+            font-weight: var(--font-weight-semibold);
+            border: none;
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            margin-top: var(--spacing-md);
+        }
+
+        .submit-btn:hover {
+            background: var(--primary-green-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .resend-link {
+            text-align: center;
+            margin-top: var(--spacing-lg);
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .resend-link button {
+            background: none;
+            border: none;
+            color: var(--primary-green);
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 0;
+        }
+
+        .resend-link button:hover {
+            color: var(--primary-green-hover);
+        }
+
+        .error-message {
+            display: none;
+            padding: var(--spacing-md);
+            background: #ffebee;
+            border: 1px solid var(--error);
+            border-radius: var(--radius-md);
+            color: var(--error);
+            margin-bottom: var(--spacing-lg);
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .success-message {
+            display: none;
+            padding: var(--spacing-md);
+            background: #d4edda;
+            border: 1px solid #28a745;
+            border-radius: var(--radius-md);
+            color: #155724;
+            margin-bottom: var(--spacing-lg);
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            padding: var(--spacing-md);
+            border-radius: var(--radius-md);
+            margin-top: var(--spacing-lg);
+            font-size: 13px;
+            color: #1565c0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- News Banner at Top -->
+    <div class="news-banner" style="position: sticky; top: 0; z-index: 999;">
+        <div class="news-slider" id="newsSlider">
+            <div class="news-item" data-link="co2-impact.html">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                </svg>
+                <span>🌍 248.5 Tonnen CO₂ gespart - Jeder Kauf zählt für unseren Planeten!</span>
+            </div>
+            <div class="news-item" data-link="/campaign/3for2-shipping">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                </svg>
+                <span>📦 2 Produkte kaufen, 3. Produkt Versand GRATIS!</span>
+            </div>
+            <div class="news-item" data-link="/leaderboard">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                </svg>
+                <span>🏆 CO₂ Rangliste - Wer spart am meisten? Klick für die Top 100!</span>
+            </div>
+            <div class="news-item" data-link="/trees">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2v20M5 9l7-7 7 7M12 22l-3-3h6l-3 3z"></path>
+                </svg>
+                <span>🌳 8,234 Bäume gepflanzt - Dein Beitrag macht den Unterschied!</span>
+            </div>
+            <div class="news-item" data-link="/sale">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 6v6l4 2" stroke="white" fill="none"></path>
+                </svg>
+                <span>🔥 Sale: 780 neue Produkte - Bis zu 70% Rabatt diese Woche!</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header" style="position: sticky; top: 40px; z-index: 998; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <div class="header-container">
+            <!-- Left Side: New Logo Design -->
+            <a href="index.html" style="text-decoration: none; display: flex; flex-direction: column; align-items: flex-start; gap: 4px;">
+                <div style="font-size: 38px; font-weight: 900; background: linear-gradient(135deg, #FF8C42, #2D5016); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 2px;">
+                    CSS Berlin
+                </div>
+                <div style="font-size: 15px; font-weight: 600; color: #666; letter-spacing: 0.5px; text-align: center; width: 100%;">
+                    Climate Smart Solutions
+                </div>
+            </a>
+
+            <!-- Right Actions -->
+            <div class="header-actions" style="gap: 8px; margin-left: auto;">
+                <a href="inserieren.html" class="inserieren-btn" title="Artikel inserieren" style="padding: 8px 16px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"></path>
+                    </svg>
+                    <span>Inserieren</span>
+                </a>
+
+                <button class="icon-btn" title="Benachrichtigungen" style="width: 40px; height: 40px; padding: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                    <span class="notification-badge" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">2</span>
+                </button>
+
+                <button class="icon-btn" title="Verhandlungen" onclick="window.location.href='messages.html'" style="width: 40px; height: 40px; padding: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        <path d="M8 10h.01M12 10h.01M16 10h.01"></path>
+                    </svg>
+                    <span class="negotiation-count" id="negotiationCount" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">0</span>
+                </button>
+
+                <button class="icon-btn" id="wishlistBtn" title="Wunschliste" onclick="window.location.href='wunschliste.html'" style="width: 40px; height: 40px; padding: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                    <span class="wishlist-count" id="wishlistCount" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">0</span>
+                </button>
+
+                <button class="icon-btn" title="Warenkorb" onclick="window.location.href='warenkorb.html'" style="width: 40px; height: 40px; padding: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-count" id="cartCount" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">0</span>
+                </button>
+
+                <a href="login.html" class="user-btn" style="padding: 8px 14px; gap: 6px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span style="font-size: 14px;">Anmelden</span>
+                </a>
+
+                <span class="header-divider" style="padding: 0 4px; font-size: 16px; color: #999; font-weight: 300;">/</span>
+
+                <a href="registrieren.html" class="register-btn" style="padding: 8px 14px; gap: 6px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="8.5" cy="7" r="4"></circle>
+                        <line x1="20" y1="8" x2="20" y2="14"></line>
+                        <line x1="23" y1="11" x2="17" y2="11"></line>
+                    </svg>
+                    <span style="font-size: 14px;">Registrieren</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="auth-container">
+        <div class="auth-card">
+            <!-- Header -->
+            <div class="auth-header">
+                <div class="auth-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                </div>
+                <h1>E-Mail bestätigen</h1>
+                <p>Wir haben einen 6-stelligen Code an folgende E-Mail-Adresse gesendet:</p>
+                <div class="email-display" id="emailDisplay"></div>
+            </div>
+
+            <!-- Messages -->
+            <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage"></div>
+
+            <!-- Code Input Form -->
+            <form id="verifyForm">
+                <div class="code-input-container">
+                    <input type="text" maxlength="1" class="code-digit" id="digit1" autocomplete="off" required>
+                    <input type="text" maxlength="1" class="code-digit" id="digit2" autocomplete="off" required>
+                    <input type="text" maxlength="1" class="code-digit" id="digit3" autocomplete="off" required>
+                    <input type="text" maxlength="1" class="code-digit" id="digit4" autocomplete="off" required>
+                    <input type="text" maxlength="1" class="code-digit" id="digit5" autocomplete="off" required>
+                    <input type="text" maxlength="1" class="code-digit" id="digit6" autocomplete="off" required>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">Bestätigen</button>
+            </form>
+
+            <!-- Resend Link -->
+            <div class="resend-link">
+                Keinen Code erhalten? <button type="button" id="resendBtn">Code erneut senden</button>
+            </div>
+
+            <!-- Info Box -->
+            <div class="info-box">
+                💡 Tipp: Überprüfen Sie auch Ihren Spam-Ordner
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 CSS Berlin. Alle Rechte vorbehalten.</p>
+                <div class="footer-links-bottom">
+                    <a href="impressum.html">Impressum</a>
+                    <a href="datenschutz.html">Datenschutz</a>
+                    <a href="agb.html">AGB</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="toast.js"></script>
+    <script>
+        // Get email from session storage
+        const email = sessionStorage.getItem('pending_verification_email');
+
+        if (!email) {
+            toast.error('Fehler', 'Keine ausstehende Verifizierung gefunden.', 3000);
+            setTimeout(() => {
+                window.location.href = 'registrieren.html';
+            }, 1500);
+        }
+
+        document.getElementById('emailDisplay').textContent = email;
+
+        // Auto-focus on first digit
+        document.getElementById('digit1').focus();
+
+        // Handle digit input
+        const digitInputs = document.querySelectorAll('.code-digit');
+        digitInputs.forEach((input, index) => {
+            input.addEventListener('input', function(e) {
+                // Only allow numbers
+                this.value = this.value.replace(/[^0-9]/g, '');
+
+                // Auto-focus next input
+                if (this.value && index < digitInputs.length - 1) {
+                    digitInputs[index + 1].focus();
+                }
+            });
+
+            input.addEventListener('keydown', function(e) {
+                // Handle backspace
+                if (e.key === 'Backspace' && !this.value && index > 0) {
+                    digitInputs[index - 1].focus();
+                }
+            });
+
+            // Handle paste
+            input.addEventListener('paste', function(e) {
+                e.preventDefault();
+                const pasteData = e.clipboardData.getData('text').replace(/[^0-9]/g, '');
+
+                for (let i = 0; i < pasteData.length && index + i < digitInputs.length; i++) {
+                    digitInputs[index + i].value = pasteData[i];
+                }
+
+                const nextIndex = Math.min(index + pasteData.length, digitInputs.length - 1);
+                digitInputs[nextIndex].focus();
+            });
+        });
+
+        // Handle form submission
+        document.getElementById('verifyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Get code from inputs
+            const code = Array.from(digitInputs).map(input => input.value).join('');
+
+            if (code.length !== 6) {
+                showError('Bitte geben Sie alle 6 Ziffern ein');
+                return;
+            }
+
+            // Get users from localStorage
+            const users = JSON.parse(localStorage.getItem('cssberlin_users') || '[]');
+            const user = users.find(u => u.email === email);
+
+            if (!user) {
+                showError('Benutzer nicht gefunden');
+                return;
+            }
+
+            // Verify code
+            if (user.verificationCode === code) {
+                // Mark as verified
+                user.verified = true;
+                user.verifiedAt = new Date().toISOString();
+                delete user.verificationCode;
+
+                // Save updated users
+                localStorage.setItem('cssberlin_users', JSON.stringify(users));
+
+                // Clear session storage
+                sessionStorage.removeItem('pending_verification_email');
+
+                // Show success
+                showSuccess('✅ E-Mail erfolgreich bestätigt!');
+
+                // Redirect to login after 2 seconds
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+            } else {
+                showError('❌ Ungültiger Code. Bitte versuchen Sie es erneut.');
+                // Clear inputs
+                digitInputs.forEach(input => input.value = '');
+                digitInputs[0].focus();
+            }
+        });
+
+        // Handle resend button
+        document.getElementById('resendBtn').addEventListener('click', function() {
+            // Get users from localStorage
+            const users = JSON.parse(localStorage.getItem('cssberlin_users') || '[]');
+            const user = users.find(u => u.email === email);
+
+            if (!user) {
+                showError('Benutzer nicht gefunden');
+                return;
+            }
+
+            // Generate new code
+            const newCode = Math.floor(100000 + Math.random() * 900000).toString();
+            user.verificationCode = newCode;
+
+            // Save updated users
+            localStorage.setItem('cssberlin_users', JSON.stringify(users));
+
+            // Simulate sending email
+            console.log('📧 Verification Email Resent:');
+            console.log('To:', email);
+            console.log('Code:', newCode);
+            console.log('---');
+
+            // Show success message
+            toast.info('Code gesendet', `Ein neuer Code wurde an ${email} gesendet. Bitte überprüfen Sie Ihre E-Mails.`, 4000);
+        });
+
+        function showError(message) {
+            toast.error('Fehler', message, 5000);
+        }
+
+        function showSuccess(message) {
+            toast.success('Erfolg', message, 3000);
+        }
+    </script>
+</body>
+</html>

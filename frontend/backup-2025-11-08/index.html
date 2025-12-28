@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Berlin - Climate Smart Solutions</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="footer.css">
+</head>
+<body>
+    <!-- News Banner at Top -->
+    <div class="news-banner" style="position: sticky; top: 0; z-index: 999;">
+        <div class="news-slider" id="newsSlider">
+            <div class="news-item" data-link="co2-impact.html">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                </svg>
+                <span>🌍 248.5 Tonnen CO₂ gespart - Jeder Kauf zählt für unseren Planeten!</span>
+            </div>
+            <div class="news-item" data-link="/campaign/3for2-shipping">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                </svg>
+                <span>📦 2 Produkte kaufen, 3. Produkt Versand GRATIS!</span>
+            </div>
+            <div class="news-item" data-link="/leaderboard">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                </svg>
+                <span>🏆 CO₂ Rangliste - Wer spart am meisten? Klick für die Top 100!</span>
+            </div>
+            <div class="news-item" data-link="/trees">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2v20M5 9l7-7 7 7M12 22l-3-3h6l-3 3z"></path>
+                </svg>
+                <span>🌳 8,234 Bäume gepflanzt - Dein Beitrag macht den Unterschied!</span>
+            </div>
+            <div class="news-item" data-link="/sale">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 6v6l4 2" stroke="white" fill="none"></path>
+                </svg>
+                <span>🔥 Sale: 780 neue Produkte - Bis zu 70% Rabatt diese Woche!</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header" style="position: sticky; top: 40px; z-index: 998; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <div class="header-container">
+            <!-- Left Side: New Logo Design -->
+            <a href="index.html" style="text-decoration: none; display: flex; flex-direction: column; align-items: flex-start; gap: 4px;">
+                <div style="font-size: 38px; font-weight: 900; background: linear-gradient(135deg, #FF8C42, #2D5016); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 2px;">
+                    CSS Berlin
+                </div>
+                <div style="font-size: 15px; font-weight: 600; color: #666; letter-spacing: 0.5px; text-align: center; width: 100%;">
+                    Climate Smart Solutions
+                </div>
+            </a>
+
+            <!-- Right Actions -->
+            <div class="header-actions" style="gap: 8px; margin-left: auto;">
+                <a href="inserieren.html" class="inserieren-btn" title="Artikel inserieren" style="padding: 8px 16px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"></path>
+                    </svg>
+                    <span>Inserieren</span>
+                </a>
+
+                <button class="icon-btn" title="Benachrichtigungen" style="width: 40px; height: 40px; padding: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                    <span class="notification-badge" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">2</span>
+                </button>
+
+                <button class="icon-btn" title="Verhandlungen" onclick="window.location.href='messages.html'" style="width: 40px; height: 40px; padding: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        <path d="M8 10h.01M12 10h.01M16 10h.01"></path>
+                    </svg>
+                    <span class="negotiation-count" id="negotiationCount" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">0</span>
+                </button>
+
+                <button class="icon-btn" id="wishlistBtn" title="Wunschliste" onclick="window.location.href='wunschliste.html'" style="width: 40px; height: 40px; padding: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                    <span class="wishlist-count" id="wishlistCount" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">0</span>
+                </button>
+
+                <button class="icon-btn" title="Warenkorb" onclick="window.location.href='warenkorb.html'" style="width: 40px; height: 40px; padding: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-count" id="cartCount" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">0</span>
+                </button>
+
+                <a href="login.html" class="user-btn" style="padding: 8px 14px; gap: 6px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span style="font-size: 14px;">Anmelden</span>
+                </a>
+
+                <span class="header-divider" style="padding: 0 4px; font-size: 16px; color: #999; font-weight: 300;">/</span>
+
+                <a href="registrieren.html" class="register-btn" style="padding: 8px 14px; gap: 6px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="8.5" cy="7" r="4"></circle>
+                        <line x1="20" y1="8" x2="20" y2="14"></line>
+                        <line x1="23" y1="11" x2="17" y2="11"></line>
+                    </svg>
+                    <span style="font-size: 14px;">Registrieren</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Category Navigation with Mega Menus -->
+    <div class="category-navigation">
+        <div class="category-container">
+            <!-- Category Buttons -->
+            <div class="category-buttons">
+                <div class="category-item" data-category="damen">
+                    <a href="damen.html" style="text-decoration: none;"><button class="category-btn">DAMEN</button></a>
+                    <!-- Mega Menu for Damen -->
+                    <div class="mega-menu">
+                        <div class="mega-menu-content">
+                            <div class="mega-menu-column">
+                                <h3 class="mega-menu-title">Kleidung</h3>
+                                <ul class="mega-menu-list">
+                                    <li><a href="damen.html">Kleider</a></li>
+                                    <li><a href="damen.html">Blusen & Tuniken</a></li>
+                                    <li><a href="damen.html">Pullover & Strickjacken</a></li>
+                                    <li><a href="damen.html">Hosen</a></li>
+                                    <li><a href="damen.html">Jeans</a></li>
+                                    <li><a href="damen.html">Röcke</a></li>
+                                    <li><a href="damen.html">Jacken & Mäntel</a></li>
+                                </ul>
+                            </div>
+                            <div class="mega-menu-column">
+                                <h3 class="mega-menu-title">Schuhe & Accessoires</h3>
+                                <ul class="mega-menu-list">
+                                    <li><a href="damen.html">Stiefel & Stiefeletten</a></li>
+                                    <li><a href="damen.html">Sneaker</a></li>
+                                    <li><a href="damen.html">Pumps & High Heels</a></li>
+                                    <li><a href="damen.html">Sandalen</a></li>
+                                    <li><a href="damen.html">Taschen & Rucksäcke</a></li>
+                                    <li><a href="damen.html">Schmuck</a></li>
+                                    <li><a href="damen.html">Schals & Tücher</a></li>
+                                </ul>
+                            </div>
+                            <div class="mega-menu-column">
+                                <h3 class="mega-menu-title">Premium & Besonderes</h3>
+                                <ul class="mega-menu-list">
+                                    <li><a href="damen.html">Designer-Stücke</a></li>
+                                    <li><a href="damen.html">Vintage</a></li>
+                                    <li><a href="damen.html">Abendkleider</a></li>
+                                    <li><a href="damen.html">Sportbekleidung</a></li>
+                                    <li><a href="damen.html">Umstandsmode</a></li>
+                                    <li><a href="damen.html">Große Größen</a></li>
+                                    <li><a href="damen.html">Neu eingetroffen</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-item" data-category="herren">
+                    <a href="herren.html" style="text-decoration: none;"><button class="category-btn">HERREN</button></a>
+                    <!-- Mega Menu for Herren -->
+                    <div class="mega-menu">
+                        <div class="mega-menu-content">
+                            <div class="mega-menu-column">
+                                <h3 class="mega-menu-title">Oberbekleidung</h3>
+                                <ul class="mega-menu-list">
+                                    <li><a href="damen.html">T-Shirts & Polo</a></li>
+                                    <li><a href="damen.html">Hemden</a></li>
+                                    <li><a href="damen.html">Pullover & Hoodies</a></li>
+                                    <li><a href="damen.html">Sweatshirts</a></li>
+                                    <li><a href="damen.html">Jacken & Mäntel</a></li>
+                                    <li><a href="damen.html">Anzüge & Sakkos</a></li>
+                                    <li><a href="damen.html">Westen</a></li>
+                                </ul>
+                            </div>
+                            <div class="mega-menu-column">
+                                <h3 class="mega-menu-title">Hosen & Schuhe</h3>
+                                <ul class="mega-menu-list">
+                                    <li><a href="damen.html">Jeans</a></li>
+                                    <li><a href="damen.html">Chinos & Stoffhosen</a></li>
+                                    <li><a href="damen.html">Shorts</a></li>
+                                    <li><a href="damen.html">Sportswear</a></li>
+                                    <li><a href="damen.html">Sneaker & Sportschuhe</a></li>
+                                    <li><a href="damen.html">Business-Schuhe</a></li>
+                                    <li><a href="damen.html">Stiefel & Boots</a></li>
+                                </ul>
+                            </div>
+                            <div class="mega-menu-column">
+                                <h3 class="mega-menu-title">Accessoires</h3>
+                                <ul class="mega-menu-list">
+                                    <li><a href="damen.html">Taschen & Rucksäcke</a></li>
+                                    <li><a href="damen.html">Gürtel</a></li>
+                                    <li><a href="damen.html">Mützen & Caps</a></li>
+                                    <li><a href="damen.html">Schals</a></li>
+                                    <li><a href="damen.html">Uhren</a></li>
+                                    <li><a href="damen.html">Geldbörsen</a></li>
+                                    <li><a href="damen.html">Sonnenbrillen</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-item" data-category="kinder">
+                    <a href="kinder.html" style="text-decoration: none;"><button class="category-btn">KINDER</button></a>
+                    <!-- Mega Menu for Kinder -->
+                    <div class="mega-menu">
+                        <div class="mega-menu-content">
+                            <div class="mega-menu-column">
+                                <h3 class="mega-menu-title">Mädchen</h3>
+                                <ul class="mega-menu-list">
+                                    <li><a href="damen.html">Kleider & Röcke</a></li>
+                                    <li><a href="damen.html">Oberteile</a></li>
+                                    <li><a href="damen.html">Hosen & Jeans</a></li>
+                                    <li><a href="damen.html">Jacken & Mäntel</a></li>
+                                    <li><a href="damen.html">Schuhe</a></li>
+                                    <li><a href="damen.html">Accessoires</a></li>
+                                    <li><a href="damen.html">Sportbekleidung</a></li>
+                                </ul>
+                            </div>
+                            <div class="mega-menu-column">
+                                <h3 class="mega-menu-title">Jungen</h3>
+                                <ul class="mega-menu-list">
+                                    <li><a href="damen.html">T-Shirts & Polo</a></li>
+                                    <li><a href="damen.html">Hemden</a></li>
+                                    <li><a href="damen.html">Hosen & Jeans</a></li>
+                                    <li><a href="damen.html">Pullover & Hoodies</a></li>
+                                    <li><a href="damen.html">Jacken</a></li>
+                                    <li><a href="damen.html">Schuhe</a></li>
+                                    <li><a href="damen.html">Sportswear</a></li>
+                                </ul>
+                            </div>
+                            <div class="mega-menu-column">
+                                <h3 class="mega-menu-title">Baby & Kleinkind</h3>
+                                <ul class="mega-menu-list">
+                                    <li><a href="damen.html">Babykleidung (0-24 M)</a></li>
+                                    <li><a href="damen.html">Strampler & Bodies</a></li>
+                                    <li><a href="damen.html">Jacken & Overall</a></li>
+                                    <li><a href="damen.html">Schuhe & Söckchen</a></li>
+                                    <li><a href="damen.html">Mützen & Accessoires</a></li>
+                                    <li><a href="damen.html">Spielzeug</a></li>
+                                    <li><a href="damen.html">Baby-Ausstattung</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-bar-container">
+                <div class="search-bar">
+                    <svg class="search-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="M21 21l-4.35-4.35"></path>
+                    </svg>
+                    <input type="text" class="search-input" id="searchInput" placeholder="Suche nach Marke, Kategorie, Farbe, Größe...">
+                    <button class="search-clear-btn" id="searchClearBtn" style="display: none;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products Section -->
+    <section class="products-section">
+        <div class="section-header">
+            <h2>Alle Produkte</h2>
+            <div class="filter-controls">
+                <select class="sort-dropdown">
+                    <option>Sortieren</option>
+                    <option>Preis aufsteigend</option>
+                    <option>Preis absteigend</option>
+                    <option>Neu zuerst</option>
+                    <option>Meiste CO₂ Einsparung</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="products-grid" id="productsGrid">
+            <!-- Products will be generated by JavaScript -->
+        </div>
+
+        <!-- Load More Button -->
+        <div class="load-more-container">
+            <button class="load-more-btn" id="loadMoreBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                Mehr Produkte laden
+            </button>
+        </div>
+    </section>
+
+    <!-- Pre-Footer: Newsletter & Trust Badges -->
+    <div class="pre-footer">
+        <div class="pre-footer-container">
+            <!-- Newsletter Section -->
+            <div class="newsletter-section">
+                <h2 class="newsletter-heading">Bleib informiert!</h2>
+                <p class="newsletter-subheading">Erhalte exklusive Angebote und CO₂-Updates direkt in dein Postfach</p>
+
+                <form class="newsletter-form" id="newsletterForm">
+                    <div class="newsletter-input-group">
+                        <input
+                            type="email"
+                            id="newsletterEmail"
+                            class="newsletter-input"
+                            placeholder="Deine E-Mail-Adresse"
+                            required
+                            aria-label="E-Mail für Newsletter"
+                        >
+                        <button type="submit" class="newsletter-submit-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 2L11 13"></path>
+                                <path d="M22 2L15 22L11 13L2 9L22 2Z"></path>
+                            </svg>
+                            <span>Anmelden</span>
+                        </button>
+                    </div>
+                    <div class="newsletter-privacy">
+                        <input type="checkbox" id="newsletterPrivacy" required>
+                        <label for="newsletterPrivacy">
+                            Ich akzeptiere die <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a>
+                        </label>
+                    </div>
+                    <div class="newsletter-message" id="newsletterMessage"></div>
+                </form>
+            </div>
+
+            <!-- Trust Badges -->
+            <div class="trust-badges">
+                <div class="trust-badge-item">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    <span>SSL Sicher</span>
+                </div>
+                <div class="trust-badge-item">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                    </svg>
+                    <span>Trusted Shops</span>
+                </div>
+                <div class="trust-badge-item">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
+                        <path d="M12 6v6l4 2"></path>
+                    </svg>
+                    <span>14 Tage Rückgabe</span>
+                </div>
+                <div class="trust-badge-item">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M2 12h20"></path>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                    </svg>
+                    <span>Klimaneutraler Versand</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <!-- Sliding CO₂ & Campaign News Banner -->
+        <div class="footer-news-banner">
+            <div class="footer-news-slider" id="footerNewsSlider">
+                <div class="footer-news-item" data-link="co2-impact.html">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                    </svg>
+                    <span>🌍 248.5 Tonnen CO₂ gespart - Jeder Kauf zählt für unseren Planeten!</span>
+                </div>
+                <div class="footer-news-item" data-link="/campaign/3for2-shipping">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                        <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                    </svg>
+                    <span>📦 2 Produkte kaufen, 3. Produkt Versand GRATIS!</span>
+                </div>
+                <div class="footer-news-item" data-link="/leaderboard">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                    </svg>
+                    <span>🏆 CO₂ Rangliste - Wer spart am meisten? Klick für die Top 100!</span>
+                </div>
+                <div class="footer-news-item" data-link="/trees">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2v20M5 9l7-7 7 7M12 22l-3-3h6l-3 3z"></path>
+                    </svg>
+                    <span>🌳 8,234 Bäume gepflanzt - Dein Beitrag macht den Unterschied!</span>
+                </div>
+                <div class="footer-news-item" data-link="/sale">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 6v6l4 2" stroke="white" fill="none"></path>
+                    </svg>
+                    <span>🔥 Sale: 780 neue Produkte - Bis zu 70% Rabatt diese Woche!</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-container">
+            <!-- Footer Main Content: 6 Columns -->
+            <div class="footer-main">
+                <!-- Column 1: Brand & Social -->
+                <div class="footer-column footer-brand">
+                    <div class="footer-logo">CSS Berlin</div>
+                    <p class="footer-tagline">Climate Smart Solutions</p>
+                    <p class="footer-description">Nachhaltige Mode für eine bessere Zukunft. Jeder Kauf spart CO₂ und pflanzt Bäume.</p>
+
+                    <div class="footer-social">
+                        <a href="https://instagram.com/cssberlin" target="_blank" aria-label="Instagram" class="social-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" fill="none" stroke="white" stroke-width="2"></path>
+                                <circle cx="17.5" cy="6.5" r="1.5" fill="white"></circle>
+                            </svg>
+                        </a>
+                        <a href="https://facebook.com/cssberlin" target="_blank" aria-label="Facebook" class="social-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                            </svg>
+                        </a>
+                        <a href="https://twitter.com/cssberlin" target="_blank" aria-label="Twitter/X" class="social-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+                            </svg>
+                        </a>
+                        <a href="https://tiktok.com/@cssberlin" target="_blank" aria-label="TikTok" class="social-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path>
+                            </svg>
+                        </a>
+                        <a href="https://linkedin.com/company/cssberlin" target="_blank" aria-label="LinkedIn" class="social-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                                <rect x="2" y="9" width="4" height="12"></rect>
+                                <circle cx="4" cy="4" r="2"></circle>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Column 2: Shop -->
+                <div class="footer-column">
+                    <h4>Shop</h4>
+                    <ul>
+                        <li><a href="damen.html">Damen</a></li>
+                        <li><a href="herren.html">Herren</a></li>
+                        <li><a href="kinder.html">Kinder</a></li>
+                        <li><a href="sale.html">Sale</a></li>
+                        <li><a href="neu.html">Neu eingetroffen</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Hilfe & Service -->
+                <div class="footer-column">
+                    <h4>Hilfe & Service</h4>
+                    <ul>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="kontakt.html">Kontakt</a></li>
+                        <li><a href="versand.html">Versand & Lieferung</a></li>
+                        <li><a href="rueckgabe.html">Rückgabe & Umtausch</a></li>
+                        <li><a href="zahlungsarten.html">Zahlungsarten</a></li>
+                        <li><a href="groessentabelle.html">Größentabelle</a></li>
+                        <li><a href="inserieren.html">Verkaufen</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 4: Nachhaltigkeit -->
+                <div class="footer-column">
+                    <h4>Nachhaltigkeit</h4>
+                    <ul>
+                        <li><a href="co2-impact.html">CO₂ Impact Dashboard</a></li>
+                        <li><a href="leaderboard.html">CO₂ Rangliste</a></li>
+                        <li><a href="trees.html">Baumpflanz-Programm</a></li>
+                        <li><a href="mission.html">Unsere Mission</a></li>
+                        <li><a href="blog.html">Nachhaltigkeits-Blog</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 5: Rechtliches (MANDATORY FOR GERMAN E-COMMERCE) -->
+                <div class="footer-column footer-legal">
+                    <h4>Rechtliches</h4>
+                    <ul>
+                        <li><a href="impressum.html">⚖️ Impressum</a></li>
+                        <li><a href="datenschutz.html">🔒 Datenschutzerklärung</a></li>
+                        <li><a href="agb.html">📄 AGB</a></li>
+                        <li><a href="widerrufsrecht.html">↩️ Widerrufsrecht</a></li>
+                        <li><a href="cookie.html" id="cookieSettingsLink">🍪 Cookie-Einstellungen</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 6: Über uns -->
+                <div class="footer-column">
+                    <h4>Über CSS Berlin</h4>
+                    <ul>
+                        <li><a href="team.html">Unser Team</a></li>
+                        <li><a href="karriere.html">Karriere</a></li>
+                        <li><a href="presse.html">Presse</a></li>
+                        <li><a href="partner.html">Partner werden</a></li>
+                        <li><a href="standorte.html">Standorte</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Payment & Shipping Methods -->
+            <div class="footer-payment-shipping">
+                <div class="payment-methods">
+                    <span class="payment-label">Sichere Zahlung:</span>
+                    <div class="payment-icons">
+                        <span class="payment-icon" title="Visa">VISA</span>
+                        <span class="payment-icon" title="Mastercard">MC</span>
+                        <span class="payment-icon" title="PayPal">PayPal</span>
+                        <span class="payment-icon" title="Klarna">Klarna</span>
+                        <span class="payment-icon" title="SEPA">SEPA</span>
+                        <span class="payment-icon" title="Apple Pay">Apple Pay</span>
+                    </div>
+                </div>
+                <div class="shipping-methods">
+                    <span class="shipping-label">Versand mit:</span>
+                    <div class="shipping-icons">
+                        <span class="shipping-icon" title="DHL">DHL</span>
+                        <span class="shipping-icon" title="DPD">DPD</span>
+                        <span class="shipping-icon" title="Hermes">Hermes</span>
+                        <span class="shipping-icon" title="UPS">UPS</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kleinunternehmer VAT Notice -->
+            <div class="footer-vat-notice">
+                <p>*Alle Preise sind Endpreise zzgl. Versandkosten. Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.</p>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <p>&copy; 2025 CSS Berlin GmbH - Climate Smart Solutions. Alle Rechte vorbehalten.</p>
+                <div class="footer-bottom-links">
+                    <a href="impressum.html">Impressum</a>
+                    <span>•</span>
+                    <a href="datenschutz.html">Datenschutz</a>
+                    <span>•</span>
+                    <a href="agb.html">AGB</a>
+                    <span>•</span>
+                    <a href="widerrufsrecht.html">Widerrufsrecht</a>
+                    <span>•</span>
+                    <a href="versand-zahlung.html">Versand & Zahlung</a>
+                    <span>•</span>
+                    <a href="cookie.html">Cookie-Einstellungen</a>
+                </div>
+            </div>
+
+            <!-- EU ODR Platform -->
+            <div class="footer-odr">
+                <p>Plattform der EU zur außergerichtlichen Online-Streitbeilegung: <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer">https://ec.europa.eu/consumers/odr</a></p>
+            </div>
+
+            <!-- News Banner (Footer) -->
+            <div class="footer-news-banner">
+                <div class="news-slider" id="footerNewsSlider">
+                    <div class="news-item" data-link="co2-impact.html">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                        </svg>
+                        <span>🌍 248.5 Tonnen CO₂ gespart - Jeder Kauf zählt für unseren Planeten!</span>
+                    </div>
+                    <div class="news-item" data-link="/campaign/3for2-shipping">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                            <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                        </svg>
+                        <span>📦 2 Produkte kaufen, 3. Produkt Versand GRATIS!</span>
+                    </div>
+                    <div class="news-item" data-link="/leaderboard">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                        </svg>
+                        <span>🏆 CO₂ Rangliste - Wer spart am meisten? Klick für die Top 100!</span>
+                    </div>
+                    <div class="news-item" data-link="/trees">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2v20M5 9l7-7 7 7M12 22l-3-3h6l-3 3z"></path>
+                        </svg>
+                        <span>🌳 8,234 Bäume gepflanzt - Dein Beitrag macht den Unterschied!</span>
+                    </div>
+                    <div class="news-item" data-link="/sale">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M12 6v6l4 2" stroke="white" fill="none"></path>
+                        </svg>
+                        <span>🔥 Sale: 780 neue Produkte - Bis zu 70% Rabatt diese Woche!</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Nach oben scrollen">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 19V5M5 12l7-7 7 7"></path>
+        </svg>
+    </button>
+
+    <script src="footer.js"></script>
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Update cart count on page load
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cssberlin_cart') || '[]');
+            const cartCountElement = document.getElementById('cartCount');
+            if (cartCountElement) {
+                cartCountElement.textContent = cart.length;
+            }
+        }
+
+        // Update negotiation count on page load
+        function updateNegotiationCount() {
+            const negotiationCountElement = document.getElementById('negotiationCount');
+            if (negotiationCountElement) {
+                if (typeof window.getNegotiations === 'function') {
+                    const negotiations = window.getNegotiations();
+                    const activeNegotiations = negotiations.filter(n => n.status === 'active');
+                    negotiationCountElement.textContent = activeNegotiations.length;
+                } else {
+                    negotiationCountElement.textContent = '0';
+                }
+            }
+        }
+
+        // Initialize on page load
+        updateCartCount();
+        updateNegotiationCount();
+    </script>
+</body>
+</html>

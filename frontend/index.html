@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Berlin - Climate Smart Solutions</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="footer-kleinanzeigen.css">
+    <link rel="stylesheet" href="toast.css">
+</head>
+<body>
+    <!-- News Banner at Top -->
+    <div class="news-banner" style="position: sticky; top: 0; z-index: 999;">
+        <div class="news-slider" id="newsSlider">
+            <div class="news-item" data-link="co2-impact.html">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                </svg>
+                <span>🌍 248.5 Tonnen CO₂ gespart - Jeder Kauf zählt für unseren Planeten!</span>
+            </div>
+            <div class="news-item" data-link="campaign.html">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                </svg>
+                <span>📦 2 Produkte kaufen, 3. Produkt Versand GRATIS!</span>
+            </div>
+            <div class="news-item" data-link="co2-impact.html">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                </svg>
+                <span>🏆 CO₂ Rangliste - Wer spart am meisten? Klick für die Top 100!</span>
+            </div>
+            <div class="news-item" data-link="co2-impact.html">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2v20M5 9l7-7 7 7M12 22l-3-3h6l-3 3z"></path>
+                </svg>
+                <span>🌳 8,234 Bäume gepflanzt - Dein Beitrag macht den Unterschied!</span>
+            </div>
+            <div class="news-item" data-link="damen.html">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 6v6l4 2" stroke="white" fill="none"></path>
+                </svg>
+                <span>🔥 Sale: 780 neue Produkte - Bis zu 70% Rabatt diese Woche!</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header" style="position: sticky; top: 40px; z-index: 998;">
+        <div class="header-container">
+            <!-- Left Side: Logo -->
+            <a href="index.html" style="text-decoration: none; display: flex; flex-direction: column; align-items: stretch; gap: 0; width: 200px;">
+                <div style="font-size: 36px; font-weight: 800; color: white; letter-spacing: 2px; text-align: center;">CSS Berlin</div>
+                <div style="font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.9); letter-spacing: 1px; text-transform: uppercase; text-align: center;">Climate Smart Solutions</div>
+            </a>
+
+            <!-- Right Actions -->
+            <div class="header-actions" style="gap: 12px; margin-left: auto; display: flex; align-items: center;">
+                <!-- Icon Buttons -->
+                <button class="icon-btn" title="Benachrichtigungen" style="width: 40px; height: 40px; padding: 8px; background: rgba(255,255,255,0.2); border-radius: 8px; position: relative;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                    <span class="notification-badge" style="position: absolute; top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px; background: #FF8C42; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;">2</span>
+                </button>
+
+                <button class="icon-btn" title="Verhandlungen" onclick="window.location.href='pazarlik.html'" style="width: 40px; height: 40px; padding: 8px; background: rgba(255,255,255,0.2); border-radius: 8px; position: relative;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        <path d="M8 10h.01M12 10h.01M16 10h.01"></path>
+                    </svg>
+                    <span class="negotiation-count" id="negotiationCount" style="position: absolute; top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px; background: #FF8C42; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;">0</span>
+                </button>
+
+                <button class="icon-btn" id="wishlistBtn" title="Wunschliste" onclick="window.location.href='wunschliste.html'" style="width: 40px; height: 40px; padding: 8px; background: rgba(255,255,255,0.2); border-radius: 8px; position: relative;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                    <span class="wishlist-count" id="wishlistCount" style="position: absolute; top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px; background: #FF8C42; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;">0</span>
+                </button>
+
+                <button class="icon-btn" title="Warenkorb" onclick="window.location.href='warenkorb.html'" style="width: 40px; height: 40px; padding: 8px; background: rgba(255,255,255,0.2); border-radius: 8px; position: relative;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-count" id="cartCount" style="position: absolute; top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px; background: #FF8C42; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;">0</span>
+                </button>
+
+                <!-- Auth Buttons - Orange with Green Hover (Modal Trigger) -->
+                <button onclick="authGate.showLoginModal(null, null, 'login')" class="header-btn auth-btn" style="padding: 10px 18px; background: #E8854C; color: white; border-radius: 8px; display: flex; align-items: center; gap: 8px; font-weight: 600; text-decoration: none; font-size: 14px; transition: all 0.3s ease; border: none; cursor: pointer;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    Anmelden
+                </button>
+
+                <button onclick="authGate.showLoginModal(null, null, 'register')" class="header-btn auth-btn" style="padding: 10px 18px; background: #E8854C; color: white; border-radius: 8px; display: flex; align-items: center; gap: 8px; font-weight: 600; text-decoration: none; font-size: 14px; transition: all 0.3s ease; border: none; cursor: pointer;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="8.5" cy="7" r="4"></circle>
+                        <line x1="20" y1="8" x2="20" y2="14"></line>
+                        <line x1="23" y1="11" x2="17" y2="11"></line>
+                    </svg>
+                    Registrieren
+                </button>
+
+                <!-- Inserieren Button -->
+                <a href="inserieren.html" class="header-btn inserieren-header-btn" style="padding: 10px 18px; background: #E8854C; color: white; border-radius: 8px; display: flex; align-items: center; gap: 8px; font-weight: 600; text-decoration: none; font-size: 14px; transition: all 0.3s ease;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"></path>
+                    </svg>
+                    Inserieren
+                </a>
+
+                <!-- Language Selector -->
+                <div class="lang-selector" style="display: flex; align-items: center; gap: 4px; margin-left: 8px;">
+                    <button onclick="setLanguage('de')" id="lang-de" class="lang-btn" style="padding: 8px 12px; background: white; color: #2D5016; border: none; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer; transition: all 0.3s ease;">DE</button>
+                    <button onclick="setLanguage('en')" id="lang-en" class="lang-btn" style="padding: 8px 12px; background: rgba(255,255,255,0.3); color: white; border: none; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer; transition: all 0.3s ease;">EN</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Category Navigation with Mega Menus -->
+    <div class="category-navigation">
+        <div class="category-container">
+            <!-- Category Buttons -->
+            <div class="category-buttons">
+                <div class="category-item" data-category="damen">
+                    <a href="damen.html" style="text-decoration: none;"><button class="category-btn">DAMEN</button></a>
+                    <!-- Mega Menu for Damen -->
+                    <div class="mega-menu">
+                        <div class="mega-menu-content">
+                            <div class="mega-menu-column">
+                                <h3 class="mega-menu-title">Kleidung</h3>
+                                <ul class="mega-menu-list">
+                                    <li><a href="damen.html">Kleider</a></li>
+                                    <li><a href="damen.html">Blusen & Tuniken</a></li>
+                                    <li><a href="damen.html">Pullover & Strickjacken</a></li>
+                                    <li><a href="damen.html">Hosen</a></li>
+                                    <li><a href="damen.html">Jeans</a></li>
+                                    <li><a href="damen.html">Röcke</a></li>
+                                    <li><a href="damen.html">Jacken & Mäntel</a></li>
+                                </ul>
+                            </div>
+                            <div class="mega-menu-column">
+                                <h3 class="mega-menu-title">Schuhe & Accessoires</h3>
+                                <ul class="mega-menu-list">
+                                    <li><a href="damen.html">Stiefel & Stiefeletten</a></li>
+                                    <li><a href="damen.html">Sneaker</a></li>
+                                    <li><a href="damen.html">Pumps & High Heels</a></li>
+                                    <li><a href="damen.html">Sandalen</a></li>
+                                    <li><a href="damen.html">Taschen & Rucksäcke</a></li>
+                                    <li><a href="damen.html">Schmuck</a></li>
+                                    <li><a href="damen.html">Schals & Tücher</a></li>
+                                </ul>
+                            </div>
+                            <div class="mega-menu-column">
+                                <h3 class="mega-menu-title">Premium & Besonderes</h3>
+                                <ul class="mega-menu-list">
+                                    <li><a href="damen.html">Designer-Stücke</a></li>
+                                    <li><a href="damen.html">Vintage</a></li>
+                                    <li><a href="damen.html">Abendkleider</a></li>
+                                    <li><a href="damen.html">Sportbekleidung</a></li>
+                                    <li><a href="damen.html">Umstandsmode</a></li>
+                                    <li><a href="damen.html">Große Größen</a></li>
+                                    <li><a href="damen.html">Neu eingetroffen</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-item" data-category="herren">
+                    <a href="herren.html" style="text-decoration: none;"><button class="category-btn">HERREN</button></a>
+                    <!-- Mega Menu for Herren -->
+                    <div class="mega-menu">
+                        <div class="mega-menu-content">
+                            <div class="mega-menu-column">
+                                <h3 class="mega-menu-title">Oberbekleidung</h3>
+                                <ul class="mega-menu-list">
+                                    <li><a href="herren.html">T-Shirts & Polo</a></li>
+                                    <li><a href="herren.html">Hemden</a></li>
+                                    <li><a href="herren.html">Pullover & Hoodies</a></li>
+                                    <li><a href="herren.html">Sweatshirts</a></li>
+                                    <li><a href="herren.html">Jacken & Mäntel</a></li>
+                                    <li><a href="herren.html">Anzüge & Sakkos</a></li>
+                                    <li><a href="herren.html">Westen</a></li>
+                                </ul>
+                            </div>
+                            <div class="mega-menu-column">
+                                <h3 class="mega-menu-title">Hosen & Schuhe</h3>
+                                <ul class="mega-menu-list">
+                                    <li><a href="herren.html">Jeans</a></li>
+                                    <li><a href="herren.html">Chinos & Stoffhosen</a></li>
+                                    <li><a href="herren.html">Shorts</a></li>
+                                    <li><a href="herren.html">Sportswear</a></li>
+                                    <li><a href="herren.html">Sneaker & Sportschuhe</a></li>
+                                    <li><a href="herren.html">Business-Schuhe</a></li>
+                                    <li><a href="herren.html">Stiefel & Boots</a></li>
+                                </ul>
+                            </div>
+                            <div class="mega-menu-column">
+                                <h3 class="mega-menu-title">Accessoires</h3>
+                                <ul class="mega-menu-list">
+                                    <li><a href="herren.html">Taschen & Rucksäcke</a></li>
+                                    <li><a href="herren.html">Gürtel</a></li>
+                                    <li><a href="herren.html">Mützen & Caps</a></li>
+                                    <li><a href="herren.html">Schals</a></li>
+                                    <li><a href="herren.html">Uhren</a></li>
+                                    <li><a href="herren.html">Geldbörsen</a></li>
+                                    <li><a href="herren.html">Sonnenbrillen</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-item" data-category="kinder">
+                    <a href="kinder.html" style="text-decoration: none;"><button class="category-btn">KINDER</button></a>
+                    <!-- Mega Menu for Kinder -->
+                    <div class="mega-menu">
+                        <div class="mega-menu-content">
+                            <div class="mega-menu-column">
+                                <h3 class="mega-menu-title">Mädchen</h3>
+                                <ul class="mega-menu-list">
+                                    <li><a href="kinder.html">Kleider & Röcke</a></li>
+                                    <li><a href="kinder.html">Oberteile</a></li>
+                                    <li><a href="kinder.html">Hosen & Jeans</a></li>
+                                    <li><a href="kinder.html">Jacken & Mäntel</a></li>
+                                    <li><a href="kinder.html">Schuhe</a></li>
+                                    <li><a href="kinder.html">Accessoires</a></li>
+                                    <li><a href="kinder.html">Sportbekleidung</a></li>
+                                </ul>
+                            </div>
+                            <div class="mega-menu-column">
+                                <h3 class="mega-menu-title">Jungen</h3>
+                                <ul class="mega-menu-list">
+                                    <li><a href="kinder.html">T-Shirts & Polo</a></li>
+                                    <li><a href="kinder.html">Hemden</a></li>
+                                    <li><a href="kinder.html">Hosen & Jeans</a></li>
+                                    <li><a href="kinder.html">Pullover & Hoodies</a></li>
+                                    <li><a href="kinder.html">Jacken</a></li>
+                                    <li><a href="kinder.html">Schuhe</a></li>
+                                    <li><a href="kinder.html">Sportswear</a></li>
+                                </ul>
+                            </div>
+                            <div class="mega-menu-column">
+                                <h3 class="mega-menu-title">Baby & Kleinkind</h3>
+                                <ul class="mega-menu-list">
+                                    <li><a href="kinder.html">Babykleidung (0-24 M)</a></li>
+                                    <li><a href="kinder.html">Strampler & Bodies</a></li>
+                                    <li><a href="kinder.html">Jacken & Overall</a></li>
+                                    <li><a href="kinder.html">Schuhe & Söckchen</a></li>
+                                    <li><a href="kinder.html">Mützen & Accessoires</a></li>
+                                    <li><a href="kinder.html">Spielzeug</a></li>
+                                    <li><a href="kinder.html">Baby-Ausstattung</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-bar-container">
+                <div class="search-bar">
+                    <svg class="search-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="M21 21l-4.35-4.35"></path>
+                    </svg>
+                    <input type="text" class="search-input" id="searchInput" placeholder="Suche nach Marke, Kategorie, Farbe, Größe...">
+                    <button class="search-clear-btn" id="searchClearBtn" style="display: none;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products Section -->
+    <section class="products-section">
+        <div class="section-header">
+            <h2>Alle Produkte</h2>
+            <div class="filter-controls">
+                <select class="sort-dropdown">
+                    <option>Sortieren</option>
+                    <option>Preis aufsteigend</option>
+                    <option>Preis absteigend</option>
+                    <option>Neu zuerst</option>
+                    <option>Meiste CO₂ Einsparung</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="products-grid" id="productsGrid">
+            <!-- Products will be generated by JavaScript -->
+        </div>
+
+        <!-- Load More Button -->
+        <div class="load-more-container">
+            <button class="load-more-btn" id="loadMoreBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                Mehr Produkte laden
+            </button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" style="background: linear-gradient(135deg, #FF8C42 0%, #2D5016 100%); padding: 0;">
+        <!-- Sliding News Banner -->
+        <div class="footer-news-banner" style="background: #2D5016; padding: 12px 0;">
+            <div class="footer-news-slider" id="footerNewsSlider">
+                <div class="footer-news-item" data-link="co2-impact.html">
+                    <span style="color: white;">🌍 248.5 Tonnen CO₂ gespart - Jeder Kauf zählt für unseren Planeten!</span>
+                </div>
+                <div class="footer-news-item" data-link="campaign.html">
+                    <span style="color: white;">📦 2 Produkte kaufen, 3. Produkt Versand GRATIS!</span>
+                </div>
+                <div class="footer-news-item" data-link="co2-impact.html">
+                    <span style="color: white;">🏆 CO₂ Rangliste - Wer spart am meisten? Klick für die Top 100!</span>
+                </div>
+                <div class="footer-news-item" data-link="co2-impact.html">
+                    <span style="color: white;">🌳 8,234 Bäume gepflanzt - Dein Beitrag macht den Unterschied!</span>
+                </div>
+                <div class="footer-news-item" data-link="damen.html">
+                    <span style="color: white;">🔥 Sale: 780 neue Produkte - Bis zu 70% Rabatt diese Woche!</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Content -->
+        <div style="max-width: 1400px; margin: 0 auto; padding: 24px 32px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+                <!-- Social Media Icons -->
+                <div style="display: flex; gap: 16px; align-items: center;">
+                    <a href="https://instagram.com/cssberlin" target="_blank" title="Instagram" style="color: white; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 8px; transition: background 0.3s;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                        </svg>
+                    </a>
+                    <a href="https://tiktok.com/@cssberlin" target="_blank" title="TikTok" style="color: white; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 8px; transition: background 0.3s;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                        </svg>
+                    </a>
+                    <a href="https://youtube.com/@cssberlin" target="_blank" title="YouTube" style="color: white; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 8px; transition: background 0.3s;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        </svg>
+                    </a>
+                </div>
+
+                <!-- Legal Links (Zorunlu Linkler) -->
+                <nav style="display: flex; gap: 24px; flex-wrap: wrap; align-items: center;">
+                    <a href="ueber-uns.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;">Über uns</a>
+                    <a href="kontakt.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;">Kontakt</a>
+                    <a href="agb.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;">AGB</a>
+                    <a href="datenschutz.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;">Datenschutz</a>
+                    <a href="widerrufsrecht.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;">Widerrufsrecht</a>
+                    <a href="impressum.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;">Impressum</a>
+                </nav>
+
+                <!-- Copyright -->
+                <div style="color: rgba(255,255,255,0.8); font-size: 12px;">
+                    © 2025 CSS Berlin GmbH
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Nach oben scrollen">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 19V5M5 12l7-7 7 7"></path>
+        </svg>
+    </button>
+
+    <!-- Google Sign-In API -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <!-- EmailJS for Direct Email Sending -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <!-- API Configuration (MUST load first) -->
+    <script src="api-config.js"></script>
+    <script src="api-client.js"></script>
+    <script src="auth-gate.js"></script>  <!-- Login gate system -->
+    <script src="favorites.js"></script>  <!-- Favorites system -->
+
+    <script src="footer.js"></script>
+    <script src="toast.js"></script>
+    <script src="script.js"></script>
+
+    <script>
+        // Initialize Google Sign-In for modal
+        window.addEventListener('load', function() {
+            if (typeof google !== 'undefined' && google.accounts) {
+                google.accounts.id.initialize({
+                    client_id: '929023339787-a41l031f4i5tph481gnug7gejrmn76ue.apps.googleusercontent.com',
+                    callback: handleGoogleSignInModal
+                });
+            }
+        });
+    </script>
+
+    <script>
+        // Update cart count on page load
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cssberlin_cart') || '[]');
+            const cartCountElement = document.getElementById('cartCount');
+            if (cartCountElement) {
+                cartCountElement.textContent = cart.length;
+            }
+        }
+
+        // Update negotiation count on page load
+        function updateNegotiationCount() {
+            const negotiationCountElement = document.getElementById('negotiationCount');
+            if (negotiationCountElement) {
+                if (typeof window.getNegotiations === 'function') {
+                    const negotiations = window.getNegotiations();
+                    const activeNegotiations = negotiations.filter(n => n.status === 'active');
+                    negotiationCountElement.textContent = activeNegotiations.length;
+                } else {
+                    negotiationCountElement.textContent = '0';
+                }
+            }
+        }
+
+        // Initialize on page load
+        updateCartCount();
+        updateNegotiationCount();
+    </script>
+
+    <!-- Language Selector -->
+    <script>
+        function setLanguage(lang) {
+            const deBtn = document.getElementById('lang-de');
+            const enBtn = document.getElementById('lang-en');
+
+            if (!deBtn || !enBtn) return;
+
+            // Remove active class from both
+            deBtn.classList.remove('active');
+            enBtn.classList.remove('active');
+
+            // Add active class to selected language
+            if (lang === 'de') {
+                deBtn.classList.add('active');
+            } else {
+                enBtn.classList.add('active');
+            }
+
+            // Save preference and update document language
+            localStorage.setItem('cssberlin_lang', lang);
+            document.documentElement.lang = lang;
+
+            console.log('Language changed to:', lang);
+        }
+
+        // Load saved language preference on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedLang = localStorage.getItem('cssberlin_lang') || 'de';
+            setLanguage(savedLang);
+        });
+    </script>
+
+    <!-- Auth Gate & Favorites System -->
+    <script src="auth-gate.js"></script>
+    <script src="favorites.js"></script>
+
+    <script>
+        // Update header on page load - User Authentication State
+        document.addEventListener('DOMContentLoaded', async () => {
+            await authGate.checkAuthStatus();
+
+            // Find auth buttons
+            const authButtons = document.querySelectorAll('.header-btn.auth-btn');
+            const headerActions = document.querySelector('.header-actions');
+
+            if (authGate.isAuthenticated && authGate.currentUser) {
+                // Hide login/register buttons
+                authButtons.forEach(btn => btn.style.display = 'none');
+
+                // Get user display name
+                const userName = authGate.currentUser.firstName ||
+                                 authGate.currentUser.username ||
+                                 authGate.currentUser.email.split('@')[0];
+
+                // Create user menu with dropdown
+                const userMenu = document.createElement('div');
+                userMenu.className = 'user-menu-container';
+                userMenu.style.cssText = 'position: relative; display: inline-block;';
+                userMenu.innerHTML = `
+                    <button class="user-menu-btn header-btn" onclick="toggleUserMenu()" style="padding: 10px 18px; background: #2D5016; color: white; border-radius: 8px; display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; border: none; cursor: pointer; transition: all 0.3s ease;">
+                        ${authGate.currentUser.picture ?
+                            `<img src="${authGate.currentUser.picture}" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover;">` :
+                            `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>`
+                        }
+                        <span>${userName}</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="user-dropdown" id="userDropdown" style="display: none; position: absolute; top: 100%; right: 0; margin-top: 8px; background: white; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); min-width: 220px; z-index: 1000; overflow: hidden;">
+                        <div style="padding: 16px; border-bottom: 1px solid #eee;">
+                            <div style="font-weight: 600; color: #333;">${userName}</div>
+                            <div style="font-size: 13px; color: #666;">${authGate.currentUser.email}</div>
+                        </div>
+                        <a href="profil.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: #333; text-decoration: none; transition: background 0.2s;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            Mein Profil
+                        </a>
+                        <a href="meine-anzeigen.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: #333; text-decoration: none; transition: background 0.2s;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="3" y1="9" x2="21" y2="9"></line>
+                            </svg>
+                            Meine Anzeigen
+                        </a>
+                        <a href="bestellungen.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: #333; text-decoration: none; transition: background 0.2s;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                <line x1="3" y1="6" x2="21" y2="6"></line>
+                                <path d="M16 10a4 4 0 0 1-8 0"></path>
+                            </svg>
+                            Bestellungen
+                        </a>
+                        <a href="einstellungen.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: #333; text-decoration: none; transition: background 0.2s;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                            </svg>
+                            Einstellungen
+                        </a>
+                        <div style="border-top: 1px solid #eee; margin-top: 4px;">
+                            <button onclick="authGate.logout()" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: #dc2626; width: 100%; background: none; border: none; cursor: pointer; font-size: 14px; transition: background 0.2s; text-align: left;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                    <polyline points="16 17 21 12 16 7"></polyline>
+                                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                                </svg>
+                                Abmelden
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                // Insert before inserieren button
+                const inserierenBtn = headerActions.querySelector('.inserieren-header-btn');
+                if (inserierenBtn) {
+                    headerActions.insertBefore(userMenu, inserierenBtn);
+                } else {
+                    headerActions.appendChild(userMenu);
+                }
+            }
+        });
+
+        // Toggle user dropdown menu
+        function toggleUserMenu() {
+            const dropdown = document.getElementById('userDropdown');
+            if (dropdown) {
+                dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const userMenu = document.querySelector('.user-menu-container');
+            const dropdown = document.getElementById('userDropdown');
+            if (userMenu && dropdown && !userMenu.contains(e.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
+    </script>
+
+    <!-- Cookie Consent Banner (Reddit/Vinted Style) -->
+    <div id="cookieConsent" class="cookie-consent" style="display: none;">
+        <div class="cookie-overlay"></div>
+        <div class="cookie-modal">
+            <div class="cookie-header">
+                <h2>🍪 Wir respektieren deine Privatsphäre</h2>
+                <p>Wir und unsere Partner verwenden Cookies und ähnliche Technologien, um dir ein optimales Erlebnis zu bieten.</p>
+            </div>
+            <div class="cookie-options">
+                <div class="cookie-option">
+                    <div class="cookie-option-header">
+                        <span class="cookie-option-title">Notwendige Cookies</span>
+                        <span class="cookie-badge required">Immer aktiv</span>
+                    </div>
+                    <p class="cookie-option-desc">Diese Cookies sind für die Grundfunktionen der Website erforderlich.</p>
+                </div>
+                <div class="cookie-option">
+                    <div class="cookie-option-header">
+                        <span class="cookie-option-title">Analyse Cookies</span>
+                        <label class="cookie-toggle">
+                            <input type="checkbox" id="analyticsCookies" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <p class="cookie-option-desc">Helfen uns zu verstehen, wie Besucher mit der Website interagieren.</p>
+                </div>
+                <div class="cookie-option">
+                    <div class="cookie-option-header">
+                        <span class="cookie-option-title">Marketing Cookies</span>
+                        <label class="cookie-toggle">
+                            <input type="checkbox" id="marketingCookies">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <p class="cookie-option-desc">Werden verwendet, um Werbung relevanter für dich zu machen.</p>
+                </div>
+            </div>
+            <div class="cookie-buttons">
+                <button onclick="acceptAllCookies()" class="cookie-btn accept-all">Alle akzeptieren</button>
+                <button onclick="acceptSelectedCookies()" class="cookie-btn accept-selected">Auswahl bestätigen</button>
+                <button onclick="rejectAllCookies()" class="cookie-btn reject-all">Nur notwendige</button>
+            </div>
+            <div class="cookie-footer">
+                <a href="datenschutz.html">Datenschutz</a>
+                <span>|</span>
+                <a href="impressum.html">Impressum</a>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Cookie Consent Styles */
+        .cookie-consent {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10000;
+        }
+        .cookie-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+        }
+        .cookie-modal {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 20px 20px 0 0;
+            padding: 30px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
+            animation: slideUp 0.4s ease;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        .cookie-header h2 {
+            font-size: 22px;
+            color: #2D5016;
+            margin: 0 0 10px 0;
+        }
+        .cookie-header p {
+            font-size: 14px;
+            color: #666;
+            margin: 0 0 20px 0;
+            line-height: 1.5;
+        }
+        .cookie-options {
+            margin-bottom: 20px;
+        }
+        .cookie-option {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        .cookie-option-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .cookie-option-title {
+            font-weight: 600;
+            color: #333;
+        }
+        .cookie-badge {
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: #E8854C;
+            color: white;
+        }
+        .cookie-option-desc {
+            font-size: 13px;
+            color: #666;
+            margin: 0;
+        }
+        /* Toggle Switch */
+        .cookie-toggle {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+        .cookie-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.3s;
+            border-radius: 26px;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+        .cookie-toggle input:checked + .toggle-slider {
+            background-color: #2D5016;
+        }
+        .cookie-toggle input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+        /* Buttons */
+        .cookie-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .cookie-btn {
+            flex: 1;
+            min-width: 150px;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .cookie-btn.accept-all {
+            background: #2D5016;
+            color: white;
+        }
+        .cookie-btn.accept-all:hover {
+            background: #3d6b1e;
+            transform: translateY(-2px);
+        }
+        .cookie-btn.accept-selected {
+            background: #E8854C;
+            color: white;
+        }
+        .cookie-btn.accept-selected:hover {
+            background: #d4743f;
+            transform: translateY(-2px);
+        }
+        .cookie-btn.reject-all {
+            background: #f0f0f0;
+            color: #333;
+        }
+        .cookie-btn.reject-all:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
+        }
+        .cookie-footer {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 12px;
+        }
+        .cookie-footer a {
+            color: #666;
+            text-decoration: none;
+        }
+        .cookie-footer a:hover {
+            color: #2D5016;
+            text-decoration: underline;
+        }
+        .cookie-footer span {
+            color: #ccc;
+            margin: 0 8px;
+        }
+        @media (max-width: 600px) {
+            .cookie-modal {
+                padding: 20px;
+            }
+            .cookie-buttons {
+                flex-direction: column;
+            }
+            .cookie-btn {
+                min-width: 100%;
+            }
+        }
+    </style>
+
+    <script>
+        // Cookie Consent Functions
+        function showCookieConsent() {
+            const consent = localStorage.getItem('cssberlin_cookie_consent');
+            if (!consent) {
+                document.getElementById('cookieConsent').style.display = 'block';
+            }
+        }
+
+        function acceptAllCookies() {
+            const consent = {
+                necessary: true,
+                analytics: true,
+                marketing: true,
+                timestamp: new Date().toISOString()
+            };
+            localStorage.setItem('cssberlin_cookie_consent', JSON.stringify(consent));
+            document.getElementById('cookieConsent').style.display = 'none';
+        }
+
+        function acceptSelectedCookies() {
+            const consent = {
+                necessary: true,
+                analytics: document.getElementById('analyticsCookies').checked,
+                marketing: document.getElementById('marketingCookies').checked,
+                timestamp: new Date().toISOString()
+            };
+            localStorage.setItem('cssberlin_cookie_consent', JSON.stringify(consent));
+            document.getElementById('cookieConsent').style.display = 'none';
+        }
+
+        function rejectAllCookies() {
+            const consent = {
+                necessary: true,
+                analytics: false,
+                marketing: false,
+                timestamp: new Date().toISOString()
+            };
+            localStorage.setItem('cssberlin_cookie_consent', JSON.stringify(consent));
+            document.getElementById('cookieConsent').style.display = 'none';
+        }
+
+        // Show cookie consent on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(showCookieConsent, 500);
+        });
+    </script>
+</body>
+</html>
