@@ -1,18 +1,54 @@
 {
   "stats": {
-    "total_products": 274,
+    "total_products": 275,
     "platforms": {
       "ebay_it": 53,
       "ebay_uk": 60,
       "ebay_us": 60,
       "ebay_de": 51,
-      "ebay_fr": 50
+      "ebay_fr": 50,
+      "cssberlin": 1
     },
     "avg_price": 20.69,
     "today_count": 0,
-    "last_updated": "2025-11-12"
+    "last_updated": "2025-12-28"
   },
   "products": [
+    {
+      "id": 275,
+      "title": "Tommy Hilfiger Pullover für Jungen, 7 Jahre, guter Zustand",
+      "description": "<h3>Entdecken Sie den stilvollen Tommy Hilfiger Pullover für Jungen</h3> Der perfekte Pullover für den kleinen Stilisten! Dieser Tommy Hilfiger Pullover ist ideal für Jungen im Alter von 7 Jahren und bietet einen bequemen, modischen Look. Der Pullover ist in gutem Zustand und wurde sorgfältig ausgewählt, um Nachhaltigkeit und Stil zu vereinen. <h4>Produktdetails:</h4> <ul> <li><strong>Marke:</strong> Tommy Hilfiger - bekannt für hochwertige und modische Kleidung</li> <li><strong>Zustand:</strong> Guter Zustand - perfekt für den täglichen Gebrauch</li> <li><strong>Größe:</strong> 7 Jahre - ideal für Jungen in diesem Alter</li> </ul> <h4>Versand:</h4> <p>Wir bieten schnellen und sicheren Versand. Die Lieferung erfolgt innerhalb von 2-4 Werktagen, damit Ihr neuer Pullover schnell bei Ihnen ankommt.</p> <p>Wir legen Wert auf Nachhaltigkeit und Stil, deshalb wurde dieses Produkt sorgfältig ausgewählt und geprüft, um sicherzustellen, dass es Ihren Erwartungen entspricht.</p>",
+      "price": 8,
+      "original_price": 5,
+      "currency": "EUR",
+      "platform": "cssberlin",
+      "source_platform": "vinted.de",
+      "link": "",
+      "source_url": "https://www.vinted.de/items/7810443941",
+      "image": null,
+      "images": [],
+      "image_count": 1,
+      "brand": "Tommy Hilfiger",
+      "condition": "Guter Zustand",
+      "size": "",
+      "color": "",
+      "category": "Bekleidung",
+      "subcategory": "Oberteile",
+      "target_audience": "Kinder",
+      "meta_title": "Tommy Hilfiger Pullover Junge 7 Jahre | CSS Berlin",
+      "meta_description": "Tommy Hilfiger - Tommy Hilfiger Pullover Junge 7 Jahre - günstig kaufen bei CSS Berlin - Second-Hand Mode aus Berlin",
+      "keywords": "title, Tommy Hilfiger Pullover für Jungen, 7 Jahre, guter Zustand, description, <h3>Entdecken Sie den stilvollen Tommy Hilfiger Pullover für Jungen</h3>\nDer perfekte Pullover für den kleinen Stilisten! Dieser Tommy Hilfiger Pullover ist ideal für Jungen im Alter von 7 Jahren und bietet einen bequemen, modischen Look. Der Pullover ist in gutem Zustand und wurde sorgfältig ausgewählt, um Nachhaltigkeit und Stil zu vereinen.\n<h4>Produktdetails:</h4>\n<ul>\n<li><strong>Marke:</strong> Tommy Hilfiger - bekannt für hochwertige und modische Kleidung</li>\n<li><strong>Zustand:</strong> Guter Zustand - perfekt für den täglichen Gebrauch</li>\n<li><strong>Größe:</strong> 7 Jahre - ideal für Jungen in diesem Alter</li>\n</ul>\n<h4>Versand:</h4>\n<p>Wir bieten schnellen und sicheren Versand. Die Lieferung erfolgt innerhalb von 2-4 Werktagen, damit Ihr neuer Pullover schnell bei Ihnen ankommt.</p>\n<p>Wir legen Wert auf Nachhaltigkeit und Stil, deshalb wurde dieses Produkt sorgfältig ausgewählt und geprüft, um sicherzustellen, dass es Ihren Erwartungen entspricht.</p>, keywords, Tommy Hilfiger, Pullover, Jungen",
+      "location": "Berlin",
+      "shipping_cost": 4.99,
+      "shipping_type": "STANDARD",
+      "margin_percent": 60.0,
+      "profit": 2.99,
+      "scraped_at": "2025-12-28T20:24:31.797027",
+      "transformed_at": "2025-12-28T20:24:31.029587",
+      "source": "tatanga_transform",
+      "ai_seo_applied": true,
+      "image_processed": false
+    },
     {
       "id": 274,
       "title": "Orologio vintage Nike Athletic 100 M n. 2000 con quadrante sneaker cinturino pelle marrone USA",
