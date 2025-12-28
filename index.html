@@ -58,13 +58,7 @@
 
             <!-- Right Actions -->
             <div class="header-actions" style="gap: 12px; margin-left: auto; display: flex; align-items: center;">
-                <a href="inserieren.html" class="inserieren-btn" title="Artikel inserieren" style="padding: 8px 16px; background: white; color: #2D5016; border-radius: 8px; display: flex; align-items: center; gap: 6px; font-weight: 600;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 5v14M5 12h14"></path>
-                    </svg>
-                    <span>Inserieren</span>
-                </a>
-
+                <!-- Icon Buttons -->
                 <button class="icon-btn" title="Benachrichtigungen" style="width: 40px; height: 40px; padding: 8px; background: rgba(255,255,255,0.2); border-radius: 8px; position: relative;">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
                         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -97,25 +91,38 @@
                     <span class="cart-count" id="cartCount" style="position: absolute; top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px; background: #FF8C42; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;">0</span>
                 </button>
 
-                <a href="login.html" class="user-btn" style="padding: 8px 14px; gap: 6px; color: white; display: flex; align-items: center;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                <!-- Auth Buttons - Same Style -->
+                <a href="login.html" style="padding: 8px 16px; background: white; color: #2D5016; border-radius: 8px; display: flex; align-items: center; gap: 6px; font-weight: 600; text-decoration: none; font-size: 14px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
                     </svg>
-                    <span style="font-size: 14px;">Anmelden</span>
+                    Anmelden
                 </a>
 
-                <span class="header-divider" style="padding: 0 2px; font-size: 16px; color: rgba(255,255,255,0.7); font-weight: 300;">/</span>
-
-                <a href="registrieren.html" class="register-btn" style="padding: 8px 14px; gap: 6px; color: white; display: flex; align-items: center;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                <a href="registrieren.html" style="padding: 8px 16px; background: white; color: #2D5016; border-radius: 8px; display: flex; align-items: center; gap: 6px; font-weight: 600; text-decoration: none; font-size: 14px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                         <circle cx="8.5" cy="7" r="4"></circle>
                         <line x1="20" y1="8" x2="20" y2="14"></line>
                         <line x1="23" y1="11" x2="17" y2="11"></line>
                     </svg>
-                    <span style="font-size: 14px;">Registrieren</span>
+                    Registrieren
                 </a>
+
+                <!-- Inserieren - Far Right -->
+                <a href="inserieren.html" style="padding: 8px 16px; background: #2D5016; color: white; border-radius: 8px; display: flex; align-items: center; gap: 6px; font-weight: 600; text-decoration: none; font-size: 14px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"></path>
+                    </svg>
+                    Inserieren
+                </a>
+
+                <!-- Language Selector - Vinted Style -->
+                <div class="lang-selector" style="display: flex; align-items: center; gap: 4px; margin-left: 8px;">
+                    <button onclick="setLanguage('de')" id="lang-de" style="padding: 6px 10px; background: white; color: #2D5016; border: none; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer;">DE</button>
+                    <button onclick="setLanguage('en')" id="lang-en" style="padding: 6px 10px; background: rgba(255,255,255,0.3); color: white; border: none; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer;">EN</button>
+                </div>
             </div>
         </div>
     </header>
@@ -435,6 +442,35 @@
         // Initialize on page load
         updateCartCount();
         updateNegotiationCount();
+    </script>
+
+    <!-- Language Selector -->
+    <script>
+        function setLanguage(lang) {
+            const deBtn = document.getElementById('lang-de');
+            const enBtn = document.getElementById('lang-en');
+
+            if (lang === 'de') {
+                deBtn.style.background = 'white';
+                deBtn.style.color = '#2D5016';
+                enBtn.style.background = 'rgba(255,255,255,0.3)';
+                enBtn.style.color = 'white';
+            } else {
+                enBtn.style.background = 'white';
+                enBtn.style.color = '#2D5016';
+                deBtn.style.background = 'rgba(255,255,255,0.3)';
+                deBtn.style.color = 'white';
+            }
+
+            localStorage.setItem('cssberlin_lang', lang);
+            document.documentElement.lang = lang;
+        }
+
+        // Load saved language preference
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedLang = localStorage.getItem('cssberlin_lang') || 'de';
+            setLanguage(savedLang);
+        });
     </script>
 
     <!-- Auth Gate & Favorites System -->
