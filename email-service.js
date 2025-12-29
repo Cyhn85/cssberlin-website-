@@ -1,26 +1,21 @@
 /**
  * CSS Berlin - Email Service
  * Handles all email functionality via EmailJS
- *
- * SETUP REQUIRED:
- * 1. Create account at emailjs.com
- * 2. Add email service (Gmail or SMTP)
- * 3. Create templates: password_reset, magic_link, verification
- * 4. Update SERVICE_ID, TEMPLATE_IDs, and PUBLIC_KEY below
+ * Connected to IONOS SMTP Server
  */
 
 const EmailService = {
-    // EmailJS Configuration
-    // TODO: Replace with your actual EmailJS credentials
-    SERVICE_ID: 'service_cssberlin',  // Your EmailJS Service ID
-    PUBLIC_KEY: 'YOUR_PUBLIC_KEY',     // Your EmailJS Public Key
+    // EmailJS Configuration - IONOS SMTP
+    SERVICE_ID: 'service_x3phsl7',      // IONOS SMTP Service ID
+    PUBLIC_KEY: 'ZOprGu7EjDZmGl4ql',    // EmailJS Public Key
 
-    // Template IDs
+    // Template IDs - Using verification template for all emails
+    // Magic Link will use the same template with different content
     TEMPLATES: {
-        PASSWORD_RESET: 'template_password_reset',
-        MAGIC_LINK: 'template_magic_link',
-        VERIFICATION: 'template_verification',
-        WELCOME: 'template_welcome'
+        PASSWORD_RESET: 'template_icqfar5',   // Uses verification template
+        MAGIC_LINK: 'template_icqfar5',       // Uses verification template
+        VERIFICATION: 'template_icqfar5',     // E-Mail-Verifizierung Template
+        WELCOME: 'template_icqfar5'           // Uses verification template
     },
 
     // Check if EmailJS is loaded
@@ -33,7 +28,7 @@ const EmailService = {
         if (typeof emailjs !== 'undefined') {
             emailjs.init(this.PUBLIC_KEY);
             this.isReady = true;
-            console.log('EmailJS initialized');
+            console.log('EmailJS initialized with IONOS SMTP');
             return true;
         } else {
             console.warn('EmailJS SDK not loaded');
@@ -48,9 +43,24 @@ const EmailService = {
         const templateParams = {
             to_email: email,
             to_name: userName || email.split('@')[0],
-            reset_link: resetLink,
-            expires_in: '15 Minuten',
-            from_name: 'CSS Berlin'
+            from_name: 'CSS Berlin',
+            subject: 'Passwort zurücksetzen - CSS Berlin',
+            verification_code: 'RESET',
+            message: `Hallo ${userName || email.split('@')[0]},
+
+Sie haben angefordert, Ihr Passwort zurückzusetzen.
+
+Klicken Sie auf den folgenden Link, um ein neues Passwort zu erstellen:
+
+${resetLink}
+
+Der Link ist 15 Minuten gültig.
+
+Falls Sie diese Anfrage nicht gestellt haben, ignorieren Sie bitte diese E-Mail.
+
+Mit freundlichen Grüßen
+Ihr CSS Berlin Team
+Climate Smart Solutions`
         };
 
         return this.sendEmail(this.TEMPLATES.PASSWORD_RESET, templateParams, {
@@ -61,18 +71,34 @@ const EmailService = {
 
     /**
      * Send Magic Link Email (One-time login link)
+     * Uses verification template with magic link in message field
      */
     async sendMagicLink(email, userName, magicLink) {
         const templateParams = {
             to_email: email,
             to_name: userName || email.split('@')[0],
-            magic_link: magicLink,
-            expires_in: '10 Minuten',
-            from_name: 'CSS Berlin'
+            from_name: 'CSS Berlin',
+            subject: 'Anmeldung per E-Mail-Link - CSS Berlin',
+            verification_code: 'MAGIC-LINK',
+            message: `Hallo ${userName || email.split('@')[0]},
+
+Sie haben eine Anmeldung per E-Mail-Link angefordert.
+
+Klicken Sie auf den folgenden Link, um sich bei CSS Berlin anzumelden:
+
+${magicLink}
+
+Der Link ist 10 Minuten gültig und kann nur einmal verwendet werden.
+
+Falls Sie diese Anmeldung nicht angefordert haben, ignorieren Sie bitte diese E-Mail.
+
+Mit freundlichen Grüßen
+Ihr CSS Berlin Team
+Climate Smart Solutions`
         };
 
         return this.sendEmail(this.TEMPLATES.MAGIC_LINK, templateParams, {
-            subject: 'Anmeldung per E-Mail - CSS Berlin',
+            subject: 'Anmeldung per E-Mail-Link - CSS Berlin',
             fallbackMessage: `Magic-Link: ${magicLink}`
         });
     },
@@ -85,7 +111,21 @@ const EmailService = {
             to_email: email,
             to_name: userName || email.split('@')[0],
             verification_code: verificationCode,
-            from_name: 'CSS Berlin'
+            from_name: 'CSS Berlin',
+            subject: 'E-Mail Bestätigung - CSS Berlin',
+            message: `Hallo ${userName || email.split('@')[0]},
+
+vielen Dank für Ihre Registrierung bei CSS Berlin!
+
+Ihr Bestätigungscode lautet: ${verificationCode}
+
+Bitte geben Sie diesen Code auf der Bestätigungsseite ein, um Ihr Konto zu aktivieren.
+
+Der Code ist 24 Stunden gültig.
+
+Mit freundlichen Grüßen
+Ihr CSS Berlin Team
+Climate Smart Solutions`
         };
 
         return this.sendEmail(this.TEMPLATES.VERIFICATION, templateParams, {
@@ -101,7 +141,20 @@ const EmailService = {
         const templateParams = {
             to_email: email,
             to_name: userName,
-            from_name: 'CSS Berlin'
+            from_name: 'CSS Berlin',
+            subject: 'Willkommen bei CSS Berlin!',
+            verification_code: 'WILLKOMMEN',
+            message: `Hallo ${userName},
+
+herzlich willkommen bei CSS Berlin - Climate Smart Solutions!
+
+Wir freuen uns, Sie in unserer Community begrüßen zu dürfen. Bei uns finden Sie nachhaltige Second-Hand Mode und können dabei CO₂ sparen.
+
+Entdecken Sie jetzt unsere Produkte und starten Sie Ihr nachhaltiges Shopping-Erlebnis.
+
+Mit freundlichen Grüßen
+Ihr CSS Berlin Team
+Climate Smart Solutions`
         };
 
         return this.sendEmail(this.TEMPLATES.WELCOME, templateParams, {
@@ -111,40 +164,47 @@ const EmailService = {
     },
 
     /**
-     * Generic send email function
+     * Generic send email function - REAL EMAIL SENDING via IONOS SMTP
      */
     async sendEmail(templateId, templateParams, fallback) {
-        // Try EmailJS first
-        if (this.isReady && this.PUBLIC_KEY !== 'YOUR_PUBLIC_KEY') {
+        // Initialize EmailJS if not ready
+        if (!this.isReady) {
+            this.init();
+        }
+
+        // Send real email via EmailJS
+        if (typeof emailjs !== 'undefined') {
             try {
+                console.log('Sending email via EmailJS (IONOS SMTP)...');
+                console.log('Service:', this.SERVICE_ID);
+                console.log('Template:', templateId);
+                console.log('To:', templateParams.to_email);
+
                 const response = await emailjs.send(
                     this.SERVICE_ID,
                     templateId,
-                    templateParams
+                    templateParams,
+                    this.PUBLIC_KEY
                 );
-                console.log('Email sent via EmailJS:', response);
+
+                console.log('Email sent successfully:', response);
                 return { success: true, method: 'emailjs', response };
             } catch (error) {
                 console.error('EmailJS error:', error);
-                // Fall through to demo mode
+                return {
+                    success: false,
+                    method: 'emailjs',
+                    error: error.text || error.message || 'E-Mail konnte nicht gesendet werden'
+                };
             }
+        } else {
+            console.error('EmailJS SDK not loaded!');
+            return {
+                success: false,
+                method: 'none',
+                error: 'EmailJS nicht geladen. Bitte Seite neu laden.'
+            };
         }
-
-        // Demo mode - log to console and show alert
-        console.log('---');
-        console.log('EMAIL (Demo Mode):');
-        console.log('To:', templateParams.to_email);
-        console.log('Name:', templateParams.to_name);
-        console.log('Subject:', fallback.subject);
-        console.log('Content:', JSON.stringify(templateParams, null, 2));
-        console.log('---');
-
-        // Return success for demo
-        return {
-            success: true,
-            method: 'demo',
-            message: fallback.fallbackMessage
-        };
     },
 
     /**
@@ -169,8 +229,6 @@ const EmailService = {
      */
     storePasswordResetToken(email, token, expiresInMinutes = 15) {
         const resetTokens = JSON.parse(localStorage.getItem('cssberlin_reset_tokens') || '[]');
-
-        // Remove old tokens for this email
         const filtered = resetTokens.filter(t => t.email !== email);
 
         filtered.push({
@@ -207,8 +265,6 @@ const EmailService = {
      */
     storeMagicLinkToken(email, token, expiresInMinutes = 10) {
         const magicTokens = JSON.parse(localStorage.getItem('cssberlin_magic_tokens') || '[]');
-
-        // Remove old tokens for this email
         const filtered = magicTokens.filter(t => t.email !== email);
 
         filtered.push({
@@ -257,12 +313,10 @@ const EmailService = {
     cleanupExpiredTokens() {
         const now = Date.now();
 
-        // Clean reset tokens
         const resetTokens = JSON.parse(localStorage.getItem('cssberlin_reset_tokens') || '[]');
         const validResetTokens = resetTokens.filter(t => t.expiresAt > now);
         localStorage.setItem('cssberlin_reset_tokens', JSON.stringify(validResetTokens));
 
-        // Clean magic tokens
         const magicTokens = JSON.parse(localStorage.getItem('cssberlin_magic_tokens') || '[]');
         const validMagicTokens = magicTokens.filter(t => t.expiresAt > now && !t.used);
         localStorage.setItem('cssberlin_magic_tokens', JSON.stringify(validMagicTokens));
@@ -278,4 +332,4 @@ document.addEventListener('DOMContentLoaded', () => {
 // Export for global use
 window.EmailService = EmailService;
 
-console.log('CSS Berlin Email Service loaded');
+console.log('CSS Berlin Email Service loaded (IONOS SMTP)');

@@ -737,25 +737,48 @@ class AuthGate {
         // Generate magic link URL
         const magicLink = `${window.location.origin}${window.location.pathname.replace(/[^/]*$/, '')}magic-login.html?token=${token}`;
 
-        // Send email via EmailService (or demo mode)
+        // Send real email via EmailService
+        let emailResult = { success: false };
         if (typeof EmailService !== 'undefined') {
-            await EmailService.sendMagicLink(email, user?.firstName || email.split('@')[0], magicLink);
+            emailResult = await EmailService.sendMagicLink(email, user?.firstName || email.split('@')[0], magicLink);
         }
 
-        // Log for demo
-        console.log('Magic Link:', magicLink);
-
         this.showLoading(false);
-        this.showSuccess('Link wurde gesendet! Überprüfen Sie Ihre E-Mails.');
 
-        // Show alert for demo (remove in production)
-        setTimeout(() => {
-            alert(`📧 Magic-Link wurde an ${email} gesendet!\n\n🔗 Link:\n${magicLink}\n\n⏰ Gültig für 10 Minuten\n\nKlicken Sie auf den Link um sich anzumelden.`);
+        if (emailResult.success) {
+            // Email sent successfully
+            this.showSuccess(`Ein Anmelde-Link wurde an ${email} gesendet!`);
 
-            if (confirm('Möchten Sie direkt zur Anmeldung gehen?')) {
-                window.location.href = `magic-login.html?token=${token}`;
+            // Show confirmation modal
+            const modal = document.getElementById('auth-gate-modal');
+            const magicForm = modal?.querySelector('#magic-link-form-container');
+            if (magicForm) {
+                magicForm.innerHTML = `
+                    <div style="text-align: center; padding: 20px;">
+                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #2D5016, #4a7c24); border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;">
+                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                        <h3 style="margin: 0 0 12px; color: #2D5016;">E-Mail gesendet!</h3>
+                        <p style="color: #666; margin: 0 0 20px; line-height: 1.6;">
+                            Wir haben einen Anmelde-Link an<br>
+                            <strong>${email}</strong><br>
+                            gesendet. Bitte überprüfen Sie Ihren Posteingang.
+                        </p>
+                        <p style="color: #999; font-size: 13px; margin: 0;">
+                            Der Link ist 10 Minuten gültig.
+                        </p>
+                        <button onclick="authGate.hideLoginModal()" style="margin-top: 20px; padding: 12px 24px; background: #2D5016; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                            Verstanden
+                        </button>
+                    </div>
+                `;
             }
-        }, 500);
+        } else {
+            // Email failed
+            this.showError(emailResult.error || 'E-Mail konnte nicht gesendet werden. Bitte versuchen Sie es erneut.');
+        }
     }
 
     /**
