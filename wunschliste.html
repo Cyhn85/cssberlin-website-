@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wunschliste - CSS Berlin</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Compact Wishlist Styles */
+        .wishlist-header {
+            background: linear-gradient(135deg, #2D5016, #4A7C2C);
+            color: white;
+            padding: 32px 0;
+        }
+
+        .wishlist-header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-xl);
+        }
+
+        .wishlist-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .wishlist-header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .wishlist-container {
+            max-width: 1200px;
+            margin: var(--spacing-2xl) auto;
+            padding: 0 var(--spacing-xl);
+        }
+
+        .wishlist-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-xl);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .wishlist-count {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .clear-all-btn {
+            padding: 10px 20px;
+            background: transparent;
+            border: 2px solid var(--error);
+            color: var(--error);
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+
+        .clear-all-btn:hover {
+            background: var(--error);
+            color: white;
+        }
+
+        /* Compact List View */
+        .wishlist-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+
+        .wishlist-item {
+            display: grid;
+            grid-template-columns: 80px 1fr auto;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md);
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            transition: all var(--transition-base);
+        }
+
+        .wishlist-item:hover {
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-green);
+        }
+
+        .wishlist-item-image {
+            width: 80px;
+            height: 80px;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+
+        .wishlist-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .wishlist-item-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: var(--spacing-xs);
+        }
+
+        .wishlist-item-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .wishlist-item-details {
+            display: flex;
+            gap: var(--spacing-md);
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .wishlist-item-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary-green);
+        }
+
+        .wishlist-item-actions {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: var(--spacing-sm);
+        }
+
+        .wishlist-action-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            white-space: nowrap;
+        }
+
+        .btn-view {
+            background: var(--primary-green);
+            color: white;
+        }
+
+        .btn-view:hover {
+            background: var(--primary-green-hover);
+        }
+
+        .btn-remove {
+            background: transparent;
+            border: 1px solid var(--error);
+            color: var(--error);
+        }
+
+        .btn-remove:hover {
+            background: var(--error);
+            color: white;
+        }
+
+        .wishlist-empty {
+            text-align: center;
+            padding: var(--spacing-3xl) var(--spacing-xl);
+        }
+
+        .wishlist-empty-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto var(--spacing-lg);
+            color: var(--text-light);
+        }
+
+        .wishlist-empty h2 {
+            font-size: 24px;
+            margin-bottom: var(--spacing-md);
+            color: var(--text-primary);
+        }
+
+        .wishlist-empty p {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .btn-shop-now {
+            display: inline-block;
+            padding: 14px 32px;
+            background: var(--primary-green);
+            color: white;
+            border-radius: var(--radius-lg);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all var(--transition-base);
+        }
+
+        .btn-shop-now:hover {
+            background: var(--primary-green-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .wishlist-item {
+                grid-template-columns: 60px 1fr;
+                gap: var(--spacing-sm);
+            }
+
+            .wishlist-item-image {
+                width: 60px;
+                height: 60px;
+            }
+
+            .wishlist-item-actions {
+                grid-column: 1 / -1;
+                flex-direction: row;
+                justify-content: flex-end;
+                margin-top: var(--spacing-sm);
+            }
+
+            .wishlist-item-name {
+                font-size: 14px;
+            }
+
+            .wishlist-item-price {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- News Banner at Top -->
+    <div class="news-banner" style="position: sticky; top: 0; z-index: 999;">
+        <div class="news-slider" id="newsSlider">
+            <div class="news-item" data-link="co2-impact.html">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                </svg>
+                <span>🌍 248.5 Tonnen CO₂ gespart - Jeder Kauf zählt für unseren Planeten!</span>
+            </div>
+            <div class="news-item" data-link="/campaign/3for2-shipping">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                </svg>
+                <span>📦 2 Produkte kaufen, 3. Produkt Versand GRATIS!</span>
+            </div>
+            <div class="news-item" data-link="/leaderboard">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                </svg>
+                <span>🏆 CO₂ Rangliste - Wer spart am meisten? Klick für die Top 100!</span>
+            </div>
+            <div class="news-item" data-link="/trees">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2v20M5 9l7-7 7 7M12 22l-3-3h6l-3 3z"></path>
+                </svg>
+                <span>🌳 8,234 Bäume gepflanzt - Dein Beitrag macht den Unterschied!</span>
+            </div>
+            <div class="news-item" data-link="/sale">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 6v6l4 2" stroke="white" fill="none"></path>
+                </svg>
+                <span>🔥 Sale: 780 neue Produkte - Bis zu 70% Rabatt diese Woche!</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header" style="position: sticky; top: 40px; z-index: 998; background: linear-gradient(135deg, #F5A855 0%, #E8854C 50%, #C46A3D 100%); box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <div class="header-container">
+            <!-- Left Side: Logo -->
+            <a href="index.html" style="text-decoration: none; display: flex; align-items: center;">
+                <img src="images/logo.png" alt="CSS Berlin - Climate Smart Solutions" style="height: 65px; width: auto;">
+            </a>
+
+            <!-- Right Actions -->
+            <div class="header-actions" style="gap: 8px; margin-left: auto;">
+                <a href="inserieren.html" class="inserieren-btn" title="Artikel inserieren" style="padding: 8px 16px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"></path>
+                    </svg>
+                    <span>Inserieren</span>
+                </a>
+
+                <button class="icon-btn" title="Benachrichtigungen" style="width: 40px; height: 40px; padding: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                    <span class="notification-badge" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">2</span>
+                </button>
+
+                <button class="icon-btn" title="Verhandlungen" onclick="window.location.href='messages.html'" style="width: 40px; height: 40px; padding: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        <path d="M8 10h.01M12 10h.01M16 10h.01"></path>
+                    </svg>
+                    <span class="negotiation-count" id="negotiationCount" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">0</span>
+                </button>
+
+                <button class="icon-btn" id="wishlistBtn" title="Wunschliste" onclick="window.location.href='wunschliste.html'" style="width: 40px; height: 40px; padding: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                    <span class="wishlist-count" id="wishlistCount" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">0</span>
+                </button>
+
+                <button class="icon-btn" title="Warenkorb" onclick="window.location.href='warenkorb.html'" style="width: 40px; height: 40px; padding: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-count" id="cartCount" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">0</span>
+                </button>
+
+                <a href="login.html" class="user-btn" style="padding: 8px 14px; gap: 6px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span style="font-size: 14px;">Anmelden</span>
+                </a>
+
+                <span class="header-divider" style="padding: 0 4px; font-size: 16px; color: #999; font-weight: 300;">/</span>
+
+                <a href="registrieren.html" class="register-btn" style="padding: 8px 14px; gap: 6px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="8.5" cy="7" r="4"></circle>
+                        <line x1="20" y1="8" x2="20" y2="14"></line>
+                        <line x1="23" y1="11" x2="17" y2="11"></line>
+                    </svg>
+                    <span style="font-size: 14px;">Registrieren</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <div class="wishlist-header">
+        <div class="wishlist-header-content">
+            <h1>Meine Wunschliste</h1>
+            <p>Hier findest du alle deine gespeicherten Favoriten</p>
+        </div>
+    </div>
+
+    <!-- Wishlist Content -->
+    <div class="wishlist-container">
+        <!-- Empty State -->
+        <div class="wishlist-empty" id="wishlistEmpty" style="display: none;">
+            <svg class="wishlist-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+            <h2>Deine Wunschliste ist leer</h2>
+            <p>Speichere Artikel, die dir gefallen, indem du auf das Herz-Symbol klickst</p>
+            <a href="index.html" class="btn-shop-now">Jetzt Shoppen</a>
+        </div>
+
+        <!-- Wishlist Content -->
+        <div id="wishlistContent" style="display: none;">
+            <div class="wishlist-controls">
+                <div class="wishlist-count">
+                    <span id="wishlistItemCount">0</span> Artikel
+                </div>
+                <button class="clear-all-btn" id="clearAllBtn">Alle entfernen</button>
+            </div>
+
+            <div class="wishlist-list" id="wishlistList">
+                <!-- Items will be loaded here by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 CSS Berlin. Alle Rechte vorbehalten.</p>
+                <div class="footer-links-bottom">
+                    <a href="impressum.html">Impressum</a>
+                    <a href="datenschutz.html">Datenschutz</a>
+                    <a href="agb.html">AGB</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadWishlist();
+
+            // Clear all button
+            document.getElementById('clearAllBtn')?.addEventListener('click', function() {
+                if (confirm('Möchtest du wirklich alle Artikel entfernen?')) {
+                    clearWishlist();
+                }
+            });
+        });
+
+        function loadWishlist() {
+            const wishlist = window.getWishlist ? window.getWishlist() : [];
+            const emptyState = document.getElementById('wishlistEmpty');
+            const content = document.getElementById('wishlistContent');
+            const listContainer = document.getElementById('wishlistList');
+            const countElement = document.getElementById('wishlistItemCount');
+
+            if (wishlist.length === 0) {
+                emptyState.style.display = 'block';
+                content.style.display = 'none';
+            } else {
+                emptyState.style.display = 'none';
+                content.style.display = 'block';
+                countElement.textContent = wishlist.length;
+
+                // Render items
+                listContainer.innerHTML = wishlist.map(item => `
+                    <div class="wishlist-item" data-product-id="${item.productId}">
+                        <div class="wishlist-item-image">
+                            <img src="${item.image || 'https://via.placeholder.com/80'}" alt="${item.name}">
+                        </div>
+                        <div class="wishlist-item-info">
+                            <div class="wishlist-item-name">${item.name}</div>
+                            <div class="wishlist-item-details">
+                                ${item.category ? `<span>${item.category}</span>` : ''}
+                                ${item.size ? `<span>Größe: ${item.size}</span>` : ''}
+                                ${item.condition ? `<span>${item.condition}</span>` : ''}
+                            </div>
+                            <div class="wishlist-item-price">${item.price}</div>
+                        </div>
+                        <div class="wishlist-item-actions">
+                            <button class="wishlist-action-btn btn-view" onclick="viewProduct('${item.productId}')">
+                                Ansehen
+                            </button>
+                            <button class="wishlist-action-btn btn-remove" onclick="removeItem('${item.productId}')">
+                                Entfernen
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function removeItem(productId) {
+            if (window.removeFromWishlist) {
+                window.removeFromWishlist(productId);
+                loadWishlist();
+            }
+        }
+
+        function clearWishlist() {
+            const wishlist = window.getWishlist ? window.getWishlist() : [];
+            wishlist.forEach(item => {
+                if (window.removeFromWishlist) {
+                    window.removeFromWishlist(item.productId);
+                }
+            });
+            loadWishlist();
+        }
+
+        function viewProduct(productId) {
+            // Navigate to product detail page
+            window.location.href = `product-detail.html?id=${productId}`;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+/* ============================================
+   CSS BERLIN - PAYMENT MODAL STYLES
+   ============================================ */
+
+.payment-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.payment-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+}
+
+.payment-modal-content {
+    position: relative;
+    background: white;
+    border-radius: 24px;
+    padding: 32px;
+    max-width: 520px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.3);
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.payment-modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #F5F5F5;
+    border: none;
+    font-size: 28px;
+    line-height: 1;
+    color: #757575;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.payment-modal-close:hover {
+    background: #E0E0E0;
+    color: #212121;
+    transform: rotate(90deg);
+}
+
+/* Product Summary */
+.payment-product-summary {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: #F5F5F5;
+    border-radius: 12px;
+    margin-bottom: 24px;
+}
+
+.payment-product-summary img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.payment-product-summary h3 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    color: #212121;
+    font-weight: 600;
+}
+
+.payment-price {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2D5016;
+    margin: 0;
+}
+
+/* Payment Methods */
+.payment-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.payment-method-btn {
+    width: 100%;
+    padding: 20px;
+    border: 2px solid #E0E0E0;
+    border-radius: 16px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+}
+
+.payment-method-btn:hover {
+    border-color: #A8D08D;
+    background: #F9FFF5;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(45, 80, 22, 0.1);
+}
+
+.payment-method-btn:active {
+    transform: translateY(0);
+}
+
+.payment-method-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.payment-method-icon {
+    width: 64px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FAFAFA;
+    border-radius: 8px;
+}
+
+.payment-method-btn strong {
+    display: block;
+    font-size: 16px;
+    color: #212121;
+    margin-bottom: 4px;
+}
+
+.payment-commission {
+    font-size: 13px;
+    color: #757575;
+}
+
+.payment-method-btn svg:last-child {
+    color: #2D5016;
+    flex-shrink: 0;
+}
+
+/* Special Klarna Styling */
+.payment-method-btn:nth-child(3) .payment-method-icon {
+    background: #FFE8F0;
+}
+
+.payment-method-btn:nth-child(3):hover {
+    border-color: #FFB3C7;
+    background: #FFF5F9;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .payment-modal-content {
+        padding: 24px;
+        border-radius: 16px;
+    }
+
+    .payment-product-summary {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .payment-method-btn {
+        padding: 16px;
+    }
+
+    .payment-method-icon {
+        width: 56px;
+        height: 40px;
+    }
+
+    .payment-method-btn strong {
+        font-size: 14px;
+    }
+}
