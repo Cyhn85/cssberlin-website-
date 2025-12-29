@@ -103,16 +103,13 @@ const I18n = {
 
         if (!deBtn || !enBtn) return;
 
+        // Use CSS classes for styling
         if (lang === 'de') {
-            deBtn.style.background = '#E8854C';
-            deBtn.style.color = 'white';
-            enBtn.style.background = '#f5f5f5';
-            enBtn.style.color = '#333';
+            deBtn.classList.add('active');
+            enBtn.classList.remove('active');
         } else {
-            enBtn.style.background = '#E8854C';
-            enBtn.style.color = 'white';
-            deBtn.style.background = '#f5f5f5';
-            deBtn.style.color = '#333';
+            enBtn.classList.add('active');
+            deBtn.classList.remove('active');
         }
     },
 

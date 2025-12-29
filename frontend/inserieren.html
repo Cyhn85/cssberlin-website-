@@ -603,6 +603,31 @@
                 border-radius: 0;
             }
         }
+
+        /* Header Action Buttons */
+        .header-action-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #E8854C 0%, #d4753d 100%);
+            color: white;
+            border: 1.5px solid rgba(255, 255, 255, 0.4);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(232, 133, 76, 0.3);
+        }
+
+        .header-action-btn:hover {
+            background: linear-gradient(135deg, #2D5016 0%, #3d6b1e 100%);
+            border-color: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 15px rgba(45, 80, 22, 0.4);
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
@@ -614,7 +639,7 @@
                 <div style="font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.9); letter-spacing: 1px; text-transform: uppercase; text-align: center;">Climate Smart Solutions</div>
             </a>
             <div class="header-actions" style="gap: 12px; margin-left: auto; display: flex; align-items: center;">
-                <button onclick="authGate.showLoginModal()" class="header-btn auth-btn combined-auth-btn" style="padding: 10px 20px; background: #E8854C; color: white; border-radius: 8px; display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 14px; border: none; cursor: pointer;">
+                <button onclick="authGate.showLoginModal()" class="header-action-btn">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
