@@ -317,6 +317,23 @@ img {
     box-shadow: 0 4px 12px rgba(45, 80, 22, 0.4);
 }
 
+/* User Menu Button (when logged in) */
+.user-menu-btn:hover {
+    background: #3d6b1e !important;
+    transform: translateY(-1px);
+}
+
+/* User Dropdown Menu Styles */
+.user-dropdown a:hover,
+.user-dropdown button:hover {
+    background: #f5f5f5 !important;
+}
+
+.user-dropdown a:hover svg,
+.user-dropdown button:hover svg {
+    color: #2D5016;
+}
+
 /* Inserieren Header Button - Orange Style */
 .inserieren-header-btn {
     background: #E8854C;
@@ -1605,6 +1622,395 @@ img {
 }
 
 /* ============================================
+   ENHANCED MOBILE RESPONSIVE STYLES
+   Critical for mobile-first user experience
+   ============================================ */
+
+/* Mobile Header - Compact Layout */
+@media (max-width: 768px) {
+    html {
+        zoom: 1; /* Reset zoom for mobile */
+    }
+
+    .header-container {
+        padding: 12px 16px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    /* Logo compact */
+    .header-container > a {
+        width: auto !important;
+    }
+
+    .header-container > a > div:first-child {
+        font-size: 24px !important;
+    }
+
+    .header-container > a > div:last-child {
+        font-size: 9px !important;
+    }
+
+    /* Header actions - mobile optimized */
+    .header-actions {
+        gap: 6px !important;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        margin-left: 0;
+        width: 100%;
+        order: 3;
+    }
+
+    /* Icon buttons smaller on mobile */
+    .icon-btn {
+        width: 36px !important;
+        height: 36px !important;
+        padding: 6px !important;
+    }
+
+    .icon-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    /* Auth buttons compact */
+    .header-btn.auth-btn {
+        padding: 8px 12px !important;
+        font-size: 12px !important;
+        gap: 4px !important;
+    }
+
+    .header-btn.auth-btn svg {
+        width: 14px !important;
+        height: 14px !important;
+    }
+
+    /* Hide "Registrieren" text on small mobile, show only icon */
+    .inserieren-header-btn {
+        padding: 8px 12px !important;
+        font-size: 12px !important;
+    }
+
+    /* Language selector compact */
+    .lang-selector {
+        margin-left: 0 !important;
+    }
+
+    .lang-btn {
+        padding: 4px 8px !important;
+        font-size: 11px !important;
+    }
+
+    /* News banner smaller */
+    .news-banner {
+        font-size: 12px;
+    }
+
+    .news-item {
+        font-size: 13px;
+        padding: 8px 16px;
+        min-height: 36px;
+    }
+
+    /* Category navigation scrollable */
+    .category-navigation {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .category-buttons {
+        justify-content: flex-start;
+        gap: 8px;
+        padding: 8px 16px;
+        min-width: max-content;
+    }
+
+    .category-btn {
+        font-size: 13px;
+        padding: 8px 16px;
+        white-space: nowrap;
+    }
+
+    /* Search bar full width */
+    .search-bar-container {
+        padding: 12px 16px;
+    }
+
+    .search-bar {
+        padding: 10px 14px;
+    }
+
+    .search-input {
+        font-size: 14px;
+    }
+
+    /* Products grid */
+    .products-section {
+        padding: 16px;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    /* Product card mobile optimized */
+    .product-card {
+        border-radius: 12px;
+    }
+
+    .product-info {
+        padding: 12px;
+    }
+
+    .product-brand {
+        font-size: 10px;
+    }
+
+    .product-title {
+        font-size: 13px;
+        -webkit-line-clamp: 2;
+    }
+
+    .product-price {
+        font-size: 18px;
+    }
+
+    .product-new-price {
+        font-size: 12px;
+    }
+
+    /* Wishlist button smaller */
+    .wishlist-btn {
+        width: 36px;
+        height: 36px;
+        bottom: 8px;
+        right: 8px;
+    }
+
+    .wishlist-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    /* Carbon badge smaller */
+    .carbon-badge {
+        font-size: 10px;
+        padding: 3px 8px;
+        bottom: 8px;
+        left: 8px;
+    }
+
+    /* Product actions stacked */
+    .product-actions {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .buy-btn,
+    .negotiate-btn {
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    /* Seller info compact */
+    .product-seller-info {
+        padding: 8px;
+        gap: 8px;
+    }
+
+    .seller-avatar-mini {
+        width: 28px;
+        height: 28px;
+        font-size: 11px;
+    }
+
+    .seller-name {
+        font-size: 11px;
+    }
+
+    .seller-meta {
+        font-size: 10px;
+    }
+
+    /* Footer mobile */
+    .footer {
+        padding: 0 !important;
+    }
+
+    .footer > div {
+        padding: 16px !important;
+    }
+
+    .footer nav {
+        flex-direction: column;
+        gap: 12px !important;
+        text-align: center;
+    }
+
+    .footer nav a {
+        font-size: 13px !important;
+    }
+
+    /* Back to top button */
+    .back-to-top {
+        width: 44px;
+        height: 44px;
+        bottom: 16px;
+        right: 16px;
+    }
+
+    /* Cookie consent mobile */
+    .cookie-modal {
+        padding: 20px;
+        border-radius: 16px 16px 0 0;
+    }
+
+    .cookie-header h2 {
+        font-size: 18px;
+    }
+
+    .cookie-buttons {
+        flex-direction: column;
+    }
+
+    .cookie-btn {
+        width: 100%;
+        min-width: unset;
+    }
+
+    /* User dropdown mobile */
+    .user-dropdown {
+        width: calc(100vw - 32px) !important;
+        right: 16px !important;
+        left: 16px !important;
+    }
+}
+
+/* Extra small mobile (iPhone SE, etc.) */
+@media (max-width: 375px) {
+    .header-container > a > div:first-child {
+        font-size: 20px !important;
+    }
+
+    .header-btn.auth-btn span {
+        display: none; /* Hide text, show only icon */
+    }
+
+    .header-btn.auth-btn {
+        padding: 8px !important;
+    }
+
+    .inserieren-header-btn span {
+        display: none;
+    }
+
+    .inserieren-header-btn {
+        padding: 8px !important;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .product-info {
+        padding: 8px;
+    }
+
+    .product-price {
+        font-size: 16px;
+    }
+
+    .product-actions {
+        margin-top: 8px;
+    }
+
+    .buy-btn,
+    .negotiate-btn {
+        padding: 8px;
+        font-size: 12px;
+    }
+}
+
+/* Tablet Portrait */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .header-container {
+        padding: 16px 24px;
+    }
+
+    .header-actions {
+        gap: 8px;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    /* Larger touch targets */
+    .category-btn {
+        min-height: 44px;
+    }
+
+    .icon-btn {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .buy-btn,
+    .negotiate-btn {
+        min-height: 44px;
+    }
+
+    /* Disable hover effects on touch */
+    .product-card:hover {
+        transform: none;
+    }
+
+    .product-card:hover .quick-view-btn {
+        transform: translateY(100%);
+    }
+
+    /* Active states for touch */
+    .buy-btn:active,
+    .negotiate-btn:active {
+        transform: scale(0.98);
+    }
+}
+
+/* Safe area for notched devices (iPhone X+) */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .footer {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .cookie-modal {
+        padding-bottom: calc(20px + env(safe-area-inset-bottom));
+    }
+}
+
+/* Landscape mobile */
+@media (max-width: 812px) and (orientation: landscape) {
+    .header-container {
+        padding: 8px 16px;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .cookie-modal {
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+}
+
+/* ============================================
    UTILITY CLASSES
    ============================================ */
 .text-center {
@@ -2128,5 +2534,238 @@ img {
     .offer-product-image {
         width: 100%;
         height: 200px;
+    }
+}
+
+/* ============================================
+   USER DASHBOARD BAR
+   Header ile Kategori arasindaki kullanici paneli
+   ============================================ */
+
+.user-dashboard-bar {
+    background: linear-gradient(135deg, #f8f4f0 0%, #fff9f5 100%);
+    border-bottom: 1px solid rgba(232, 133, 76, 0.15);
+    padding: 10px 0;
+    position: sticky;
+    top: 90px; /* Header altinda */
+    z-index: 997;
+}
+
+.user-dashboard-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Sol taraf - Kullanici aksiyonlari */
+.dashboard-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Dashboard ikon butonlari */
+.dashboard-icon-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: white;
+    border: 1px solid rgba(232, 133, 76, 0.2);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+.dashboard-icon-btn:hover {
+    background: var(--accent-orange);
+    border-color: var(--primary-orange);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(232, 133, 76, 0.2);
+}
+
+.dashboard-icon-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--primary-orange);
+    fill: none;
+    stroke-width: 2;
+}
+
+.dashboard-icon-btn:hover svg {
+    stroke: var(--primary-orange-hover);
+}
+
+.dashboard-icon-btn .label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.dashboard-icon-btn .badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    background: var(--primary-orange);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Sag taraf - Inserieren ve Dil */
+.dashboard-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Inserieren butonu - Dashboard versiyonu */
+.dashboard-inserieren-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, var(--primary-green) 0%, #3d6b1e 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(45, 80, 22, 0.3);
+}
+
+.dashboard-inserieren-btn:hover {
+    background: linear-gradient(135deg, #3d6b1e 0%, var(--primary-green) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(45, 80, 22, 0.4);
+}
+
+.dashboard-inserieren-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Dil secici - Dashboard versiyonu */
+.dashboard-lang-selector {
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 1px solid rgba(232, 133, 76, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.dashboard-lang-btn {
+    padding: 10px 14px;
+    background: transparent;
+    border: none;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--text-secondary);
+}
+
+.dashboard-lang-btn.active {
+    background: var(--primary-orange);
+    color: white;
+}
+
+.dashboard-lang-btn:hover:not(.active) {
+    background: var(--accent-orange);
+    color: var(--primary-orange);
+}
+
+/* Ayirici cizgi */
+.dashboard-divider {
+    width: 1px;
+    height: 32px;
+    background: rgba(232, 133, 76, 0.2);
+    margin: 0 8px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .user-dashboard-bar {
+        top: 80px;
+        padding: 8px 0;
+    }
+
+    .user-dashboard-container {
+        padding: 0 12px;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .dashboard-actions {
+        width: 100%;
+        justify-content: space-between;
+        gap: 4px;
+    }
+
+    .dashboard-icon-btn {
+        padding: 8px 10px;
+        flex: 1;
+        justify-content: center;
+    }
+
+    .dashboard-icon-btn .label {
+        display: none;
+    }
+
+    .dashboard-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .dashboard-inserieren-btn {
+        flex: 1;
+        justify-content: center;
+        padding: 10px 16px;
+    }
+
+    .dashboard-inserieren-btn span {
+        display: none;
+    }
+
+    .dashboard-lang-selector {
+        flex-shrink: 0;
+    }
+
+    .dashboard-lang-btn {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-icon-btn {
+        padding: 8px;
+    }
+
+    .dashboard-icon-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .dashboard-inserieren-btn {
+        padding: 8px 12px;
+        font-size: 13px;
     }
 }

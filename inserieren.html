@@ -3,277 +3,299 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Artikel inserieren - CSS Berlin</title>
+    <title>Artikel verkaufen - CSS Berlin</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Inserieren Page Specific Styles */
-        .inserieren-container {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: var(--spacing-2xl);
-            background: var(--bg-primary);
-            border-radius: var(--radius-xl);
-            box-shadow: var(--shadow-lg);
+        * { box-sizing: border-box; }
+
+        body {
+            background: #f5f5f5;
+            min-height: 100vh;
         }
 
-        .inserieren-header {
-            text-align: center;
-            margin-bottom: var(--spacing-2xl);
+        .verkaufen-page {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
-        .inserieren-header h1 {
-            font-size: 32px;
-            color: var(--primary-green);
-            margin-bottom: var(--spacing-sm);
+        .page-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #E8854C;
+            margin-bottom: 24px;
         }
 
-        .inserieren-header p {
-            color: var(--text-secondary);
-            font-size: 16px;
+        /* Form Card */
+        .form-card {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            overflow: hidden;
         }
 
-        .form-section {
-            margin-bottom: var(--spacing-xl);
+        .form-card-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            font-weight: 600;
+            color: #333;
+            font-size: 15px;
         }
 
-        .form-section-title {
-            font-size: 20px;
-            font-weight: var(--font-weight-semibold);
-            color: var(--text-primary);
-            margin-bottom: var(--spacing-md);
+        .form-card-body {
+            padding: 0;
+        }
+
+        /* Form Row */
+        .form-row {
             display: flex;
-            align-items: center;
-            gap: var(--spacing-sm);
+            align-items: flex-start;
+            padding: 16px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            gap: 16px;
         }
 
-        .form-section-title svg {
-            width: 24px;
-            height: 24px;
-            color: var(--primary-orange);
+        .form-row:last-child {
+            border-bottom: none;
         }
 
-        .form-group {
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .form-label {
-            display: block;
-            font-weight: var(--font-weight-medium);
-            color: var(--text-primary);
-            margin-bottom: var(--spacing-sm);
+        .form-row-label {
+            width: 140px;
+            flex-shrink: 0;
             font-size: 14px;
+            color: #666;
+            padding-top: 10px;
         }
 
-        .form-label.required::after {
-            content: " *";
-            color: var(--error);
+        .form-row-content {
+            flex: 1;
+            min-width: 0;
         }
 
-        .form-input,
-        .form-textarea,
-        .form-select {
+        /* Input Styles - Vinted Clean */
+        .vinted-input,
+        .vinted-textarea,
+        .vinted-select {
             width: 100%;
             padding: 12px 16px;
-            border: 2px solid var(--border-color);
-            border-radius: var(--radius-md);
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
             font-size: 15px;
-            font-family: var(--font-primary);
-            transition: all var(--transition-base);
-            background: var(--bg-primary);
+            color: #333;
+            background: white;
+            transition: all 0.2s ease;
+            font-family: inherit;
         }
 
-        .form-input:focus,
-        .form-textarea:focus,
-        .form-select:focus {
+        .vinted-input:focus,
+        .vinted-textarea:focus,
+        .vinted-select:focus {
             outline: none;
-            border-color: var(--primary-green);
-            box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.1);
+            border-color: #2D5016;
+            box-shadow: 0 0 0 2px rgba(45, 80, 22, 0.1);
         }
 
-        .form-textarea {
+        .vinted-input::placeholder {
+            color: #999;
+        }
+
+        .vinted-textarea {
+            min-height: 100px;
             resize: vertical;
-            min-height: 120px;
         }
 
-        .form-row {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: var(--spacing-md);
-        }
-
-        /* Image Upload Area */
-        .image-upload-area {
-            border: 3px dashed var(--border-color);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-2xl);
-            text-align: center;
-            background: var(--bg-tertiary);
-            transition: all var(--transition-base);
+        .vinted-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 40px;
             cursor: pointer;
         }
 
-        .image-upload-area:hover,
-        .image-upload-area.dragover {
-            border-color: var(--primary-green);
-            background: var(--accent-green);
+        /* Photo Upload - Vinted Style */
+        .photo-upload-section {
+            padding: 20px;
         }
 
-        .image-upload-icon {
-            width: 64px;
-            height: 64px;
-            margin: 0 auto var(--spacing-md);
-            color: var(--primary-orange);
-        }
-
-        .image-upload-text {
-            font-size: 16px;
-            font-weight: var(--font-weight-medium);
-            color: var(--text-primary);
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .image-upload-hint {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        .image-upload-input {
-            display: none;
-        }
-
-        /* Image Preview Grid */
-        .image-preview-grid {
+        .photo-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: var(--spacing-md);
-            margin-top: var(--spacing-md);
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
         }
 
-        .image-preview-item {
+        .photo-slot {
+            aspect-ratio: 3/4;
+            border: 2px dashed #d0d0d0;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
             position: relative;
-            aspect-ratio: 1;
-            border-radius: var(--radius-md);
             overflow: hidden;
-            border: 2px solid var(--border-color);
+            background: #fafafa;
         }
 
-        .image-preview-item img {
+        .photo-slot:hover {
+            border-color: #2D5016;
+            background: #f0fff0;
+        }
+
+        .photo-slot.main {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        .photo-slot.has-image {
+            border: none;
+        }
+
+        .photo-slot img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        .image-preview-remove {
+        .photo-slot-add {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+        }
+
+        .photo-slot-add svg {
+            width: 24px;
+            height: 24px;
+            color: #2D5016;
+        }
+
+        .photo-slot-add span {
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .photo-remove {
             position: absolute;
             top: 8px;
             right: 8px;
             width: 28px;
             height: 28px;
-            border-radius: 50%;
-            background: var(--error);
-            color: white;
+            background: rgba(0,0,0,0.6);
             border: none;
+            border-radius: 50%;
+            color: white;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all var(--transition-base);
+            opacity: 0;
+            transition: opacity 0.2s;
         }
 
-        .image-preview-remove:hover {
-            transform: scale(1.1);
-            background: #d32f2f;
+        .photo-slot:hover .photo-remove {
+            opacity: 1;
         }
 
-        /* Submit Button */
-        .submit-section {
-            margin-top: var(--spacing-2xl);
-            padding-top: var(--spacing-2xl);
-            border-top: 2px solid var(--border-color);
-            text-align: center;
-        }
-
-        .submit-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-            padding: 16px 48px;
-            background: var(--primary-green);
+        .photo-main-badge {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            background: #2D5016;
             color: white;
-            font-size: 18px;
-            font-weight: var(--font-weight-semibold);
-            border: none;
-            border-radius: var(--radius-lg);
-            cursor: pointer;
-            transition: all var(--transition-base);
-            box-shadow: var(--shadow-md);
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
         }
 
-        .submit-btn:hover {
-            background: var(--primary-green-hover);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
+        /* Detail Photos Hint - Vinted Style */
+        .detail-hint {
+            background: #FFF9E6;
+            border: 1px solid #FFE082;
+            border-radius: 10px;
+            padding: 16px;
+            margin: 16px 20px;
         }
 
-        .submit-btn:disabled {
-            background: var(--text-light);
-            cursor: not-allowed;
-            transform: none;
+        .detail-hint-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
         }
 
-        .submit-btn svg {
+        .detail-hint-grid {
+            display: flex;
+            gap: 12px;
+        }
+
+        .detail-hint-item {
+            width: 60px;
+            height: 80px;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .detail-hint-item svg {
             width: 24px;
             height: 24px;
+            color: #999;
         }
 
-        /* Success Message */
-        .success-message {
-            display: none;
-            padding: var(--spacing-lg);
-            background: var(--accent-green);
-            border: 2px solid var(--success);
-            border-radius: var(--radius-lg);
-            margin-bottom: var(--spacing-xl);
+        .detail-hint-item span {
+            font-size: 9px;
+            color: #666;
             text-align: center;
         }
 
-        .success-message.show {
-            display: block;
+        .detail-hint-text {
+            font-size: 12px;
+            color: #666;
+            margin-top: 12px;
+            line-height: 1.5;
         }
 
-        .success-message-icon {
-            width: 48px;
-            height: 48px;
-            margin: 0 auto var(--spacing-md);
-            color: var(--success);
+        /* Smart Suggestions */
+        .smart-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
         }
 
-        .success-message h3 {
-            color: var(--success);
-            margin-bottom: var(--spacing-sm);
+        .suggestion-chip {
+            padding: 8px 14px;
+            background: #f5f5f5;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #333;
         }
 
-        /* Loading Spinner */
-        .loading-spinner {
-            display: none;
-            width: 40px;
-            height: 40px;
-            border: 4px solid var(--border-color);
-            border-top-color: var(--primary-green);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: var(--spacing-lg) auto;
+        .suggestion-chip:hover {
+            border-color: #2D5016;
+            background: #e8f5e9;
         }
 
-        .loading-spinner.show {
-            display: block;
+        .suggestion-chip.selected {
+            background: #2D5016;
+            color: white;
+            border-color: #2D5016;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Autocomplete Styles - Vinted Style */
+        /* Autocomplete Dropdown */
         .autocomplete-wrapper {
             position: relative;
         }
@@ -284,13 +306,13 @@
             left: 0;
             right: 0;
             background: white;
-            border: 2px solid var(--primary-green);
+            border: 1px solid #e0e0e0;
             border-top: none;
-            border-radius: 0 0 var(--radius-md) var(--radius-md);
+            border-radius: 0 0 8px 8px;
             max-height: 250px;
             overflow-y: auto;
             z-index: 100;
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             display: none;
         }
 
@@ -304,396 +326,1023 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            transition: background 0.15s;
+            border-bottom: 1px solid #f5f5f5;
         }
 
-        .autocomplete-item:hover,
-        .autocomplete-item.selected {
-            background: var(--accent-green);
+        .autocomplete-item:last-child {
+            border-bottom: none;
+        }
+
+        .autocomplete-item:hover {
+            background: #f9f9f9;
         }
 
         .autocomplete-item-logo {
             width: 32px;
             height: 32px;
-            border-radius: 4px;
-            background: #f5f5f5;
+            background: #f0f0f0;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
             font-weight: 700;
+            font-size: 11px;
             color: #666;
         }
 
-        .autocomplete-item-text {
+        .autocomplete-item-name {
+            font-weight: 500;
+            color: #333;
+        }
+
+        /* Price Section */
+        .price-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .price-input {
+            width: 150px;
+            padding-right: 30px;
+            text-align: right;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .price-currency {
+            position: absolute;
+            right: 12px;
+            color: #333;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .price-hint {
+            margin-top: 12px;
+            padding: 12px 16px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .price-recommendation {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .price-recommendation span {
+            font-weight: 600;
+            color: #2D5016;
+        }
+
+        /* Premium Price Checkbox */
+        .premium-price-option {
+            margin-top: 16px;
+            padding: 16px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .premium-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d0d0d0;
+            border-radius: 4px;
+            cursor: pointer;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .premium-checkbox:checked {
+            background: #2D5016;
+            border-color: #2D5016;
+        }
+
+        .premium-content h4 {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .premium-content p {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        /* Package Size - Vinted Style */
+        .package-sizes {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .package-option {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .package-option:hover {
+            border-color: #2D5016;
+        }
+
+        .package-option.selected {
+            border-color: #2D5016;
+            background: #f0fff0;
+        }
+
+        .package-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d0d0d0;
+            border-radius: 50%;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .package-option.selected .package-radio {
+            border-color: #2D5016;
+        }
+
+        .package-option.selected .package-radio::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            background: #2D5016;
+            border-radius: 50%;
+        }
+
+        .package-content {
             flex: 1;
         }
 
-        .autocomplete-item-name {
+        .package-title {
             font-weight: 600;
-            color: var(--text-primary);
+            color: #333;
+            margin-bottom: 4px;
         }
 
-        .autocomplete-item-count {
-            font-size: 12px;
-            color: var(--text-secondary);
+        .package-desc {
+            font-size: 13px;
+            color: #666;
         }
 
-        .autocomplete-section-title {
-            padding: 8px 16px;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            background: var(--bg-tertiary);
-            text-transform: uppercase;
-        }
-
-        /* Subcategory Styles */
-        .subcategory-wrapper {
-            margin-top: var(--spacing-md);
-            display: none;
-        }
-
-        .subcategory-wrapper.show {
-            display: block;
-        }
-
-        .subcategory-chips {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--spacing-sm);
-        }
-
-        .subcategory-chip {
-            padding: 8px 16px;
-            background: var(--bg-tertiary);
-            border: 2px solid var(--border-color);
-            border-radius: 20px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .subcategory-chip:hover {
-            border-color: var(--primary-green);
-        }
-
-        .subcategory-chip.selected {
-            background: var(--primary-green);
+        .package-badge {
+            padding: 4px 10px;
+            background: #E8854C;
             color: white;
-            border-color: var(--primary-green);
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
         }
 
-        /* Popular brands section */
-        .popular-brands {
+        /* Boost Option */
+        .boost-section {
+            padding: 20px;
+            background: linear-gradient(135deg, #fff5e6 0%, #fff0db 100%);
+            border-top: 1px solid #ffe4c4;
+        }
+
+        .boost-header {
             display: flex;
-            flex-wrap: wrap;
-            gap: var(--spacing-sm);
-            margin-top: var(--spacing-md);
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
         }
 
-        .popular-brand-chip {
-            padding: 6px 12px;
-            background: var(--accent-orange);
-            border: 1px solid var(--primary-orange);
-            border-radius: 16px;
+        .boost-title {
+            font-weight: 700;
+            color: #E8854C;
+            font-size: 15px;
+        }
+
+        .boost-price {
+            font-weight: 700;
+            color: #333;
+        }
+
+        .boost-desc {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .boost-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .boost-switch {
+            width: 48px;
+            height: 26px;
+            background: #d0d0d0;
+            border-radius: 13px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .boost-switch.active {
+            background: #2D5016;
+        }
+
+        .boost-switch::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: left 0.2s;
+        }
+
+        .boost-switch.active::after {
+            left: 25px;
+        }
+
+        /* Action Buttons - Vinted Style */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            padding: 0;
+        }
+
+        .btn-draft {
+            flex: 1;
+            padding: 16px 24px;
+            background: white;
+            border: 2px solid #2D5016;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #2D5016;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-draft:hover {
+            background: #f0fff0;
+        }
+
+        .btn-publish {
+            flex: 2;
+            padding: 16px 24px;
+            background: #2D5016;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-publish:hover {
+            background: #3d6b1e;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(45, 80, 22, 0.3);
+        }
+
+        .btn-publish:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Feedback Button */
+        .feedback-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 16px;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
             font-size: 13px;
             cursor: pointer;
-            transition: all 0.2s;
-            color: var(--primary-orange);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
-        .popular-brand-chip:hover {
-            background: var(--primary-orange);
-            color: white;
-        }
-
-        /* Responsive */
+        /* Mobile Responsive */
         @media (max-width: 768px) {
-            .inserieren-container {
-                margin: 20px;
-                padding: var(--spacing-lg);
+            .verkaufen-page {
+                padding: 16px;
             }
 
             .form-row {
-                grid-template-columns: 1fr;
+                flex-direction: column;
+                gap: 8px;
             }
 
-            .inserieren-header h1 {
-                font-size: 24px;
+            .form-row-label {
+                width: 100%;
+                padding-top: 0;
+                font-weight: 600;
+                color: #333;
+            }
+
+            .photo-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .photo-slot.main {
+                grid-column: span 1;
+                grid-row: span 1;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn-draft,
+            .btn-publish {
+                flex: none;
+            }
+
+            .detail-hint-grid {
+                flex-wrap: wrap;
+            }
+
+            .package-option {
+                flex-wrap: wrap;
             }
         }
     </style>
 </head>
 <body>
-    <!-- News Banner at Top -->
-    <div class="news-banner" style="position: sticky; top: 0; z-index: 999;">
-        <div class="news-slider" id="newsSlider">
-            <div class="news-item" data-link="co2-impact.html">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
-                </svg>
-                <span>🌍 248.5 Tonnen CO₂ gespart - Jeder Kauf zählt für unseren Planeten!</span>
-            </div>
-            <div class="news-item" data-link="/campaign/3for2-shipping">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
-                </svg>
-                <span>📦 2 Produkte kaufen, 3. Produkt Versand GRATIS!</span>
-            </div>
-            <div class="news-item" data-link="/leaderboard">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
-                </svg>
-                <span>🏆 CO₂ Rangliste - Wer spart am meisten? Klick für die Top 100!</span>
-            </div>
-            <div class="news-item" data-link="/trees">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2v20M5 9l7-7 7 7M12 22l-3-3h6l-3 3z"></path>
-                </svg>
-                <span>🌳 8,234 Bäume gepflanzt - Dein Beitrag macht den Unterschied!</span>
-            </div>
-            <div class="news-item" data-link="/sale">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <path d="M12 6v6l4 2" stroke="white" fill="none"></path>
-                </svg>
-                <span>🔥 Sale: 780 neue Produkte - Bis zu 70% Rabatt diese Woche!</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Header -->
-    <header class="header" style="position: sticky; top: 40px; z-index: 998; background: linear-gradient(135deg, #F5A855 0%, #E8854C 50%, #C46A3D 100%); box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+    <!-- Header - Sadeleştirilmiş -->
+    <header class="header" style="position: sticky; top: 0; z-index: 998;">
         <div class="header-container">
-            <!-- Left Side: Logo -->
-            <a href="index.html" style="text-decoration: none; display: flex; align-items: center;">
-                <img src="images/logo.png" alt="CSS Berlin - Climate Smart Solutions" style="height: 65px; width: auto;">
+            <a href="index.html" style="text-decoration: none; display: flex; flex-direction: column; align-items: stretch; gap: 0; width: 200px;">
+                <div style="font-size: 36px; font-weight: 800; color: white; letter-spacing: 2px; text-align: center;">CSS Berlin</div>
+                <div style="font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.9); letter-spacing: 1px; text-transform: uppercase; text-align: center;">Climate Smart Solutions</div>
             </a>
-
-            <!-- Right Actions -->
-            <div class="header-actions" style="gap: 8px; margin-left: auto;">
-                <a href="inserieren.html" class="inserieren-btn" title="Artikel inserieren" style="padding: 8px 16px;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 5v14M5 12h14"></path>
-                    </svg>
-                    <span>Inserieren</span>
-                </a>
-
-                <button class="icon-btn" title="Benachrichtigungen" style="width: 40px; height: 40px; padding: 8px;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                    </svg>
-                    <span class="notification-badge" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">2</span>
-                </button>
-
-                <button class="icon-btn" title="Verhandlungen" onclick="window.location.href='messages.html'" style="width: 40px; height: 40px; padding: 8px;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                        <path d="M8 10h.01M12 10h.01M16 10h.01"></path>
-                    </svg>
-                    <span class="negotiation-count" id="negotiationCount" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">0</span>
-                </button>
-
-                <button class="icon-btn" id="wishlistBtn" title="Wunschliste" onclick="window.location.href='wunschliste.html'" style="width: 40px; height: 40px; padding: 8px;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                    </svg>
-                    <span class="wishlist-count" id="wishlistCount" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">0</span>
-                </button>
-
-                <button class="icon-btn" title="Warenkorb" onclick="window.location.href='warenkorb.html'" style="width: 40px; height: 40px; padding: 8px;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <circle cx="9" cy="21" r="1"></circle>
-                        <circle cx="20" cy="21" r="1"></circle>
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                    </svg>
-                    <span class="cart-count" id="cartCount" style="top: 2px; right: 2px; width: 18px; height: 18px; font-size: 11px;">0</span>
-                </button>
-
-                <a href="login.html" class="user-btn" style="padding: 8px 14px; gap: 6px;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <div class="header-actions" style="gap: 12px; margin-left: auto; display: flex; align-items: center;">
+                <button onclick="authGate.showLoginModal(null, null, 'login')" class="header-btn auth-btn" style="padding: 10px 18px; background: #E8854C; color: white; border-radius: 8px; display: flex; align-items: center; gap: 8px; font-weight: 600; text-decoration: none; font-size: 14px; transition: all 0.3s ease; border: none; cursor: pointer;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
                     </svg>
-                    <span style="font-size: 14px;">Anmelden</span>
-                </a>
-
-                <span class="header-divider" style="padding: 0 4px; font-size: 16px; color: #999; font-weight: 300;">/</span>
-
-                <a href="registrieren.html" class="register-btn" style="padding: 8px 14px; gap: 6px;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    Anmelden
+                </button>
+                <button onclick="authGate.showLoginModal(null, null, 'register')" class="header-btn auth-btn" style="padding: 10px 18px; background: #E8854C; color: white; border-radius: 8px; display: flex; align-items: center; gap: 8px; font-weight: 600; text-decoration: none; font-size: 14px; transition: all 0.3s ease; border: none; cursor: pointer;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
                         <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                         <circle cx="8.5" cy="7" r="4"></circle>
                         <line x1="20" y1="8" x2="20" y2="14"></line>
                         <line x1="23" y1="11" x2="17" y2="11"></line>
                     </svg>
-                    <span style="font-size: 14px;">Registrieren</span>
-                </a>
+                    Registrieren
+                </button>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <div class="inserieren-container">
-        <!-- Header -->
-        <div class="inserieren-header">
-            <h1>Artikel inserieren</h1>
-            <p>Verkaufen Sie Ihre Artikel schnell und einfach auf CSS Berlin</p>
-        </div>
-
-        <!-- Success Message -->
-        <div class="success-message" id="successMessage">
-            <svg class="success-message-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
-            <h3>Artikel erfolgreich eingereicht!</h3>
-            <p>Ihr Artikel wird bearbeitet und in Kürze veröffentlicht.</p>
-        </div>
-
-        <!-- Form -->
-        <form id="inserierenForm">
-            <!-- Product Info Section -->
-            <div class="form-section">
-                <h2 class="form-section-title">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                    </svg>
-                    Produktinformationen
-                </h2>
-
-                <div class="form-group">
-                    <label class="form-label required" for="productName">Produktname</label>
-                    <input type="text" id="productName" class="form-input" placeholder="z.B. Nike Air Max 90" required>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label required" for="brand">Marke</label>
-                        <div class="autocomplete-wrapper">
-                            <input type="text" id="brand" class="form-input" placeholder="Marke eingeben..." autocomplete="off" required>
-                            <div class="autocomplete-dropdown" id="brandDropdown"></div>
-                        </div>
-                        <div class="popular-brands" id="popularBrands">
-                            <span class="popular-brand-chip" data-brand="Nike">Nike</span>
-                            <span class="popular-brand-chip" data-brand="Adidas">Adidas</span>
-                            <span class="popular-brand-chip" data-brand="Zara">Zara</span>
-                            <span class="popular-brand-chip" data-brand="H&M">H&M</span>
-                            <span class="popular-brand-chip" data-brand="Tommy Hilfiger">Tommy Hilfiger</span>
-                            <span class="popular-brand-chip" data-brand="Ralph Lauren">Ralph Lauren</span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label required" for="category">Kategorie</label>
-                        <select id="category" class="form-select" required>
-                            <option value="">Wählen Sie eine Kategorie</option>
-                            <option value="Herren">Herren</option>
-                            <option value="Damen">Damen</option>
-                            <option value="Kinder">Kinder</option>
-                            <option value="Schuhe">Schuhe</option>
-                            <option value="Accessoires">Accessoires</option>
-                            <option value="Sportbekleidung">Sportbekleidung</option>
-                            <option value="Taschen">Taschen</option>
-                            <option value="Sonstiges">Sonstiges</option>
-                        </select>
-                        <!-- Dynamic Subcategories -->
-                        <div class="subcategory-wrapper" id="subcategoryWrapper">
-                            <label class="form-label">Unterkategorie</label>
-                            <div class="subcategory-chips" id="subcategoryChips"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label required" for="condition">Zustand</label>
-                        <select id="condition" class="form-select" required>
-                            <option value="">Wählen Sie den Zustand</option>
-                            <option value="Neu">Neu (mit Etikett)</option>
-                            <option value="Sehr gut">Sehr gut</option>
-                            <option value="Gut">Gut</option>
-                            <option value="Akzeptabel">Akzeptabel</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label required" for="size">Größe</label>
-                        <input type="text" id="size" class="form-input" placeholder="z.B. M, L, 42" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label required" for="price">Preis (€)</label>
-                    <input type="number" id="price" class="form-input" placeholder="0.00" step="0.01" min="0" required>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="description">Beschreibung (optional)</label>
-                    <textarea id="description" class="form-textarea" placeholder="Beschreiben Sie Ihr Produkt... (wird automatisch optimiert)"></textarea>
-                </div>
-            </div>
-
-            <!-- Images Section -->
-            <div class="form-section">
-                <h2 class="form-section-title">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                        <polyline points="21 15 16 10 5 21"></polyline>
-                    </svg>
-                    Produktbilder
-                </h2>
-
-                <div class="image-upload-area" id="imageUploadArea">
-                    <svg class="image-upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="17 8 12 3 7 8"></polyline>
-                        <line x1="12" y1="3" x2="12" y2="15"></line>
-                    </svg>
-                    <p class="image-upload-text">Bilder hier ablegen oder klicken zum Hochladen</p>
-                    <p class="image-upload-hint">PNG, JPG oder WEBP (max. 5MB pro Bild)</p>
-                    <input type="file" id="imageUploadInput" class="image-upload-input" accept="image/*" multiple>
-                </div>
-
-                <div class="image-preview-grid" id="imagePreviewGrid"></div>
-            </div>
-
-            <!-- Submit Section -->
-            <div class="submit-section">
-                <button type="submit" class="submit-btn" id="submitBtn">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                    </svg>
-                    Artikel einreichen
+    <!-- User Dashboard Bar -->
+    <div class="user-dashboard-bar">
+        <div class="user-dashboard-container">
+            <div class="dashboard-actions">
+                <button class="dashboard-icon-btn" title="Benachrichtigungen">
+                    <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    <span class="label">Benachrichtigungen</span>
+                    <span class="badge">2</span>
                 </button>
-                <div class="loading-spinner" id="loadingSpinner"></div>
+                <a href="pazarlik.html" class="dashboard-icon-btn" title="Verhandlungen">
+                    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    <span class="label">Verhandlungen</span>
+                    <span class="badge" id="negotiationCount">0</span>
+                </a>
+                <a href="wunschliste.html" class="dashboard-icon-btn" title="Wunschliste">
+                    <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    <span class="label">Wunschliste</span>
+                    <span class="badge" id="wishlistCount">0</span>
+                </a>
+                <a href="warenkorb.html" class="dashboard-icon-btn" title="Warenkorb">
+                    <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                    <span class="label">Warenkorb</span>
+                    <span class="badge" id="cartCount">0</span>
+                </a>
             </div>
-        </form>
+            <div class="dashboard-right">
+                <a href="inserieren.html" class="dashboard-inserieren-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"></path></svg>
+                    <span>Inserieren</span>
+                </a>
+                <div class="dashboard-divider"></div>
+                <div class="dashboard-lang-selector">
+                    <button onclick="setLanguage('de')" id="lang-de" class="dashboard-lang-btn active">DE</button>
+                    <button onclick="setLanguage('en')" id="lang-en" class="dashboard-lang-btn">EN</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-bottom">
-                <p>&copy; 2025 CSS Berlin. Alle Rechte vorbehalten.</p>
-                <div class="footer-links-bottom">
-                    <a href="impressum.html">Impressum</a>
-                    <a href="datenschutz.html">Datenschutz</a>
-                    <a href="agb.html">AGB</a>
+    <div class="verkaufen-page">
+        <h1 class="page-title">Artikel verkaufen</h1>
+
+        <!-- Photo Upload Card -->
+        <div class="form-card">
+            <div class="photo-upload-section">
+                <div class="photo-grid" id="photoGrid">
+                    <div class="photo-slot main" data-index="0" onclick="triggerPhotoUpload(0)">
+                        <div class="photo-slot-add">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            <span>Fotos hinzufügen</span>
+                        </div>
+                    </div>
+                    <div class="photo-slot" data-index="1" onclick="triggerPhotoUpload(1)">
+                        <div class="photo-slot-add">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="photo-slot" data-index="2" onclick="triggerPhotoUpload(2)">
+                        <div class="photo-slot-add">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="photo-slot" data-index="3" onclick="triggerPhotoUpload(3)">
+                        <div class="photo-slot-add">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="photo-slot" data-index="4" onclick="triggerPhotoUpload(4)">
+                        <div class="photo-slot-add">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                        </div>
+                    </div>
                 </div>
+                <input type="file" id="photoInput" accept="image/*" multiple style="display: none;" onchange="handlePhotoUpload(event)">
+            </div>
+
+            <!-- Detail Photo Hint -->
+            <div class="detail-hint">
+                <div class="detail-hint-title">Vergewissere dich, dass du Fotos der folgenden Details hinzugefügt hast:</div>
+                <div class="detail-hint-grid">
+                    <div class="detail-hint-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                            <path d="M7 8h4M7 12h6M7 16h4"></path>
+                        </svg>
+                        <span>Etikett</span>
+                    </div>
+                    <div class="detail-hint-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="9"></circle>
+                            <path d="M12 6v6l4 2"></path>
+                        </svg>
+                        <span>Logo</span>
+                    </div>
+                    <div class="detail-hint-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                            <path d="M2 17l10 5 10-5"></path>
+                        </svg>
+                        <span>Material</span>
+                    </div>
+                    <div class="detail-hint-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+                        </svg>
+                        <span>Mängel</span>
+                    </div>
+                </div>
+                <p class="detail-hint-text">
+                    Genauere Fotos der folgenden Details hochladen: Etikett, Logo, Seriennummer. Artikel automatisch zu einem höheren Preis verkauft werden können, artikelzustand ist zu so gut wie neu erkennbar sein.
+                </p>
+            </div>
+        </div>
+
+        <!-- Title & Description Card -->
+        <div class="form-card">
+            <div class="form-row">
+                <div class="form-row-label">Titel</div>
+                <div class="form-row-content">
+                    <input type="text" id="productTitle" class="vinted-input" placeholder="z.B. adidas superstar 45">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-row-label">Beschreibe deinen Artikel</div>
+                <div class="form-row-content">
+                    <textarea id="productDesc" class="vinted-textarea" placeholder="z.B. nur wenige Male getragen, guter Zustand..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category & Brand Card -->
+        <div class="form-card">
+            <div class="form-row">
+                <div class="form-row-label">Kategorie</div>
+                <div class="form-row-content">
+                    <select id="category" class="vinted-select">
+                        <option value="">Kategorie wählen</option>
+                        <option value="sneaker">Sneaker</option>
+                        <option value="jacken">Jacken & Mäntel</option>
+                        <option value="jeans">Jeans & Hosen</option>
+                        <option value="shirts">T-Shirts & Tops</option>
+                        <option value="pullover">Pullover & Hoodies</option>
+                        <option value="kleider">Kleider & Röcke</option>
+                        <option value="taschen">Taschen</option>
+                        <option value="accessoires">Accessoires</option>
+                        <option value="sportbekleidung">Sportbekleidung</option>
+                    </select>
+                    <div class="smart-suggestions" id="categorySuggestions" style="display: none;">
+                        <!-- Dynamic suggestions based on title -->
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-row-label">Marke</div>
+                <div class="form-row-content">
+                    <div class="autocomplete-wrapper">
+                        <input type="text" id="brand" class="vinted-input" placeholder="Marke eingeben" autocomplete="off">
+                        <div class="autocomplete-dropdown" id="brandDropdown"></div>
+                    </div>
+                    <div class="smart-suggestions" id="brandSuggestions">
+                        <span class="suggestion-chip" data-brand="adidas">adidas</span>
+                        <span class="suggestion-chip" data-brand="Nike">Nike</span>
+                        <span class="suggestion-chip" data-brand="Zara">Zara</span>
+                        <span class="suggestion-chip" data-brand="H&M">H&M</span>
+                        <span class="suggestion-chip" data-brand="Tommy Hilfiger">Tommy Hilfiger</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Size, Condition, Color Card -->
+        <div class="form-card">
+            <div class="form-row">
+                <div class="form-row-label">Größe</div>
+                <div class="form-row-content">
+                    <input type="text" id="size" class="vinted-input" placeholder="z.B. M, L, 42">
+                    <div class="smart-suggestions" id="sizeSuggestions">
+                        <span class="suggestion-chip" data-size="XS">XS</span>
+                        <span class="suggestion-chip" data-size="S">S</span>
+                        <span class="suggestion-chip" data-size="M">M</span>
+                        <span class="suggestion-chip" data-size="L">L</span>
+                        <span class="suggestion-chip" data-size="XL">XL</span>
+                        <span class="suggestion-chip" data-size="XXL">XXL</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-row-label">Zustand</div>
+                <div class="form-row-content">
+                    <select id="condition" class="vinted-select">
+                        <option value="">Zustand wählen</option>
+                        <option value="neu_etikett">Neu mit Etikett</option>
+                        <option value="neu">Neu ohne Etikett</option>
+                        <option value="sehr_gut">Sehr gut</option>
+                        <option value="gut">Gut</option>
+                        <option value="befriedigend">Befriedigend</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-row-label">Farbe</div>
+                <div class="form-row-content">
+                    <select id="color" class="vinted-select">
+                        <option value="">Farbe wählen</option>
+                        <option value="schwarz">Schwarz</option>
+                        <option value="weiß">Weiß</option>
+                        <option value="grau">Grau</option>
+                        <option value="blau">Blau</option>
+                        <option value="rot">Rot</option>
+                        <option value="grün">Grün</option>
+                        <option value="gelb">Gelb</option>
+                        <option value="braun">Braun</option>
+                        <option value="beige">Beige</option>
+                        <option value="pink">Pink</option>
+                        <option value="lila">Lila</option>
+                        <option value="orange">Orange</option>
+                        <option value="mehrfarbig">Mehrfarbig</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-row-label">Material (optional)</div>
+                <div class="form-row-content">
+                    <input type="text" id="material" class="vinted-input" placeholder="z.B. Baumwolle, Leder, Polyester">
+                </div>
+            </div>
+        </div>
+
+        <!-- Price Card -->
+        <div class="form-card">
+            <div class="form-row">
+                <div class="form-row-label">Preis</div>
+                <div class="form-row-content">
+                    <div class="price-input-wrapper">
+                        <input type="number" id="price" class="vinted-input price-input" placeholder="0,00" step="0.01" min="0">
+                        <span class="price-currency">€</span>
+                    </div>
+                    <div class="price-hint">
+                        <div>Retail-Rabatte von bis zu 80 % sind üblich. <a href="#" style="color: #2D5016;">Rabatt-Berechnungen bearbeiten</a></div>
+                        <div class="price-recommendation">
+                            <span>8,00 €</span> - <span>27,00 €</span>
+                        </div>
+                    </div>
+                    <div class="premium-price-option">
+                        <input type="checkbox" id="premiumPrice" class="premium-checkbox">
+                        <div class="premium-content">
+                            <h4>Gehobenes Preisniveau</h4>
+                            <p>Guter Preis für Artikel mit exzellenter Qualität und zum Steigern deines Gewinns.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Package Size Card -->
+        <div class="form-card">
+            <div class="form-card-header">Bitte wähle eine Paketgrößenoption:</div>
+            <div class="form-card-body" style="padding: 16px 20px;">
+                <div class="package-sizes">
+                    <div class="package-option" data-size="klein" onclick="selectPackage(this)">
+                        <div class="package-radio"></div>
+                        <div class="package-content">
+                            <div class="package-title">Klein</div>
+                            <div class="package-desc">Für Artikel, die in einen großen Umschlag passen.</div>
+                        </div>
+                    </div>
+                    <div class="package-option selected" data-size="mittel" onclick="selectPackage(this)">
+                        <div class="package-radio"></div>
+                        <div class="package-content">
+                            <div class="package-title">Mittel</div>
+                            <div class="package-desc">Für Artikel, die in einen Schuhkarton passen.</div>
+                        </div>
+                        <span class="package-badge">Empfohlen</span>
+                    </div>
+                    <div class="package-option" data-size="groß" onclick="selectPackage(this)">
+                        <div class="package-radio"></div>
+                        <div class="package-content">
+                            <div class="package-title">Groß</div>
+                            <div class="package-desc">Für Artikel, die in einen Umzugskarton passen.</div>
+                        </div>
+                    </div>
+                </div>
+                <p style="font-size: 12px; color: #666; margin-top: 12px;">Für eine Versandoption wird immer ein Maßen.</p>
+            </div>
+        </div>
+
+        <!-- Boost Option -->
+        <div class="form-card">
+            <div class="boost-section">
+                <div class="boost-header">
+                    <span class="boost-title">Pushen und schneller verkaufen</span>
+                    <span class="boost-price">ab 1,95 €</span>
+                </div>
+                <p class="boost-desc">Dein Artikel geht sofort ganz oben in der Suche und steigert die Verkaufschancen bis zu 20x.</p>
+                <div class="boost-toggle">
+                    <div class="boost-switch" id="boostSwitch" onclick="toggleBoost()"></div>
+                    <span style="font-size: 14px; color: #333;">Aktivieren</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn-draft" onclick="saveDraft()">Entwurf speichern</button>
+            <button class="btn-publish" id="publishBtn" onclick="publishArticle()">Hochladen</button>
+        </div>
+    </div>
+
+    <!-- Feedback Button -->
+    <button class="feedback-btn" onclick="showFeedback()">Feedback geben</button>
+
+    <!-- Footer -->
+    <footer class="footer" style="background: linear-gradient(135deg, #FF8C42 0%, #2D5016 100%); padding: 0; margin-top: 40px;">
+        <div style="max-width: 1400px; margin: 0 auto; padding: 24px 32px;">
+            <div style="text-align: center; color: rgba(255,255,255,0.8); font-size: 12px;">
+                © 2025 CSS Berlin GmbH
             </div>
         </div>
     </footer>
 
-    <script src="inserieren.js"></script>    <!-- API Configuration (MUST load first) -->
     <script src="api-config.js"></script>
-    <script src="api-client.js"></script>
+    <script src="auth-gate.js"></script>
 
+    <script>
+        // Photo Management
+        let uploadedPhotos = [];
+        let currentPhotoIndex = 0;
 
+        function triggerPhotoUpload(index) {
+            currentPhotoIndex = index;
+            document.getElementById('photoInput').click();
+        }
+
+        function handlePhotoUpload(event) {
+            const files = event.target.files;
+            const grid = document.getElementById('photoGrid');
+
+            Array.from(files).forEach((file, i) => {
+                if (uploadedPhotos.length >= 5) return;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const targetIndex = uploadedPhotos.length;
+                    uploadedPhotos.push({
+                        file: file,
+                        url: e.target.result
+                    });
+
+                    const slot = grid.children[targetIndex];
+                    slot.innerHTML = `
+                        <img src="${e.target.result}" alt="Foto ${targetIndex + 1}">
+                        <button class="photo-remove" onclick="removePhoto(event, ${targetIndex})">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                        ${targetIndex === 0 ? '<span class="photo-main-badge">Hauptbild</span>' : ''}
+                    `;
+                    slot.classList.add('has-image');
+                };
+                reader.readAsDataURL(file);
+            });
+
+            event.target.value = '';
+        }
+
+        function removePhoto(event, index) {
+            event.stopPropagation();
+            uploadedPhotos.splice(index, 1);
+            renderPhotoGrid();
+        }
+
+        function renderPhotoGrid() {
+            const grid = document.getElementById('photoGrid');
+
+            for (let i = 0; i < 5; i++) {
+                const slot = grid.children[i];
+
+                if (uploadedPhotos[i]) {
+                    slot.innerHTML = `
+                        <img src="${uploadedPhotos[i].url}" alt="Foto ${i + 1}">
+                        <button class="photo-remove" onclick="removePhoto(event, ${i})">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                        ${i === 0 ? '<span class="photo-main-badge">Hauptbild</span>' : ''}
+                    `;
+                    slot.classList.add('has-image');
+                } else {
+                    slot.innerHTML = `
+                        <div class="photo-slot-add">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            ${i === 0 ? '<span>Fotos hinzufügen</span>' : ''}
+                        </div>
+                    `;
+                    slot.classList.remove('has-image');
+                }
+            }
+        }
+
+        // Brand Autocomplete
+        const brands = [
+            'adidas', 'Nike', 'Puma', 'Zara', 'H&M', 'Tommy Hilfiger', 'Ralph Lauren',
+            'Gucci', 'Prada', 'Louis Vuitton', 'Calvin Klein', 'Levi\'s', 'Diesel',
+            'The North Face', 'Patagonia', 'Carhartt', 'Champion', 'Converse', 'Vans',
+            'New Balance', 'Reebok', 'Under Armour', 'Fila', 'Kappa', 'Lacoste',
+            'Hugo Boss', 'Armani', 'Versace', 'Burberry', 'Michael Kors', 'Coach'
+        ];
+
+        const brandInput = document.getElementById('brand');
+        const brandDropdown = document.getElementById('brandDropdown');
+
+        brandInput.addEventListener('input', function() {
+            const value = this.value.toLowerCase();
+            if (value.length < 1) {
+                brandDropdown.classList.remove('show');
+                return;
+            }
+
+            const matches = brands.filter(b => b.toLowerCase().includes(value));
+
+            if (matches.length > 0) {
+                brandDropdown.innerHTML = matches.slice(0, 8).map(brand => `
+                    <div class="autocomplete-item" onclick="selectBrand('${brand}')">
+                        <div class="autocomplete-item-logo">${brand.substring(0, 2).toUpperCase()}</div>
+                        <span class="autocomplete-item-name">${brand}</span>
+                    </div>
+                `).join('');
+                brandDropdown.classList.add('show');
+            } else {
+                brandDropdown.classList.remove('show');
+            }
+        });
+
+        brandInput.addEventListener('blur', function() {
+            setTimeout(() => brandDropdown.classList.remove('show'), 200);
+        });
+
+        function selectBrand(brand) {
+            brandInput.value = brand;
+            brandDropdown.classList.remove('show');
+
+            // Update suggestion chips
+            document.querySelectorAll('#brandSuggestions .suggestion-chip').forEach(chip => {
+                chip.classList.toggle('selected', chip.dataset.brand === brand);
+            });
+        }
+
+        // Brand Suggestion Chips
+        document.querySelectorAll('#brandSuggestions .suggestion-chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                selectBrand(this.dataset.brand);
+            });
+        });
+
+        // Size Suggestion Chips
+        document.querySelectorAll('#sizeSuggestions .suggestion-chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                document.getElementById('size').value = this.dataset.size;
+                document.querySelectorAll('#sizeSuggestions .suggestion-chip').forEach(c => {
+                    c.classList.toggle('selected', c === this);
+                });
+            });
+        });
+
+        // Package Selection
+        function selectPackage(element) {
+            document.querySelectorAll('.package-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            element.classList.add('selected');
+        }
+
+        // Boost Toggle
+        function toggleBoost() {
+            const boostSwitch = document.getElementById('boostSwitch');
+            boostSwitch.classList.toggle('active');
+        }
+
+        // Smart Category Suggestions based on Title
+        const titleInput = document.getElementById('productTitle');
+        titleInput.addEventListener('input', function() {
+            const title = this.value.toLowerCase();
+            const categorySuggestions = document.getElementById('categorySuggestions');
+            const categorySelect = document.getElementById('category');
+
+            // Smart category detection
+            if (title.includes('sneaker') || title.includes('schuh') || title.includes('air max') || title.includes('jordan')) {
+                categorySelect.value = 'sneaker';
+            } else if (title.includes('jacke') || title.includes('mantel') || title.includes('coat')) {
+                categorySelect.value = 'jacken';
+            } else if (title.includes('jeans') || title.includes('hose') || title.includes('pants')) {
+                categorySelect.value = 'jeans';
+            } else if (title.includes('shirt') || title.includes('top') || title.includes('tshirt')) {
+                categorySelect.value = 'shirts';
+            } else if (title.includes('pullover') || title.includes('hoodie') || title.includes('sweater')) {
+                categorySelect.value = 'pullover';
+            } else if (title.includes('tasche') || title.includes('bag')) {
+                categorySelect.value = 'taschen';
+            }
+
+            // Smart brand detection from title
+            brands.forEach(brand => {
+                if (title.includes(brand.toLowerCase())) {
+                    selectBrand(brand);
+                }
+            });
+        });
+
+        // Save Draft
+        function saveDraft() {
+            const draft = collectFormData();
+            localStorage.setItem('cssberlin_draft', JSON.stringify(draft));
+            alert('Entwurf wurde gespeichert!');
+        }
+
+        // Publish Article
+        function publishArticle() {
+            const formData = collectFormData();
+
+            // Validation
+            if (uploadedPhotos.length === 0) {
+                alert('Bitte fügen Sie mindestens ein Foto hinzu.');
+                return;
+            }
+            if (!formData.title) {
+                alert('Bitte geben Sie einen Titel ein.');
+                return;
+            }
+            if (!formData.category) {
+                alert('Bitte wählen Sie eine Kategorie.');
+                return;
+            }
+            if (!formData.price || formData.price <= 0) {
+                alert('Bitte geben Sie einen gültigen Preis ein.');
+                return;
+            }
+
+            const btn = document.getElementById('publishBtn');
+            btn.disabled = true;
+            btn.textContent = 'Wird hochgeladen...';
+
+            // Simulate upload
+            setTimeout(() => {
+                // Save to localStorage for demo
+                const products = JSON.parse(localStorage.getItem('cssberlin_user_products') || '[]');
+                formData.id = 'prod_' + Date.now();
+                formData.createdAt = new Date().toISOString();
+                formData.status = 'active';
+                formData.images = uploadedPhotos.map(p => p.url);
+                products.push(formData);
+                localStorage.setItem('cssberlin_user_products', JSON.stringify(products));
+
+                // Clear draft
+                localStorage.removeItem('cssberlin_draft');
+
+                // Redirect to success or product page
+                alert('Artikel wurde erfolgreich hochgeladen!');
+                window.location.href = 'mein-konto.html';
+            }, 2000);
+        }
+
+        function collectFormData() {
+            return {
+                title: document.getElementById('productTitle').value,
+                description: document.getElementById('productDesc').value,
+                category: document.getElementById('category').value,
+                brand: document.getElementById('brand').value,
+                size: document.getElementById('size').value,
+                condition: document.getElementById('condition').value,
+                color: document.getElementById('color').value,
+                material: document.getElementById('material').value,
+                price: parseFloat(document.getElementById('price').value) || 0,
+                premiumPrice: document.getElementById('premiumPrice').checked,
+                packageSize: document.querySelector('.package-option.selected')?.dataset.size || 'mittel',
+                boost: document.getElementById('boostSwitch').classList.contains('active')
+            };
+        }
+
+        // Load Draft on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const draft = localStorage.getItem('cssberlin_draft');
+            if (draft) {
+                const data = JSON.parse(draft);
+                document.getElementById('productTitle').value = data.title || '';
+                document.getElementById('productDesc').value = data.description || '';
+                document.getElementById('category').value = data.category || '';
+                document.getElementById('brand').value = data.brand || '';
+                document.getElementById('size').value = data.size || '';
+                document.getElementById('condition').value = data.condition || '';
+                document.getElementById('color').value = data.color || '';
+                document.getElementById('material').value = data.material || '';
+                document.getElementById('price').value = data.price || '';
+                document.getElementById('premiumPrice').checked = data.premiumPrice || false;
+            }
+        });
+
+        function showFeedback() {
+            alert('Feedback-Formular wird bald verfügbar sein!');
+        }
+    </script>
 </body>
 </html>
