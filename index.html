@@ -462,21 +462,24 @@
 
             if (!deBtn || !enBtn) return;
 
-            // Remove active class from both
-            deBtn.classList.remove('active');
-            enBtn.classList.remove('active');
-
-            // Add active class to selected language
+            // Update button styles based on selection
             if (lang === 'de') {
-                deBtn.classList.add('active');
+                deBtn.style.background = '#E8854C';
+                deBtn.style.color = 'white';
+                enBtn.style.background = '#f5f5f5';
+                enBtn.style.color = '#333';
             } else {
-                enBtn.classList.add('active');
+                enBtn.style.background = '#E8854C';
+                enBtn.style.color = 'white';
+                deBtn.style.background = '#f5f5f5';
+                deBtn.style.color = '#333';
             }
 
             // Save preference and update document language
             localStorage.setItem('cssberlin_lang', lang);
             document.documentElement.lang = lang;
 
+            // TODO: Implement actual text translation here
             console.log('Language changed to:', lang);
         }
 
