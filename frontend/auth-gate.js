@@ -174,12 +174,47 @@ class AuthGate {
                             </svg>
                             Mit Google fortfahren
                         </button>
-                        <button class="oauth-btn apple-btn" onclick="authGate.loginWithApple()">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+                        <button class="oauth-btn magic-link-btn" onclick="authGate.showMagicLinkForm()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
                             </svg>
-                            Mit Apple fortfahren
+                            Per E-Mail-Link anmelden
                         </button>
+                    </div>
+
+                    <!-- Magic Link Form (hidden by default) -->
+                    <div id="magic-link-form-container" class="magic-link-form" style="display: none;">
+                        <div class="magic-link-header">
+                            <button type="button" class="magic-link-back" onclick="authGate.hideMagicLinkForm()">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="15 18 9 12 15 6"></polyline>
+                                </svg>
+                            </button>
+                            <h3>Anmeldung per E-Mail</h3>
+                        </div>
+                        <p class="magic-link-desc">Geben Sie Ihre E-Mail ein und wir senden Ihnen einen sicheren Anmelde-Link.</p>
+                        <form id="magic-link-form" onsubmit="authGate.sendMagicLink(event); return false;">
+                            <div class="form-group">
+                                <label for="magic-email">E-Mail-Adresse</label>
+                                <input type="email" id="magic-email" placeholder="ihre@email.de" required>
+                            </div>
+                            <button type="submit" class="btn-primary magic-link-submit">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 2L11 13"></path>
+                                    <path d="M22 2L15 22L11 13L2 9L22 2Z"></path>
+                                </svg>
+                                <span>Link senden</span>
+                            </button>
+                        </form>
+                        <div class="magic-link-info">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M12 16v-4"></path>
+                                <path d="M12 8h.01"></path>
+                            </svg>
+                            <span>Der Link ist 10 Minuten gültig und kann nur einmal verwendet werden.</span>
+                        </div>
                     </div>
 
                     <!-- Divider -->
@@ -603,10 +638,124 @@ class AuthGate {
     }
 
     /**
-     * Apple OAuth login (placeholder)
+     * Show Magic Link form
      */
-    loginWithApple() {
-        this.showError('Apple Sign-In kommt bald!');
+    showMagicLinkForm() {
+        const modal = document.getElementById('auth-gate-modal');
+        if (!modal) return;
+
+        // Hide other sections
+        modal.querySelector('.auth-gate-oauth').style.display = 'none';
+        modal.querySelector('.oauth-divider').style.display = 'none';
+        modal.querySelector('.auth-gate-tabs').style.display = 'none';
+        modal.querySelectorAll('.auth-gate-form').forEach(f => f.style.display = 'none');
+        modal.querySelector('.auth-gate-footer').style.display = 'none';
+
+        // Show Magic Link form
+        const magicForm = modal.querySelector('#magic-link-form-container');
+        if (magicForm) {
+            magicForm.style.display = 'block';
+        }
+
+        // Update header
+        const headerTitle = modal.querySelector('.auth-gate-header h2');
+        if (headerTitle) {
+            headerTitle.textContent = 'Per E-Mail anmelden';
+        }
+
+        // Focus email input
+        setTimeout(() => {
+            const emailInput = modal.querySelector('#magic-email');
+            if (emailInput) emailInput.focus();
+        }, 100);
+    }
+
+    /**
+     * Hide Magic Link form
+     */
+    hideMagicLinkForm() {
+        const modal = document.getElementById('auth-gate-modal');
+        if (!modal) return;
+
+        // Show other sections
+        modal.querySelector('.auth-gate-oauth').style.display = 'flex';
+        modal.querySelector('.oauth-divider').style.display = 'block';
+        modal.querySelector('.auth-gate-tabs').style.display = 'flex';
+        modal.querySelector('.auth-gate-footer').style.display = 'block';
+
+        // Show active form
+        this.switchTab('login');
+
+        // Hide Magic Link form
+        const magicForm = modal.querySelector('#magic-link-form-container');
+        if (magicForm) {
+            magicForm.style.display = 'none';
+        }
+
+        // Reset header
+        const headerTitle = modal.querySelector('.auth-gate-header h2');
+        if (headerTitle) {
+            headerTitle.textContent = 'Willkommen zurück';
+        }
+    }
+
+    /**
+     * Send Magic Link email
+     */
+    async sendMagicLink(event) {
+        if (event) event.preventDefault();
+
+        const emailInput = document.getElementById('magic-email');
+        const email = emailInput?.value.trim();
+
+        if (!email) {
+            this.showError('Bitte geben Sie Ihre E-Mail-Adresse ein');
+            return;
+        }
+
+        this.showLoading(true);
+
+        // Check if user exists
+        const users = JSON.parse(localStorage.getItem('cssberlin_users') || '[]');
+        let user = users.find(u => u.email === email);
+
+        // Generate magic link token
+        const token = 'magic_' + Date.now() + '_' + Math.random().toString(36).substr(2, 16);
+        const expiresAt = Date.now() + (10 * 60 * 1000); // 10 minutes
+
+        // Store token
+        const magicTokens = JSON.parse(localStorage.getItem('cssberlin_magic_tokens') || '[]');
+        magicTokens.push({
+            email,
+            token,
+            expiresAt,
+            createdAt: Date.now(),
+            used: false
+        });
+        localStorage.setItem('cssberlin_magic_tokens', JSON.stringify(magicTokens));
+
+        // Generate magic link URL
+        const magicLink = `${window.location.origin}${window.location.pathname.replace(/[^/]*$/, '')}magic-login.html?token=${token}`;
+
+        // Send email via EmailService (or demo mode)
+        if (typeof EmailService !== 'undefined') {
+            await EmailService.sendMagicLink(email, user?.firstName || email.split('@')[0], magicLink);
+        }
+
+        // Log for demo
+        console.log('Magic Link:', magicLink);
+
+        this.showLoading(false);
+        this.showSuccess('Link wurde gesendet! Überprüfen Sie Ihre E-Mails.');
+
+        // Show alert for demo (remove in production)
+        setTimeout(() => {
+            alert(`📧 Magic-Link wurde an ${email} gesendet!\n\n🔗 Link:\n${magicLink}\n\n⏰ Gültig für 10 Minuten\n\nKlicken Sie auf den Link um sich anzumelden.`);
+
+            if (confirm('Möchten Sie direkt zur Anmeldung gehen?')) {
+                window.location.href = `magic-login.html?token=${token}`;
+            }
+        }, 500);
     }
 
     /**
@@ -910,6 +1059,133 @@ authGateStyles.textContent = `
     .oauth-btn.apple-btn:hover {
         background: #222;
         border-color: #222;
+    }
+
+    /* Magic Link Button */
+    .oauth-btn.magic-link-btn {
+        background: #f8f9fa;
+        border-color: #dee2e6;
+        color: #495057;
+    }
+
+    .oauth-btn.magic-link-btn:hover {
+        background: #e9ecef;
+        border-color: #ced4da;
+    }
+
+    .oauth-btn.magic-link-btn svg {
+        stroke: #E8854C;
+    }
+
+    /* Magic Link Form */
+    .magic-link-form {
+        animation: fadeIn 0.3s ease;
+    }
+
+    .magic-link-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .magic-link-back {
+        background: #f5f5f5;
+        border: none;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .magic-link-back:hover {
+        background: #e0e0e0;
+    }
+
+    .magic-link-header h3 {
+        margin: 0;
+        font-size: 18px;
+        color: #333;
+        font-weight: 600;
+    }
+
+    .magic-link-desc {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 20px;
+        line-height: 1.5;
+    }
+
+    .magic-link-form .form-group {
+        margin-bottom: 16px;
+    }
+
+    .magic-link-form label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        color: #333;
+        font-size: 13px;
+    }
+
+    .magic-link-form input {
+        width: 100%;
+        padding: 14px 16px;
+        border: 2px solid #e8e8e8;
+        border-radius: 10px;
+        font-size: 15px;
+        transition: all 0.2s;
+        box-sizing: border-box;
+    }
+
+    .magic-link-form input:focus {
+        outline: none;
+        border-color: #2D5016;
+        box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.1);
+    }
+
+    .magic-link-submit {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #E8854C 0%, #d4753d 100%);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .magic-link-submit:hover {
+        background: linear-gradient(135deg, #d4753d 0%, #c4652d 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(232, 133, 76, 0.3);
+    }
+
+    .magic-link-info {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-top: 20px;
+        padding: 12px 16px;
+        background: #f0f9ff;
+        border-radius: 10px;
+        color: #0369a1;
+        font-size: 13px;
+    }
+
+    .magic-link-info svg {
+        flex-shrink: 0;
+        margin-top: 2px;
     }
 
     /* Divider */

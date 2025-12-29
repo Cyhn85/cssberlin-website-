@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anmeldung per E-Mail-Link - CSS Berlin</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .magic-login-container {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .magic-login-card {
+            max-width: 420px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            padding: 40px;
+            text-align: center;
+        }
+
+        .magic-login-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .magic-login-icon.loading {
+            background: linear-gradient(135deg, #E8854C 0%, #FF9F5A 100%);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .magic-login-icon.success {
+            background: linear-gradient(135deg, #2D5016 0%, #4a7c24 100%);
+        }
+
+        .magic-login-icon.error {
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+
+        .magic-login-icon svg {
+            width: 40px;
+            height: 40px;
+            color: white;
+        }
+
+        .magic-login-card h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .magic-login-card p {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .magic-login-card .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #2D5016 0%, #3d6b1e 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .magic-login-card .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(45, 80, 22, 0.3);
+        }
+
+        .magic-login-card .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+            margin-top: 12px;
+        }
+
+        .magic-login-card .btn-secondary:hover {
+            background: #e8e8e8;
+            box-shadow: none;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .countdown {
+            font-size: 14px;
+            color: #999;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- News Banner at Top -->
+    <div class="news-banner" style="position: sticky; top: 0; z-index: 999;">
+        <div class="news-slider" id="newsSlider">
+            <div class="news-item" data-link="co2-impact.html">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                </svg>
+                <span>Climate Smart Solutions - Nachhaltig Shoppen</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header" style="position: sticky; top: 40px; z-index: 998;">
+        <div class="header-container">
+            <a href="index.html" style="text-decoration: none; display: flex; flex-direction: column; align-items: stretch; gap: 0; width: 200px;">
+                <div style="font-size: 36px; font-weight: 800; color: white; letter-spacing: 2px; text-align: center;">CSS Berlin</div>
+                <div style="font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.9); letter-spacing: 1px; text-transform: uppercase; text-align: center;">Climate Smart Solutions</div>
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="magic-login-container">
+        <div class="magic-login-card" id="magicLoginCard">
+            <!-- Loading State (default) -->
+            <div id="loadingState">
+                <div class="magic-login-icon loading">
+                    <div class="spinner"></div>
+                </div>
+                <h1>Anmeldung wird verarbeitet...</h1>
+                <p>Bitte warten Sie einen Moment, wahrend wir Sie anmelden.</p>
+            </div>
+
+            <!-- Success State (hidden by default) -->
+            <div id="successState" style="display: none;">
+                <div class="magic-login-icon success">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </div>
+                <h1>Erfolgreich angemeldet!</h1>
+                <p>Willkommen zuruck bei CSS Berlin. Sie werden in <span id="countdown">3</span> Sekunden weitergeleitet...</p>
+                <a href="index.html" class="btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                    Zur Startseite
+                </a>
+            </div>
+
+            <!-- Error State (hidden by default) -->
+            <div id="errorState" style="display: none;">
+                <div class="magic-login-icon error">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                    </svg>
+                </div>
+                <h1>Link ungultig</h1>
+                <p id="errorMessage">Dieser Anmelde-Link ist ungultig oder abgelaufen. Bitte fordern Sie einen neuen Link an.</p>
+                <button class="btn" onclick="authGate.showLoginModal()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    Neuen Link anfordern
+                </button>
+                <a href="index.html" class="btn btn-secondary">Zur Startseite</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer" style="background: linear-gradient(135deg, #FF8C42 0%, #2D5016 100%); padding: 24px 0;">
+        <div style="max-width: 1400px; margin: 0 auto; padding: 0 32px; text-align: center; color: rgba(255,255,255,0.8); font-size: 12px;">
+            &copy; 2025 CSS Berlin GmbH - Climate Smart Solutions
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="api-config.js"></script>
+    <script src="api-client.js"></script>
+    <script src="email-service.js"></script>
+    <script src="auth-gate.js"></script>
+
+    <script>
+        // Process magic link on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+
+            if (!token) {
+                showError('Kein Anmelde-Token gefunden.');
+                return;
+            }
+
+            // Validate token
+            setTimeout(() => {
+                validateMagicLink(token);
+            }, 1500); // Show loading for 1.5 seconds
+        });
+
+        function validateMagicLink(token) {
+            // Get stored magic tokens
+            const magicTokens = JSON.parse(localStorage.getItem('cssberlin_magic_tokens') || '[]');
+            const tokenIndex = magicTokens.findIndex(t => t.token === token);
+
+            if (tokenIndex === -1) {
+                showError('Dieser Anmelde-Link ist ungultig.');
+                return;
+            }
+
+            const tokenData = magicTokens[tokenIndex];
+
+            // Check if already used
+            if (tokenData.used) {
+                showError('Dieser Anmelde-Link wurde bereits verwendet.');
+                return;
+            }
+
+            // Check if expired
+            if (Date.now() > tokenData.expiresAt) {
+                showError('Dieser Anmelde-Link ist abgelaufen. Bitte fordern Sie einen neuen an.');
+                return;
+            }
+
+            // Mark token as used
+            magicTokens[tokenIndex].used = true;
+            localStorage.setItem('cssberlin_magic_tokens', JSON.stringify(magicTokens));
+
+            // Find or create user
+            const users = JSON.parse(localStorage.getItem('cssberlin_users') || '[]');
+            let user = users.find(u => u.email === tokenData.email);
+
+            if (!user) {
+                // Create new user with magic link
+                user = {
+                    id: 'user_' + Date.now(),
+                    firstName: tokenData.email.split('@')[0],
+                    lastName: '',
+                    email: tokenData.email,
+                    createdAt: new Date().toISOString(),
+                    wishlist: [],
+                    negotiations: [],
+                    loginMethod: 'magic_link'
+                };
+                users.push(user);
+                localStorage.setItem('cssberlin_users', JSON.stringify(users));
+            }
+
+            // Login user
+            const sessionUser = {
+                id: user.id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                picture: user.picture || null,
+                loginMethod: 'magic_link'
+            };
+
+            localStorage.setItem('cssberlin_current_user', JSON.stringify(sessionUser));
+            localStorage.setItem('auth_token', 'magic_' + Date.now());
+
+            // Show success
+            showSuccess();
+        }
+
+        function showSuccess() {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'none';
+            document.getElementById('successState').style.display = 'block';
+
+            // Countdown and redirect
+            let seconds = 3;
+            const countdownEl = document.getElementById('countdown');
+
+            const interval = setInterval(() => {
+                seconds--;
+                countdownEl.textContent = seconds;
+
+                if (seconds <= 0) {
+                    clearInterval(interval);
+                    window.location.href = 'index.html';
+                }
+            }, 1000);
+        }
+
+        function showError(message) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('successState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'block';
+            document.getElementById('errorMessage').textContent = message;
+        }
+    </script>
+</body>
+</html>
