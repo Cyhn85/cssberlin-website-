@@ -562,6 +562,12 @@ class AuthGate {
         this.hideLoginModal();
         this.showLoading(false);
 
+        // Notify AuthGuard about successful login
+        if (typeof AuthGuard !== 'undefined' && AuthGuard.onLoginSuccess) {
+            AuthGuard.onLoginSuccess();
+            return; // AuthGuard handles the redirect
+        }
+
         // Redirect if URL provided
         const modal = document.getElementById('auth-gate-modal');
         const redirectUrl = modal?.dataset.redirectUrl;
