@@ -38,3 +38,4 @@ logs/
 *.bak
 *.backup
 nul
+credentials/
