@@ -59,7 +59,7 @@
             <!-- Center: Search Box -->
             <div class="header-search" style="flex: 1; max-width: 500px; margin: 0 20px;">
                 <form action="search.html" method="GET" style="display: flex; width: 100%;">
-                    <input type="text" name="q" placeholder="Suche nach Marken, Artikeln..." style="flex: 1; padding: 12px 16px; border: none; border-radius: 8px 0 0 8px; font-size: 14px; outline: none; background: rgba(255,255,255,0.95);">
+                    <input type="text" name="q" placeholder="Suche nach Marken, Artikeln..." data-i18n-placeholder="header.search_placeholder" style="flex: 1; padding: 12px 16px; border: none; border-radius: 8px 0 0 8px; font-size: 14px; outline: none; background: rgba(255,255,255,0.95);">
                     <button type="submit" style="padding: 12px 18px; background: #E8854C; border: none; border-radius: 0 8px 8px 0; cursor: pointer; display: flex; align-items: center; justify-content: center;">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
                             <circle cx="11" cy="11" r="8"></circle>
@@ -76,7 +76,7 @@
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
                         <path d="M12 5v14M5 12h14"></path>
                     </svg>
-                    Inserieren
+                    <span data-i18n="header.inserieren">Inserieren</span>
                 </a>
 
                 <!-- Auth Buttons -->
@@ -85,7 +85,7 @@
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
                     </svg>
-                    Anmelden
+                    <span data-i18n="header.anmelden">Anmelden</span>
                 </button>
 
                 <button onclick="authGate.showLoginModal(null, null, 'register')" class="header-btn auth-btn" style="padding: 10px 18px; background: #E8854C; color: white; border-radius: 8px; display: flex; align-items: center; gap: 8px; font-weight: 600; text-decoration: none; font-size: 14px; transition: all 0.3s ease; border: none; cursor: pointer;">
@@ -95,7 +95,7 @@
                         <line x1="20" y1="8" x2="20" y2="14"></line>
                         <line x1="23" y1="11" x2="17" y2="11"></line>
                     </svg>
-                    Registrieren
+                    <span data-i18n="header.registrieren">Registrieren</span>
                 </button>
 
                 <!-- Language Selector (En Sağda) -->
@@ -113,41 +113,41 @@
             <!-- Sol - Kullanıcı Aksiyonları -->
             <div class="dashboard-actions">
                 <!-- Bildirimler -->
-                <button class="dashboard-icon-btn" title="Benachrichtigungen">
+                <button class="dashboard-icon-btn" title="Benachrichtigungen" data-i18n-title="dashboard.benachrichtigungen">
                     <svg viewBox="0 0 24 24">
                         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
                         <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
                     </svg>
-                    <span class="label">Benachrichtigungen</span>
+                    <span class="label" data-i18n="dashboard.benachrichtigungen">Benachrichtigungen</span>
                     <span class="badge">2</span>
                 </button>
 
                 <!-- Verhandlungen / Pazarlıklar -->
-                <a href="pazarlik.html" class="dashboard-icon-btn" title="Verhandlungen">
+                <a href="pazarlik.html" class="dashboard-icon-btn" title="Verhandlungen" data-i18n-title="dashboard.verhandlungen">
                     <svg viewBox="0 0 24 24">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                     </svg>
-                    <span class="label">Verhandlungen</span>
+                    <span class="label" data-i18n="dashboard.verhandlungen">Verhandlungen</span>
                     <span class="badge" id="negotiationCount">0</span>
                 </a>
 
                 <!-- Wunschliste -->
-                <a href="wunschliste.html" class="dashboard-icon-btn" id="wishlistBtn" title="Wunschliste">
+                <a href="wunschliste.html" class="dashboard-icon-btn" id="wishlistBtn" title="Wunschliste" data-i18n-title="dashboard.wunschliste">
                     <svg viewBox="0 0 24 24">
                         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                     </svg>
-                    <span class="label">Wunschliste</span>
+                    <span class="label" data-i18n="dashboard.wunschliste">Wunschliste</span>
                     <span class="badge" id="wishlistCount">0</span>
                 </a>
 
                 <!-- Warenkorb -->
-                <a href="warenkorb.html" class="dashboard-icon-btn" title="Warenkorb">
+                <a href="warenkorb.html" class="dashboard-icon-btn" title="Warenkorb" data-i18n-title="dashboard.warenkorb">
                     <svg viewBox="0 0 24 24">
                         <circle cx="9" cy="21" r="1"></circle>
                         <circle cx="20" cy="21" r="1"></circle>
                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                     </svg>
-                    <span class="label">Warenkorb</span>
+                    <span class="label" data-i18n="dashboard.warenkorb">Warenkorb</span>
                     <span class="badge" id="cartCount">0</span>
                 </a>
             </div>
@@ -160,7 +160,7 @@
             <!-- Category Buttons -->
             <div class="category-buttons">
                 <div class="category-item" data-category="damen">
-                    <a href="damen.html" style="text-decoration: none;"><button class="category-btn">DAMEN</button></a>
+                    <a href="damen.html" style="text-decoration: none;"><button class="category-btn" data-i18n="categories.damen">DAMEN</button></a>
                     <!-- Mega Menu for Damen -->
                     <div class="mega-menu">
                         <div class="mega-menu-content">
@@ -205,7 +205,7 @@
                 </div>
 
                 <div class="category-item" data-category="herren">
-                    <a href="herren.html" style="text-decoration: none;"><button class="category-btn">HERREN</button></a>
+                    <a href="herren.html" style="text-decoration: none;"><button class="category-btn" data-i18n="categories.herren">HERREN</button></a>
                     <!-- Mega Menu for Herren -->
                     <div class="mega-menu">
                         <div class="mega-menu-content">
@@ -250,7 +250,7 @@
                 </div>
 
                 <div class="category-item" data-category="kinder">
-                    <a href="kinder.html" style="text-decoration: none;"><button class="category-btn">KINDER</button></a>
+                    <a href="kinder.html" style="text-decoration: none;"><button class="category-btn" data-i18n="categories.kinder">KINDER</button></a>
                     <!-- Mega Menu for Kinder -->
                     <div class="mega-menu">
                         <div class="mega-menu-content">
@@ -300,14 +300,14 @@
     <!-- Products Section -->
     <section class="products-section">
         <div class="section-header">
-            <h2>Alle Produkte</h2>
+            <h2 data-i18n="products.alle_produkte">Alle Produkte</h2>
             <div class="filter-controls">
                 <select class="sort-dropdown">
-                    <option>Sortieren</option>
-                    <option>Preis aufsteigend</option>
-                    <option>Preis absteigend</option>
-                    <option>Neu zuerst</option>
-                    <option>Meiste CO₂ Einsparung</option>
+                    <option data-i18n="products.sortieren">Sortieren</option>
+                    <option data-i18n="products.preis_aufsteigend">Preis aufsteigend</option>
+                    <option data-i18n="products.preis_absteigend">Preis absteigend</option>
+                    <option data-i18n="products.neu_zuerst">Neu zuerst</option>
+                    <option data-i18n="products.meiste_co2">Meiste CO₂ Einsparung</option>
                 </select>
             </div>
         </div>
@@ -322,7 +322,7 @@
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
-                Mehr Produkte laden
+                <span data-i18n="products.mehr_laden">Mehr Produkte laden</span>
             </button>
         </div>
     </section>
@@ -374,16 +374,16 @@
 
                 <!-- Legal Links (Zorunlu Linkler) -->
                 <nav style="display: flex; gap: 24px; flex-wrap: wrap; align-items: center;">
-                    <a href="ueber-uns.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;">Über uns</a>
-                    <a href="kontakt.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;">Kontakt</a>
-                    <a href="agb.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;">AGB</a>
-                    <a href="datenschutz.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;">Datenschutz</a>
-                    <a href="widerrufsrecht.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;">Widerrufsrecht</a>
-                    <a href="impressum.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;">Impressum</a>
+                    <a href="ueber-uns.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;" data-i18n="footer.ueber_uns">Über uns</a>
+                    <a href="kontakt.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;" data-i18n="footer.kontakt">Kontakt</a>
+                    <a href="agb.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;" data-i18n="footer.agb">AGB</a>
+                    <a href="datenschutz.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;" data-i18n="footer.datenschutz">Datenschutz</a>
+                    <a href="widerrufsrecht.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;" data-i18n="footer.widerrufsrecht">Widerrufsrecht</a>
+                    <a href="impressum.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;" data-i18n="footer.impressum">Impressum</a>
                 </nav>
 
                 <!-- Copyright -->
-                <div style="color: rgba(255,255,255,0.8); font-size: 12px;">
+                <div style="color: rgba(255,255,255,0.8); font-size: 12px;" data-i18n="footer.copyright">
                     © 2025 CSS Berlin GmbH
                 </div>
             </div>
@@ -409,6 +409,7 @@
     <script src="auth-gate.js"></script>  <!-- Login gate system -->
     <script src="favorites.js"></script>  <!-- Favorites system -->
 
+    <script src="i18n.js"></script>
     <script src="footer.js"></script>
     <script src="toast.js"></script>
     <script src="script.js"></script>
@@ -452,42 +453,6 @@
         // Initialize on page load
         updateCartCount();
         updateNegotiationCount();
-    </script>
-
-    <!-- Language Selector -->
-    <script>
-        function setLanguage(lang) {
-            const deBtn = document.getElementById('lang-de');
-            const enBtn = document.getElementById('lang-en');
-
-            if (!deBtn || !enBtn) return;
-
-            // Update button styles based on selection
-            if (lang === 'de') {
-                deBtn.style.background = '#E8854C';
-                deBtn.style.color = 'white';
-                enBtn.style.background = '#f5f5f5';
-                enBtn.style.color = '#333';
-            } else {
-                enBtn.style.background = '#E8854C';
-                enBtn.style.color = 'white';
-                deBtn.style.background = '#f5f5f5';
-                deBtn.style.color = '#333';
-            }
-
-            // Save preference and update document language
-            localStorage.setItem('cssberlin_lang', lang);
-            document.documentElement.lang = lang;
-
-            // TODO: Implement actual text translation here
-            console.log('Language changed to:', lang);
-        }
-
-        // Load saved language preference on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            const savedLang = localStorage.getItem('cssberlin_lang') || 'de';
-            setLanguage(savedLang);
-        });
     </script>
 
     <!-- Auth Gate & Favorites System -->
