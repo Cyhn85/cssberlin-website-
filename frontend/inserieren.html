@@ -3,187 +3,247 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Artikel verkaufen - CSS Berlin</title>
+    <title>Anzeige aufgeben - CSS Berlin</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         * { box-sizing: border-box; }
+        body { background: #f5f5f5; min-height: 100vh; }
 
-        body {
-            background: #f5f5f5;
-            min-height: 100vh;
-        }
-
-        .verkaufen-page {
-            max-width: 680px;
+        .inserieren-page {
+            max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 24px 20px 60px;
         }
 
-        .page-title {
-            font-size: 22px;
-            font-weight: 700;
-            color: #E8854C;
+        .page-header {
             margin-bottom: 24px;
         }
 
-        /* Form Card */
-        .form-card {
-            background: white;
-            border-radius: 12px;
-            margin-bottom: 16px;
-            overflow: hidden;
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            margin: 0;
         }
 
-        .form-card-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid #f0f0f0;
+        /* Form Section */
+        .form-section {
+            background: white;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .form-section-title {
+            font-size: 18px;
             font-weight: 600;
             color: #333;
-            font-size: 15px;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e0e0e0;
+            margin: 0;
         }
 
-        .form-card-body {
+        .form-section-body {
             padding: 0;
         }
 
-        /* Form Row */
+        /* Form Row - Kleinanzeigen Style */
         .form-row {
             display: flex;
-            align-items: flex-start;
-            padding: 16px 20px;
+            padding: 16px 24px;
             border-bottom: 1px solid #f0f0f0;
-            gap: 16px;
+            align-items: flex-start;
         }
 
         .form-row:last-child {
             border-bottom: none;
         }
 
-        .form-row-label {
-            width: 140px;
+        .form-label {
+            width: 160px;
             flex-shrink: 0;
-            font-size: 14px;
-            color: #666;
             padding-top: 10px;
-        }
-
-        .form-row-content {
-            flex: 1;
-            min-width: 0;
-        }
-
-        /* Input Styles - Vinted Clean */
-        .vinted-input,
-        .vinted-textarea,
-        .vinted-select {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 15px;
+            font-size: 14px;
             color: #333;
-            background: white;
-            transition: all 0.2s ease;
-            font-family: inherit;
+            font-weight: 500;
         }
 
-        .vinted-input:focus,
-        .vinted-textarea:focus,
-        .vinted-select:focus {
+        .form-label.required::after {
+            content: ' *';
+            color: #E8854C;
+        }
+
+        .form-field {
+            flex: 1;
+        }
+
+        .form-tip {
+            font-size: 12px;
+            color: #666;
+            margin-top: 6px;
+            line-height: 1.4;
+        }
+
+        .form-tip a {
+            color: #2D5016;
+        }
+
+        /* Input Styles */
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
             outline: none;
             border-color: #2D5016;
-            box-shadow: 0 0 0 2px rgba(45, 80, 22, 0.1);
         }
 
-        .vinted-input::placeholder {
+        .form-input::placeholder {
             color: #999;
         }
 
-        .vinted-textarea {
-            min-height: 100px;
+        .form-textarea {
+            min-height: 120px;
             resize: vertical;
         }
 
-        .vinted-select {
+        .form-select {
             appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            padding-right: 40px;
+            background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%23666'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 12px center;
+            padding-right: 32px;
             cursor: pointer;
         }
 
-        /* Photo Upload - Vinted Style */
-        .photo-upload-section {
-            padding: 20px;
-        }
-
-        .photo-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 12px;
-        }
-
-        .photo-slot {
-            aspect-ratio: 3/4;
-            border: 2px dashed #d0d0d0;
-            border-radius: 10px;
+        /* Radio/Checkbox Group */
+        .radio-group {
             display: flex;
-            flex-direction: column;
+            gap: 24px;
+        }
+
+        .radio-item {
+            display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 8px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-            overflow: hidden;
+        }
+
+        .radio-item input {
+            width: 18px;
+            height: 18px;
+            accent-color: #2D5016;
+        }
+
+        /* Price Input */
+        .price-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .price-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .price-input {
+            width: 120px;
+            text-align: right;
+        }
+
+        .price-currency {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .price-type-select {
+            width: 160px;
+        }
+
+        /* Character Counter */
+        .char-counter {
+            text-align: right;
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        /* Image Upload - Kleinanzeigen Style */
+        .image-upload-area {
+            padding: 24px;
+        }
+
+        .image-dropzone {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
             background: #fafafa;
         }
 
-        .photo-slot:hover {
+        .image-dropzone:hover {
             border-color: #2D5016;
-            background: #f0fff0;
+            background: #f5fff5;
         }
 
-        .photo-slot.main {
-            grid-column: span 2;
-            grid-row: span 2;
+        .image-dropzone-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 12px;
+            color: #999;
         }
 
-        .photo-slot.has-image {
-            border: none;
+        .image-dropzone-text {
+            font-size: 14px;
+            color: #666;
         }
 
-        .photo-slot img {
+        .image-dropzone-text span {
+            color: #2D5016;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .image-preview-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .image-preview-item {
+            width: 100px;
+            height: 100px;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid #e0e0e0;
+        }
+
+        .image-preview-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        .photo-slot-add {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            color: #666;
-        }
-
-        .photo-slot-add svg {
+        .image-preview-remove {
+            position: absolute;
+            top: 4px;
+            right: 4px;
             width: 24px;
             height: 24px;
-            color: #2D5016;
-        }
-
-        .photo-slot-add span {
-            font-size: 12px;
-            text-align: center;
-        }
-
-        .photo-remove {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            width: 28px;
-            height: 28px;
             background: rgba(0,0,0,0.6);
             border: none;
             border-radius: 50%;
@@ -192,414 +252,290 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        .photo-slot:hover .photo-remove {
-            opacity: 1;
-        }
-
-        .photo-main-badge {
-            position: absolute;
-            bottom: 8px;
-            left: 8px;
-            background: #2D5016;
-            color: white;
-            font-size: 11px;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-weight: 600;
-        }
-
-        /* Detail Photos Hint - Vinted Style */
-        .detail-hint {
-            background: #FFF9E6;
-            border: 1px solid #FFE082;
-            border-radius: 10px;
-            padding: 16px;
-            margin: 16px 20px;
-        }
-
-        .detail-hint-title {
             font-size: 14px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 12px;
         }
 
-        .detail-hint-grid {
-            display: flex;
-            gap: 12px;
+        .image-hint {
+            font-size: 12px;
+            color: #666;
+            margin-top: 12px;
         }
 
-        .detail-hint-item {
-            width: 60px;
-            height: 80px;
+        /* Category Picker Button */
+        .category-picker-btn {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
             background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 6px;
+            text-align: left;
+            cursor: pointer;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            gap: 4px;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #333;
+            transition: border-color 0.2s;
         }
 
-        .detail-hint-item svg {
-            width: 24px;
-            height: 24px;
+        .category-picker-btn:hover {
+            border-color: #2D5016;
+        }
+
+        .category-picker-btn.placeholder {
             color: #999;
         }
 
-        .detail-hint-item span {
-            font-size: 9px;
+        .category-picker-btn svg {
+            width: 16px;
+            height: 16px;
             color: #666;
-            text-align: center;
         }
 
-        .detail-hint-text {
-            font-size: 12px;
-            color: #666;
-            margin-top: 12px;
-            line-height: 1.5;
-        }
-
-        /* Smart Suggestions */
-        .smart-suggestions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        .suggestion-chip {
-            padding: 8px 14px;
-            background: #f5f5f5;
-            border: 1px solid #e0e0e0;
-            border-radius: 20px;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            color: #333;
-        }
-
-        .suggestion-chip:hover {
-            border-color: #2D5016;
-            background: #e8f5e9;
-        }
-
-        .suggestion-chip.selected {
-            background: #2D5016;
-            color: white;
-            border-color: #2D5016;
-        }
-
-        /* Autocomplete Dropdown */
-        .autocomplete-wrapper {
-            position: relative;
-        }
-
-        .autocomplete-dropdown {
-            position: absolute;
-            top: 100%;
+        /* Category Picker Modal - Vinted Style */
+        .category-modal {
+            display: none;
+            position: fixed;
+            top: 0;
             left: 0;
             right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .category-modal.open {
+            display: flex;
+        }
+
+        .category-modal-content {
             background: white;
-            border: 1px solid #e0e0e0;
-            border-top: none;
-            border-radius: 0 0 8px 8px;
-            max-height: 250px;
-            overflow-y: auto;
-            z-index: 100;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            display: none;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 480px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
 
-        .autocomplete-dropdown.show {
-            display: block;
+        .category-modal-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        .autocomplete-item {
-            padding: 12px 16px;
-            cursor: pointer;
+        .category-modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
             display: flex;
             align-items: center;
             gap: 12px;
-            border-bottom: 1px solid #f5f5f5;
         }
 
-        .autocomplete-item:last-child {
-            border-bottom: none;
-        }
-
-        .autocomplete-item:hover {
-            background: #f9f9f9;
-        }
-
-        .autocomplete-item-logo {
+        .category-back-btn {
             width: 32px;
             height: 32px;
-            background: #f0f0f0;
-            border-radius: 6px;
+            border: none;
+            background: #f5f5f5;
+            border-radius: 50%;
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
-            font-size: 11px;
+            transition: background 0.2s;
+        }
+
+        .category-back-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .category-close-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: none;
+            cursor: pointer;
             color: #666;
         }
 
-        .autocomplete-item-name {
-            font-weight: 500;
-            color: #333;
+        .category-search {
+            padding: 12px 20px;
+            border-bottom: 1px solid #e0e0e0;
         }
 
-        /* Price Section */
-        .price-input-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .price-input {
-            width: 150px;
-            padding-right: 30px;
-            text-align: right;
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .price-currency {
-            position: absolute;
-            right: 12px;
-            color: #333;
-            font-weight: 600;
-            font-size: 18px;
-        }
-
-        .price-hint {
-            margin-top: 12px;
+        .category-search-input {
+            width: 100%;
             padding: 12px 16px;
-            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
             border-radius: 8px;
-            font-size: 13px;
-            color: #666;
+            font-size: 14px;
+            background: #f5f5f5;
         }
 
-        .price-recommendation {
+        .category-search-input:focus {
+            outline: none;
+            border-color: #2D5016;
+            background: white;
+        }
+
+        .category-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px 0;
+        }
+
+        .category-item {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-top: 8px;
+            padding: 14px 20px;
+            cursor: pointer;
+            transition: background 0.2s;
+            gap: 14px;
         }
 
-        .price-recommendation span {
-            font-weight: 600;
+        .category-item:hover {
+            background: #f5f5f5;
+        }
+
+        .category-item-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: #2D5016;
         }
 
-        /* Premium Price Checkbox */
-        .premium-price-option {
-            margin-top: 16px;
-            padding: 16px;
-            background: #f9f9f9;
-            border-radius: 10px;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
+        .category-item-icon svg {
+            width: 24px;
+            height: 24px;
         }
 
-        .premium-checkbox {
+        .category-item-name {
+            flex: 1;
+            font-size: 15px;
+            color: #333;
+        }
+
+        .category-item-arrow {
+            color: #999;
+        }
+
+        .category-item-radio {
             width: 20px;
             height: 20px;
-            border: 2px solid #d0d0d0;
-            border-radius: 4px;
-            cursor: pointer;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-
-        .premium-checkbox:checked {
-            background: #2D5016;
-            border-color: #2D5016;
-        }
-
-        .premium-content h4 {
-            font-size: 14px;
-            color: #333;
-            margin-bottom: 4px;
-        }
-
-        .premium-content p {
-            font-size: 12px;
-            color: #666;
-            line-height: 1.5;
-        }
-
-        /* Package Size - Vinted Style */
-        .package-sizes {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .package-option {
+            border: 2px solid #ccc;
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 16px;
-            padding: 16px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            justify-content: center;
         }
 
-        .package-option:hover {
+        .category-item.selected .category-item-radio {
             border-color: #2D5016;
         }
 
-        .package-option.selected {
-            border-color: #2D5016;
-            background: #f0fff0;
-        }
-
-        .package-radio {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #d0d0d0;
-            border-radius: 50%;
-            position: relative;
-            flex-shrink: 0;
-        }
-
-        .package-option.selected .package-radio {
-            border-color: #2D5016;
-        }
-
-        .package-option.selected .package-radio::after {
+        .category-item.selected .category-item-radio::after {
             content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
             width: 10px;
             height: 10px;
             background: #2D5016;
             border-radius: 50%;
         }
 
-        .package-content {
-            flex: 1;
+        /* Smart Suggestions */
+        .smart-suggestions {
+            padding: 12px 20px;
+            background: #fff9e6;
+            border-bottom: 1px solid #ffe082;
         }
 
-        .package-title {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 4px;
-        }
-
-        .package-desc {
-            font-size: 13px;
+        .smart-suggestions-title {
+            font-size: 12px;
             color: #666;
+            margin-bottom: 8px;
         }
 
-        .package-badge {
-            padding: 4px 10px;
+        .smart-suggestions-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .smart-suggestion-chip {
+            padding: 6px 12px;
+            background: white;
+            border: 1px solid #E8854C;
+            border-radius: 16px;
+            font-size: 13px;
+            color: #E8854C;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .smart-suggestion-chip:hover {
             background: #E8854C;
             color: white;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 600;
         }
 
-        /* Boost Option */
-        .boost-section {
-            padding: 20px;
-            background: linear-gradient(135deg, #fff5e6 0%, #fff0db 100%);
-            border-top: 1px solid #ffe4c4;
-        }
-
-        .boost-header {
+        /* Location Fields */
+        .location-row {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
-        }
-
-        .boost-title {
-            font-weight: 700;
-            color: #E8854C;
-            font-size: 15px;
-        }
-
-        .boost-price {
-            font-weight: 700;
-            color: #333;
-        }
-
-        .boost-desc {
-            font-size: 13px;
-            color: #666;
-            line-height: 1.5;
-            margin-bottom: 12px;
-        }
-
-        .boost-toggle {
-            display: flex;
-            align-items: center;
             gap: 12px;
         }
 
-        .boost-switch {
-            width: 48px;
-            height: 26px;
-            background: #d0d0d0;
-            border-radius: 13px;
-            position: relative;
-            cursor: pointer;
-            transition: background 0.2s;
+        .plz-input {
+            width: 100px;
         }
 
-        .boost-switch.active {
-            background: #2D5016;
+        .city-display {
+            flex: 1;
+            padding: 10px 0;
+            color: #2D5016;
+            font-weight: 500;
         }
 
-        .boost-switch::after {
-            content: '';
-            position: absolute;
-            top: 3px;
-            left: 3px;
-            width: 20px;
-            height: 20px;
+        /* Action Buttons */
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            padding: 24px;
             background: white;
-            border-radius: 50%;
-            transition: left 0.2s;
+            border-radius: 4px;
+            border: 1px solid #e0e0e0;
         }
 
-        .boost-switch.active::after {
-            left: 25px;
+        .btn-preview {
+            padding: 12px 24px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        /* Action Buttons - Vinted Style */
-        .action-buttons {
-            display: flex;
-            gap: 12px;
-            margin-top: 24px;
-            padding: 0;
+        .btn-preview:hover {
+            background: #f5f5f5;
         }
 
         .btn-draft {
-            flex: 1;
-            padding: 16px 24px;
+            padding: 12px 24px;
             background: white;
-            border: 2px solid #2D5016;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 600;
+            border: 1px solid #2D5016;
+            border-radius: 4px;
+            font-size: 14px;
             color: #2D5016;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
         }
 
         .btn-draft:hover {
@@ -607,93 +543,61 @@
         }
 
         .btn-publish {
-            flex: 2;
-            padding: 16px 24px;
+            padding: 12px 32px;
             background: #2D5016;
             border: none;
-            border-radius: 8px;
-            font-size: 15px;
+            border-radius: 4px;
+            font-size: 14px;
             font-weight: 600;
             color: white;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
         }
 
         .btn-publish:hover {
             background: #3d6b1e;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(45, 80, 22, 0.3);
         }
 
-        .btn-publish:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* Feedback Button */
-        .feedback-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 10px 16px;
-            background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 13px;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        /* Mobile Responsive */
+        /* Mobile */
         @media (max-width: 768px) {
-            .verkaufen-page {
-                padding: 16px;
-            }
-
             .form-row {
                 flex-direction: column;
                 gap: 8px;
             }
 
-            .form-row-label {
+            .form-label {
                 width: 100%;
                 padding-top: 0;
-                font-weight: 600;
-                color: #333;
             }
 
-            .photo-grid {
-                grid-template-columns: repeat(3, 1fr);
+            .price-row {
+                flex-direction: column;
+                align-items: flex-start;
             }
 
-            .photo-slot.main {
-                grid-column: span 1;
-                grid-row: span 1;
-            }
-
-            .action-buttons {
+            .location-row {
                 flex-direction: column;
             }
 
-            .btn-draft,
-            .btn-publish {
-                flex: none;
+            .plz-input {
+                width: 100%;
             }
 
-            .detail-hint-grid {
-                flex-wrap: wrap;
+            .form-actions {
+                flex-direction: column;
             }
 
-            .package-option {
-                flex-wrap: wrap;
+            .category-modal-content {
+                max-width: 100%;
+                height: 100%;
+                max-height: 100%;
+                border-radius: 0;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header - Sadeleştirilmiş -->
+    <!-- Header -->
     <header class="header" style="position: sticky; top: 0; z-index: 998;">
         <div class="header-container">
             <a href="index.html" style="text-decoration: none; display: flex; flex-direction: column; align-items: stretch; gap: 0; width: 200px;">
@@ -701,402 +605,513 @@
                 <div style="font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.9); letter-spacing: 1px; text-transform: uppercase; text-align: center;">Climate Smart Solutions</div>
             </a>
             <div class="header-actions" style="gap: 12px; margin-left: auto; display: flex; align-items: center;">
-                <button onclick="authGate.showLoginModal(null, null, 'login')" class="header-btn auth-btn" style="padding: 10px 18px; background: #E8854C; color: white; border-radius: 8px; display: flex; align-items: center; gap: 8px; font-weight: 600; text-decoration: none; font-size: 14px; transition: all 0.3s ease; border: none; cursor: pointer;">
+                <button onclick="authGate.showLoginModal()" class="header-btn auth-btn combined-auth-btn" style="padding: 10px 20px; background: #E8854C; color: white; border-radius: 8px; display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 14px; border: none; cursor: pointer;">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
                     </svg>
-                    Anmelden
-                </button>
-                <button onclick="authGate.showLoginModal(null, null, 'register')" class="header-btn auth-btn" style="padding: 10px 18px; background: #E8854C; color: white; border-radius: 8px; display: flex; align-items: center; gap: 8px; font-weight: 600; text-decoration: none; font-size: 14px; transition: all 0.3s ease; border: none; cursor: pointer;">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="8.5" cy="7" r="4"></circle>
-                        <line x1="20" y1="8" x2="20" y2="14"></line>
-                        <line x1="23" y1="11" x2="17" y2="11"></line>
-                    </svg>
-                    Registrieren
+                    <span>Registrieren | Anmelden</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- User Dashboard Bar -->
-    <div class="user-dashboard-bar">
-        <div class="user-dashboard-container">
-            <div class="dashboard-actions">
-                <button class="dashboard-icon-btn" title="Benachrichtigungen">
-                    <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                    <span class="label">Benachrichtigungen</span>
-                    <span class="badge">2</span>
-                </button>
-                <a href="pazarlik.html" class="dashboard-icon-btn" title="Verhandlungen">
-                    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-                    <span class="label">Verhandlungen</span>
-                    <span class="badge" id="negotiationCount">0</span>
-                </a>
-                <a href="wunschliste.html" class="dashboard-icon-btn" title="Wunschliste">
-                    <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                    <span class="label">Wunschliste</span>
-                    <span class="badge" id="wishlistCount">0</span>
-                </a>
-                <a href="warenkorb.html" class="dashboard-icon-btn" title="Warenkorb">
-                    <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                    <span class="label">Warenkorb</span>
-                    <span class="badge" id="cartCount">0</span>
-                </a>
-            </div>
-            <div class="dashboard-right">
-                <a href="inserieren.html" class="dashboard-inserieren-btn">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"></path></svg>
-                    <span>Inserieren</span>
-                </a>
-                <div class="dashboard-divider"></div>
-                <div class="dashboard-lang-selector">
-                    <button onclick="setLanguage('de')" id="lang-de" class="dashboard-lang-btn active">DE</button>
-                    <button onclick="setLanguage('en')" id="lang-en" class="dashboard-lang-btn">EN</button>
+    <div class="inserieren-page">
+        <div class="page-header">
+            <h1 class="page-title">Anzeige aufgeben</h1>
+        </div>
+
+        <!-- Anzeigendetails -->
+        <div class="form-section">
+            <h2 class="form-section-title">Anzeigendetails</h2>
+            <div class="form-section-body">
+                <!-- Gebot/Gesuch -->
+                <div class="form-row">
+                    <div class="form-label">Gebot / Gesuch</div>
+                    <div class="form-field">
+                        <div class="radio-group">
+                            <label class="radio-item">
+                                <input type="radio" name="offerType" value="biete" checked>
+                                <span>Ich biete</span>
+                            </label>
+                            <label class="radio-item">
+                                <input type="radio" name="offerType" value="suche">
+                                <span>Ich suche</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Titel -->
+                <div class="form-row">
+                    <div class="form-label required">Titel</div>
+                    <div class="form-field">
+                        <input type="text" id="productTitle" class="form-input" placeholder="" maxlength="80">
+                        <div class="form-tip">Tipp: Mit einem aussagekraftigen Titel verkaufst du besser.</div>
+                    </div>
+                </div>
+
+                <!-- Kategorie -->
+                <div class="form-row">
+                    <div class="form-label required">Kategorie</div>
+                    <div class="form-field">
+                        <button type="button" class="category-picker-btn placeholder" id="categoryPickerBtn" onclick="openCategoryModal()">
+                            <span id="selectedCategoryText">Wahle deine Kategorie</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <input type="hidden" id="selectedCategory" value="">
+                    </div>
+                </div>
+
+                <!-- Preis -->
+                <div class="form-row">
+                    <div class="form-label required">Preis</div>
+                    <div class="form-field">
+                        <div class="price-row">
+                            <div class="price-input-wrapper">
+                                <input type="number" id="price" class="form-input price-input" placeholder=",00" step="0.01" min="0">
+                                <span class="price-currency">EUR</span>
+                            </div>
+                            <select id="priceType" class="form-select price-type-select">
+                                <option value="festpreis">Festpreis</option>
+                                <option value="vb">VB (Verhandlungsbasis)</option>
+                                <option value="verschenken">Zu verschenken</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Beschreibung -->
+                <div class="form-row">
+                    <div class="form-label">Beschreibung</div>
+                    <div class="form-field">
+                        <textarea id="productDesc" class="form-textarea" placeholder="" maxlength="4000" oninput="updateCharCounter()"></textarea>
+                        <div class="char-counter"><span id="charCount">0</span> / 4000 Zeichen</div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="verkaufen-page">
-        <h1 class="page-title">Artikel verkaufen</h1>
-
-        <!-- Photo Upload Card -->
-        <div class="form-card">
-            <div class="photo-upload-section">
-                <div class="photo-grid" id="photoGrid">
-                    <div class="photo-slot main" data-index="0" onclick="triggerPhotoUpload(0)">
-                        <div class="photo-slot-add">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                            </svg>
-                            <span>Fotos hinzufügen</span>
-                        </div>
+        <!-- Bilder -->
+        <div class="form-section">
+            <h2 class="form-section-title">Bilder (empfohlen)</h2>
+            <div class="image-upload-area">
+                <div class="image-dropzone" onclick="document.getElementById('imageInput').click()">
+                    <div class="image-dropzone-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg>
                     </div>
-                    <div class="photo-slot" data-index="1" onclick="triggerPhotoUpload(1)">
-                        <div class="photo-slot-add">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="photo-slot" data-index="2" onclick="triggerPhotoUpload(2)">
-                        <div class="photo-slot-add">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="photo-slot" data-index="3" onclick="triggerPhotoUpload(3)">
-                        <div class="photo-slot-add">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="photo-slot" data-index="4" onclick="triggerPhotoUpload(4)">
-                        <div class="photo-slot-add">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                            </svg>
-                        </div>
+                    <div class="image-dropzone-text">
+                        Drag & Drop<br>
+                        oder <span>Fotos hochladen</span>
                     </div>
                 </div>
-                <input type="file" id="photoInput" accept="image/*" multiple style="display: none;" onchange="handlePhotoUpload(event)">
-            </div>
-
-            <!-- Detail Photo Hint -->
-            <div class="detail-hint">
-                <div class="detail-hint-title">Vergewissere dich, dass du Fotos der folgenden Details hinzugefügt hast:</div>
-                <div class="detail-hint-grid">
-                    <div class="detail-hint-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <rect x="3" y="4" width="18" height="16" rx="2"></rect>
-                            <path d="M7 8h4M7 12h6M7 16h4"></path>
-                        </svg>
-                        <span>Etikett</span>
-                    </div>
-                    <div class="detail-hint-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <circle cx="12" cy="12" r="9"></circle>
-                            <path d="M12 6v6l4 2"></path>
-                        </svg>
-                        <span>Logo</span>
-                    </div>
-                    <div class="detail-hint-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                            <path d="M2 17l10 5 10-5"></path>
-                        </svg>
-                        <span>Material</span>
-                    </div>
-                    <div class="detail-hint-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <circle cx="12" cy="12" r="3"></circle>
-                            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
-                        </svg>
-                        <span>Mängel</span>
-                    </div>
-                </div>
-                <p class="detail-hint-text">
-                    Genauere Fotos der folgenden Details hochladen: Etikett, Logo, Seriennummer. Artikel automatisch zu einem höheren Preis verkauft werden können, artikelzustand ist zu so gut wie neu erkennbar sein.
+                <div class="image-preview-grid" id="imagePreviewGrid"></div>
+                <input type="file" id="imageInput" accept="image/*" multiple style="display: none;" onchange="handleImageUpload(event)">
+                <p class="image-hint">
+                    Tipp: Fuge bis zu 20 Bilder (max. 12 MB) per Upload oder Drag & Drop hinzu.
+                    Fur bessere Ergebnisse helfen dir unsere <a href="#">Fototipps</a>
+                </p>
+                <p style="font-size: 12px; color: #999; margin-top: 8px;">
+                    <em>Verschieben, um die Reihenfolge zu andern</em>
                 </p>
             </div>
         </div>
 
-        <!-- Title & Description Card -->
-        <div class="form-card">
-            <div class="form-row">
-                <div class="form-row-label">Titel</div>
-                <div class="form-row-content">
-                    <input type="text" id="productTitle" class="vinted-input" placeholder="z.B. adidas superstar 45">
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-row-label">Beschreibe deinen Artikel</div>
-                <div class="form-row-content">
-                    <textarea id="productDesc" class="vinted-textarea" placeholder="z.B. nur wenige Male getragen, guter Zustand..."></textarea>
-                </div>
-            </div>
-        </div>
-
-        <!-- Category & Brand Card -->
-        <div class="form-card">
-            <div class="form-row">
-                <div class="form-row-label">Kategorie</div>
-                <div class="form-row-content">
-                    <select id="category" class="vinted-select">
-                        <option value="">Kategorie wählen</option>
-                        <option value="sneaker">Sneaker</option>
-                        <option value="jacken">Jacken & Mäntel</option>
-                        <option value="jeans">Jeans & Hosen</option>
-                        <option value="shirts">T-Shirts & Tops</option>
-                        <option value="pullover">Pullover & Hoodies</option>
-                        <option value="kleider">Kleider & Röcke</option>
-                        <option value="taschen">Taschen</option>
-                        <option value="accessoires">Accessoires</option>
-                        <option value="sportbekleidung">Sportbekleidung</option>
-                    </select>
-                    <div class="smart-suggestions" id="categorySuggestions" style="display: none;">
-                        <!-- Dynamic suggestions based on title -->
-                    </div>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-row-label">Marke</div>
-                <div class="form-row-content">
-                    <div class="autocomplete-wrapper">
-                        <input type="text" id="brand" class="vinted-input" placeholder="Marke eingeben" autocomplete="off">
-                        <div class="autocomplete-dropdown" id="brandDropdown"></div>
-                    </div>
-                    <div class="smart-suggestions" id="brandSuggestions">
-                        <span class="suggestion-chip" data-brand="adidas">adidas</span>
-                        <span class="suggestion-chip" data-brand="Nike">Nike</span>
-                        <span class="suggestion-chip" data-brand="Zara">Zara</span>
-                        <span class="suggestion-chip" data-brand="H&M">H&M</span>
-                        <span class="suggestion-chip" data-brand="Tommy Hilfiger">Tommy Hilfiger</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Size, Condition, Color Card -->
-        <div class="form-card">
-            <div class="form-row">
-                <div class="form-row-label">Größe</div>
-                <div class="form-row-content">
-                    <input type="text" id="size" class="vinted-input" placeholder="z.B. M, L, 42">
-                    <div class="smart-suggestions" id="sizeSuggestions">
-                        <span class="suggestion-chip" data-size="XS">XS</span>
-                        <span class="suggestion-chip" data-size="S">S</span>
-                        <span class="suggestion-chip" data-size="M">M</span>
-                        <span class="suggestion-chip" data-size="L">L</span>
-                        <span class="suggestion-chip" data-size="XL">XL</span>
-                        <span class="suggestion-chip" data-size="XXL">XXL</span>
-                    </div>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-row-label">Zustand</div>
-                <div class="form-row-content">
-                    <select id="condition" class="vinted-select">
-                        <option value="">Zustand wählen</option>
-                        <option value="neu_etikett">Neu mit Etikett</option>
-                        <option value="neu">Neu ohne Etikett</option>
-                        <option value="sehr_gut">Sehr gut</option>
-                        <option value="gut">Gut</option>
-                        <option value="befriedigend">Befriedigend</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-row-label">Farbe</div>
-                <div class="form-row-content">
-                    <select id="color" class="vinted-select">
-                        <option value="">Farbe wählen</option>
-                        <option value="schwarz">Schwarz</option>
-                        <option value="weiß">Weiß</option>
-                        <option value="grau">Grau</option>
-                        <option value="blau">Blau</option>
-                        <option value="rot">Rot</option>
-                        <option value="grün">Grün</option>
-                        <option value="gelb">Gelb</option>
-                        <option value="braun">Braun</option>
-                        <option value="beige">Beige</option>
-                        <option value="pink">Pink</option>
-                        <option value="lila">Lila</option>
-                        <option value="orange">Orange</option>
-                        <option value="mehrfarbig">Mehrfarbig</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-row-label">Material (optional)</div>
-                <div class="form-row-content">
-                    <input type="text" id="material" class="vinted-input" placeholder="z.B. Baumwolle, Leder, Polyester">
-                </div>
-            </div>
-        </div>
-
-        <!-- Price Card -->
-        <div class="form-card">
-            <div class="form-row">
-                <div class="form-row-label">Preis</div>
-                <div class="form-row-content">
-                    <div class="price-input-wrapper">
-                        <input type="number" id="price" class="vinted-input price-input" placeholder="0,00" step="0.01" min="0">
-                        <span class="price-currency">€</span>
-                    </div>
-                    <div class="price-hint">
-                        <div>Retail-Rabatte von bis zu 80 % sind üblich. <a href="#" style="color: #2D5016;">Rabatt-Berechnungen bearbeiten</a></div>
-                        <div class="price-recommendation">
-                            <span>8,00 €</span> - <span>27,00 €</span>
+        <!-- Ort -->
+        <div class="form-section">
+            <h2 class="form-section-title">Ort</h2>
+            <div class="form-section-body">
+                <div class="form-row">
+                    <div class="form-label required">PLZ</div>
+                    <div class="form-field">
+                        <div class="location-row">
+                            <input type="text" id="plz" class="form-input plz-input" placeholder="z.B. 10115" maxlength="5" oninput="lookupPLZ()">
+                            <div class="city-display" id="cityDisplay">Berlin - Mitte</div>
+                        </div>
+                        <div class="form-tip">
+                            Tipp: Standardmassig zeigen wir nur die Postleitzahl und den Ort an.
                         </div>
                     </div>
-                    <div class="premium-price-option">
-                        <input type="checkbox" id="premiumPrice" class="premium-checkbox">
-                        <div class="premium-content">
-                            <h4>Gehobenes Preisniveau</h4>
-                            <p>Guter Preis für Artikel mit exzellenter Qualität und zum Steigern deines Gewinns.</p>
+                </div>
+                <div class="form-row">
+                    <div class="form-label">Strasse/Nr. (optional)</div>
+                    <div class="form-field">
+                        <input type="text" id="street" class="form-input" placeholder="">
+                        <label style="display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 13px; color: #666;">
+                            <input type="checkbox" id="showFullAddress">
+                            Vollstandige Adresse anzeigen
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deine Angaben -->
+        <div class="form-section">
+            <h2 class="form-section-title">Deine Angaben</h2>
+            <div class="form-section-body">
+                <div class="form-row">
+                    <div class="form-label required">Name</div>
+                    <div class="form-field">
+                        <input type="text" id="sellerName" class="form-input" placeholder="">
+                        <div class="form-tip">
+                            Tipp: Du kannst deinen Profilnamen jederzeit in den Einstellungen andern.
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Package Size Card -->
-        <div class="form-card">
-            <div class="form-card-header">Bitte wähle eine Paketgrößenoption:</div>
-            <div class="form-card-body" style="padding: 16px 20px;">
-                <div class="package-sizes">
-                    <div class="package-option" data-size="klein" onclick="selectPackage(this)">
-                        <div class="package-radio"></div>
-                        <div class="package-content">
-                            <div class="package-title">Klein</div>
-                            <div class="package-desc">Für Artikel, die in einen großen Umschlag passen.</div>
-                        </div>
-                    </div>
-                    <div class="package-option selected" data-size="mittel" onclick="selectPackage(this)">
-                        <div class="package-radio"></div>
-                        <div class="package-content">
-                            <div class="package-title">Mittel</div>
-                            <div class="package-desc">Für Artikel, die in einen Schuhkarton passen.</div>
-                        </div>
-                        <span class="package-badge">Empfohlen</span>
-                    </div>
-                    <div class="package-option" data-size="groß" onclick="selectPackage(this)">
-                        <div class="package-radio"></div>
-                        <div class="package-content">
-                            <div class="package-title">Groß</div>
-                            <div class="package-desc">Für Artikel, die in einen Umzugskarton passen.</div>
-                        </div>
-                    </div>
-                </div>
-                <p style="font-size: 12px; color: #666; margin-top: 12px;">Für eine Versandoption wird immer ein Maßen.</p>
-            </div>
-        </div>
-
-        <!-- Boost Option -->
-        <div class="form-card">
-            <div class="boost-section">
-                <div class="boost-header">
-                    <span class="boost-title">Pushen und schneller verkaufen</span>
-                    <span class="boost-price">ab 1,95 €</span>
-                </div>
-                <p class="boost-desc">Dein Artikel geht sofort ganz oben in der Suche und steigert die Verkaufschancen bis zu 20x.</p>
-                <div class="boost-toggle">
-                    <div class="boost-switch" id="boostSwitch" onclick="toggleBoost()"></div>
-                    <span style="font-size: 14px; color: #333;">Aktivieren</span>
-                </div>
-            </div>
+        <!-- Disclaimer -->
+        <div style="padding: 16px 0; font-size: 13px; color: #666; line-height: 1.5;">
+            Es gelten unsere <a href="agb.html" style="color: #2D5016;">Nutzungsbedingungen</a>.
+            Informationen zur Verarbeitung deiner Daten findest du in unserer <a href="datenschutz.html" style="color: #2D5016;">Datenschutzerklarung</a>.
         </div>
 
         <!-- Action Buttons -->
-        <div class="action-buttons">
+        <div class="form-actions">
+            <button class="btn-preview" onclick="showPreview()">Vorschau</button>
             <button class="btn-draft" onclick="saveDraft()">Entwurf speichern</button>
-            <button class="btn-publish" id="publishBtn" onclick="publishArticle()">Hochladen</button>
+            <button class="btn-publish" onclick="publishArticle()">Anzeige aufgeben</button>
         </div>
     </div>
 
-    <!-- Feedback Button -->
-    <button class="feedback-btn" onclick="showFeedback()">Feedback geben</button>
+    <!-- Category Picker Modal - Vinted Style -->
+    <div class="category-modal" id="categoryModal">
+        <div class="category-modal-content">
+            <div class="category-modal-header">
+                <h3 class="category-modal-title">
+                    <button class="category-back-btn" id="categoryBackBtn" onclick="goBackCategory()" style="display: none;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+                    <span id="categoryModalTitle">Wahle eine Kategorie</span>
+                </h3>
+                <button class="category-close-btn" onclick="closeCategoryModal()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="category-search">
+                <input type="text" class="category-search-input" id="categorySearchInput" placeholder="Finde eine Kategorie" oninput="searchCategories()">
+            </div>
+
+            <!-- Smart Suggestions (shown when title has keywords) -->
+            <div class="smart-suggestions" id="smartSuggestions" style="display: none;">
+                <div class="smart-suggestions-title">Vorschlage basierend auf deinem Titel:</div>
+                <div class="smart-suggestions-list" id="smartSuggestionsList"></div>
+            </div>
+
+            <div class="category-list" id="categoryList">
+                <!-- Categories will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
-    <footer class="footer" style="background: linear-gradient(135deg, #FF8C42 0%, #2D5016 100%); padding: 0; margin-top: 40px;">
-        <div style="max-width: 1400px; margin: 0 auto; padding: 24px 32px;">
-            <div style="text-align: center; color: rgba(255,255,255,0.8); font-size: 12px;">
-                © 2025 CSS Berlin GmbH
-            </div>
+    <footer class="footer" style="background: linear-gradient(135deg, #FF8C42 0%, #2D5016 100%); padding: 24px 0; margin-top: 40px;">
+        <div style="max-width: 1400px; margin: 0 auto; padding: 0 32px; text-align: center; color: rgba(255,255,255,0.8); font-size: 12px;">
+            &copy; 2025 CSS Berlin GmbH - Climate Smart Solutions
         </div>
     </footer>
 
     <script src="api-config.js"></script>
+    <script src="api-client.js"></script>
+    <script src="email-service.js"></script>
     <script src="auth-gate.js"></script>
 
     <script>
-        // Photo Management
-        let uploadedPhotos = [];
-        let currentPhotoIndex = 0;
+        // Category Data - Hierarchical Structure (Vinted-style)
+        const categoryData = {
+            root: [
+                { id: 'damen', name: 'Damen', icon: 'dress', hasChildren: true },
+                { id: 'herren', name: 'Herren', icon: 'shirt', hasChildren: true },
+                { id: 'kinder', name: 'Kinder', icon: 'baby', hasChildren: true },
+                { id: 'home', name: 'Home & Living', icon: 'home', hasChildren: true },
+                { id: 'elektronik', name: 'Elektronik', icon: 'device', hasChildren: true }
+            ],
+            damen: [
+                { id: 'damen_kleidung', name: 'Kleidung', icon: 'hanger', hasChildren: true },
+                { id: 'damen_schuhe', name: 'Schuhe', icon: 'shoe', hasChildren: true },
+                { id: 'damen_taschen', name: 'Taschen', icon: 'bag', hasChildren: false },
+                { id: 'damen_accessoires', name: 'Accessoires', icon: 'accessory', hasChildren: true },
+                { id: 'damen_schmuck', name: 'Schmuck', icon: 'jewelry', hasChildren: false }
+            ],
+            herren: [
+                { id: 'herren_kleidung', name: 'Kleidung', icon: 'hanger', hasChildren: true },
+                { id: 'herren_schuhe', name: 'Schuhe', icon: 'shoe', hasChildren: true },
+                { id: 'herren_accessoires', name: 'Accessoires', icon: 'accessory', hasChildren: false }
+            ],
+            kinder: [
+                { id: 'kinder_maedchen', name: 'Madchen', icon: 'dress', hasChildren: true },
+                { id: 'kinder_jungen', name: 'Jungen', icon: 'shirt', hasChildren: true },
+                { id: 'kinder_baby', name: 'Baby (0-24 Monate)', icon: 'baby', hasChildren: false }
+            ],
+            damen_kleidung: [
+                { id: 'damen_kleider', name: 'Kleider', icon: 'dress', hasChildren: false },
+                { id: 'damen_oberteile', name: 'Oberteile & T-Shirts', icon: 'shirt', hasChildren: false },
+                { id: 'damen_hosen', name: 'Hosen & Jeans', icon: 'pants', hasChildren: false },
+                { id: 'damen_pullover', name: 'Pullover & Strickjacken', icon: 'sweater', hasChildren: false },
+                { id: 'damen_jacken', name: 'Jacken & Mantel', icon: 'jacket', hasChildren: false },
+                { id: 'damen_roecke', name: 'Rocke', icon: 'skirt', hasChildren: false },
+                { id: 'damen_sportbekleidung', name: 'Sportbekleidung', icon: 'sport', hasChildren: false }
+            ],
+            damen_schuhe: [
+                { id: 'damen_sneaker', name: 'Sneaker', icon: 'sneaker', hasChildren: false },
+                { id: 'damen_stiefel', name: 'Stiefel & Stiefeletten', icon: 'boot', hasChildren: false },
+                { id: 'damen_pumps', name: 'Pumps & High Heels', icon: 'heel', hasChildren: false },
+                { id: 'damen_sandalen', name: 'Sandalen', icon: 'sandal', hasChildren: false },
+                { id: 'damen_loafer', name: 'Loafer & Mokassins', icon: 'loafer', hasChildren: false }
+            ],
+            herren_kleidung: [
+                { id: 'herren_tshirts', name: 'T-Shirts & Polos', icon: 'shirt', hasChildren: false },
+                { id: 'herren_hemden', name: 'Hemden', icon: 'shirt', hasChildren: false },
+                { id: 'herren_hosen', name: 'Hosen & Jeans', icon: 'pants', hasChildren: false },
+                { id: 'herren_pullover', name: 'Pullover & Hoodies', icon: 'sweater', hasChildren: false },
+                { id: 'herren_jacken', name: 'Jacken & Mantel', icon: 'jacket', hasChildren: false },
+                { id: 'herren_anzuege', name: 'Anzuge & Sakkos', icon: 'suit', hasChildren: false }
+            ],
+            herren_schuhe: [
+                { id: 'herren_sneaker', name: 'Sneaker', icon: 'sneaker', hasChildren: false },
+                { id: 'herren_stiefel', name: 'Stiefel & Boots', icon: 'boot', hasChildren: false },
+                { id: 'herren_business', name: 'Business-Schuhe', icon: 'oxford', hasChildren: false },
+                { id: 'herren_loafer', name: 'Bootsschuhe, Loafer & Mokassins', icon: 'loafer', hasChildren: false },
+                { id: 'herren_sandalen', name: 'Sandalen & Clogs', icon: 'sandal', hasChildren: false }
+            ]
+        };
 
-        function triggerPhotoUpload(index) {
-            currentPhotoIndex = index;
-            document.getElementById('photoInput').click();
+        // Category Icons (SVG paths)
+        const categoryIcons = {
+            dress: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 8v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8l-3-6H6z"/><path d="M3 8h18"/><path d="M16 12a4 4 0 1 1-8 0"/></svg>',
+            shirt: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>',
+            baby: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>',
+            home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+            device: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>',
+            hanger: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1l7 6v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6l7-6h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/></svg>',
+            shoe: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 18v-3a3 3 0 0 1 3-3h14a3 3 0 0 1 3 3v3"/><path d="M4 12V8a2 2 0 0 1 2-2h3l2 2h5a2 2 0 0 1 2 2v2"/></svg>',
+            bag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>',
+            accessory: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',
+            jewelry: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+            sneaker: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 18v-3a3 3 0 0 1 3-3h14a3 3 0 0 1 3 3v3"/><path d="M4 12V8a2 2 0 0 1 2-2h3l2 2h5a2 2 0 0 1 2 2v2"/></svg>',
+            boot: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/><path d="M7 5v6l3 3v8h8v-8l3-7-14-2z"/></svg>',
+            pants: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2h12l-1 20h-4l-1-10-1 10H7L6 2z"/></svg>',
+            sweater: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>',
+            jacket: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 3h16l2 7v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V10l2-7z"/><path d="M9 3v18"/><path d="M15 3v18"/><path d="M2 10h20"/></svg>'
+        };
+
+        // Current navigation state
+        let categoryNavStack = ['root'];
+        let selectedCategoryPath = [];
+
+        // Smart keyword to category mapping
+        const keywordCategoryMap = {
+            'sneaker': ['damen_sneaker', 'herren_sneaker'],
+            'schuhe': ['damen_schuhe', 'herren_schuhe'],
+            'schuh': ['damen_schuhe', 'herren_schuhe'],
+            'air max': ['damen_sneaker', 'herren_sneaker'],
+            'jordan': ['damen_sneaker', 'herren_sneaker'],
+            'nike': ['damen_sneaker', 'herren_sneaker'],
+            'adidas': ['damen_sneaker', 'herren_sneaker'],
+            'jacke': ['damen_jacken', 'herren_jacken'],
+            'mantel': ['damen_jacken', 'herren_jacken'],
+            'coat': ['damen_jacken', 'herren_jacken'],
+            'jeans': ['damen_hosen', 'herren_hosen'],
+            'hose': ['damen_hosen', 'herren_hosen'],
+            'kleid': ['damen_kleider'],
+            'dress': ['damen_kleider'],
+            'rock': ['damen_roecke'],
+            'shirt': ['damen_oberteile', 'herren_tshirts'],
+            't-shirt': ['damen_oberteile', 'herren_tshirts'],
+            'pullover': ['damen_pullover', 'herren_pullover'],
+            'hoodie': ['damen_pullover', 'herren_pullover'],
+            'tasche': ['damen_taschen'],
+            'bag': ['damen_taschen'],
+            'stiefel': ['damen_stiefel', 'herren_stiefel'],
+            'boots': ['damen_stiefel', 'herren_stiefel']
+        };
+
+        // Open Category Modal
+        function openCategoryModal() {
+            const modal = document.getElementById('categoryModal');
+            modal.classList.add('open');
+            categoryNavStack = ['root'];
+            renderCategoryList();
+            checkSmartSuggestions();
         }
 
-        function handlePhotoUpload(event) {
-            const files = event.target.files;
-            const grid = document.getElementById('photoGrid');
+        // Close Category Modal
+        function closeCategoryModal() {
+            const modal = document.getElementById('categoryModal');
+            modal.classList.remove('open');
+        }
 
-            Array.from(files).forEach((file, i) => {
-                if (uploadedPhotos.length >= 5) return;
+        // Render Category List
+        function renderCategoryList() {
+            const currentLevel = categoryNavStack[categoryNavStack.length - 1];
+            const categories = categoryData[currentLevel] || [];
+            const list = document.getElementById('categoryList');
+            const backBtn = document.getElementById('categoryBackBtn');
+            const title = document.getElementById('categoryModalTitle');
+
+            // Update back button and title
+            if (categoryNavStack.length > 1) {
+                backBtn.style.display = 'flex';
+                const parentCat = categoryData[categoryNavStack[categoryNavStack.length - 2]]?.find(c => c.id === currentLevel);
+                title.innerHTML = `<button class="category-back-btn" onclick="goBackCategory()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+                <span>${parentCat?.name || 'Kategorie'}</span>`;
+            } else {
+                backBtn.style.display = 'none';
+                title.innerHTML = '<span>Wahle eine Kategorie</span>';
+            }
+
+            // Render categories
+            list.innerHTML = categories.map(cat => `
+                <div class="category-item" onclick="${cat.hasChildren ? `navigateToCategory('${cat.id}')` : `selectCategory('${cat.id}', '${cat.name}')`}">
+                    <div class="category-item-icon">
+                        ${categoryIcons[cat.icon] || categoryIcons['hanger']}
+                    </div>
+                    <span class="category-item-name">${cat.name}</span>
+                    ${cat.hasChildren ? `
+                        <span class="category-item-arrow">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </span>
+                    ` : `
+                        <div class="category-item-radio"></div>
+                    `}
+                </div>
+            `).join('');
+        }
+
+        // Navigate to sub-category
+        function navigateToCategory(categoryId) {
+            categoryNavStack.push(categoryId);
+            renderCategoryList();
+        }
+
+        // Go back to parent category
+        function goBackCategory() {
+            if (categoryNavStack.length > 1) {
+                categoryNavStack.pop();
+                renderCategoryList();
+            }
+        }
+
+        // Select final category
+        function selectCategory(categoryId, categoryName) {
+            document.getElementById('selectedCategory').value = categoryId;
+            document.getElementById('selectedCategoryText').textContent = categoryName;
+            document.getElementById('categoryPickerBtn').classList.remove('placeholder');
+            closeCategoryModal();
+        }
+
+        // Search categories
+        function searchCategories() {
+            const query = document.getElementById('categorySearchInput').value.toLowerCase();
+            const list = document.getElementById('categoryList');
+
+            if (query.length < 2) {
+                renderCategoryList();
+                return;
+            }
+
+            // Flatten and search all categories
+            let results = [];
+            Object.keys(categoryData).forEach(key => {
+                categoryData[key].forEach(cat => {
+                    if (cat.name.toLowerCase().includes(query)) {
+                        results.push(cat);
+                    }
+                });
+            });
+
+            list.innerHTML = results.slice(0, 10).map(cat => `
+                <div class="category-item" onclick="selectCategory('${cat.id}', '${cat.name}')">
+                    <div class="category-item-icon">
+                        ${categoryIcons[cat.icon] || categoryIcons['hanger']}
+                    </div>
+                    <span class="category-item-name">${cat.name}</span>
+                    <div class="category-item-radio"></div>
+                </div>
+            `).join('');
+        }
+
+        // Check for smart suggestions based on title
+        function checkSmartSuggestions() {
+            const title = document.getElementById('productTitle').value.toLowerCase();
+            const suggestionsDiv = document.getElementById('smartSuggestions');
+            const suggestionsList = document.getElementById('smartSuggestionsList');
+
+            if (!title) {
+                suggestionsDiv.style.display = 'none';
+                return;
+            }
+
+            let suggestions = [];
+            Object.keys(keywordCategoryMap).forEach(keyword => {
+                if (title.includes(keyword)) {
+                    keywordCategoryMap[keyword].forEach(catId => {
+                        // Find category name
+                        Object.keys(categoryData).forEach(key => {
+                            const cat = categoryData[key].find(c => c.id === catId);
+                            if (cat && !suggestions.find(s => s.id === catId)) {
+                                suggestions.push({ id: catId, name: cat.name });
+                            }
+                        });
+                    });
+                }
+            });
+
+            if (suggestions.length > 0) {
+                suggestionsDiv.style.display = 'block';
+                suggestionsList.innerHTML = suggestions.slice(0, 4).map(s => `
+                    <span class="smart-suggestion-chip" onclick="selectCategory('${s.id}', '${s.name}')">${s.name}</span>
+                `).join('');
+            } else {
+                suggestionsDiv.style.display = 'none';
+            }
+        }
+
+        // Title input event for smart detection
+        document.getElementById('productTitle').addEventListener('input', function() {
+            // If modal is open, update suggestions
+            if (document.getElementById('categoryModal').classList.contains('open')) {
+                checkSmartSuggestions();
+            }
+        });
+
+        // Image Upload
+        let uploadedImages = [];
+
+        function handleImageUpload(event) {
+            const files = Array.from(event.target.files);
+            const grid = document.getElementById('imagePreviewGrid');
+
+            files.forEach(file => {
+                if (uploadedImages.length >= 20) return;
 
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const targetIndex = uploadedPhotos.length;
-                    uploadedPhotos.push({
+                    uploadedImages.push({
                         file: file,
                         url: e.target.result
                     });
-
-                    const slot = grid.children[targetIndex];
-                    slot.innerHTML = `
-                        <img src="${e.target.result}" alt="Foto ${targetIndex + 1}">
-                        <button class="photo-remove" onclick="removePhoto(event, ${targetIndex})">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="18" y1="6" x2="6" y2="18"></line>
-                                <line x1="6" y1="6" x2="18" y2="18"></line>
-                            </svg>
-                        </button>
-                        ${targetIndex === 0 ? '<span class="photo-main-badge">Hauptbild</span>' : ''}
-                    `;
-                    slot.classList.add('has-image');
+                    renderImagePreviews();
                 };
                 reader.readAsDataURL(file);
             });
@@ -1104,159 +1119,76 @@
             event.target.value = '';
         }
 
-        function removePhoto(event, index) {
-            event.stopPropagation();
-            uploadedPhotos.splice(index, 1);
-            renderPhotoGrid();
+        function renderImagePreviews() {
+            const grid = document.getElementById('imagePreviewGrid');
+            grid.innerHTML = uploadedImages.map((img, i) => `
+                <div class="image-preview-item">
+                    <img src="${img.url}" alt="Bild ${i + 1}">
+                    <button class="image-preview-remove" onclick="removeImage(${i})">x</button>
+                </div>
+            `).join('');
         }
 
-        function renderPhotoGrid() {
-            const grid = document.getElementById('photoGrid');
-
-            for (let i = 0; i < 5; i++) {
-                const slot = grid.children[i];
-
-                if (uploadedPhotos[i]) {
-                    slot.innerHTML = `
-                        <img src="${uploadedPhotos[i].url}" alt="Foto ${i + 1}">
-                        <button class="photo-remove" onclick="removePhoto(event, ${i})">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="18" y1="6" x2="6" y2="18"></line>
-                                <line x1="6" y1="6" x2="18" y2="18"></line>
-                            </svg>
-                        </button>
-                        ${i === 0 ? '<span class="photo-main-badge">Hauptbild</span>' : ''}
-                    `;
-                    slot.classList.add('has-image');
-                } else {
-                    slot.innerHTML = `
-                        <div class="photo-slot-add">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                            </svg>
-                            ${i === 0 ? '<span>Fotos hinzufügen</span>' : ''}
-                        </div>
-                    `;
-                    slot.classList.remove('has-image');
-                }
-            }
+        function removeImage(index) {
+            uploadedImages.splice(index, 1);
+            renderImagePreviews();
         }
 
-        // Brand Autocomplete
-        const brands = [
-            'adidas', 'Nike', 'Puma', 'Zara', 'H&M', 'Tommy Hilfiger', 'Ralph Lauren',
-            'Gucci', 'Prada', 'Louis Vuitton', 'Calvin Klein', 'Levi\'s', 'Diesel',
-            'The North Face', 'Patagonia', 'Carhartt', 'Champion', 'Converse', 'Vans',
-            'New Balance', 'Reebok', 'Under Armour', 'Fila', 'Kappa', 'Lacoste',
-            'Hugo Boss', 'Armani', 'Versace', 'Burberry', 'Michael Kors', 'Coach'
-        ];
+        // Character counter
+        function updateCharCounter() {
+            const textarea = document.getElementById('productDesc');
+            document.getElementById('charCount').textContent = textarea.value.length;
+        }
 
-        const brandInput = document.getElementById('brand');
-        const brandDropdown = document.getElementById('brandDropdown');
+        // PLZ Lookup (simple demo)
+        const plzData = {
+            '10115': 'Berlin - Mitte',
+            '10178': 'Berlin - Mitte',
+            '10243': 'Berlin - Friedrichshain',
+            '10999': 'Berlin - Kreuzberg',
+            '12043': 'Berlin - Neukolln',
+            '13353': 'Berlin - Wedding',
+            '13593': 'Berlin - Spandau',
+            '14195': 'Berlin - Dahlem',
+            '80331': 'Munchen - Altstadt',
+            '20095': 'Hamburg - Altstadt',
+            '50667': 'Koln - Altstadt',
+            '60311': 'Frankfurt am Main'
+        };
 
-        brandInput.addEventListener('input', function() {
-            const value = this.value.toLowerCase();
-            if (value.length < 1) {
-                brandDropdown.classList.remove('show');
-                return;
-            }
+        function lookupPLZ() {
+            const plz = document.getElementById('plz').value;
+            const cityDisplay = document.getElementById('cityDisplay');
 
-            const matches = brands.filter(b => b.toLowerCase().includes(value));
-
-            if (matches.length > 0) {
-                brandDropdown.innerHTML = matches.slice(0, 8).map(brand => `
-                    <div class="autocomplete-item" onclick="selectBrand('${brand}')">
-                        <div class="autocomplete-item-logo">${brand.substring(0, 2).toUpperCase()}</div>
-                        <span class="autocomplete-item-name">${brand}</span>
-                    </div>
-                `).join('');
-                brandDropdown.classList.add('show');
+            if (plzData[plz]) {
+                cityDisplay.textContent = plzData[plz];
+                cityDisplay.style.color = '#2D5016';
+            } else if (plz.length === 5) {
+                cityDisplay.textContent = 'PLZ nicht gefunden';
+                cityDisplay.style.color = '#999';
             } else {
-                brandDropdown.classList.remove('show');
+                cityDisplay.textContent = '';
             }
-        });
-
-        brandInput.addEventListener('blur', function() {
-            setTimeout(() => brandDropdown.classList.remove('show'), 200);
-        });
-
-        function selectBrand(brand) {
-            brandInput.value = brand;
-            brandDropdown.classList.remove('show');
-
-            // Update suggestion chips
-            document.querySelectorAll('#brandSuggestions .suggestion-chip').forEach(chip => {
-                chip.classList.toggle('selected', chip.dataset.brand === brand);
-            });
         }
 
-        // Brand Suggestion Chips
-        document.querySelectorAll('#brandSuggestions .suggestion-chip').forEach(chip => {
-            chip.addEventListener('click', function() {
-                selectBrand(this.dataset.brand);
-            });
-        });
-
-        // Size Suggestion Chips
-        document.querySelectorAll('#sizeSuggestions .suggestion-chip').forEach(chip => {
-            chip.addEventListener('click', function() {
-                document.getElementById('size').value = this.dataset.size;
-                document.querySelectorAll('#sizeSuggestions .suggestion-chip').forEach(c => {
-                    c.classList.toggle('selected', c === this);
-                });
-            });
-        });
-
-        // Package Selection
-        function selectPackage(element) {
-            document.querySelectorAll('.package-option').forEach(opt => {
-                opt.classList.remove('selected');
-            });
-            element.classList.add('selected');
-        }
-
-        // Boost Toggle
-        function toggleBoost() {
-            const boostSwitch = document.getElementById('boostSwitch');
-            boostSwitch.classList.toggle('active');
-        }
-
-        // Smart Category Suggestions based on Title
-        const titleInput = document.getElementById('productTitle');
-        titleInput.addEventListener('input', function() {
-            const title = this.value.toLowerCase();
-            const categorySuggestions = document.getElementById('categorySuggestions');
-            const categorySelect = document.getElementById('category');
-
-            // Smart category detection
-            if (title.includes('sneaker') || title.includes('schuh') || title.includes('air max') || title.includes('jordan')) {
-                categorySelect.value = 'sneaker';
-            } else if (title.includes('jacke') || title.includes('mantel') || title.includes('coat')) {
-                categorySelect.value = 'jacken';
-            } else if (title.includes('jeans') || title.includes('hose') || title.includes('pants')) {
-                categorySelect.value = 'jeans';
-            } else if (title.includes('shirt') || title.includes('top') || title.includes('tshirt')) {
-                categorySelect.value = 'shirts';
-            } else if (title.includes('pullover') || title.includes('hoodie') || title.includes('sweater')) {
-                categorySelect.value = 'pullover';
-            } else if (title.includes('tasche') || title.includes('bag')) {
-                categorySelect.value = 'taschen';
+        // Load user data
+        function loadUserData() {
+            const user = JSON.parse(localStorage.getItem('cssberlin_current_user'));
+            if (user) {
+                document.getElementById('sellerName').value = user.firstName || '';
             }
-
-            // Smart brand detection from title
-            brands.forEach(brand => {
-                if (title.includes(brand.toLowerCase())) {
-                    selectBrand(brand);
-                }
-            });
-        });
+        }
 
         // Save Draft
         function saveDraft() {
-            const draft = collectFormData();
-            localStorage.setItem('cssberlin_draft', JSON.stringify(draft));
+            const formData = collectFormData();
+            localStorage.setItem('cssberlin_listing_draft', JSON.stringify(formData));
             alert('Entwurf wurde gespeichert!');
+        }
+
+        // Show Preview
+        function showPreview() {
+            alert('Vorschau-Funktion wird bald verfugbar sein!');
         }
 
         // Publish Article
@@ -1264,85 +1196,70 @@
             const formData = collectFormData();
 
             // Validation
-            if (uploadedPhotos.length === 0) {
-                alert('Bitte fügen Sie mindestens ein Foto hinzu.');
-                return;
-            }
             if (!formData.title) {
-                alert('Bitte geben Sie einen Titel ein.');
+                alert('Bitte gib einen Titel ein.');
                 return;
             }
             if (!formData.category) {
-                alert('Bitte wählen Sie eine Kategorie.');
+                alert('Bitte wahle eine Kategorie.');
                 return;
             }
-            if (!formData.price || formData.price <= 0) {
-                alert('Bitte geben Sie einen gültigen Preis ein.');
+            if (!formData.price && formData.priceType !== 'verschenken') {
+                alert('Bitte gib einen Preis ein.');
                 return;
             }
 
-            const btn = document.getElementById('publishBtn');
-            btn.disabled = true;
-            btn.textContent = 'Wird hochgeladen...';
+            // Save to localStorage
+            const listings = JSON.parse(localStorage.getItem('cssberlin_listings') || '[]');
+            formData.id = 'listing_' + Date.now();
+            formData.createdAt = new Date().toISOString();
+            formData.status = 'active';
+            formData.images = uploadedImages.map(img => img.url);
+            listings.push(formData);
+            localStorage.setItem('cssberlin_listings', JSON.stringify(listings));
 
-            // Simulate upload
-            setTimeout(() => {
-                // Save to localStorage for demo
-                const products = JSON.parse(localStorage.getItem('cssberlin_user_products') || '[]');
-                formData.id = 'prod_' + Date.now();
-                formData.createdAt = new Date().toISOString();
-                formData.status = 'active';
-                formData.images = uploadedPhotos.map(p => p.url);
-                products.push(formData);
-                localStorage.setItem('cssberlin_user_products', JSON.stringify(products));
+            // Clear draft
+            localStorage.removeItem('cssberlin_listing_draft');
 
-                // Clear draft
-                localStorage.removeItem('cssberlin_draft');
-
-                // Redirect to success or product page
-                alert('Artikel wurde erfolgreich hochgeladen!');
-                window.location.href = 'mein-konto.html';
-            }, 2000);
+            alert('Anzeige wurde erfolgreich aufgegeben!');
+            window.location.href = 'mein-konto.html';
         }
 
         function collectFormData() {
             return {
+                offerType: document.querySelector('input[name="offerType"]:checked')?.value || 'biete',
                 title: document.getElementById('productTitle').value,
-                description: document.getElementById('productDesc').value,
-                category: document.getElementById('category').value,
-                brand: document.getElementById('brand').value,
-                size: document.getElementById('size').value,
-                condition: document.getElementById('condition').value,
-                color: document.getElementById('color').value,
-                material: document.getElementById('material').value,
+                category: document.getElementById('selectedCategory').value,
                 price: parseFloat(document.getElementById('price').value) || 0,
-                premiumPrice: document.getElementById('premiumPrice').checked,
-                packageSize: document.querySelector('.package-option.selected')?.dataset.size || 'mittel',
-                boost: document.getElementById('boostSwitch').classList.contains('active')
+                priceType: document.getElementById('priceType').value,
+                description: document.getElementById('productDesc').value,
+                plz: document.getElementById('plz').value,
+                city: document.getElementById('cityDisplay').textContent,
+                street: document.getElementById('street').value,
+                showFullAddress: document.getElementById('showFullAddress').checked,
+                sellerName: document.getElementById('sellerName').value
             };
         }
 
-        // Load Draft on page load
+        // Load draft on page load
         document.addEventListener('DOMContentLoaded', function() {
-            const draft = localStorage.getItem('cssberlin_draft');
+            loadUserData();
+
+            const draft = localStorage.getItem('cssberlin_listing_draft');
             if (draft) {
                 const data = JSON.parse(draft);
                 document.getElementById('productTitle').value = data.title || '';
-                document.getElementById('productDesc').value = data.description || '';
-                document.getElementById('category').value = data.category || '';
-                document.getElementById('brand').value = data.brand || '';
-                document.getElementById('size').value = data.size || '';
-                document.getElementById('condition').value = data.condition || '';
-                document.getElementById('color').value = data.color || '';
-                document.getElementById('material').value = data.material || '';
                 document.getElementById('price').value = data.price || '';
-                document.getElementById('premiumPrice').checked = data.premiumPrice || false;
+                document.getElementById('priceType').value = data.priceType || 'festpreis';
+                document.getElementById('productDesc').value = data.description || '';
+                document.getElementById('plz').value = data.plz || '';
+                document.getElementById('street').value = data.street || '';
+                document.getElementById('sellerName').value = data.sellerName || '';
+
+                if (data.plz) lookupPLZ();
+                updateCharCounter();
             }
         });
-
-        function showFeedback() {
-            alert('Feedback-Formular wird bald verfügbar sein!');
-        }
     </script>
 </body>
 </html>
