@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mein Konto - CSS Berlin</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=2026">
     <link rel="stylesheet" href="toast.css">
     <style>
         .account-container {
@@ -763,7 +763,7 @@
                         <line x1="3" y1="6" x2="21" y2="6"></line>
                         <line x1="3" y1="18" x2="21" y2="18"></line>
                     </svg>
-                    Menü
+                    MenÃ¼
                 </button>
 
                 <div class="account-user-info">
@@ -789,7 +789,7 @@
                                 <rect x="14" y="14" width="7" height="7"></rect>
                                 <rect x="3" y="14" width="7" height="7"></rect>
                             </svg>
-                            Übersicht
+                            Ãœbersicht
                         </a>
                     </li>
 
@@ -884,17 +884,17 @@
 
             <!-- Content -->
             <main class="account-content">
-                <!-- Übersicht Section (Default) -->
+                <!-- Ãœbersicht Section (Default) -->
                 <div class="content-section active" id="section-ubersicht">
                     <div class="account-welcome">
-                        <h1>Willkommen zurück, <span id="welcomeName">Benutzer</span>!</h1>
+                        <h1>Willkommen zurÃ¼ck, <span id="welcomeName">Benutzer</span>!</h1>
                         <p>Verwalten Sie Ihr Konto, Bestellungen und vieles mehr.</p>
                     </div>
 
                     <!-- Stats -->
                     <div class="stats-grid">
                         <div class="stat-card">
-                            <div class="stat-icon green">🛒</div>
+                            <div class="stat-icon green">ðŸ›’</div>
                             <div class="stat-info">
                                 <h3 id="totalOrders">0</h3>
                                 <p>Bestellungen</p>
@@ -902,7 +902,7 @@
                         </div>
 
                         <div class="stat-card">
-                            <div class="stat-icon orange">💬</div>
+                            <div class="stat-icon orange">ðŸ’¬</div>
                             <div class="stat-info">
                                 <h3 id="totalMessages">0</h3>
                                 <p>Nachrichten</p>
@@ -910,7 +910,7 @@
                         </div>
 
                         <div class="stat-card">
-                            <div class="stat-icon blue">❤️</div>
+                            <div class="stat-icon blue">â¤ï¸</div>
                             <div class="stat-info">
                                 <h3 id="totalWishlist">0</h3>
                                 <p>Wunschliste</p>
@@ -918,7 +918,7 @@
                         </div>
 
                         <div class="stat-card">
-                            <div class="stat-icon red">🤝</div>
+                            <div class="stat-icon red">ðŸ¤</div>
                             <div class="stat-info">
                                 <h3 id="totalNegotiations">0</h3>
                                 <p>Verhandlungen</p>
@@ -974,7 +974,7 @@
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
                             </svg>
-                            Letzte Aktivität
+                            Letzte AktivitÃ¤t
                         </h2>
 
                         <ul class="activity-list" id="activityList">
@@ -997,7 +997,7 @@
                 <!-- Profil Section -->
                 <div class="content-section" id="section-profil" style="display: none;">
                     <h2>Mein Profil</h2>
-                    <p>Profil-Bearbeitungsfunktion wird bald verfügbar sein.</p>
+                    <p>Profil-Bearbeitungsfunktion wird bald verfÃ¼gbar sein.</p>
                 </div>
 
                 <!-- Bestellungen Section -->
@@ -1033,7 +1033,7 @@
                                     <line x1="3" y1="6" x2="21" y2="6"></line>
                                     <path d="M16 10a4 4 0 0 1-8 0"></path>
                                 </svg>
-                                <h3>Keine Käufe</h3>
+                                <h3>Keine KÃ¤ufe</h3>
                                 <p>Sie haben noch nichts gekauft.</p>
                                 <a href="index.html" class="btn-primary-sm">Jetzt shoppen</a>
                             </div>
@@ -1047,7 +1047,7 @@
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="64" height="64">
                                     <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                                 </svg>
-                                <h3>Keine Verkäufe</h3>
+                                <h3>Keine VerkÃ¤ufe</h3>
                                 <p>Sie haben noch nichts verkauft.</p>
                                 <a href="inserieren.html" class="btn-primary-sm">Artikel inserieren</a>
                             </div>
@@ -1110,7 +1110,7 @@
                 <!-- Einstellungen Section -->
                 <div class="content-section" id="section-einstellungen" style="display: none;">
                     <h2>Einstellungen</h2>
-                    <p>Einstellungsfunktion wird bald verfügbar sein.</p>
+                    <p>Einstellungsfunktion wird bald verfÃ¼gbar sein.</p>
                 </div>
             </main>
         </div>
@@ -1325,8 +1325,8 @@
                         </div>
 
                         <div class="negotiation-offer">
-                            <span class="offer-amount">${neg.counterAmount || neg.offerAmount} €</span>
-                            <span class="offer-original">${neg.originalPrice} €</span>
+                            <span class="offer-amount">${neg.counterAmount || neg.offerAmount} â‚¬</span>
+                            <span class="offer-original">${neg.originalPrice} â‚¬</span>
                             <span class="offer-discount">-${discount}%</span>
                         </div>
 
@@ -1335,13 +1335,13 @@
                         ${neg.status === 'pending' && isSeller ? `
                             <div class="negotiation-actions">
                                 <button class="btn-accept" onclick="acceptNegotiation('${neg.id}')">
-                                    ✓ Annehmen
+                                    âœ“ Annehmen
                                 </button>
                                 <button class="btn-counter" onclick="showCounterModal('${neg.id}', ${neg.originalPrice})">
-                                    ↔ Gegenangebot
+                                    â†” Gegenangebot
                                 </button>
                                 <button class="btn-decline" onclick="declineNegotiation('${neg.id}')">
-                                    ✗ Ablehnen
+                                    âœ— Ablehnen
                                 </button>
                             </div>
                         ` : ''}
@@ -1349,17 +1349,17 @@
                         ${neg.status === 'countered' && !isSeller ? `
                             <div class="negotiation-actions">
                                 <button class="btn-accept" onclick="acceptCounterOffer('${neg.id}')">
-                                    ✓ Gegenangebot annehmen (${neg.counterAmount} €)
+                                    âœ“ Gegenangebot annehmen (${neg.counterAmount} â‚¬)
                                 </button>
                                 <button class="btn-decline" onclick="declineNegotiation('${neg.id}')">
-                                    ✗ Ablehnen
+                                    âœ— Ablehnen
                                 </button>
                             </div>
                         ` : ''}
 
                         ${neg.status === 'accepted' ? `
                             <div style="padding: 12px; background: #E8F5E9; border-radius: 8px; color: #2D5016; font-weight: 600;">
-                                ✓ Angebot angenommen - Warten auf Zahlung
+                                âœ“ Angebot angenommen - Warten auf Zahlung
                             </div>
                         ` : ''}
                     </div>
@@ -1388,7 +1388,7 @@
             if (index !== -1) {
                 negotiations[index].status = 'accepted';
                 localStorage.setItem('cssberlin_negotiations', JSON.stringify(negotiations));
-                toast.success('Angebot angenommen', 'Der Käufer wird benachrichtigt.');
+                toast.success('Angebot angenommen', 'Der KÃ¤ufer wird benachrichtigt.');
                 loadNegotiations();
                 loadUserData();
             }
@@ -1415,7 +1415,7 @@
                 negotiations[index].status = 'accepted';
                 negotiations[index].offerAmount = negotiations[index].counterAmount;
                 localStorage.setItem('cssberlin_negotiations', JSON.stringify(negotiations));
-                toast.success('Gegenangebot angenommen', 'Sie können jetzt kaufen.');
+                toast.success('Gegenangebot angenommen', 'Sie kÃ¶nnen jetzt kaufen.');
                 loadNegotiations();
                 loadUserData();
             }
@@ -1433,8 +1433,8 @@
             modal.innerHTML = `
                 <div class="counter-modal-content">
                     <h3>Gegenangebot senden</h3>
-                    <p style="color: #757575; margin-bottom: 16px;">Originalpreis: ${originalPrice} €</p>
-                    <input type="number" class="counter-input" id="counterAmountInput" placeholder="Ihr Preis in €" step="0.01">
+                    <p style="color: #757575; margin-bottom: 16px;">Originalpreis: ${originalPrice} â‚¬</p>
+                    <input type="number" class="counter-input" id="counterAmountInput" placeholder="Ihr Preis in â‚¬" step="0.01">
                     <div class="counter-modal-actions">
                         <button class="btn-decline" onclick="closeCounterModal()" style="flex: 1;">Abbrechen</button>
                         <button class="btn-accept" onclick="submitCounterOffer()" style="flex: 1;">Senden</button>
@@ -1460,7 +1460,7 @@
             const amount = parseFloat(document.getElementById('counterAmountInput').value);
 
             if (!amount || amount <= 0) {
-                toast.error('Ungültiger Betrag', 'Bitte geben Sie einen gültigen Preis ein.');
+                toast.error('UngÃ¼ltiger Betrag', 'Bitte geben Sie einen gÃ¼ltigen Preis ein.');
                 return;
             }
 
@@ -1471,7 +1471,7 @@
                 negotiations[index].counterAmount = amount;
                 negotiations[index].status = 'countered';
                 localStorage.setItem('cssberlin_negotiations', JSON.stringify(negotiations));
-                toast.success('Gegenangebot gesendet', `${amount} € wurde dem Käufer vorgeschlagen.`);
+                toast.success('Gegenangebot gesendet', `${amount} â‚¬ wurde dem KÃ¤ufer vorgeschlagen.`);
                 closeCounterModal();
                 loadNegotiations();
             }
@@ -1529,8 +1529,8 @@
                     </div>
 
                     <div class="negotiation-offer">
-                        <span class="offer-amount">${offer.counter_amount || offer.offer_amount} €</span>
-                        <span class="offer-original">${offer.product_price} €</span>
+                        <span class="offer-amount">${offer.counter_amount || offer.offer_amount} â‚¬</span>
+                        <span class="offer-original">${offer.product_price} â‚¬</span>
                         <span class="offer-discount">-${discount}%</span>
                     </div>
 
@@ -1539,13 +1539,13 @@
                     ${offer.status === 'pending' && isSeller ? `
                         <div class="negotiation-actions">
                             <button class="btn-accept" onclick="acceptOfferAPI(${offer.id})">
-                                ✓ Annehmen
+                                âœ“ Annehmen
                             </button>
                             <button class="btn-counter" onclick="showCounterModalAPI(${offer.id}, ${offer.product_price})">
-                                ↔ Gegenangebot
+                                â†” Gegenangebot
                             </button>
                             <button class="btn-decline" onclick="declineOfferAPI(${offer.id})">
-                                ✗ Ablehnen
+                                âœ— Ablehnen
                             </button>
                         </div>
                     ` : ''}
@@ -1553,17 +1553,17 @@
                     ${offer.status === 'countered' && !isSeller ? `
                         <div class="negotiation-actions">
                             <button class="btn-accept" onclick="acceptOfferAPI(${offer.id})">
-                                ✓ Gegenangebot annehmen (${offer.counter_amount} €)
+                                âœ“ Gegenangebot annehmen (${offer.counter_amount} â‚¬)
                             </button>
                             <button class="btn-decline" onclick="declineOfferAPI(${offer.id})">
-                                ✗ Ablehnen
+                                âœ— Ablehnen
                             </button>
                         </div>
                     ` : ''}
 
                     ${offer.status === 'accepted' ? `
                         <div style="padding: 12px; background: #E8F5E9; border-radius: 8px; color: #2D5016; font-weight: 600;">
-                            ✓ Angebot angenommen - Warten auf Zahlung
+                            âœ“ Angebot angenommen - Warten auf Zahlung
                         </div>
                     ` : ''}
                 </div>
@@ -1609,7 +1609,7 @@
                         <img src="${shipment.product_image || 'https://via.placeholder.com/60'}" alt="${shipment.product_name}" class="order-product-image">
                         <div class="order-product-info">
                             <p class="order-product-name">${shipment.product_name}</p>
-                            <p class="order-product-price">${shipment.product_price?.toFixed(2) || '0.00'} €</p>
+                            <p class="order-product-price">${shipment.product_price?.toFixed(2) || '0.00'} â‚¬</p>
                         </div>
                         <span class="order-status ${shipment.status}">${statusLabels[shipment.status] || shipment.status}</span>
                     </div>
@@ -1624,7 +1624,7 @@
                             </svg>
                             <span>${shipment.carrier?.toUpperCase() || ''}: ${shipment.tracking_number}</span>
                             <a href="versand-tracking.html?tracking=${shipment.tracking_number}" class="tracking-link">
-                                Verfolgen →
+                                Verfolgen â†’
                             </a>
                         </div>
                     ` : `
@@ -1645,7 +1645,7 @@
         async function acceptOfferAPI(offerId) {
             try {
                 await api.acceptOffer(offerId);
-                toast.success('Angebot angenommen', 'Der Käufer wird benachrichtigt.');
+                toast.success('Angebot angenommen', 'Der KÃ¤ufer wird benachrichtigt.');
                 loadUserData();
             } catch (error) {
                 console.error('Error accepting offer:', error);
@@ -1676,8 +1676,8 @@
             modal.innerHTML = `
                 <div class="counter-modal-content">
                     <h3>Gegenangebot senden</h3>
-                    <p style="color: #757575; margin-bottom: 16px;">Originalpreis: ${originalPrice} €</p>
-                    <input type="number" class="counter-input" id="counterAmountAPI" placeholder="Ihr Preis in €" step="0.01">
+                    <p style="color: #757575; margin-bottom: 16px;">Originalpreis: ${originalPrice} â‚¬</p>
+                    <input type="number" class="counter-input" id="counterAmountAPI" placeholder="Ihr Preis in â‚¬" step="0.01">
                     <div class="counter-modal-actions">
                         <button class="btn-decline" onclick="closeCounterModalAPI()" style="flex: 1;">Abbrechen</button>
                         <button class="btn-accept" onclick="submitCounterOfferAPI()" style="flex: 1;">Senden</button>
@@ -1701,13 +1701,13 @@
             const amount = parseFloat(document.getElementById('counterAmountAPI').value);
 
             if (!amount || amount <= 0) {
-                toast.error('Ungültiger Betrag', 'Bitte geben Sie einen gültigen Preis ein.');
+                toast.error('UngÃ¼ltiger Betrag', 'Bitte geben Sie einen gÃ¼ltigen Preis ein.');
                 return;
             }
 
             try {
                 await api.counterOffer(currentAPIOfferId, amount);
-                toast.success('Gegenangebot gesendet', `${amount} € wurde dem Käufer vorgeschlagen.`);
+                toast.success('Gegenangebot gesendet', `${amount} â‚¬ wurde dem KÃ¤ufer vorgeschlagen.`);
                 closeCounterModalAPI();
                 loadUserData();
             } catch (error) {
