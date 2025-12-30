@@ -940,15 +940,21 @@ img {
    NEWS BANNER BELOW HEADER
    ============================================ */
 .news-banner {
-    background: #2D5016;  /* Doğa yeşili - düz renk (gradient değil) */
-    color: var(--text-white);
-    overflow: hidden;
+    background: #2D5016 !important;
+    color: var(--text-white) !important;
+    overflow: hidden !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    height: 30px !important;
+    min-height: 30px !important;
+    max-height: 30px !important;
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
 .news-slider {
     display: flex;
     animation: slideNews 40s linear infinite;
+    height: 30px !important;
 }
 
 .news-slider:hover {
@@ -965,21 +971,23 @@ img {
 }
 
 .news-item {
-    min-width: 100vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-sm);
-    font-size: 13px;
-    font-weight: var(--font-weight-medium);
-    font-family: var(--font-primary);
-    letter-spacing: 0.02em;
-    padding: 0 var(--spacing-xl);
+    min-width: 100vw !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: var(--spacing-sm) !important;
+    font-size: 13px !important;
+    font-weight: var(--font-weight-medium) !important;
+    font-family: var(--font-primary) !important;
+    letter-spacing: 0.02em !important;
+    padding: 0 var(--spacing-xl) !important;
     cursor: pointer;
     transition: all var(--transition-base);
-    white-space: nowrap;
-    height: 30px;
-    min-height: 30px;
+    white-space: nowrap !important;
+    height: 30px !important;
+    min-height: 30px !important;
+    max-height: 30px !important;
+    line-height: 30px !important;
 }
 
 .news-item:hover {
@@ -1720,24 +1728,32 @@ img {
 
 /* ============================================
    FOOTER WITH CO₂ SLIDING NEWS BANNER
+   Header ile aynı 30px kayar pano
    ============================================ */
 .footer {
-    background: var(--primary-orange);
-    color: var(--text-white);
+    background: var(--primary-orange) !important;
+    color: var(--text-white) !important;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
 }
 
-/* Footer News Banner - Sliding Campaign News */
+/* Footer News Banner - Header ile birebir aynı */
 .footer-news-banner {
-    background: linear-gradient(90deg, #FF8C42 0%, #2D5016 100%);
-    color: var(--text-white);
-    overflow: hidden;
-    padding: 0;
+    background: #2D5016 !important;
+    color: var(--text-white) !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    margin: 0 !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    height: 30px !important;
+    min-height: 30px !important;
+    max-height: 30px !important;
 }
 
 .footer-news-slider {
     display: flex;
     animation: slideFooterNews 40s linear infinite;
+    height: 30px !important;
 }
 
 .footer-news-slider:hover {
@@ -1754,21 +1770,23 @@ img {
 }
 
 .footer-news-item {
-    min-width: 100vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-sm);
-    font-size: 13px;
-    font-weight: var(--font-weight-medium);
-    font-family: var(--font-primary);
-    letter-spacing: 0.02em;
-    padding: 0 var(--spacing-xl);
+    min-width: 100vw !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: var(--spacing-sm) !important;
+    font-size: 13px !important;
+    font-weight: var(--font-weight-medium) !important;
+    font-family: var(--font-primary) !important;
+    letter-spacing: 0.02em !important;
+    padding: 0 var(--spacing-xl) !important;
     cursor: pointer;
     transition: all var(--transition-base);
-    white-space: nowrap;
-    height: 30px;
-    min-height: 30px;
+    white-space: nowrap !important;
+    height: 30px !important;
+    min-height: 30px !important;
+    max-height: 30px !important;
+    line-height: 30px !important;
 }
 
 .footer-news-item:hover {
@@ -1777,13 +1795,16 @@ img {
 
 .footer-news-item svg {
     flex-shrink: 0;
+    width: 14px !important;
+    height: 14px !important;
 }
 
-/* Footer Container - Minimalist */
+/* Footer Container - Minimalist, sıfır alt boşluk */
 .footer-container {
     max-width: 1400px;
-    margin: 0 auto;
-    padding: var(--spacing-lg) var(--spacing-xl);
+    margin: 0 auto !important;
+    padding: var(--spacing-md) var(--spacing-xl) !important;
+    padding-bottom: 0 !important;
 }
 
 .footer-top {
@@ -2510,15 +2531,18 @@ img {
     user-select: none;
 }
 
-/* Footer Bottom - Copyright */
+/* Footer Bottom - Copyright - Sıfır alt boşluk */
 .footer-bottom-compact {
-    text-align: center;
-    padding: var(--spacing-md) 0;
+    text-align: center !important;
+    padding: var(--spacing-sm) 0 !important;
+    margin: 0 !important;
 }
 
 .footer-bottom-compact p {
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px !important;
+    color: rgba(255, 255, 255, 0.6) !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 /* Hide old footer elements */
@@ -2530,6 +2554,27 @@ img {
 .social-links,
 .payment-methods {
     display: none !important;
+}
+
+/* ============================================
+   FOOTER ALT BOŞLUK KALDIRma - GLOBAL
+   ============================================ */
+html, body {
+    margin-bottom: 0 !important;
+}
+
+.footer,
+footer,
+[class*="footer"] {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+/* Footer sonrasında hiçbir boşluk olmamalı */
+.footer::after,
+footer::after {
+    display: none !important;
+    content: none !important;
 }
 
 /* ============================================
@@ -3439,25 +3484,22 @@ img {
    Hızlı pazarlık seçenekleri: %10, %15, %20
    ============================================ */
 .quick-offer-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.6);
-    display: flex;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(0, 0, 0, 0.6) !important;
+    display: none !important;
     align-items: center;
     justify-content: center;
-    z-index: 10000;
-    opacity: 0;
-    visibility: hidden;
+    z-index: 10000 !important;
     transition: all 0.3s ease;
     backdrop-filter: blur(4px);
 }
 
 .quick-offer-modal.active {
-    opacity: 1;
-    visibility: visible;
+    display: flex !important;
 }
 
 .quick-offer-content {
