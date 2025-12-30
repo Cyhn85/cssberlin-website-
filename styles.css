@@ -969,14 +969,17 @@ img {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--spacing-md);
-    font-size: 16px;
+    gap: var(--spacing-sm);
+    font-size: 13px;
     font-weight: var(--font-weight-medium);
-    padding: var(--spacing-md) var(--spacing-2xl);
+    font-family: var(--font-primary);
+    letter-spacing: 0.02em;
+    padding: 0 var(--spacing-xl);
     cursor: pointer;
     transition: all var(--transition-base);
     white-space: nowrap;
-    min-height: 50px;
+    height: 30px;
+    min-height: 30px;
 }
 
 .news-item:hover {
@@ -1728,7 +1731,7 @@ img {
     background: linear-gradient(90deg, #FF8C42 0%, #2D5016 100%);
     color: var(--text-white);
     overflow: hidden;
-    padding: var(--spacing-md) 0;
+    padding: 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -1755,14 +1758,17 @@ img {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--spacing-md);
-    font-size: 16px;
+    gap: var(--spacing-sm);
+    font-size: 13px;
     font-weight: var(--font-weight-medium);
-    padding: var(--spacing-md) var(--spacing-2xl);
+    font-family: var(--font-primary);
+    letter-spacing: 0.02em;
+    padding: 0 var(--spacing-xl);
     cursor: pointer;
     transition: all var(--transition-base);
     white-space: nowrap;
-    min-height: 50px;
+    height: 30px;
+    min-height: 30px;
 }
 
 .footer-news-item:hover {
@@ -1773,11 +1779,11 @@ img {
     flex-shrink: 0;
 }
 
-/* Footer Container */
+/* Footer Container - Minimalist */
 .footer-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: var(--spacing-3xl) var(--spacing-xl);
+    padding: var(--spacing-lg) var(--spacing-xl);
 }
 
 .footer-top {
@@ -3193,4 +3199,779 @@ img {
         padding: 8px 12px;
         font-size: 13px;
     }
+}
+
+/* ============================================
+   2026 VISION - NEW COMPONENTS
+   Offer Hub, Klarna, Shipping Info, etc.
+   ============================================ */
+
+/* ============================================
+   OFFER HUB - LIST VIEW DESIGN
+   Sol: Ürün resmi, Orta: Teklif durumu, Sağ: Butonlar
+   ============================================ */
+.offer-hub-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: var(--spacing-xl);
+}
+
+.offer-hub-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.offer-hub-header h1 {
+    font-size: 28px;
+    font-weight: var(--font-weight-bold);
+    font-family: var(--font-display);
+    color: var(--text-primary);
+}
+
+.offer-hub-filters {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.offer-hub-filter-btn {
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-full);
+    font-size: 13px;
+    font-weight: var(--font-weight-medium);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.offer-hub-filter-btn:hover,
+.offer-hub-filter-btn.active {
+    background: var(--primary-green);
+    color: white;
+    border-color: var(--primary-green);
+}
+
+/* Offer List Item */
+.offer-list-item {
+    display: grid;
+    grid-template-columns: 100px 1fr auto;
+    gap: var(--spacing-lg);
+    align-items: center;
+    padding: var(--spacing-lg);
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--spacing-md);
+    transition: all var(--transition-base);
+}
+
+.offer-list-item:hover {
+    border-color: var(--primary-green-light);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+/* Left: Product Image */
+.offer-list-image {
+    width: 100px;
+    height: 130px;
+    border-radius: var(--radius-md);
+    object-fit: cover;
+    background: var(--bg-tertiary);
+}
+
+/* Center: Offer Status */
+.offer-list-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.offer-list-title {
+    font-size: 16px;
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+}
+
+.offer-list-price-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.offer-list-original {
+    font-size: 14px;
+    color: var(--text-light);
+    text-decoration: line-through;
+}
+
+.offer-list-offer {
+    font-size: 18px;
+    font-weight: var(--font-weight-bold);
+    color: var(--primary-green);
+}
+
+.offer-list-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: var(--font-weight-semibold);
+}
+
+.offer-list-status.pending {
+    background: rgba(255, 152, 0, 0.15);
+    color: #E65100;
+}
+
+.offer-list-status.accepted {
+    background: rgba(76, 175, 80, 0.15);
+    color: #2E7D32;
+}
+
+.offer-list-status.rejected {
+    background: rgba(244, 67, 54, 0.15);
+    color: #C62828;
+}
+
+.offer-list-status.countered {
+    background: rgba(33, 150, 243, 0.15);
+    color: #1565C0;
+}
+
+.offer-list-date {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* Right: Action Buttons */
+.offer-list-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    min-width: 140px;
+}
+
+.offer-list-btn {
+    padding: 10px 20px;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    text-align: center;
+    border: none;
+}
+
+.offer-list-btn.primary {
+    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-orange-dark) 100%);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.offer-list-btn.primary:hover {
+    background: var(--gradient-button-hover);
+    box-shadow: var(--shadow-glow-green);
+    transform: translateY(-2px);
+}
+
+.offer-list-btn.secondary {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1.5px solid var(--border-color);
+}
+
+.offer-list-btn.secondary:hover {
+    border-color: var(--primary-green);
+    color: var(--primary-green);
+}
+
+/* ============================================
+   PRODUCT CARD - OFFER BUTTON
+   Hover'da görünen teklif butonu
+   ============================================ */
+.product-card-offer-btn {
+    position: absolute;
+    bottom: 50px;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-orange-dark) 100%);
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 13px;
+    font-weight: var(--font-weight-semibold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+    transform: translateY(100%);
+    transition: all 0.3s ease;
+    z-index: 3;
+    opacity: 0;
+}
+
+.product-card:hover .product-card-offer-btn {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.product-card-offer-btn:hover {
+    background: var(--gradient-button-hover);
+    box-shadow: var(--shadow-glow-green);
+}
+
+.product-card-offer-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* ============================================
+   QUICK OFFER MODAL
+   Hızlı pazarlık seçenekleri: %10, %15, %20
+   ============================================ */
+.quick-offer-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+}
+
+.quick-offer-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.quick-offer-content {
+    background: white;
+    border-radius: var(--radius-xl);
+    width: 100%;
+    max-width: 420px;
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-xl);
+    transform: scale(0.9) translateY(20px);
+    transition: all 0.3s ease;
+}
+
+.quick-offer-modal.active .quick-offer-content {
+    transform: scale(1) translateY(0);
+}
+
+.quick-offer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.quick-offer-header h3 {
+    font-size: 20px;
+    font-weight: var(--font-weight-bold);
+    font-family: var(--font-display);
+    color: var(--text-primary);
+}
+
+.quick-offer-close {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-full);
+    background: var(--bg-secondary);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: var(--text-secondary);
+    transition: all var(--transition-fast);
+}
+
+.quick-offer-close:hover {
+    background: var(--error);
+    color: white;
+}
+
+/* Quick Percentage Options */
+.quick-offer-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.quick-offer-option {
+    padding: var(--spacing-md);
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    text-align: center;
+}
+
+.quick-offer-option:hover {
+    border-color: var(--primary-orange);
+    background: var(--accent-orange);
+}
+
+.quick-offer-option.selected {
+    border-color: var(--primary-green);
+    background: var(--accent-green);
+}
+
+.quick-offer-percent {
+    font-size: 24px;
+    font-weight: var(--font-weight-bold);
+    color: var(--primary-orange);
+    margin-bottom: 4px;
+}
+
+.quick-offer-option.selected .quick-offer-percent {
+    color: var(--primary-green);
+}
+
+.quick-offer-price {
+    font-size: 14px;
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-secondary);
+}
+
+.quick-offer-custom {
+    margin-bottom: var(--spacing-lg);
+}
+
+.quick-offer-custom-label {
+    font-size: 14px;
+    font-weight: var(--font-weight-medium);
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.quick-offer-custom-input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 18px;
+    font-weight: var(--font-weight-semibold);
+    text-align: center;
+    transition: all var(--transition-base);
+}
+
+.quick-offer-custom-input:focus {
+    outline: none;
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.1);
+}
+
+.quick-offer-submit {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-orange-dark) 100%);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: var(--radius-lg);
+    font-size: 16px;
+    font-weight: var(--font-weight-bold);
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.quick-offer-submit:hover {
+    background: var(--gradient-button-hover);
+    box-shadow: var(--shadow-glow-green);
+    transform: translateY(-2px);
+}
+
+/* ============================================
+   KLARNA PAYMENT UI COMPONENTS
+   Taksitli ödeme arayüzü
+   ============================================ */
+.klarna-payment-section {
+    background: var(--bg-primary);
+    border: 2px solid #FFB3C7;
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    margin: var(--spacing-lg) 0;
+}
+
+.klarna-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.klarna-logo {
+    height: 28px;
+    width: auto;
+}
+
+.klarna-badge {
+    background: #FFB3C7;
+    color: #17120F;
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: var(--font-weight-bold);
+}
+
+.klarna-title {
+    font-size: 18px;
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.klarna-subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+/* Klarna Installment Options */
+.klarna-options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.klarna-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-md);
+    background: var(--bg-secondary);
+    border: 2px solid transparent;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.klarna-option:hover {
+    border-color: #FFB3C7;
+    background: #FFF5F8;
+}
+
+.klarna-option.selected {
+    border-color: #17120F;
+    background: white;
+}
+
+.klarna-option-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.klarna-option-title {
+    font-size: 15px;
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+}
+
+.klarna-option-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.klarna-option-price {
+    font-size: 18px;
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+}
+
+.klarna-option-price small {
+    font-size: 12px;
+    font-weight: var(--font-weight-normal);
+    color: var(--text-secondary);
+}
+
+.klarna-radio {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--border-dark);
+    border-radius: var(--radius-full);
+    position: relative;
+    transition: all var(--transition-base);
+}
+
+.klarna-option.selected .klarna-radio {
+    border-color: #17120F;
+}
+
+.klarna-option.selected .klarna-radio::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 12px;
+    height: 12px;
+    background: #17120F;
+    border-radius: var(--radius-full);
+}
+
+.klarna-info-text {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--border-color);
+}
+
+/* ============================================
+   SHIPPING INFO BOX
+   DHL/Hermes karbon-nötr kargo bilgisi
+   ============================================ */
+.shipping-info-box {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    background: linear-gradient(135deg, rgba(45, 80, 22, 0.05) 0%, rgba(107, 175, 61, 0.08) 100%);
+    border: 1px solid rgba(45, 80, 22, 0.2);
+    border-radius: var(--radius-lg);
+    margin: var(--spacing-lg) 0;
+}
+
+.shipping-info-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--nature-leaf) 100%);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.shipping-info-icon svg {
+    width: 24px;
+    height: 24px;
+    color: white;
+}
+
+.shipping-info-content {
+    flex: 1;
+}
+
+.shipping-info-title {
+    font-size: 15px;
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.shipping-info-title .carrier-logo {
+    height: 18px;
+    width: auto;
+}
+
+.shipping-info-text {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.shipping-info-badges {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+}
+
+.shipping-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-full);
+    font-size: 11px;
+    font-weight: var(--font-weight-medium);
+    color: var(--text-secondary);
+}
+
+.shipping-badge.eco {
+    background: var(--accent-green);
+    border-color: rgba(45, 80, 22, 0.2);
+    color: var(--primary-green);
+}
+
+.shipping-badge svg {
+    width: 12px;
+    height: 12px;
+}
+
+/* ============================================
+   MOBILE BOTTOM NAVIGATION
+   Sabit alt gezinme çubuğu
+   ============================================ */
+.mobile-bottom-nav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    border-top: 1px solid var(--border-color);
+    padding: var(--spacing-sm) 0;
+    padding-bottom: env(safe-area-inset-bottom, var(--spacing-sm));
+    z-index: 1000;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.mobile-bottom-nav-items {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: var(--spacing-sm);
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all var(--transition-base);
+    position: relative;
+}
+
+.mobile-nav-item.active {
+    color: var(--primary-green);
+}
+
+.mobile-nav-item:hover {
+    color: var(--primary-orange);
+}
+
+.mobile-nav-item svg {
+    width: 24px;
+    height: 24px;
+}
+
+.mobile-nav-item span {
+    font-size: 11px;
+    font-weight: var(--font-weight-medium);
+}
+
+.mobile-nav-item .nav-badge {
+    position: absolute;
+    top: 2px;
+    right: 50%;
+    transform: translateX(12px);
+    min-width: 16px;
+    height: 16px;
+    background: var(--error);
+    color: white;
+    font-size: 10px;
+    font-weight: var(--font-weight-bold);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+}
+
+/* Sell button special styling */
+.mobile-nav-item.sell-btn {
+    margin-top: -20px;
+}
+
+.mobile-nav-item.sell-btn .nav-icon-wrapper {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-orange-dark) 100%);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(255, 140, 66, 0.4);
+    transition: all var(--transition-base);
+}
+
+.mobile-nav-item.sell-btn:hover .nav-icon-wrapper {
+    background: var(--gradient-button-hover);
+    box-shadow: var(--shadow-glow-green);
+    transform: scale(1.05);
+}
+
+.mobile-nav-item.sell-btn svg {
+    color: white;
+}
+
+.mobile-nav-item.sell-btn span {
+    color: var(--primary-orange);
+    font-weight: var(--font-weight-semibold);
+}
+
+/* Show mobile nav on small screens */
+@media (max-width: 768px) {
+    .mobile-bottom-nav {
+        display: block;
+    }
+
+    /* Add padding to body to prevent content from being hidden */
+    body {
+        padding-bottom: 70px;
+    }
+}
+
+/* ============================================
+   PRODUCT CARD CO2 INFO
+   Ürün kartı altında CO2 tasarrufu bilgisi
+   ============================================ */
+.product-card-co2-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--accent-green);
+    border-top: 1px solid var(--border-color);
+    font-size: 12px;
+    color: var(--primary-green);
+    font-weight: var(--font-weight-medium);
+}
+
+.product-card-co2-info svg {
+    width: 14px;
+    height: 14px;
+    color: var(--nature-leaf);
+}
+
+/* ============================================
+   PRODUCT CARD HOVER ANIMATION UPDATE
+   Kart %2 büyüme ve buton animasyonu
+   ============================================ */
+.product-card {
+    transform-origin: center;
+}
+
+.product-card:hover {
+    transform: translateY(-4px) scale(1.02);
 }
