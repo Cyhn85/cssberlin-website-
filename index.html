@@ -4,32 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CSS Berlin - Climate Smart Solutions</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=2026">
+    <link rel="stylesheet" href="header-v2.css">
     <link rel="stylesheet" href="footer-kleinanzeigen.css">
     <link rel="stylesheet" href="toast.css">
     <style>
-        /* Header Action Buttons - Orange to Green Hover */
+        /* ============================================
+           2026 Kapsamlı Geliştirme Planı - Inline Stiller
+           Eco-Tech Design - Turuncu→Yeşil Hover System
+           ============================================ */
+
+        /* Header Action Buttons - 1px beyaz border, turuncu dolgu, yeşil hover */
         .header-action-btn {
             padding: 10px 18px;
-            background: linear-gradient(135deg, #E8854C 0%, #d4753d 100%);
+            background: linear-gradient(135deg, #FF8C42 0%, #E8854C 100%);
             color: white;
-            border: 1.5px solid rgba(255, 255, 255, 0.4);
-            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
             display: flex;
             align-items: center;
             gap: 8px;
             font-weight: 600;
             font-size: 14px;
+            font-family: 'Inter', sans-serif;
             text-decoration: none;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(232, 133, 76, 0.3);
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 2px 8px rgba(255, 140, 66, 0.25);
         }
 
         .header-action-btn:hover {
             background: linear-gradient(135deg, #2D5016 0%, #3d6b1e 100%);
-            border-color: rgba(255, 255, 255, 0.6);
-            box-shadow: 0 4px 15px rgba(45, 80, 22, 0.4);
+            border-color: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 0 20px rgba(45, 80, 22, 0.35), 0 4px 15px rgba(45, 80, 22, 0.25);
             transform: translateY(-2px);
         }
 
@@ -38,13 +45,13 @@
             gap: 10px;
         }
 
-        /* Language Selector */
+        /* Language Selector - Modern Pills Style */
         .lang-selector {
             display: flex;
             align-items: center;
             background: rgba(255, 255, 255, 0.15);
-            border: 1.5px solid rgba(255, 255, 255, 0.4);
-            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 25px;
             padding: 3px;
             transition: all 0.3s ease;
         }
@@ -59,9 +66,10 @@
             background: transparent;
             color: rgba(255, 255, 255, 0.8);
             border: none;
-            border-radius: 6px;
-            font-weight: 700;
+            border-radius: 20px;
+            font-weight: 600;
             font-size: 13px;
+            font-family: 'Inter', sans-serif;
             cursor: pointer;
             transition: all 0.3s ease;
         }
@@ -72,148 +80,321 @@
         }
 
         .lang-btn.active {
-            background: linear-gradient(135deg, #E8854C 0%, #d4753d 100%);
+            background: linear-gradient(135deg, #FF8C42 0%, #E8854C 100%);
             color: white;
         }
 
         .lang-btn.active:hover {
             background: linear-gradient(135deg, #2D5016 0%, #3d6b1e 100%);
         }
+
+        /* Category Pills - Yatay Filtreleme */
+        .category-pills-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            background: rgba(232, 245, 233, 0.4);
+        }
+
+        .category-pills-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .category-pill-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 18px;
+            background: white;
+            color: #4a5a3a;
+            border: 1.5px solid #D8E4D0;
+            border-radius: 9999px;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .category-pill-btn:hover {
+            background: #E8F5E9;
+            border-color: #2D5016;
+            color: #2D5016;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(45, 80, 22, 0.12);
+        }
+
+        .category-pill-btn.active {
+            background: linear-gradient(135deg, #FF8C42 0%, #E8854C 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        .category-pill-btn.active:hover {
+            background: linear-gradient(135deg, #2D5016 0%, #3d6b1e 100%);
+        }
+
+        /* CO2 Badge Styles for Product Cards */
+        .product-co2-badge {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 5px 10px;
+            background: linear-gradient(135deg, rgba(45, 80, 22, 0.9) 0%, rgba(107, 175, 61, 0.9) 100%);
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+            backdrop-filter: blur(4px);
+            z-index: 2;
+        }
+
+        .product-co2-badge::before {
+            content: '🌿';
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
     <!-- News Banner at Top -->
-    <div class="news-banner" style="position: sticky; top: 0; z-index: 999;">
+    <div class="news-banner-v2">
         <div class="news-slider" id="newsSlider">
             <div class="news-item" data-link="co2-impact.html">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
-                </svg>
-                <span>🌍 248.5 Tonnen CO₂ gespart - Jeder Kauf zählt für unseren Planeten!</span>
+                <span>🌍 248.5 Tonnen CO₂ gespart</span>
             </div>
             <div class="news-item" data-link="campaign.html">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
-                </svg>
-                <span>📦 2 Produkte kaufen, 3. Produkt Versand GRATIS!</span>
+                <span>📦 2 kaufen = 3. Versand GRATIS</span>
             </div>
             <div class="news-item" data-link="co2-impact.html">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
-                </svg>
-                <span>🏆 CO₂ Rangliste - Wer spart am meisten? Klick für die Top 100!</span>
+                <span>🏆 CO₂ Top 100 Rangliste</span>
             </div>
             <div class="news-item" data-link="co2-impact.html">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2v20M5 9l7-7 7 7M12 22l-3-3h6l-3 3z"></path>
-                </svg>
-                <span>🌳 8,234 Bäume gepflanzt - Dein Beitrag macht den Unterschied!</span>
+                <span>🌳 8,234 Bäume gepflanzt</span>
             </div>
             <div class="news-item" data-link="damen.html">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <path d="M12 6v6l4 2" stroke="white" fill="none"></path>
-                </svg>
-                <span>🔥 Sale: 780 neue Produkte - Bis zu 70% Rabatt diese Woche!</span>
+                <span>🔥 780 neue Sale-Produkte</span>
             </div>
         </div>
     </div>
 
-    <!-- Header - Sadeleştirilmiş -->
-    <header class="header" style="position: sticky; top: 40px; z-index: 998;">
-        <div class="header-container">
-            <!-- Left Side: Logo -->
-            <a href="index.html" style="text-decoration: none; display: flex; flex-direction: column; align-items: stretch; gap: 0; width: 200px;">
-                <div style="font-size: 36px; font-weight: 800; color: white; letter-spacing: 2px; text-align: center;">CSS Berlin</div>
-                <div style="font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.9); letter-spacing: 1px; text-transform: uppercase; text-align: center;">Climate Smart Solutions</div>
+    <!-- Modern Header V2 - Vinted/Kleinanzeigen Style -->
+    <header class="header-v2">
+        <div class="header-container-v2">
+            <!-- Mobile Menu Button -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menü öffnen">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <!-- Logo -->
+            <a href="index.html" class="header-logo">
+                <span class="logo-text">CSS</span>
+                <span class="logo-subtext">Berlin</span>
             </a>
 
-            <!-- Center: Search Box -->
-            <div class="header-search" style="flex: 1; max-width: 500px; margin: 0 20px;">
-                <form action="search.html" method="GET" style="display: flex; width: 100%;">
-                    <input type="text" name="q" placeholder="Suche nach Marken, Artikeln..." data-i18n-placeholder="header.search_placeholder" style="flex: 1; padding: 12px 16px; border: none; border-radius: 8px 0 0 8px; font-size: 14px; outline: none; background: rgba(255,255,255,0.95);">
-                    <button type="submit" style="padding: 12px 18px; background: #E8854C; border: none; border-radius: 0 8px 8px 0; cursor: pointer; display: flex; align-items: center; justify-content: center;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+            <!-- Search Bar - Center -->
+            <div class="header-search-v2">
+                <form action="search.html" method="GET" class="search-form-v2">
+                    <div class="search-input-wrapper">
+                        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="11" cy="11" r="8"></circle>
                             <path d="M21 21l-4.35-4.35"></path>
                         </svg>
+                        <input type="text" name="q" id="searchInput" placeholder="Suche nach Marken, Artikeln..." autocomplete="off">
+                        <button type="button" class="search-clear" id="searchClear">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 6L6 18M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <button type="submit" class="search-submit-btn">
+                        <span>Suchen</span>
                     </button>
                 </form>
+                <!-- Search Suggestions Dropdown -->
+                <div class="search-suggestions" id="searchSuggestions">
+                    <div class="suggestions-section">
+                        <span class="suggestions-title">Beliebte Suchen</span>
+                        <a href="search.html?q=Nike" class="suggestion-item">Nike</a>
+                        <a href="search.html?q=Adidas" class="suggestion-item">Adidas</a>
+                        <a href="search.html?q=Zara" class="suggestion-item">Zara</a>
+                        <a href="search.html?q=H%26M" class="suggestion-item">H&M</a>
+                    </div>
+                </div>
             </div>
 
+            <!-- Mobile Search Toggle -->
+            <button class="mobile-search-btn" id="mobileSearchBtn" aria-label="Suche">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="M21 21l-4.35-4.35"></path>
+                </svg>
+            </button>
+
             <!-- Right Actions -->
-            <div class="header-actions" style="gap: 12px; margin-left: auto; display: flex; align-items: center;">
+            <div class="header-actions-v2">
                 <!-- Inserieren Button -->
-                <a href="inserieren.html" class="header-action-btn inserieren-btn">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                <a href="inserieren.html" class="btn-inserieren">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                         <path d="M12 5v14M5 12h14"></path>
                     </svg>
-                    <span data-i18n="header.inserieren">Inserieren</span>
+                    <span>Inserieren</span>
                 </a>
 
-                <!-- Combined Auth Button -->
-                <button onclick="authGate.showLoginModal()" class="header-action-btn auth-btn">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
+                <!-- Favorites -->
+                <a href="wunschliste.html" class="header-icon-btn" title="Favoriten">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                     </svg>
-                    <span><span data-i18n="header.registrieren">Registrieren</span> <span style="opacity: 0.7;">|</span> <span data-i18n="header.anmelden">Anmelden</span></span>
-                </button>
+                    <span class="icon-badge" id="wishlistCount">0</span>
+                </a>
 
-                <!-- Language Selector (En Sağda) -->
-                <div class="lang-selector">
-                    <button onclick="setLanguage('de')" id="lang-de" class="lang-btn active">DE</button>
-                    <button onclick="setLanguage('en')" id="lang-en" class="lang-btn">EN</button>
+                <!-- Messages -->
+                <a href="nachrichten.html" class="header-icon-btn" title="Nachrichten">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    <span class="icon-badge" id="messageCount">0</span>
+                </a>
+
+                <!-- Cart -->
+                <a href="warenkorb.html" class="header-icon-btn" title="Warenkorb">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="icon-badge" id="cartCount">0</span>
+                </a>
+
+                <!-- User Menu -->
+                <div class="user-menu-wrapper">
+                    <button class="user-menu-btn-v2" id="userMenuBtn">
+                        <div class="user-avatar" id="userAvatar">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <span class="user-name" id="userName">Anmelden</span>
+                        <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <!-- User Dropdown -->
+                    <div class="user-dropdown-v2" id="userDropdown">
+                        <div class="dropdown-guest" id="dropdownGuest">
+                            <p>Willkommen bei CSS Berlin</p>
+                            <button onclick="authGate.showLoginModal()" class="dropdown-login-btn">Anmelden</button>
+                            <a href="registrieren.html" class="dropdown-register-link">Neu hier? Jetzt registrieren</a>
+                        </div>
+                        <div class="dropdown-user" id="dropdownUser" style="display: none;">
+                            <div class="dropdown-user-info">
+                                <div class="dropdown-avatar" id="dropdownAvatar">U</div>
+                                <div class="dropdown-user-details">
+                                    <span class="dropdown-user-name" id="dropdownUserName">User</span>
+                                    <span class="dropdown-user-email" id="dropdownUserEmail">user@email.com</span>
+                                </div>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <a href="profil.html" class="dropdown-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                Mein Profil
+                            </a>
+                            <a href="meine-anzeigen.html" class="dropdown-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line></svg>
+                                Meine Anzeigen
+                            </a>
+                            <a href="bestellungen.html" class="dropdown-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line></svg>
+                                Bestellungen
+                            </a>
+                            <a href="verkaeufe.html" class="dropdown-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                                Verkäufe
+                            </a>
+                            <a href="einstellungen.html" class="dropdown-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                                Einstellungen
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <button onclick="authGate.logout()" class="dropdown-item dropdown-logout">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                                Abmelden
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Language Selector -->
+                <div class="lang-selector-v2">
+                    <button onclick="setLanguage('de')" id="lang-de" class="lang-btn-v2 active">DE</button>
+                    <button onclick="setLanguage('en')" id="lang-en" class="lang-btn-v2">EN</button>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- User Dashboard Bar - İkonlar, Inserieren ve Dil Seçici -->
-    <div class="user-dashboard-bar">
-        <div class="user-dashboard-container">
-            <!-- Sol - Kullanıcı Aksiyonları -->
-            <div class="dashboard-actions">
-                <!-- Bildirimler -->
-                <button class="dashboard-icon-btn" title="Benachrichtigungen" data-i18n-title="dashboard.benachrichtigungen">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+    <!-- Mobile Search Overlay -->
+    <div class="mobile-search-overlay" id="mobileSearchOverlay">
+        <div class="mobile-search-container">
+            <form action="search.html" method="GET" class="mobile-search-form">
+                <button type="button" class="mobile-search-back" id="mobileSearchBack">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"></path>
                     </svg>
-                    <span class="label" data-i18n="dashboard.benachrichtigungen">Benachrichtigungen</span>
-                    <span class="badge">2</span>
                 </button>
-
-                <!-- Verhandlungen / Pazarlıklar -->
-                <a href="pazarlik.html" class="dashboard-icon-btn" title="Verhandlungen" data-i18n-title="dashboard.verhandlungen">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                <input type="text" name="q" placeholder="Suche..." autofocus>
+                <button type="submit" class="mobile-search-submit">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="M21 21l-4.35-4.35"></path>
                     </svg>
-                    <span class="label" data-i18n="dashboard.verhandlungen">Verhandlungen</span>
-                    <span class="badge" id="negotiationCount">0</span>
-                </a>
+                </button>
+            </form>
+        </div>
+    </div>
 
-                <!-- Wunschliste -->
-                <a href="wunschliste.html" class="dashboard-icon-btn" id="wishlistBtn" title="Wunschliste" data-i18n-title="dashboard.wunschliste">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay">
+        <div class="mobile-menu-panel">
+            <div class="mobile-menu-header">
+                <span class="mobile-menu-title">Menü</span>
+                <button class="mobile-menu-close" id="mobileMenuClose">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12"></path>
                     </svg>
-                    <span class="label" data-i18n="dashboard.wunschliste">Wunschliste</span>
-                    <span class="badge" id="wishlistCount">0</span>
-                </a>
-
-                <!-- Warenkorb -->
-                <a href="warenkorb.html" class="dashboard-icon-btn" title="Warenkorb" data-i18n-title="dashboard.warenkorb">
-                    <svg viewBox="0 0 24 24">
-                        <circle cx="9" cy="21" r="1"></circle>
-                        <circle cx="20" cy="21" r="1"></circle>
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                    </svg>
-                    <span class="label" data-i18n="dashboard.warenkorb">Warenkorb</span>
-                    <span class="badge" id="cartCount">0</span>
-                </a>
+                </button>
             </div>
+            <nav class="mobile-menu-nav">
+                <a href="damen.html" class="mobile-menu-item">
+                    <span>👗</span> Damen
+                </a>
+                <a href="herren.html" class="mobile-menu-item">
+                    <span>👔</span> Herren
+                </a>
+                <a href="kinder.html" class="mobile-menu-item">
+                    <span>👶</span> Kinder
+                </a>
+                <div class="mobile-menu-divider"></div>
+                <a href="co2-impact.html" class="mobile-menu-item">
+                    <span>🌍</span> CO₂ Impact
+                </a>
+                <a href="ueber-uns.html" class="mobile-menu-item">
+                    <span>ℹ️</span> Über uns
+                </a>
+                <a href="hilfe.html" class="mobile-menu-item">
+                    <span>❓</span> Hilfe
+                </a>
+            </nav>
         </div>
     </div>
 
@@ -452,6 +633,45 @@
             </div>
         </div>
     </footer>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-bottom-nav">
+        <div class="mobile-bottom-nav-container">
+            <a href="index.html" class="mobile-nav-item active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                <span>Home</span>
+            </a>
+            <a href="search.html" class="mobile-nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="M21 21l-4.35-4.35"></path>
+                </svg>
+                <span>Suche</span>
+            </a>
+            <a href="inserieren.html" class="mobile-nav-item mobile-nav-add">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M12 5v14M5 12h14"></path>
+                </svg>
+            </a>
+            <a href="wunschliste.html" class="mobile-nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                <span>Favoriten</span>
+                <span class="nav-badge" id="mobileWishlistCount"></span>
+            </a>
+            <a href="profil.html" class="mobile-nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span>Profil</span>
+            </a>
+        </div>
+    </nav>
 
     <!-- Back to Top Button -->
     <button class="back-to-top" id="backToTop" aria-label="Nach oben scrollen">

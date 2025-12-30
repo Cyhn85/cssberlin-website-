@@ -1,46 +1,69 @@
 /* ============================================
    CSS Berlin V3 - Climate Smart Solutions
-   Main Stylesheet - No Banner Version
+   2026 Kapsamlı Geliştirme Planı - Eco-Tech Design
    ============================================ */
+
+/* Google Fonts - Inter & Montserrat */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap');
 
 /* ============================================
-   CSS VARIABLES
+   CSS VARIABLES - ECO-TECH PALET 2026
    ============================================ */
 :root {
-    /* Colors - Orange to Pistachio Green Theme (Eco Friendly) */
+    /* Ana Renk Paleti - Turuncu & Doğa Yeşili */
     --primary-orange: #FF8C42;
+    --primary-orange-dark: #E8854C;
     --primary-orange-hover: #FF7A29;
     --primary-green: #2D5016;
-    --primary-green-hover: #A8D08D; /* Fıstık yeşili */
-    --primary-green-light: #C5E1A5; /* Açık fıstık yeşili */
-    --secondary-green: #9CCC65; /* Fıstık yeşili ton */
+    --primary-green-light: #3d6b1e;
+    --primary-green-hover: #4a8025;
+    --secondary-green: #5a9a30;
     --accent-green: #E8F5E9;
     --accent-orange: #FFF3E0;
-    --fuchsia: #E91E63; /* Fuşya renk */
-    --fuchsia-hover: #C2185B; /* Koyu fuşya */
 
-    /* Text Colors */
-    --text-primary: #212121;
-    --text-secondary: #757575;
-    --text-light: #9E9E9E;
+    /* Doğa Tonları - Eco-Tech */
+    --nature-leaf: #6BAF3D;
+    --nature-forest: #1E3A0F;
+    --nature-moss: #7CB342;
+    --nature-earth: #8B6914;
+    --eco-light: #F5FBF2;
+    --eco-soft: #EDF7E8;
+
+    /* Gradient Tanımları - Header için Turuncu→Yeşil */
+    --gradient-header: linear-gradient(135deg, #FF8C42 0%, #E8854C 30%, #4a8025 70%, #2D5016 100%);
+    --gradient-header-smooth: linear-gradient(90deg, #FF8C42 0%, #d4753d 25%, #5a9a30 60%, #2D5016 100%);
+    --gradient-orange-green: linear-gradient(135deg, #FF8C42 0%, #2D5016 100%);
+    --gradient-green-orange: linear-gradient(135deg, #2D5016 0%, #FF8C42 100%);
+    --gradient-button-hover: linear-gradient(135deg, #2D5016 0%, #3d6b1e 100%);
+    --gradient-eco-bg: linear-gradient(180deg, var(--accent-green) 0%, #FFFFFF 100%);
+
+    /* Text Colors - Profesyonel Tipografi */
+    --text-primary: #1a2e0a;
+    --text-secondary: #4a5a3a;
+    --text-light: #7a8a6a;
     --text-white: #FFFFFF;
+    --text-muted: #9CA3AF;
 
-    /* Background Colors */
+    /* Background Colors - Eco-Friendly Atmosfer */
     --bg-primary: #FFFFFF;
-    --bg-secondary: #F5F5F5;
-    --bg-tertiary: #FAFAFA;
+    --bg-secondary: #F8FAF5;
+    --bg-tertiary: #F0F4EC;
+    --bg-warm: #FFFBF5;
+    --bg-eco: var(--accent-green);
+    --bg-eco-subtle: rgba(232, 245, 233, 0.4);
 
     /* Border Colors */
-    --border-color: #E0E0E0;
-    --border-dark: #BDBDBD;
+    --border-color: #D8E4D0;
+    --border-dark: #B8C8A8;
+    --border-light: #E8F0E0;
 
     /* Status Colors */
     --success: #4CAF50;
     --warning: #FF9800;
-    --error: #F44336;
-    --info: #2196F3;
+    --error: #E53935;
+    --info: #29B6F6;
 
-    /* Spacing */
+    /* Spacing - Temiz Boşluklar (Whitespace) */
     --spacing-xs: 4px;
     --spacing-sm: 8px;
     --spacing-md: 16px;
@@ -48,32 +71,50 @@
     --spacing-xl: 32px;
     --spacing-2xl: 48px;
     --spacing-3xl: 64px;
+    --spacing-4xl: 80px;
 
-    /* Border Radius */
-    --radius-sm: 4px;
-    --radius-md: 8px;
-    --radius-lg: 12px;
-    --radius-xl: 16px;
+    /* Border Radius - Yumuşak Köşeler */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 20px;
+    --radius-2xl: 25px;
     --radius-full: 9999px;
 
-    /* Shadows */
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
-    --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.2);
+    /* Shadows - Doğal Gölgeler + Glow */
+    --shadow-sm: 0 2px 4px rgba(45, 80, 22, 0.08);
+    --shadow-md: 0 4px 12px rgba(45, 80, 22, 0.12);
+    --shadow-lg: 0 8px 24px rgba(45, 80, 22, 0.16);
+    --shadow-xl: 0 16px 40px rgba(45, 80, 22, 0.2);
+    --shadow-glow-green: 0 0 20px rgba(45, 80, 22, 0.35), 0 4px 15px rgba(45, 80, 22, 0.25);
+    --shadow-glow-orange: 0 0 20px rgba(255, 140, 66, 0.35), 0 4px 15px rgba(255, 140, 66, 0.25);
+    --shadow-header: 0 4px 30px rgba(45, 80, 22, 0.2);
 
-    /* Transitions */
+    /* Transitions - 0.3s Yumuşak Geçişler */
     --transition-fast: 0.15s ease;
     --transition-base: 0.3s ease;
     --transition-slow: 0.5s ease;
+    --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-hover: 0.3s ease-in-out;
 
-    /* Typography */
-    --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    /* Typography - Inter & Montserrat (Profesyonel/İnce) */
+    --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-display: 'Montserrat', var(--font-primary);
+    --font-weight-light: 300;
     --font-weight-normal: 400;
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
     --font-weight-bold: 700;
-    --font-weight-black: 900;
+    --font-weight-black: 800;
+
+    /* Line Heights - Okunabilirlik */
+    --line-height-tight: 1.3;
+    --line-height-normal: 1.6;
+    --line-height-relaxed: 1.8;
+
+    /* Search Bar */
+    --search-radius: 25px;
+    --search-height: 52px;
 }
 
 /* ============================================
@@ -93,10 +134,13 @@ html {
 body {
     font-family: var(--font-primary);
     color: var(--text-primary);
-    background: var(--bg-secondary);
-    line-height: 1.6;
+    background: var(--bg-eco-subtle);
+    background-image: var(--gradient-eco-bg);
+    background-attachment: fixed;
+    line-height: var(--line-height-normal);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.01em;
 }
 
 a {
@@ -111,6 +155,379 @@ button {
     font-family: inherit;
 }
 
+/* ============================================
+   GLOBAL BUTTON STYLES - TURUNCU → YEŞİL HOVER
+   Standart: 1px beyaz çerçeve, turuncu arka plan
+   Hover: Yeşil arka plan + parlama efekti
+   ============================================ */
+.btn,
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: 12px 24px;
+    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-orange-dark) 100%);
+    color: var(--text-white);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: all var(--transition-smooth);
+    text-decoration: none;
+    box-shadow: var(--shadow-sm);
+}
+
+.btn:hover,
+.btn-primary:hover {
+    background: var(--gradient-button-hover);
+    border-color: rgba(255, 255, 255, 0.7);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow-green);
+}
+
+.btn:active,
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-md);
+}
+
+/* Secondary Button - Outline Style */
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: 12px 24px;
+    background: transparent;
+    color: var(--primary-orange);
+    border: 2px solid var(--primary-orange);
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: all var(--transition-smooth);
+    text-decoration: none;
+}
+
+.btn-secondary:hover {
+    background: var(--gradient-button-hover);
+    color: var(--text-white);
+    border-color: var(--primary-green);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow-green);
+}
+
+/* Green Button Variant */
+.btn-green {
+    background: var(--gradient-button-hover);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.btn-green:hover {
+    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-orange-dark) 100%);
+    box-shadow: var(--shadow-glow-orange);
+}
+
+/* Large Button */
+.btn-lg {
+    padding: 16px 32px;
+    font-size: 16px;
+    border-radius: var(--radius-lg);
+}
+
+/* Small Button */
+.btn-sm {
+    padding: 8px 16px;
+    font-size: 13px;
+    border-radius: var(--radius-sm);
+}
+
+/* ============================================
+   CO2 ROZET - ECO BADGE SYSTEM
+   Ürün kartları için yeşil font, yaprak ikonlu
+   ============================================ */
+.co2-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: linear-gradient(135deg, rgba(45, 80, 22, 0.1) 0%, rgba(107, 175, 61, 0.15) 100%);
+    border: 1px solid rgba(45, 80, 22, 0.2);
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: var(--font-weight-semibold);
+    color: var(--primary-green);
+    backdrop-filter: blur(4px);
+    transition: all var(--transition-hover);
+}
+
+.co2-badge::before {
+    content: '🌿';
+    font-size: 14px;
+}
+
+.co2-badge:hover {
+    background: linear-gradient(135deg, rgba(45, 80, 22, 0.15) 0%, rgba(107, 175, 61, 0.25) 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(45, 80, 22, 0.15);
+}
+
+.co2-badge[data-i18n] {
+    /* i18n desteği için */
+}
+
+.co2-badge-lg {
+    padding: 8px 16px;
+    font-size: 14px;
+}
+
+.co2-badge-lg::before {
+    font-size: 16px;
+}
+
+/* CO2 Badge Varyantları */
+.co2-badge.champion {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 193, 7, 0.3) 100%);
+    border-color: rgba(255, 193, 7, 0.4);
+    color: #B7791F;
+}
+
+.co2-badge.champion::before {
+    content: '🏆';
+}
+
+.co2-badge.profi {
+    background: linear-gradient(135deg, rgba(156, 39, 176, 0.15) 0%, rgba(103, 58, 183, 0.2) 100%);
+    border-color: rgba(156, 39, 176, 0.3);
+    color: #7B1FA2;
+}
+
+.co2-badge.profi::before {
+    content: '⭐';
+}
+
+/* ============================================
+   PAZARLIK BUTONU - VINTED/KLEINANZEIGEN STYLE
+   Turuncu çerçeveli, içi şeffaf
+   ============================================ */
+.btn-bargain,
+.btn-pazarlik {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: transparent;
+    color: var(--primary-orange);
+    border: 2px solid var(--primary-orange);
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: var(--font-weight-semibold);
+    font-family: var(--font-primary);
+    cursor: pointer;
+    transition: all var(--transition-hover);
+    text-decoration: none;
+}
+
+.btn-bargain:hover,
+.btn-pazarlik:hover {
+    background: var(--gradient-button-hover);
+    color: var(--text-white);
+    border-color: var(--primary-green);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow-green);
+}
+
+.btn-bargain:active,
+.btn-pazarlik:active {
+    transform: translateY(0);
+}
+
+.btn-bargain svg,
+.btn-pazarlik svg {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    fill: none;
+}
+
+/* Pazarlık - Küçük Versiyon */
+.btn-bargain-sm {
+    padding: 8px 14px;
+    font-size: 13px;
+    gap: 6px;
+}
+
+.btn-bargain-sm svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* ============================================
+   KATEGORİ ÇİPLERİ - HORIZONTAL PILLS
+   Yatay filtreleme için modern pills
+   ============================================ */
+.category-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: var(--spacing-md) 0;
+    align-items: center;
+}
+
+.category-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    border: 1.5px solid var(--border-color);
+    border-radius: var(--radius-full);
+    font-size: 14px;
+    font-weight: var(--font-weight-medium);
+    font-family: var(--font-primary);
+    cursor: pointer;
+    transition: all var(--transition-hover);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.category-pill:hover {
+    background: var(--accent-green);
+    border-color: var(--primary-green);
+    color: var(--primary-green);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.category-pill.active {
+    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-orange-dark) 100%);
+    color: var(--text-white);
+    border-color: transparent;
+    box-shadow: var(--shadow-md);
+}
+
+.category-pill.active:hover {
+    background: var(--gradient-button-hover);
+    box-shadow: var(--shadow-glow-green);
+}
+
+.category-pill svg,
+.category-pill img {
+    width: 18px;
+    height: 18px;
+}
+
+/* Kategori Pill - i18n Desteği */
+.category-pill[data-i18n] {
+    /* de.json/en.json'dan veri çekebilir */
+}
+
+/* ============================================
+   MODERN ARAMA ÇUBUĞU - SEARCH BAR
+   25px radius, büyük, büyüteç ikonlu
+   ============================================ */
+.search-bar-modern {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg-primary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--search-radius);
+    padding: 0 20px;
+    height: var(--search-height);
+    transition: all var(--transition-hover);
+    box-shadow: var(--shadow-sm);
+    flex: 1;
+    max-width: 600px;
+}
+
+.search-bar-modern:focus-within {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 4px rgba(45, 80, 22, 0.1), var(--shadow-md);
+}
+
+.search-bar-modern .search-icon {
+    width: 22px;
+    height: 22px;
+    color: var(--text-light);
+    flex-shrink: 0;
+    transition: color var(--transition-hover);
+}
+
+.search-bar-modern:focus-within .search-icon {
+    color: var(--primary-green);
+}
+
+.search-bar-modern input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 15px;
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-normal);
+    color: var(--text-primary);
+    outline: none;
+    height: 100%;
+}
+
+.search-bar-modern input::placeholder {
+    color: var(--text-muted);
+    font-weight: var(--font-weight-normal);
+}
+
+.search-bar-modern .search-clear {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-full);
+    background: var(--bg-tertiary);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: all var(--transition-hover);
+}
+
+.search-bar-modern input:not(:placeholder-shown) ~ .search-clear {
+    opacity: 1;
+}
+
+.search-bar-modern .search-clear:hover {
+    background: var(--primary-green);
+    color: white;
+}
+
+.search-bar-modern .search-submit {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-orange-dark) 100%);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-hover);
+    margin-right: -12px;
+}
+
+.search-bar-modern .search-submit:hover {
+    background: var(--gradient-button-hover);
+    transform: scale(1.05);
+    box-shadow: var(--shadow-glow-green);
+}
+
+.search-bar-modern .search-submit svg {
+    width: 20px;
+    height: 20px;
+    color: white;
+}
+
 img {
     max-width: 100%;
     height: auto;
@@ -118,15 +535,17 @@ img {
 }
 
 /* ============================================
-   HEADER STYLES - V3 NEW LAYOUT
+   HEADER STYLES - TURUNCU→YEŞİL PROFESYONEL GRADIENT
+   Sticky Header - 2026 Eco-Tech Design
    ============================================ */
 .header {
-    background: linear-gradient(135deg, #F5A855 0%, #E8854C 50%, #C46A3D 100%);
+    background: var(--gradient-header-smooth);
     border-bottom: none;
     position: sticky;
     top: 0;
     z-index: 1000;
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-header);
+    backdrop-filter: blur(10px);
 }
 
 .header-container {
@@ -253,25 +672,27 @@ img {
     margin-left: auto;
 }
 
-/* Inserieren Button */
+/* Inserieren Button - Turuncu → Yeşil Hover */
 .inserieren-btn {
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
     padding: var(--spacing-sm) var(--spacing-md);
-    background: var(--primary-orange);
+    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-orange-dark) 100%);
     color: var(--text-white);
+    border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: var(--radius-lg);
     font-weight: var(--font-weight-semibold);
     font-size: 15px;
-    transition: all var(--transition-base);
+    transition: all var(--transition-smooth);
     box-shadow: var(--shadow-sm);
 }
 
 .inserieren-btn:hover {
-    background: var(--primary-green);
+    background: var(--gradient-button-hover);
+    border-color: rgba(255, 255, 255, 0.7);
     transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-glow-green);
 }
 
 .inserieren-btn svg {
@@ -299,10 +720,11 @@ img {
     height: 18px;
 }
 
-/* Auth Buttons (Anmelden, Registrieren) - Orange Style */
+/* Auth Buttons (Anmelden, Registrieren) - Turuncu → Yeşil Hover */
 .auth-btn {
-    background: #E8854C;
+    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-orange-dark) 100%);
     color: white;
+    border: 1px solid rgba(255, 255, 255, 0.5) !important;
 }
 
 .auth-btn svg {
@@ -311,10 +733,11 @@ img {
 
 .auth-btn:hover,
 .auth-btn:active {
-    background: #2D5016 !important;
+    background: var(--gradient-button-hover) !important;
     color: white !important;
+    border-color: rgba(255, 255, 255, 0.7) !important;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(45, 80, 22, 0.4);
+    box-shadow: var(--shadow-glow-green);
 }
 
 /* User Menu Button (when logged in) */
@@ -451,19 +874,20 @@ img {
     align-items: center;
     justify-content: center;
     position: relative;
-    transition: all var(--transition-base);
-    background: var(--primary-orange);
+    transition: all var(--transition-smooth);
+    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-orange-dark) 100%);
     color: var(--text-white);
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.5);
     cursor: pointer;
 }
 
 .icon-btn:hover,
 .icon-btn:active {
-    background: var(--primary-green-hover); /* Fıstık yeşili */
+    background: var(--gradient-button-hover);
     color: var(--text-white);
+    border-color: rgba(255, 255, 255, 0.7);
     transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(168, 208, 141, 0.4);
+    box-shadow: var(--shadow-glow-green);
 }
 
 .notification-badge,
@@ -1188,8 +1612,9 @@ img {
 
 .buy-btn {
     padding: var(--spacing-md);
-    background: var(--primary-orange);
+    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-orange-dark) 100%);
     color: var(--text-white);
+    border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: var(--radius-md);
     font-weight: var(--font-weight-semibold);
     font-size: 14px;
@@ -1197,16 +1622,16 @@ img {
     align-items: center;
     justify-content: center;
     gap: var(--spacing-sm);
-    transition: all var(--transition-base);
-    border: none;
+    transition: all var(--transition-smooth);
     cursor: pointer;
 }
 
 .buy-btn:hover,
 .buy-btn:active {
-    background: var(--primary-green-hover); /* Fıstık yeşili */
+    background: var(--gradient-button-hover);
+    border-color: rgba(255, 255, 255, 0.7);
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(168, 208, 141, 0.5);
+    box-shadow: var(--shadow-glow-green);
 }
 
 .buy-btn svg {
@@ -1228,17 +1653,17 @@ img {
     align-items: center;
     justify-content: center;
     gap: var(--spacing-sm);
-    transition: all var(--transition-base);
+    transition: all var(--transition-smooth);
     cursor: pointer;
 }
 
 .negotiate-btn:hover,
 .negotiate-btn:active {
-    background: var(--primary-green-hover); /* Fıstık yeşili */
+    background: var(--gradient-button-hover);
     color: var(--text-white);
-    border-color: var(--primary-green-hover);
+    border-color: var(--primary-green);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(168, 208, 141, 0.4);
+    box-shadow: var(--shadow-glow-green);
 }
 
 .negotiate-btn svg {
@@ -1260,23 +1685,23 @@ img {
     align-items: center;
     gap: var(--spacing-sm);
     padding: var(--spacing-md) var(--spacing-xl);
-    background: var(--primary-orange);
+    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-orange-dark) 100%);
     color: var(--text-white);
-    border: 2px solid var(--primary-orange);
+    border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: var(--radius-full);
     font-weight: var(--font-weight-semibold);
     font-size: 15px;
-    transition: all var(--transition-base);
+    transition: all var(--transition-smooth);
     cursor: pointer;
 }
 
 .load-more-btn:hover,
 .load-more-btn:active {
-    background: var(--primary-green);
+    background: var(--gradient-button-hover);
     color: var(--text-white);
-    border-color: var(--primary-green);
+    border-color: rgba(255, 255, 255, 0.7);
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(45, 80, 22, 0.4);
+    box-shadow: var(--shadow-glow-green);
 }
 
 .load-more-btn svg {
