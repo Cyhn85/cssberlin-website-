@@ -149,6 +149,111 @@ async def get_current_user_info(current_user: User = Depends(get_current_user)):
     return current_user
 
 
+# Magic Link Storage (in production use Redis)
+magic_link_tokens = {}
+
+from pydantic import BaseModel, EmailStr
+import secrets
+
+class MagicLinkRequest(BaseModel):
+    email: EmailStr
+
+class MagicLinkVerify(BaseModel):
+    token: str
+
+@app.post("/api/auth/magic-link")
+async def send_magic_link(request: MagicLinkRequest, db: AsyncSession = Depends(get_db)):
+    """Send magic link to user's email"""
+    from sqlalchemy import select
+
+    # Generate unique token
+    token = secrets.token_urlsafe(32)
+
+    # Store token with email and expiry (30 minutes)
+    magic_link_tokens[token] = {
+        "email": request.email,
+        "created_at": datetime.utcnow(),
+        "expires_at": datetime.utcnow() + timedelta(minutes=30)
+    }
+
+    # TODO: Send actual email with link
+    # For now, just return success
+    # In production: use EmailJS or SMTP to send email
+    magic_link_url = f"https://cssberlin.de/verify-magic-link?token={token}"
+
+    print(f"Magic Link for {request.email}: {magic_link_url}")
+
+    return {
+        "success": True,
+        "message": "Magic link sent to your email",
+        "email": request.email
+    }
+
+
+@app.get("/api/auth/verify-magic-link")
+async def verify_magic_link(token: str, db: AsyncSession = Depends(get_db)):
+    """Verify magic link token and login user"""
+    from sqlalchemy import select
+
+    # Check if token exists
+    if token not in magic_link_tokens:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid or expired token"
+        )
+
+    token_data = magic_link_tokens[token]
+
+    # Check if token is expired
+    if datetime.utcnow() > token_data["expires_at"]:
+        del magic_link_tokens[token]
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Token expired"
+        )
+
+    email = token_data["email"]
+
+    # Find or create user
+    result = await db.execute(select(User).where(User.email == email))
+    user = result.scalar_one_or_none()
+
+    if not user:
+        # Create new user with magic link
+        user = User(
+            email=email,
+            hashed_password=get_password_hash(secrets.token_urlsafe(16)),  # Random password
+            first_name=email.split("@")[0],
+            last_name="",
+            is_verified=True
+        )
+        db.add(user)
+        await db.commit()
+        await db.refresh(user)
+
+    # Delete used token
+    del magic_link_tokens[token]
+
+    # Create access token
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": user.email, "user_id": user.id},
+        expires_delta=access_token_expires
+    )
+
+    return {
+        "success": True,
+        "access_token": access_token,
+        "token_type": "bearer",
+        "user": {
+            "id": user.id,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name
+        }
+    }
+
+
 # ============== PRODUCT ENDPOINTS ==============
 
 @app.get("/api/products")

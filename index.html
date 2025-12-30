@@ -275,8 +275,14 @@
                     <span class="icon-badge" id="cartCount">0</span>
                 </a>
 
-                <!-- User Menu -->
-                <div class="user-menu-wrapper">
+                <!-- Auth Buttons (Guest) -->
+                <div class="auth-buttons" id="guestAuthButtons">
+                    <a href="login.html" class="auth-btn auth-btn-login">Anmelden</a>
+                    <a href="registrieren.html" class="auth-btn auth-btn-register">Registrieren</a>
+                </div>
+
+                <!-- User Menu (Logged In) -->
+                <div class="user-menu-wrapper" id="userMenuWrapper" style="display: none;">
                     <button class="user-menu-btn-v2" id="userMenuBtn">
                         <div class="user-avatar" id="userAvatar">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -284,19 +290,14 @@
                                 <circle cx="12" cy="7" r="4"></circle>
                             </svg>
                         </div>
-                        <span class="user-name" id="userName">Anmelden</span>
+                        <span class="user-name" id="userName">Profil</span>
                         <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polyline points="6 9 12 15 18 9"></polyline>
                         </svg>
                     </button>
                     <!-- User Dropdown -->
                     <div class="user-dropdown-v2" id="userDropdown">
-                        <div class="dropdown-guest" id="dropdownGuest">
-                            <p>Willkommen bei CSS Berlin</p>
-                            <button onclick="authGate.showLoginModal()" class="dropdown-login-btn">Anmelden</button>
-                            <a href="registrieren.html" class="dropdown-register-link">Neu hier? Jetzt registrieren</a>
-                        </div>
-                        <div class="dropdown-user" id="dropdownUser" style="display: none;">
+                        <div class="dropdown-user" id="dropdownUser">
                             <div class="dropdown-user-info">
                                 <div class="dropdown-avatar" id="dropdownAvatar">U</div>
                                 <div class="dropdown-user-details">
@@ -750,7 +751,36 @@
         document.addEventListener('DOMContentLoaded', async () => {
             await authGate.checkAuthStatus();
 
-            // Find auth buttons
+            // New auth structure: guestAuthButtons vs userMenuWrapper
+            const guestAuthButtons = document.getElementById('guestAuthButtons');
+            const userMenuWrapper = document.getElementById('userMenuWrapper');
+
+            if (authGate.isAuthenticated && authGate.currentUser) {
+                // Show user menu, hide guest buttons
+                if (guestAuthButtons) guestAuthButtons.style.display = 'none';
+                if (userMenuWrapper) userMenuWrapper.style.display = 'flex';
+
+                // Update user info in dropdown
+                const userName = authGate.currentUser.firstName ||
+                                 authGate.currentUser.username ||
+                                 authGate.currentUser.email.split('@')[0];
+
+                const userNameEl = document.getElementById('userName');
+                const dropdownUserName = document.getElementById('dropdownUserName');
+                const dropdownUserEmail = document.getElementById('dropdownUserEmail');
+                const dropdownAvatar = document.getElementById('dropdownAvatar');
+
+                if (userNameEl) userNameEl.textContent = userName;
+                if (dropdownUserName) dropdownUserName.textContent = userName;
+                if (dropdownUserEmail) dropdownUserEmail.textContent = authGate.currentUser.email;
+                if (dropdownAvatar) dropdownAvatar.textContent = userName.charAt(0).toUpperCase();
+            } else {
+                // Show guest buttons, hide user menu
+                if (guestAuthButtons) guestAuthButtons.style.display = 'flex';
+                if (userMenuWrapper) userMenuWrapper.style.display = 'none';
+            }
+
+            // Also handle legacy auth buttons
             const authButtons = document.querySelectorAll('.header-btn.auth-btn');
             const headerActions = document.querySelector('.header-actions');
 

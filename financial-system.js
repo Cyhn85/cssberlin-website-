@@ -9,12 +9,31 @@ const FinancialSystem = {
     SERVICE_FEE: 1.00,  // 1€ Hizmet Bedeli
     MIN_OFFER_PERCENT: 50,  // Minimum teklif yüzdesi (%50)
 
-    // Regex Patterns - Anti-Bypass
+    // Regex Patterns - Anti-Bypass (Gelişmiş)
     PHONE_PATTERNS: [
         /(\+?\d{1,4}[\s.-]?)?\(?\d{1,4}\)?[\s.-]?\d{1,4}[\s.-]?\d{1,9}/g,  // Telefon numaraları
         /\b0\d{3,4}[\s.-]?\d{6,8}\b/g,  // Almanya telefon
         /\b\+49[\s.-]?\d{3,4}[\s.-]?\d{6,8}\b/g,  // Almanya +49
         /\b01[567]\d[\s.-]?\d{7,8}\b/g,  // Almanya mobil
+    ],
+    EMAIL_PATTERNS: [
+        /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/gi,  // Email adresleri
+    ],
+    PLZ_PATTERNS: [
+        /\b\d{5}\b/g,  // Almanya posta kodu (5 haneli)
+        /\bPLZ[\s:]*\d{5}\b/gi,  // "PLZ 10115" formatı
+        /\b1[0-4]\d{3}\b/g,  // Berlin PLZ (10xxx-14xxx)
+    ],
+    ADDRESS_PATTERNS: [
+        /\b(strasse|straße|str\.|stra[sß]e)\s*\d+[a-z]?\b/gi,  // Straße + numara
+        /\b\d+[a-z]?\s*(strasse|straße|str\.)\b/gi,  // Numara + Straße
+        /\bweg\s*\d+[a-z]?\b/gi,  // Weg + numara
+        /\ballee\s*\d+[a-z]?\b/gi,  // Allee + numara
+        /\bplatz\s*\d+[a-z]?\b/gi,  // Platz + numara
+        /\bdamm\s*\d+[a-z]?\b/gi,  // Damm + numara
+        /\bufer\s*\d+[a-z]?\b/gi,  // Ufer + numara
+        /\bchaussee\s*\d+[a-z]?\b/gi,  // Chaussee + numara
+        /\b(hausnummer|haus\s*nr\.?|hnr\.?)\s*:?\s*\d+[a-z]?\b/gi,  // Hausnummer
     ],
     LINK_PATTERNS: [
         /https?:\/\/[^\s]+/gi,  // HTTP/HTTPS links
@@ -26,11 +45,15 @@ const FinancialSystem = {
         /facebook\.com\/[^\s]+/gi,
     ],
 
+    // Güvenlik Uyarı Mesajları
+    WARNING_MESSAGE_TR: 'Güvenliğiniz için adres ve iletişim bilgilerinizi sadece 1€\'luk Güvenli Randevu onayından sonra paylaşın.',
+    WARNING_MESSAGE_DE: 'Zu Ihrer Sicherheit: Teilen Sie Adress- und Kontaktdaten erst nach der 1€ Sichere-Termin-Bestätigung.',
+
     /**
      * Escrow (Havuz) Sistemi - İşlem Başlatma
      */
     initEscrow: function(transactionData) {
-        const escrowId = 'ESC_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        const escrowId = 'ESC_' + Date.now() + '_' + Math.random().toString(36).substring(2, 11);
 
         const escrow = {
             id: escrowId,
@@ -118,7 +141,7 @@ const FinancialSystem = {
     /**
      * Manuel Teklif Doğrulama (%50 Kuralı)
      */
-    validateOffer: function(offerAmount, originalPrice, isBundle = false) {
+    validateOffer: function(offerAmount, originalPrice) {
         const minOffer = originalPrice * (this.MIN_OFFER_PERCENT / 100);
 
         if (offerAmount < minOffer) {
@@ -147,7 +170,7 @@ const FinancialSystem = {
     },
 
     /**
-     * Anti-Bypass: Mesaj Tarama
+     * Anti-Bypass: Mesaj Tarama (Gelişmiş - Email, PLZ, Adres dahil)
      */
     scanMessageForBypass: function(message) {
         const detectedItems = [];
@@ -161,9 +184,59 @@ const FinancialSystem = {
                         detectedItems.push({
                             type: 'phone',
                             value: match,
-                            message: 'Telefon numarası algılandı'
+                            label: 'Telefon',
+                            labelDE: 'Telefonnummer'
                         });
                     }
+                });
+            }
+        });
+
+        // Email kontrolü
+        this.EMAIL_PATTERNS.forEach(pattern => {
+            const matches = message.match(pattern);
+            if (matches) {
+                matches.forEach(match => {
+                    detectedItems.push({
+                        type: 'email',
+                        value: match,
+                        label: 'E-posta',
+                        labelDE: 'E-Mail'
+                    });
+                });
+            }
+        });
+
+        // PLZ (Posta Kodu) kontrolü
+        this.PLZ_PATTERNS.forEach(pattern => {
+            const matches = message.match(pattern);
+            if (matches) {
+                matches.forEach(match => {
+                    // Yıl gibi görünen sayıları filtrele (1900-2099)
+                    const numOnly = match.replace(/\D/g, '');
+                    if (numOnly.length === 5 && !(numOnly >= '1900' && numOnly <= '2099')) {
+                        detectedItems.push({
+                            type: 'plz',
+                            value: match,
+                            label: 'Posta Kodu',
+                            labelDE: 'Postleitzahl'
+                        });
+                    }
+                });
+            }
+        });
+
+        // Adres kontrolü (Strasse, Hausnummer vb.)
+        this.ADDRESS_PATTERNS.forEach(pattern => {
+            const matches = message.match(pattern);
+            if (matches) {
+                matches.forEach(match => {
+                    detectedItems.push({
+                        type: 'address',
+                        value: match,
+                        label: 'Adres',
+                        labelDE: 'Adresse'
+                    });
                 });
             }
         });
@@ -176,17 +249,29 @@ const FinancialSystem = {
                     detectedItems.push({
                         type: 'link',
                         value: match,
-                        message: 'Harici link algılandı'
+                        label: 'Link',
+                        labelDE: 'Link'
                     });
                 });
             }
         });
 
-        if (detectedItems.length > 0) {
+        // Benzersiz değerleri al (aynı match'in tekrarını önle)
+        const uniqueItems = [];
+        const seenValues = new Set();
+        detectedItems.forEach(item => {
+            if (!seenValues.has(item.value)) {
+                seenValues.add(item.value);
+                uniqueItems.push(item);
+            }
+        });
+
+        if (uniqueItems.length > 0) {
             return {
                 detected: true,
-                items: detectedItems,
-                warning: 'Güvenliğiniz için randevuyu sistem üzerinden 1€ karşılığında oluşturmalısınız.'
+                items: uniqueItems,
+                warningTR: this.WARNING_MESSAGE_TR,
+                warningDE: this.WARNING_MESSAGE_DE
             };
         }
 
@@ -488,18 +573,95 @@ const FinancialUI = {
     },
 
     /**
-     * Mesaj Input Anti-Bypass
+     * Mesaj Input Anti-Bypass (Inline Turuncu Uyarı)
      */
-    initMessageScanning: function(inputId) {
+    initMessageScanning: function(inputId, containerId) {
         const input = document.getElementById(inputId);
+        const container = containerId ? document.getElementById(containerId) : input?.parentElement;
         if (!input) return;
 
+        // Uyarı elementi oluştur
+        let warningEl = container.querySelector('.inline-bypass-warning');
+        if (!warningEl) {
+            warningEl = document.createElement('div');
+            warningEl.className = 'inline-bypass-warning';
+            warningEl.innerHTML = `
+                <div class="bypass-warning-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </div>
+                <div class="bypass-warning-text"></div>
+            `;
+            container.appendChild(warningEl);
+        }
+
+        // Input event listener (real-time kontrol)
+        input.addEventListener('input', function() {
+            const result = FinancialSystem.scanMessageForBypass(this.value);
+            if (result.detected) {
+                FinancialUI.showInlineWarning(warningEl, result);
+            } else {
+                FinancialUI.hideInlineWarning(warningEl);
+            }
+        });
+
+        // Blur event (son kontrol)
         input.addEventListener('blur', function() {
             const result = FinancialSystem.scanMessageForBypass(this.value);
             if (result.detected) {
-                FinancialUI.showSecurityWarning(result.items);
+                FinancialUI.showInlineWarning(warningEl, result);
             }
         });
+    },
+
+    /**
+     * Inline Turuncu Uyarı Göster
+     */
+    showInlineWarning: function(warningEl, scanResult) {
+        if (!warningEl) return;
+
+        const textEl = warningEl.querySelector('.bypass-warning-text');
+        if (textEl) {
+            // Algılanan tipleri listele
+            const types = [...new Set(scanResult.items.map(i => i.labelDE))].join(', ');
+            textEl.innerHTML = `
+                <strong>${types} erkannt:</strong>
+                ${scanResult.warningDE}
+            `;
+        }
+
+        warningEl.classList.add('visible');
+    },
+
+    /**
+     * Inline Uyarı Gizle
+     */
+    hideInlineWarning: function(warningEl) {
+        if (warningEl) {
+            warningEl.classList.remove('visible');
+        }
+    },
+
+    /**
+     * Chat Mesajına Uyarı Ekle (Gönderim sonrası)
+     */
+    attachWarningToMessage: function(messageEl, scanResult) {
+        if (!messageEl || !scanResult.detected) return;
+
+        const warningHtml = `
+            <div class="message-bypass-warning">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                <span>${scanResult.warningDE}</span>
+            </div>
+        `;
+        messageEl.insertAdjacentHTML('beforeend', warningHtml);
     }
 };
 
