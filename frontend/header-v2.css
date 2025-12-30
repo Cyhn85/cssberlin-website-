@@ -50,10 +50,11 @@
 .header-container-v2 {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 12px 24px;
+    padding: 16px 24px;
     display: flex;
     align-items: center;
     gap: 20px;
+    min-height: 70px;
 }
 
 /* Mobile Menu Button */
@@ -102,16 +103,23 @@
 }
 
 .logo-text {
-    font-size: 28px;
+    font-size: 32px;
     font-weight: 800;
     color: #2D5016;
     letter-spacing: -1px;
+    line-height: 1;
 }
 
 .logo-subtext {
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 600;
     color: #FF8C42;
+}
+
+/* Logo görsel varsa */
+.header-logo img {
+    max-height: 50px;
+    width: auto;
 }
 
 /* Search Bar V2 */

@@ -162,7 +162,9 @@
         }
     </style>
 </head>
-<body>
+<body class="page-wrapper">
+    <!-- Main Content Wrapper for Flex Layout -->
+    <main class="page-main">
     <!-- News Banner at Top -->
     <div class="news-banner-v2">
         <div class="news-slider" id="newsSlider">
@@ -571,6 +573,8 @@
             </button>
         </div>
     </section>
+    </main>
+    <!-- End of Main Content -->
 
     <!-- Footer -->
     <footer class="footer" style="background: linear-gradient(135deg, #FF8C42 0%, #2D5016 100%); padding: 0;">
@@ -695,6 +699,7 @@
     <script src="auth-guard.js"></script>  <!-- Authorization guard -->
     <script src="favorites.js"></script>  <!-- Favorites system -->
     <script src="financial-system.js"></script>  <!-- 1€ Escrow, Offers, Anti-Bypass -->
+    <script src="success-animations.js"></script>  <!-- El Sikisma + CO2 Yapraklar -->
 
     <script src="i18n.js"></script>
     <script src="footer.js"></script>
@@ -769,11 +774,25 @@
                 const dropdownUserName = document.getElementById('dropdownUserName');
                 const dropdownUserEmail = document.getElementById('dropdownUserEmail');
                 const dropdownAvatar = document.getElementById('dropdownAvatar');
+                const userAvatar = document.getElementById('userAvatar');
 
                 if (userNameEl) userNameEl.textContent = userName;
                 if (dropdownUserName) dropdownUserName.textContent = userName;
                 if (dropdownUserEmail) dropdownUserEmail.textContent = authGate.currentUser.email;
-                if (dropdownAvatar) dropdownAvatar.textContent = userName.charAt(0).toUpperCase();
+
+                // Google Avatar: Eğer picture varsa resim göster, yoksa harf göster
+                if (authGate.currentUser.picture) {
+                    // Header avatar
+                    if (userAvatar) {
+                        userAvatar.innerHTML = `<img src="${authGate.currentUser.picture}" alt="${userName}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">`;
+                    }
+                    // Dropdown avatar
+                    if (dropdownAvatar) {
+                        dropdownAvatar.innerHTML = `<img src="${authGate.currentUser.picture}" alt="${userName}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+                    }
+                } else {
+                    if (dropdownAvatar) dropdownAvatar.textContent = userName.charAt(0).toUpperCase();
+                }
             } else {
                 // Show guest buttons, hide user menu
                 if (guestAuthButtons) guestAuthButtons.style.display = 'flex';
