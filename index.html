@@ -285,7 +285,7 @@
 
                 <!-- User Menu (Logged In) -->
                 <div class="user-menu-wrapper" id="userMenuWrapper" style="display: none;">
-                    <button class="user-menu-btn-v2" id="userMenuBtn">
+                    <button class="user-menu-btn-v2" id="userMenuBtn" onclick="toggleUserDropdown(event)">
                         <div class="user-avatar" id="userAvatar">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -887,20 +887,45 @@
             }
         });
 
-        // Toggle user dropdown menu
-        function toggleUserMenu() {
+        // Toggle user dropdown menu (Click-based, not hover)
+        function toggleUserDropdown(event) {
+            event.stopPropagation();
             const dropdown = document.getElementById('userDropdown');
             if (dropdown) {
-                dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+                dropdown.classList.toggle('active');
             }
+        }
+
+        // Legacy toggle for old menu structure
+        function toggleUserMenu() {
+            toggleUserDropdown({ stopPropagation: () => {} });
         }
 
         // Close dropdown when clicking outside
         document.addEventListener('click', function(e) {
-            const userMenu = document.querySelector('.user-menu-container');
+            const userMenuWrapper = document.getElementById('userMenuWrapper');
+            const userMenuContainer = document.querySelector('.user-menu-container');
             const dropdown = document.getElementById('userDropdown');
-            if (userMenu && dropdown && !userMenu.contains(e.target)) {
+
+            // V2 dropdown close
+            if (userMenuWrapper && dropdown && !userMenuWrapper.contains(e.target)) {
+                dropdown.classList.remove('active');
+            }
+
+            // Legacy dropdown close
+            if (userMenuContainer && dropdown && !userMenuContainer.contains(e.target)) {
                 dropdown.style.display = 'none';
+            }
+        });
+
+        // ESC tusu ile kapat
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const dropdown = document.getElementById('userDropdown');
+                if (dropdown) {
+                    dropdown.classList.remove('active');
+                    dropdown.style.display = 'none';
+                }
             }
         });
     </script>

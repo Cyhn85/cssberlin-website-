@@ -425,9 +425,21 @@
     overflow: hidden;
 }
 
-.user-menu-wrapper:hover .user-dropdown-v2,
+/* Dropdown sadece click ile acilir (.active class) - hover kaldirildi */
 .user-dropdown-v2.active {
     display: block;
+    animation: dropdownFadeIn 0.2s ease;
+}
+
+@keyframes dropdownFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .dropdown-guest {
