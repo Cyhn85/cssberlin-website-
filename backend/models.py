@@ -161,3 +161,176 @@ class Favorite(Base):
     # Relationships
     user = relationship("User", back_populates="favorites")
     product = relationship("Product")
+
+
+class Escrow(Base):
+    """
+    Escrow (Havuz) Sistemi - 1€ Hizmet Bedeli
+    Her işlem için ödeme havuzda tutulur, onay sonrası serbest bırakılır.
+    """
+    __tablename__ = "escrows"
+
+    id = Column(Integer, primary_key=True, index=True)
+    escrow_code = Column(String(50), unique=True, nullable=False)  # ESC_xxx formatında
+
+    # Taraflar
+    buyer_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    seller_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    product_id = Column(Integer, ForeignKey("products.id"), nullable=False)
+
+    # Tutar bilgileri
+    product_price = Column(Float, nullable=False)
+    service_fee = Column(Float, default=1.00)  # 1€ sabit
+    total_amount = Column(Float, nullable=False)
+
+    # İşlem tipi ve durumu
+    transaction_type = Column(String(20), nullable=False)  # 'online' veya 'abholung'
+    status = Column(String(30), default="pending")  # pending, paid, confirmed, released, cancelled, refunded
+
+    # Ödeme bilgileri
+    payment_method = Column(String(50))  # klarna, paypal, card
+    payment_intent_id = Column(String(255))  # Ödeme servisinden gelen ID
+    paid_at = Column(DateTime)
+
+    # PIN/QR onay sistemi (Abholung için)
+    confirmation_pin = Column(String(6))
+    confirmed_at = Column(DateTime)
+
+    # İptal/iade bilgileri
+    cancelled_at = Column(DateTime)
+    cancel_reason = Column(String(255))
+    refunded_at = Column(DateTime)
+
+    # Zaman damgaları
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    expires_at = Column(DateTime)  # Ödeme için son tarih
+
+    # Relationships
+    buyer = relationship("User", foreign_keys=[buyer_id])
+    seller = relationship("User", foreign_keys=[seller_id])
+    product = relationship("Product")
+    appointment = relationship("Appointment", back_populates="escrow", uselist=False)
+
+
+class Appointment(Base):
+    """
+    Randevu Sistemi - Abholung (Elden Teslim)
+    Alıcı ve satıcı buluşması için randevu yönetimi.
+    """
+    __tablename__ = "appointments"
+
+    id = Column(Integer, primary_key=True, index=True)
+    appointment_code = Column(String(50), unique=True, nullable=False)  # APT_xxx formatında
+
+    # Taraflar
+    buyer_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    seller_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    product_id = Column(Integer, ForeignKey("products.id"), nullable=False)
+    escrow_id = Column(Integer, ForeignKey("escrows.id"))
+
+    # Randevu detayları
+    appointment_date = Column(DateTime, nullable=False)
+    appointment_time = Column(String(10), nullable=False)  # HH:MM formatında
+
+    # Konum bilgileri (ödeme sonrası açılır)
+    location_address = Column(String(500))
+    location_city = Column(String(100))
+    location_plz = Column(String(10))
+    location_lat = Column(Float)
+    location_lng = Column(Float)
+    location_revealed = Column(Boolean, default=False)
+
+    # Durum
+    status = Column(String(30), default="pending_payment")
+    # pending_payment, confirmed, completed, cancelled, no_show
+
+    # Hatırlatıcı sistemi
+    reminder_1h_sent = Column(Boolean, default=False)
+    reminder_24h_sent = Column(Boolean, default=False)
+
+    # Notlar
+    buyer_notes = Column(Text)
+    seller_notes = Column(Text)
+
+    # Zaman damgaları
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    completed_at = Column(DateTime)
+    cancelled_at = Column(DateTime)
+
+    # Relationships
+    buyer = relationship("User", foreign_keys=[buyer_id])
+    seller = relationship("User", foreign_keys=[seller_id])
+    product = relationship("Product")
+    escrow = relationship("Escrow", back_populates="appointment")
+
+
+class BundleOffer(Base):
+    """
+    Bundle (Çoklu Ürün) Teklif Sistemi
+    Birden fazla ürün için toplu teklif.
+    """
+    __tablename__ = "bundle_offers"
+
+    id = Column(Integer, primary_key=True, index=True)
+    bundle_code = Column(String(50), unique=True, nullable=False)  # BND_xxx formatında
+
+    # Taraflar
+    buyer_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    seller_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+
+    # Ürünler (JSON listesi)
+    product_ids = Column(JSON, nullable=False)  # [1, 2, 3] formatında
+    product_count = Column(Integer, nullable=False)
+
+    # Fiyatlandırma
+    original_total = Column(Float, nullable=False)  # Toplam liste fiyatı
+    offer_amount = Column(Float, nullable=False)  # Teklif edilen tutar
+    min_offer_amount = Column(Float, nullable=False)  # %50 kuralına göre minimum
+    discount_percent = Column(Float)  # Yüzde indirim
+
+    # Durum
+    status = Column(String(30), default="pending")
+    # pending, accepted, declined, countered, expired
+
+    counter_amount = Column(Float)  # Satıcı karşı teklifi
+    message = Column(Text)
+
+    # Zaman damgaları
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    expires_at = Column(DateTime)
+
+    # Relationships
+    buyer = relationship("User", foreign_keys=[buyer_id])
+    seller = relationship("User", foreign_keys=[seller_id])
+
+
+class SecurityLog(Base):
+    """
+    Güvenlik Kayıtları - Anti-Bypass
+    Şüpheli mesajlar ve platform dışı iletişim girişimleri.
+    """
+    __tablename__ = "security_logs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+
+    # Algılanan içerik
+    log_type = Column(String(30), nullable=False)  # phone_detected, link_detected, bypass_attempt
+    detected_content = Column(Text)
+    original_message = Column(Text)
+
+    # Bağlam
+    context = Column(String(50))  # chat, offer_message, profile_update
+    related_user_id = Column(Integer, ForeignKey("users.id"))  # Mesajın gönderildiği kişi
+
+    # Kullanıcı tepkisi
+    user_action = Column(String(30))  # created_appointment, skipped_warning, blocked
+
+    # Zaman damgası
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    # Relationships
+    user = relationship("User", foreign_keys=[user_id])

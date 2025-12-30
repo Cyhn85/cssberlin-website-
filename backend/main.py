@@ -14,7 +14,9 @@ from typing import Optional
 import os
 
 from database import get_db, engine, Base
-from models import User, Product, Offer, Message, Order, Shipment
+from models import User, Product, Offer, Message, Order, Shipment, Escrow, Appointment, BundleOffer, SecurityLog
+import re
+import random
 from schemas import (
     UserCreate, UserResponse, UserLogin, Token,
     ProductCreate, ProductResponse, ProductUpdate,
@@ -950,6 +952,491 @@ async def check_favorite(
     favorite = result.scalar_one_or_none()
 
     return {"is_favorite": favorite is not None}
+
+
+# ============================================================================
+# ESCROW SİSTEMİ - 1€ HİZMET BEDELİ
+# ============================================================================
+
+SERVICE_FEE = 1.00  # Sabit 1€ hizmet bedeli
+MIN_OFFER_PERCENT = 50  # Minimum teklif yüzdesi
+
+# Anti-bypass regex patterns
+PHONE_PATTERNS = [
+    r'(\+?\d{1,4}[\s.-]?)?\(?\d{1,4}\)?[\s.-]?\d{1,4}[\s.-]?\d{1,9}',
+    r'\b0\d{3,4}[\s.-]?\d{6,8}\b',
+    r'\b\+49[\s.-]?\d{3,4}[\s.-]?\d{6,8}\b',
+    r'\b01[567]\d[\s.-]?\d{7,8}\b',
+]
+
+LINK_PATTERNS = [
+    r'https?://[^\s]+',
+    r'www\.[^\s]+',
+    r'[a-zA-Z0-9.-]+\.(com|de|net|org|io|app|xyz)[^\s]*',
+    r'wa\.me/\d+',
+    r't\.me/[^\s]+',
+]
+
+
+def generate_pin():
+    """4 haneli PIN oluştur"""
+    return str(random.randint(1000, 9999))
+
+
+def generate_code(prefix: str):
+    """Benzersiz kod oluştur (ESC_, APT_, BND_)"""
+    import time
+    return f"{prefix}{int(time.time())}_{random.randint(1000, 9999)}"
+
+
+@app.post("/api/escrow/create")
+async def create_escrow(
+    escrow_data: dict,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """Yeni escrow işlemi oluştur"""
+    from sqlalchemy import select
+
+    product_id = escrow_data.get("product_id")
+    transaction_type = escrow_data.get("type", "online")  # online veya abholung
+
+    # Ürünü bul
+    result = await db.execute(select(Product).where(Product.id == product_id))
+    product = result.scalar_one_or_none()
+
+    if not product:
+        raise HTTPException(status_code=404, detail="Produkt nicht gefunden")
+
+    if product.seller_id == current_user.id:
+        raise HTTPException(status_code=400, detail="Sie können nicht Ihr eigenes Produkt kaufen")
+
+    # Escrow oluştur
+    escrow = Escrow(
+        escrow_code=generate_code("ESC_"),
+        buyer_id=current_user.id,
+        seller_id=product.seller_id,
+        product_id=product_id,
+        product_price=product.price,
+        service_fee=SERVICE_FEE,
+        total_amount=product.price + SERVICE_FEE,
+        transaction_type=transaction_type,
+        status="pending",
+        confirmation_pin=generate_pin(),
+        expires_at=datetime.utcnow() + timedelta(hours=24)
+    )
+
+    db.add(escrow)
+    await db.commit()
+    await db.refresh(escrow)
+
+    return {
+        "success": True,
+        "escrow": {
+            "id": escrow.id,
+            "code": escrow.escrow_code,
+            "product_price": escrow.product_price,
+            "service_fee": escrow.service_fee,
+            "total_amount": escrow.total_amount,
+            "type": escrow.transaction_type,
+            "expires_at": escrow.expires_at.isoformat()
+        }
+    }
+
+
+@app.post("/api/escrow/{escrow_id}/pay")
+async def pay_escrow(
+    escrow_id: int,
+    payment_data: dict,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """Escrow ödemesi yap"""
+    from sqlalchemy import select
+
+    result = await db.execute(select(Escrow).where(Escrow.id == escrow_id))
+    escrow = result.scalar_one_or_none()
+
+    if not escrow:
+        raise HTTPException(status_code=404, detail="Escrow nicht gefunden")
+
+    if escrow.buyer_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Nicht berechtigt")
+
+    if escrow.status != "pending":
+        raise HTTPException(status_code=400, detail="Escrow kann nicht bezahlt werden")
+
+    # Ödemeyi işle (gerçek ödeme entegrasyonu burada yapılacak)
+    escrow.status = "paid"
+    escrow.payment_method = payment_data.get("method", "card")
+    escrow.paid_at = datetime.utcnow()
+
+    await db.commit()
+
+    # Abholung ise konum bilgisini hazırla
+    location_data = None
+    if escrow.transaction_type == "abholung":
+        # Satıcı bilgilerini al
+        seller_result = await db.execute(select(User).where(User.id == escrow.seller_id))
+        seller = seller_result.scalar_one_or_none()
+
+        location_data = {
+            "revealed": True,
+            "pin": escrow.confirmation_pin,
+            "seller_name": f"{seller.first_name} {seller.last_name}" if seller else "Verkäufer"
+        }
+
+    return {
+        "success": True,
+        "message": "Zahlung erfolgreich",
+        "escrow": {
+            "id": escrow.id,
+            "status": escrow.status,
+            "pin": escrow.confirmation_pin if escrow.transaction_type == "abholung" else None
+        },
+        "location": location_data
+    }
+
+
+@app.post("/api/escrow/{escrow_id}/confirm")
+async def confirm_escrow(
+    escrow_id: int,
+    confirm_data: dict,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """PIN ile escrow onayla (buluşma sonrası)"""
+    from sqlalchemy import select
+
+    result = await db.execute(select(Escrow).where(Escrow.id == escrow_id))
+    escrow = result.scalar_one_or_none()
+
+    if not escrow:
+        raise HTTPException(status_code=404, detail="Escrow nicht gefunden")
+
+    # Satıcı veya alıcı onaylayabilir
+    if escrow.buyer_id != current_user.id and escrow.seller_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Nicht berechtigt")
+
+    if escrow.status != "paid":
+        raise HTTPException(status_code=400, detail="Escrow muss zuerst bezahlt werden")
+
+    entered_pin = confirm_data.get("pin", "")
+    if escrow.confirmation_pin != entered_pin:
+        raise HTTPException(status_code=400, detail="Falscher PIN-Code")
+
+    escrow.status = "confirmed"
+    escrow.confirmed_at = datetime.utcnow()
+
+    await db.commit()
+
+    return {
+        "success": True,
+        "message": "Transaktion bestätigt",
+        "platform_fee": SERVICE_FEE,
+        "seller_amount": escrow.product_price
+    }
+
+
+# ============================================================================
+# RANDEVU SİSTEMİ
+# ============================================================================
+
+@app.post("/api/appointments/create")
+async def create_appointment(
+    appointment_data: dict,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """Yeni randevu oluştur"""
+    from sqlalchemy import select
+
+    product_id = appointment_data.get("product_id")
+    appointment_date = appointment_data.get("date")
+    appointment_time = appointment_data.get("time")
+
+    # Ürünü bul
+    result = await db.execute(select(Product).where(Product.id == product_id))
+    product = result.scalar_one_or_none()
+
+    if not product:
+        raise HTTPException(status_code=404, detail="Produkt nicht gefunden")
+
+    # Randevu oluştur
+    appointment = Appointment(
+        appointment_code=generate_code("APT_"),
+        buyer_id=current_user.id,
+        seller_id=product.seller_id,
+        product_id=product_id,
+        appointment_date=datetime.fromisoformat(appointment_date),
+        appointment_time=appointment_time,
+        status="pending_payment"
+    )
+
+    db.add(appointment)
+    await db.commit()
+    await db.refresh(appointment)
+
+    return {
+        "success": True,
+        "appointment": {
+            "id": appointment.id,
+            "code": appointment.appointment_code,
+            "date": appointment.appointment_date.isoformat(),
+            "time": appointment.appointment_time,
+            "status": appointment.status,
+            "fee_required": SERVICE_FEE
+        }
+    }
+
+
+@app.get("/api/appointments")
+async def get_user_appointments(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """Kullanıcının randevularını getir"""
+    from sqlalchemy import select, or_
+
+    result = await db.execute(
+        select(Appointment).where(
+            or_(
+                Appointment.buyer_id == current_user.id,
+                Appointment.seller_id == current_user.id
+            )
+        ).order_by(Appointment.appointment_date.desc())
+    )
+    appointments = result.scalars().all()
+
+    enriched = []
+    for apt in appointments:
+        # Ürün bilgisi
+        prod_result = await db.execute(select(Product).where(Product.id == apt.product_id))
+        product = prod_result.scalar_one_or_none()
+
+        enriched.append({
+            "id": apt.id,
+            "code": apt.appointment_code,
+            "product_name": product.name if product else "Unknown",
+            "product_image": product.images[0] if product and product.images else None,
+            "date": apt.appointment_date.isoformat(),
+            "time": apt.appointment_time,
+            "status": apt.status,
+            "location_revealed": apt.location_revealed,
+            "location_address": apt.location_address if apt.location_revealed else None,
+            "is_buyer": apt.buyer_id == current_user.id
+        })
+
+    return {"appointments": enriched}
+
+
+# ============================================================================
+# TEKLİF DOĞRULAMA (%50 KURALI)
+# ============================================================================
+
+@app.post("/api/offers/validate")
+async def validate_offer(
+    offer_data: dict,
+    db: AsyncSession = Depends(get_db)
+):
+    """Teklif tutarını doğrula (%50 kuralı)"""
+    offer_amount = float(offer_data.get("offer_amount", 0))
+    original_price = float(offer_data.get("original_price", 0))
+
+    if original_price <= 0:
+        raise HTTPException(status_code=400, detail="Ungültiger Originalpreis")
+
+    min_offer = original_price * (MIN_OFFER_PERCENT / 100)
+
+    if offer_amount < min_offer:
+        return {
+            "valid": False,
+            "min_amount": min_offer,
+            "message": f"Dieses Angebot ist nicht fair! Mindestangebot: €{min_offer:.2f}"
+        }
+
+    discount = ((original_price - offer_amount) / original_price) * 100
+
+    return {
+        "valid": True,
+        "offer_amount": offer_amount,
+        "discount_percent": round(discount, 1),
+        "message": "Angebot ist gültig"
+    }
+
+
+@app.post("/api/bundle-offers/create")
+async def create_bundle_offer(
+    bundle_data: dict,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """Bundle (çoklu ürün) teklifi oluştur"""
+    from sqlalchemy import select
+
+    product_ids = bundle_data.get("product_ids", [])
+    offer_amount = float(bundle_data.get("offer_amount", 0))
+
+    if len(product_ids) < 2:
+        raise HTTPException(status_code=400, detail="Mindestens 2 Produkte für Bundle erforderlich")
+
+    # Ürünleri bul ve toplam fiyatı hesapla
+    total_price = 0
+    seller_id = None
+
+    for pid in product_ids:
+        result = await db.execute(select(Product).where(Product.id == pid))
+        product = result.scalar_one_or_none()
+
+        if not product:
+            raise HTTPException(status_code=404, detail=f"Produkt {pid} nicht gefunden")
+
+        if seller_id is None:
+            seller_id = product.seller_id
+        elif seller_id != product.seller_id:
+            raise HTTPException(status_code=400, detail="Alle Produkte müssen vom selben Verkäufer sein")
+
+        total_price += product.price
+
+    # %50 kuralını kontrol et
+    min_offer = total_price * (MIN_OFFER_PERCENT / 100)
+
+    if offer_amount < min_offer:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Dieses Angebot ist nicht fair! Mindestangebot: €{min_offer:.2f}"
+        )
+
+    # Bundle teklifi oluştur
+    bundle = BundleOffer(
+        bundle_code=generate_code("BND_"),
+        buyer_id=current_user.id,
+        seller_id=seller_id,
+        product_ids=product_ids,
+        product_count=len(product_ids),
+        original_total=total_price,
+        offer_amount=offer_amount,
+        min_offer_amount=min_offer,
+        discount_percent=((total_price - offer_amount) / total_price) * 100,
+        status="pending",
+        message=bundle_data.get("message", ""),
+        expires_at=datetime.utcnow() + timedelta(days=2)
+    )
+
+    db.add(bundle)
+    await db.commit()
+    await db.refresh(bundle)
+
+    return {
+        "success": True,
+        "bundle": {
+            "id": bundle.id,
+            "code": bundle.bundle_code,
+            "product_count": bundle.product_count,
+            "original_total": bundle.original_total,
+            "offer_amount": bundle.offer_amount,
+            "discount_percent": round(bundle.discount_percent, 1),
+            "status": bundle.status
+        }
+    }
+
+
+# ============================================================================
+# ANTİ-BYPASS GÜVENLİK
+# ============================================================================
+
+@app.post("/api/security/scan-message")
+async def scan_message(
+    message_data: dict,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """Mesajı telefon/link için tara"""
+    message = message_data.get("message", "")
+    context = message_data.get("context", "chat")
+
+    detected = []
+
+    # Telefon kontrolü
+    for pattern in PHONE_PATTERNS:
+        matches = re.findall(pattern, message)
+        for match in matches:
+            if isinstance(match, tuple):
+                match = ''.join(match)
+            # En az 8 rakam içermeli
+            digits = re.sub(r'\D', '', match)
+            if len(digits) >= 8:
+                detected.append({
+                    "type": "phone",
+                    "value": match
+                })
+
+    # Link kontrolü
+    for pattern in LINK_PATTERNS:
+        matches = re.findall(pattern, message, re.IGNORECASE)
+        for match in matches:
+            detected.append({
+                "type": "link",
+                "value": match
+            })
+
+    if detected:
+        # Güvenlik logu kaydet
+        log = SecurityLog(
+            user_id=current_user.id,
+            log_type="bypass_attempt",
+            detected_content=str(detected),
+            original_message=message[:500],  # Max 500 karakter
+            context=context
+        )
+        db.add(log)
+        await db.commit()
+
+        return {
+            "detected": True,
+            "items": detected,
+            "warning": "Für Ihre Sicherheit sollten Sie den Termin über das System für 1€ erstellen."
+        }
+
+    return {"detected": False}
+
+
+# ============================================================================
+# CHECKOUT HESAPLAMA
+# ============================================================================
+
+@app.post("/api/checkout/calculate")
+async def calculate_checkout(
+    checkout_data: dict,
+    db: AsyncSession = Depends(get_db)
+):
+    """Checkout toplam hesaplama"""
+    from sqlalchemy import select
+
+    product_ids = checkout_data.get("product_ids", [])
+    delivery_type = checkout_data.get("delivery_type", "shipping")
+
+    subtotal = 0
+    for pid in product_ids:
+        result = await db.execute(select(Product).where(Product.id == pid))
+        product = result.scalar_one_or_none()
+        if product:
+            # Teklif fiyatı varsa onu kullan
+            offer_price = checkout_data.get(f"offer_price_{pid}")
+            subtotal += offer_price if offer_price else product.price
+
+    shipping_cost = 4.99 if delivery_type == "shipping" else 0  # DHL/Hermes
+
+    return {
+        "subtotal": subtotal,
+        "service_fee": SERVICE_FEE,
+        "shipping": shipping_cost,
+        "total": subtotal + SERVICE_FEE + shipping_cost,
+        "breakdown": {
+            "items": len(product_ids),
+            "delivery": delivery_type
+        }
+    }
 
 
 # ============================================================================

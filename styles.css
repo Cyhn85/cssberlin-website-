@@ -4017,3 +4017,965 @@ footer::after {
 .product-card:hover {
     transform: translateY(-4px) scale(1.02);
 }
+
+/* ============================================
+   2026 FİNANSAL SİSTEM - 1€ HİZMET BEDELİ
+   Escrow, Ödeme, Randevu Sistemi
+   ============================================ */
+
+/* ============================================
+   ESCROW (HAVUZ) SİSTEMİ - 1€ FEE
+   ============================================ */
+.escrow-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: var(--font-weight-bold);
+    color: #1a1a1a;
+    box-shadow: 0 2px 8px rgba(255, 165, 0, 0.3);
+}
+
+.escrow-badge svg {
+    width: 14px;
+    height: 14px;
+}
+
+.service-fee-notice {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, #FFF8E7 0%, #FFF3DB 100%);
+    border: 1px solid #FFD93D;
+    border-radius: var(--radius-lg);
+    margin: var(--spacing-md) 0;
+}
+
+.service-fee-notice .fee-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.service-fee-notice .fee-icon svg {
+    width: 24px;
+    height: 24px;
+    color: #1a1a1a;
+}
+
+.service-fee-notice .fee-text {
+    flex: 1;
+}
+
+.service-fee-notice .fee-text h4 {
+    font-size: 14px;
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.service-fee-notice .fee-text p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.service-fee-notice .fee-amount {
+    font-size: 24px;
+    font-weight: var(--font-weight-black);
+    color: var(--primary-green);
+    white-space: nowrap;
+}
+
+/* ============================================
+   RANDEVU (ABHOLUNG) SİSTEMİ
+   ============================================ */
+.pickup-unlock-modal {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(0, 0, 0, 0.7) !important;
+    display: none !important;
+    align-items: center;
+    justify-content: center;
+    z-index: 10001 !important;
+    backdrop-filter: blur(5px);
+}
+
+.pickup-unlock-modal.active {
+    display: flex !important;
+}
+
+.pickup-unlock-content {
+    background: white;
+    border-radius: var(--radius-xl);
+    width: 100%;
+    max-width: 480px;
+    padding: var(--spacing-2xl);
+    box-shadow: var(--shadow-xl);
+    text-align: center;
+}
+
+.pickup-unlock-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto var(--spacing-lg);
+    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-green) 100%);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pickup-unlock-icon svg {
+    width: 40px;
+    height: 40px;
+    color: white;
+}
+
+.pickup-unlock-content h2 {
+    font-size: 24px;
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.pickup-unlock-content p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-lg);
+}
+
+.pickup-unlock-fee {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: var(--accent-green);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.pickup-unlock-fee span {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.pickup-unlock-fee strong {
+    font-size: 28px;
+    font-weight: var(--font-weight-black);
+    color: var(--primary-green);
+}
+
+.pickup-unlock-btn {
+    width: 100%;
+    padding: 16px 32px;
+    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-orange-dark) 100%);
+    color: white;
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: 16px;
+    font-weight: var(--font-weight-bold);
+    cursor: pointer;
+    transition: all var(--transition-smooth);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.pickup-unlock-btn:hover {
+    background: var(--gradient-button-hover);
+    box-shadow: var(--shadow-glow-green);
+    transform: translateY(-2px);
+}
+
+/* QR Kod / PIN Onay Sistemi */
+.qr-confirmation-box {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+    max-width: 360px;
+    margin: 0 auto;
+}
+
+.qr-code-display {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto var(--spacing-lg);
+    background: #f5f5f5;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px dashed var(--border-color);
+}
+
+.pin-input-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.pin-input {
+    width: 50px;
+    height: 60px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    text-align: center;
+    font-size: 24px;
+    font-weight: var(--font-weight-bold);
+    transition: all var(--transition-base);
+}
+
+.pin-input:focus {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.15);
+    outline: none;
+}
+
+/* ============================================
+   KLARNA & ÇOKLU ÖDEME UI
+   ============================================ */
+.payment-methods-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-md);
+    margin: var(--spacing-lg) 0;
+}
+
+.payment-method-card {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    background: white;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    position: relative;
+}
+
+.payment-method-card:hover {
+    border-color: var(--primary-orange);
+    box-shadow: var(--shadow-md);
+}
+
+.payment-method-card.selected {
+    border-color: var(--primary-green);
+    background: var(--accent-green);
+}
+
+.payment-method-card input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.payment-method-logo {
+    width: 60px;
+    height: 40px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+/* Klarna özel renk */
+.payment-method-card.klarna .payment-method-logo {
+    background: #FFB3C7;
+    padding: 8px;
+    border-radius: var(--radius-sm);
+}
+
+/* PayPal özel renk */
+.payment-method-card.paypal .payment-method-logo {
+    background: #003087;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+}
+
+.payment-method-info {
+    flex: 1;
+}
+
+.payment-method-info h4 {
+    font-size: 16px;
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.payment-method-info p {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.payment-method-fee {
+    padding: 6px 12px;
+    background: linear-gradient(135deg, #FFF8E7 0%, #FFECB3 100%);
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: var(--font-weight-bold);
+    color: #8B6914;
+    white-space: nowrap;
+}
+
+.payment-method-fee::before {
+    content: "+ ";
+}
+
+/* Klarna Taksit Seçenekleri */
+.klarna-installments {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: #FFF0F5;
+    border-radius: var(--radius-md);
+}
+
+.klarna-option {
+    padding: 10px;
+    background: white;
+    border: 1.5px solid #FFB3C7;
+    border-radius: var(--radius-sm);
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.klarna-option:hover,
+.klarna-option.selected {
+    border-color: #FF69B4;
+    background: #FFE4EC;
+}
+
+.klarna-option span {
+    display: block;
+    font-size: 14px;
+    font-weight: var(--font-weight-bold);
+    color: #1a1a1a;
+}
+
+.klarna-option small {
+    font-size: 11px;
+    color: #666;
+}
+
+/* ============================================
+   MANUEL TEKLİF SİSTEMİ - %50 KURALI
+   ============================================ */
+.manual-offer-box {
+    background: white;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    margin: var(--spacing-lg) 0;
+}
+
+.manual-offer-box.bundle-mode {
+    border-color: var(--primary-orange);
+    background: linear-gradient(to bottom, #FFF8F0, white);
+}
+
+.manual-offer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-lg);
+}
+
+.manual-offer-header h3 {
+    font-size: 18px;
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.manual-offer-header h3 svg {
+    width: 20px;
+    height: 20px;
+    color: var(--primary-orange);
+}
+
+.offer-rule-badge {
+    padding: 6px 14px;
+    background: linear-gradient(135deg, var(--accent-green) 0%, #D4EDDA 100%);
+    border: 1px solid var(--primary-green-light);
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: var(--font-weight-semibold);
+    color: var(--primary-green);
+}
+
+.manual-offer-input-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.offer-input-wrapper {
+    flex: 1;
+    position: relative;
+}
+
+.offer-input-wrapper input {
+    width: 100%;
+    padding: 16px 20px;
+    padding-left: 40px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    font-size: 20px;
+    font-weight: var(--font-weight-bold);
+    transition: all var(--transition-base);
+}
+
+.offer-input-wrapper input:focus {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 4px rgba(45, 80, 22, 0.1);
+    outline: none;
+}
+
+.offer-input-wrapper input.invalid {
+    border-color: var(--error);
+    background: #FFF5F5;
+}
+
+.offer-input-wrapper input.valid {
+    border-color: var(--success);
+    background: #F5FFF5;
+}
+
+.offer-input-wrapper .currency-symbol {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    font-weight: var(--font-weight-bold);
+    color: var(--text-muted);
+}
+
+.offer-min-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+}
+
+.offer-min-indicator span {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.offer-min-indicator strong {
+    font-size: 16px;
+    font-weight: var(--font-weight-bold);
+    color: var(--primary-green);
+}
+
+/* Teklif Geçersiz Uyarısı */
+.offer-invalid-warning {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    background: linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%);
+    border: 1px solid #EF9A9A;
+    border-radius: var(--radius-lg);
+    margin-top: var(--spacing-md);
+    animation: shake 0.5s ease-in-out;
+}
+
+.offer-invalid-warning.show {
+    display: flex;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.offer-invalid-warning svg {
+    width: 24px;
+    height: 24px;
+    color: var(--error);
+    flex-shrink: 0;
+}
+
+.offer-invalid-warning .warning-text h4 {
+    font-size: 14px;
+    font-weight: var(--font-weight-bold);
+    color: var(--error);
+    margin-bottom: 2px;
+}
+
+.offer-invalid-warning .warning-text p {
+    font-size: 13px;
+    color: #B71C1C;
+}
+
+/* ============================================
+   ANTİ-BYPASS GÜVENLİK SİSTEMİ
+   Mesajlaşmada Telefon/Link Algılama
+   ============================================ */
+.security-warning-modal {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(0, 0, 0, 0.75) !important;
+    display: none !important;
+    align-items: center;
+    justify-content: center;
+    z-index: 10002 !important;
+    backdrop-filter: blur(6px);
+}
+
+.security-warning-modal.active {
+    display: flex !important;
+}
+
+.security-warning-content {
+    background: white;
+    border-radius: var(--radius-xl);
+    width: 100%;
+    max-width: 440px;
+    padding: var(--spacing-2xl);
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.security-warning-icon {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto var(--spacing-lg);
+    background: linear-gradient(135deg, #FFD54F 0%, #FFB300 100%);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse-warning 2s infinite;
+}
+
+@keyframes pulse-warning {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 179, 0, 0.4); }
+    50% { box-shadow: 0 0 0 15px rgba(255, 179, 0, 0); }
+}
+
+.security-warning-icon svg {
+    width: 36px;
+    height: 36px;
+    color: #1a1a1a;
+}
+
+.security-warning-content h2 {
+    font-size: 22px;
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.security-warning-content p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-lg);
+}
+
+.security-warning-content .detected-text {
+    padding: 12px 16px;
+    background: #FFF3E0;
+    border: 1px solid #FFE0B2;
+    border-radius: var(--radius-md);
+    font-family: monospace;
+    font-size: 14px;
+    color: #E65100;
+    margin-bottom: var(--spacing-lg);
+    word-break: break-all;
+}
+
+.security-create-appointment-btn {
+    width: 100%;
+    padding: 16px 24px;
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-light) 100%);
+    color: white;
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: 15px;
+    font-weight: var(--font-weight-bold);
+    cursor: pointer;
+    transition: all var(--transition-smooth);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: var(--spacing-sm);
+}
+
+.security-create-appointment-btn:hover {
+    background: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-orange-dark) 100%);
+    box-shadow: var(--shadow-glow-orange);
+}
+
+.security-skip-btn {
+    padding: 12px 24px;
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.security-skip-btn:hover {
+    color: var(--text-secondary);
+}
+
+/* ============================================
+   RANDEVU TAKVİMİ
+   ============================================ */
+.appointment-calendar {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-lg);
+}
+
+.calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-lg);
+}
+
+.calendar-nav-btn {
+    width: 40px;
+    height: 40px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.calendar-nav-btn:hover {
+    background: var(--primary-orange);
+    color: white;
+}
+
+.calendar-month-year {
+    font-size: 18px;
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.calendar-day-header {
+    padding: 10px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-muted);
+}
+
+.calendar-day {
+    padding: 12px;
+    text-align: center;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    font-size: 14px;
+}
+
+.calendar-day:hover:not(.disabled) {
+    background: var(--accent-orange);
+}
+
+.calendar-day.selected {
+    background: var(--primary-green);
+    color: white;
+    font-weight: var(--font-weight-bold);
+}
+
+.calendar-day.disabled {
+    color: var(--text-muted);
+    cursor: not-allowed;
+    opacity: 0.4;
+}
+
+.calendar-day.today {
+    border: 2px solid var(--primary-orange);
+}
+
+/* Saat Seçimi */
+.time-slots-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-lg);
+}
+
+.time-slot {
+    padding: 12px 16px;
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    font-size: 14px;
+    font-weight: var(--font-weight-medium);
+}
+
+.time-slot:hover:not(.disabled) {
+    border-color: var(--primary-orange);
+    background: var(--accent-orange);
+}
+
+.time-slot.selected {
+    border-color: var(--primary-green);
+    background: var(--accent-green);
+    color: var(--primary-green);
+    font-weight: var(--font-weight-bold);
+}
+
+.time-slot.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* Randevu Hatırlatma Bilgisi */
+.appointment-reminder-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+    border: 1px solid #90CAF9;
+    border-radius: var(--radius-lg);
+    margin-top: var(--spacing-lg);
+}
+
+.appointment-reminder-info svg {
+    width: 24px;
+    height: 24px;
+    color: #1976D2;
+    flex-shrink: 0;
+}
+
+.appointment-reminder-info span {
+    font-size: 13px;
+    color: #0D47A1;
+    line-height: 1.5;
+}
+
+/* ============================================
+   CHECKOUT - TOPLAM + 1€ FEE
+   ============================================ */
+.checkout-summary {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-lg);
+}
+
+.checkout-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-sm) 0;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.checkout-summary-row.service-fee {
+    background: linear-gradient(90deg, #FFF8E7, transparent);
+    margin: 0 calc(-1 * var(--spacing-xl));
+    padding: var(--spacing-sm) var(--spacing-xl);
+}
+
+.checkout-summary-row.service-fee .label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.checkout-summary-row.service-fee .label svg {
+    width: 16px;
+    height: 16px;
+    color: #FFB300;
+}
+
+.checkout-summary-row.total {
+    border-top: 2px solid var(--border-color);
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    font-size: 18px;
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+}
+
+.checkout-summary-row.total .value {
+    font-size: 24px;
+    color: var(--primary-green);
+}
+
+/* ============================================
+   BUNDLE TEKLİF SİSTEMİ
+   ============================================ */
+.bundle-offer-summary {
+    background: linear-gradient(135deg, #FFF8F0 0%, #FFF3E0 100%);
+    border: 2px solid var(--primary-orange);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    margin-bottom: var(--spacing-lg);
+}
+
+.bundle-items-list {
+    margin-bottom: var(--spacing-lg);
+}
+
+.bundle-item-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.bundle-item-row:last-child {
+    border-bottom: none;
+}
+
+.bundle-item-img {
+    width: 50px;
+    height: 65px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+}
+
+.bundle-item-info {
+    flex: 1;
+}
+
+.bundle-item-title {
+    font-size: 14px;
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+}
+
+.bundle-item-price {
+    font-size: 14px;
+    font-weight: var(--font-weight-bold);
+    color: var(--primary-green);
+}
+
+.bundle-total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: var(--spacing-md);
+    border-top: 2px dashed var(--primary-orange);
+}
+
+.bundle-total-row .label {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.bundle-total-row .value {
+    font-size: 20px;
+    font-weight: var(--font-weight-black);
+    color: var(--primary-green);
+}
+
+/* ============================================
+   30px KAYAR PANO - KESİN FİX
+   ============================================ */
+.news-banner,
+.scrolling-panel,
+.header-news-banner,
+[class*="marquee-container"],
+.top-banner {
+    height: 30px !important;
+    min-height: 30px !important;
+    max-height: 30px !important;
+    line-height: 30px !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+}
+
+.footer-news-banner,
+.footer-scrolling-panel,
+.footer-marquee {
+    height: 30px !important;
+    min-height: 30px !important;
+    max-height: 30px !important;
+    line-height: 30px !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+}
+
+/* ============================================
+   FOOTER BOŞLUK KALDIRma - KESİN FİX
+   ============================================ */
+html {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+body {
+    margin-bottom: 0 !important;
+}
+
+footer,
+.footer,
+[class*="footer"] {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+footer::after,
+.footer::after {
+    display: none !important;
+    content: none !important;
+    height: 0 !important;
+}
+
+/* Son eleman olarak footer kesin fix */
+body > footer:last-child,
+body > .footer:last-child {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
