@@ -289,6 +289,32 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        #secureCardModal {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #secureCardModal .payment-modal-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        #secureCardModal .payment-modal-content {
+            position: relative;
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            width: 90%;
+            max-width: 520px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
     </style>
 </head>
 <body>
@@ -737,7 +763,7 @@
             }
         }
 
-        function placeOrder() {
+        async function placeOrder() {
             const form = document.getElementById('checkoutForm');
 
             if (!form.checkValidity()) {
@@ -753,52 +779,147 @@
             btn.disabled = true;
             btn.innerHTML = '<span style="display: inline-block; animation: spin 1s linear infinite;">⏳</span> Wird verarbeitet...';
 
-            // Create order object
-            const order = {
-                id: 'ORD-' + Date.now(),
-                items: checkoutItems,
-                subtotal: currentSubtotal,
-                shipping: currentShipping,
-                total: currentSubtotal + currentShipping,
-                paymentMethod: paymentMethod,
-                shippingMethod: shippingMethod,
-                shippingAddress: {
-                    firstName: document.getElementById('firstName').value,
-                    lastName: document.getElementById('lastName').value,
-                    email: document.getElementById('email').value,
-                    phone: document.getElementById('phone').value,
-                    street: document.getElementById('street').value,
-                    postalCode: document.getElementById('postalCode').value,
-                    city: document.getElementById('city').value,
-                    country: document.getElementById('country').value
-                },
-                status: 'pending_payment',
-                createdAt: new Date().toISOString()
-            };
+            try {
+                const orderPayload = {
+                    items: checkoutItems.map(item => ({
+                        product_id: item.id,
+                        price: parseFloat(item.price.toString().replace('€', '').replace(',', '.')),
+                        original_price: item.originalPrice || null,
+                        offer_id: item.offerId || null
+                    })),
+                    shipping_address: {
+                        firstName: document.getElementById('firstName').value,
+                        lastName: document.getElementById('lastName').value,
+                        email: document.getElementById('email').value,
+                        phone: document.getElementById('phone').value,
+                        street: document.getElementById('street').value,
+                        postalCode: document.getElementById('postalCode').value,
+                        city: document.getElementById('city').value,
+                        country: document.getElementById('country').value
+                    },
+                    payment_method: paymentMethod,
+                    shipping_method: shippingMethod,
+                    shipping_cost: currentShipping,
+                    total_amount: currentSubtotal + currentShipping
+                };
 
-            // Save order to localStorage (for demo)
-            const orders = JSON.parse(localStorage.getItem('cssberlin_orders') || '[]');
-            orders.push(order);
-            localStorage.setItem('cssberlin_orders', JSON.stringify(orders));
+                const orderResponse = await api.request('/api/orders', {
+                    method: 'POST',
+                    body: JSON.stringify(orderPayload)
+                });
 
-            // Simulate payment redirect
-            setTimeout(() => {
-                if (typeof toast !== 'undefined') {
-                    toast.success('Bestellung erstellt!', `Weiterleitung zu ${getPaymentName(paymentMethod)}...`, 3000);
+                const orderIds = (orderResponse.orders || []).map(o => o.id);
+
+                if (paymentMethod === 'card') {
+                    openSecureCardModal(orderIds);
+                } else {
+                    await finalizePayment(orderIds, paymentMethod, null);
                 }
+            } catch (error) {
+                console.error('Order error:', error);
+                if (typeof toast !== 'undefined') {
+                    toast.error('Fehler', error.message || 'Bestellung konnte nicht erstellt werden.', 5000);
+                }
+                resetOrderButton();
+            }
+        }
 
-                // Clear checkout data
-                sessionStorage.removeItem('checkout_item');
-                localStorage.removeItem('cssberlin_cart');
+        function resetOrderButton() {
+            const btn = document.querySelector('.place-order-btn');
+            btn.disabled = false;
+            btn.innerHTML = '🔒 Zahlungspflichtig bestellen';
+        }
 
-                // Save last order for confirmation page
-                sessionStorage.setItem('lastOrder', JSON.stringify(order));
+        function openSecureCardModal(orderIds) {
+            const modal = document.createElement('div');
+            modal.id = 'secureCardModal';
+            modal.innerHTML = `
+                <div class="payment-modal-overlay"></div>
+                <div class="payment-modal-content">
+                    <h3>🔒 Sichere Karteneingabe</h3>
+                    <p style="color:#666; font-size:14px; margin-bottom:16px;">
+                        Ihre Kartendaten werden verschlüsselt verarbeitet und nicht gespeichert.
+                    </p>
+                    <div class="form-group">
+                        <label>Kartennummer</label>
+                        <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>MM</label>
+                            <input type="text" id="cardExpMonth" placeholder="MM" maxlength="2">
+                        </div>
+                        <div class="form-group">
+                            <label>YY</label>
+                            <input type="text" id="cardExpYear" placeholder="YY" maxlength="2">
+                        </div>
+                        <div class="form-group">
+                            <label>CVC</label>
+                            <input type="password" id="cardCvc" placeholder="CVC" maxlength="4">
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:12px; margin-top:16px;">
+                        <button class="continue-shopping-btn" onclick="closeSecureCardModal()">Abbrechen</button>
+                        <button class="place-order-btn" onclick="submitCardPayment(${JSON.stringify(orderIds).replace(/"/g, '&quot;')})">Bezahlen</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
 
-                // Redirect to confirmation
-                setTimeout(() => {
-                    window.location.href = 'bestellung-bestaetigung.html';
-                }, 1500);
-            }, 1000);
+        function closeSecureCardModal() {
+            document.getElementById('secureCardModal')?.remove();
+            resetOrderButton();
+        }
+
+        async function submitCardPayment(orderIds) {
+            const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+            const cardExpMonth = document.getElementById('cardExpMonth').value;
+            const cardExpYear = document.getElementById('cardExpYear').value;
+            const cardCvc = document.getElementById('cardCvc').value;
+
+            if (!cardNumber || cardNumber.length < 12 || !cardExpMonth || !cardExpYear || !cardCvc) {
+                toast.error('Ungültige Karte', 'Bitte prüfen Sie Ihre Kartendaten.');
+                return;
+            }
+
+            await finalizePayment(orderIds, 'card', {
+                card_number: cardNumber,
+                card_exp_month: cardExpMonth,
+                card_exp_year: cardExpYear,
+                card_cvc: cardCvc
+            });
+            closeSecureCardModal();
+        }
+
+        async function finalizePayment(orderIds, method, cardData) {
+            for (const orderId of orderIds) {
+                await api.request('/api/payment/card/intent', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        order_id: orderId,
+                        method: method,
+                        ...(cardData || {})
+                    })
+                });
+            }
+
+            if (typeof toast !== 'undefined') {
+                toast.success('Bestellung erstellt!', `Zahlung mit ${getPaymentName(method)} abgeschlossen.`, 3000);
+            }
+
+            sessionStorage.removeItem('checkout_item');
+            localStorage.removeItem('cssberlin_cart');
+
+            sessionStorage.setItem('lastOrder', JSON.stringify({
+                orderIds: orderIds,
+                total: currentSubtotal + currentShipping,
+                paymentMethod: method
+            }));
+
+            setTimeout(() => {
+                window.location.href = 'bestellung-bestaetigung.html';
+            }, 1200);
         }
 
         function getPaymentName(method) {

@@ -158,6 +158,9 @@ class APIClient {
         if (options.category) params.append('category', options.category);
         if (options.brand) params.append('brand', options.brand);
         if (options.search) params.append('search', options.search);
+        if (options.include) params.append('include', options.include);
+        if (options.seller_id) params.append('seller_id', options.seller_id);
+        if (typeof options.is_sold !== 'undefined') params.append('is_sold', options.is_sold);
 
         const queryString = params.toString();
         const endpoint = `/api/products${queryString ? `?${queryString}` : ''}`;
@@ -222,6 +225,10 @@ class APIClient {
      */
     async getOffers() {
         return await this.request('/api/offers');
+    }
+
+    async getOffersByUser(userId) {
+        return await this.request(`/api/offers/user/${userId}`);
     }
 
     /**
@@ -298,6 +305,45 @@ class APIClient {
      */
     async getShipments() {
         return await this.request('/api/shipments');
+    }
+
+    // ============== ORDERS ==============
+
+    async createOrder(orderData) {
+        return await this.request('/api/orders', {
+            method: 'POST',
+            body: JSON.stringify(orderData)
+        });
+    }
+
+    async getOrders() {
+        return await this.request('/api/orders');
+    }
+
+    // ============== PAYMENTS ==============
+
+    async createPaymentIntent(payload) {
+        return await this.request('/api/payment/card/intent', {
+            method: 'POST',
+            body: JSON.stringify(payload)
+        });
+    }
+
+    // ============== REVIEWS ==============
+
+    async createUserReview(payload) {
+        return await this.request('/api/reviews/user', {
+            method: 'POST',
+            body: JSON.stringify(payload)
+        });
+    }
+
+    async getUserReviews(userId) {
+        return await this.request(`/api/reviews/user/${userId}`);
+    }
+
+    async getUserReviewSummary(userId) {
+        return await this.request(`/api/reviews/user/${userId}/summary`);
     }
 
     /**

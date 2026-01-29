@@ -12,7 +12,11 @@
 
 class OfferNotificationManager {
     constructor() {
-        this.API_BASE = 'http://localhost:8000';
+        this.API_BASE = (typeof API_CONFIG !== 'undefined' && API_CONFIG.current) ? API_CONFIG.current : (
+            (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+                ? 'http://localhost:8000'
+                : ''
+        );
         this.pollInterval = 30000; // 30 seconds
         this.unreadCount = 0;
         this.notifications = [];
@@ -42,6 +46,17 @@ class OfferNotificationManager {
 
         // Setup badge click handler
         this.setupBadgeClickHandler();
+    }
+
+    getAuthHeaders() {
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+        const token = localStorage.getItem('cssberlin_token');
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+        return headers;
     }
 
     /**
@@ -87,9 +102,7 @@ class OfferNotificationManager {
             // Get unread count
             const countResponse = await fetch(`${this.API_BASE}/api/offers/notifications/${user.userId}/unread-count`, {
                 method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+                headers: this.getAuthHeaders()
             });
 
             if (countResponse.ok) {
@@ -108,9 +121,7 @@ class OfferNotificationManager {
             // Get user offers for notifications
             const offersResponse = await fetch(`${this.API_BASE}/api/offers/user/${user.userId}`, {
                 method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+                headers: this.getAuthHeaders()
             });
 
             if (offersResponse.ok) {
@@ -383,9 +394,7 @@ class OfferNotificationManager {
         try {
             const response = await fetch(`${this.API_BASE}/api/offers/notifications/${user.userId}/mark-read`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: this.getAuthHeaders(),
                 body: JSON.stringify({})
             });
 

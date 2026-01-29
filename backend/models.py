@@ -2,7 +2,7 @@
 SQLAlchemy models for CSS Berlin database
 """
 
-from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime, ForeignKey, Text, JSON
+from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime, ForeignKey, Text, JSON, UniqueConstraint
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from database import Base
@@ -107,6 +107,45 @@ class Order(Base):
 
     # Relationships
     shipment = relationship("Shipment", back_populates="order", uselist=False)
+
+
+class Payment(Base):
+    """Payment records for checkout"""
+    __tablename__ = "payments"
+
+    id = Column(Integer, primary_key=True, index=True)
+    order_id = Column(Integer, ForeignKey("orders.id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    amount = Column(Float, nullable=False)
+    currency = Column(String(10), default="EUR")
+    method = Column(String(50), nullable=False)  # card, paypal, klarna, giropay
+    status = Column(String(30), default="pending")  # pending, paid, failed
+    provider = Column(String(50), default="mock")
+    provider_reference = Column(String(255))
+    card_last4 = Column(String(4))
+    card_brand = Column(String(30))
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
+class UserReview(Base):
+    """User-to-user reviews after a transaction"""
+    __tablename__ = "user_reviews"
+    __table_args__ = (
+        UniqueConstraint("order_id", "from_user_id", name="uq_review_order_from"),
+    )
+
+    id = Column(Integer, primary_key=True, index=True)
+    order_id = Column(Integer, ForeignKey("orders.id"), nullable=False)
+    product_id = Column(Integer, ForeignKey("products.id"), nullable=False)
+    from_user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    to_user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    rating = Column(Integer, nullable=False)
+    comment = Column(Text)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    # Relationships
+    from_user = relationship("User", foreign_keys=[from_user_id])
+    to_user = relationship("User", foreign_keys=[to_user_id])
 
 
 class Shipment(Base):
@@ -333,4 +372,18 @@ class SecurityLog(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     # Relationships
+    user = relationship("User", foreign_keys=[user_id])
+
+
+class OfferNotification(Base):
+    """Notifications for offer updates"""
+    __tablename__ = "offer_notifications"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    offer_id = Column(Integer, ForeignKey("offers.id"), nullable=False)
+    type = Column(String(50), nullable=False)  # new_offer, counter_offer, offer_accepted, offer_declined
+    is_read = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
     user = relationship("User", foreign_keys=[user_id])

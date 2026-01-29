@@ -150,6 +150,84 @@ class MessageResponse(BaseModel):
         from_attributes = True
 
 
+# ============== ORDER SCHEMAS ==============
+
+class OrderItemCreate(BaseModel):
+    product_id: int
+    price: float
+    original_price: Optional[float] = None
+    offer_id: Optional[int] = None
+
+
+class OrderCreate(BaseModel):
+    items: List[OrderItemCreate]
+    shipping_address: dict
+    payment_method: str
+    shipping_method: str
+    shipping_cost: float
+    total_amount: float
+
+
+class OrderResponse(BaseModel):
+    id: int
+    buyer_id: int
+    product_id: int
+    offer_id: Optional[int]
+    total_amount: float
+    shipping_address: Optional[dict]
+    status: str
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+# ============== PAYMENT SCHEMAS ==============
+
+class PaymentIntentCreate(BaseModel):
+    order_id: int
+    method: str
+    card_number: Optional[str] = None
+    card_exp_month: Optional[str] = None
+    card_exp_year: Optional[str] = None
+    card_cvc: Optional[str] = None
+
+
+class PaymentIntentResponse(BaseModel):
+    id: int
+    order_id: int
+    amount: float
+    currency: str
+    method: str
+    status: str
+    provider_reference: Optional[str]
+
+    class Config:
+        from_attributes = True
+
+
+# ============== USER REVIEW SCHEMAS ==============
+
+class UserReviewCreate(BaseModel):
+    order_id: int
+    rating: int
+    comment: Optional[str] = None
+
+
+class UserReviewResponse(BaseModel):
+    id: int
+    order_id: int
+    product_id: int
+    from_user_id: int
+    to_user_id: int
+    rating: int
+    comment: Optional[str]
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
 # ============== SHIPMENT SCHEMAS ==============
 
 class ShipmentCreate(BaseModel):

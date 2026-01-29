@@ -1,0 +1,90 @@
+Datum,Platform,Transaktionstyp,Beschreibung,Betrag,Kategorie,Belegnummer,Status,Notizen,Business/Private
+2025-10-25,Finanzamt,Gewerbe,Gewerbe Anmeldung,0.00,Gründung,GW-2025-10-25,Tamamlandı,25.10.2025 tarihinde Gewerbe açıldı,İŞ
+2025-10-14,Deutsche Bank,Gider,PayPal Vinted Alış,-8.64,Mal Alımı,DB-PAYPAL-2025-10-14,Tamamlandı,MGP Vinted - Kleiderkreisel,İŞ
+2025-10-15,Kleinanzeigen,Gelir,PayPal Satış,25.00,Satış,PAYPAL-KLEIN-2025-10-15,Tamamlandı,PayPal üzerinden,İŞ
+2025-10-20,Amazon,Gider,Koli Bandı Alışı,-5.00,Büromaterial,AMAZON-2025-10-20,Tamamlandı,Amazon'dan bant alışı,İŞ
+2025-10-20,Deutsche Bank,Gider,IONOS SE Web Hosting,-1.00,Web Hosting,DB-IONOS-2025-10-20,Tamamlandı,Web sitesi hosting,İŞ
+2025-10-30,Deutsche Bank,Gider,GALERIA PARKEN,-1.50,Park Ücreti,DB-PARK-2025-10-30,Tamamlandı,28.10.2025,İŞ
+2025-11-03,Deutsche Bank,Gider,Klarna AliExpress Alış,-10.15,Mal Alımı,DB-KLARNA-2025-11-03,Tamamlandı,Purchase at AliExpress,İŞ
+2025-11-06,Deutsche Bank,Gelir,Allianz Kfz-Versicherung Rückgabe,420.44,Geri Ödeme,DB-ALLIANZ-RET-2025-11-06,Tamamlandı,SEPA Lastschrift-Rückgabe,İŞ
+2025-11-06,Deutsche Bank,Gider,Allianz Kfz-Versicherung,-420.44,Araç Sigortası,DB-ALLIANZ-2025-11-06,Tamamlandı,Vertrag AS-6235897576,İŞ
+2025-11-06,Deutsche Bank,Gider,Zinsen/Kosten/Auslagen,-1.36,Banka Ücreti,DB-FEE-2025-11-06,Tamamlandı,Berechtigte Ablehnung,İŞ
+2025-11-11,Deutsche Bank,Gelir,Klarna AliExpress Rückgabe,23.24,Geri Ödeme,DB-KLARNA-RET-2025-11-11,Tamamlandı,SEPA Lastschrift-Rückgabe,İŞ
+2025-11-11,Deutsche Bank,Gider,Klarna AliExpress,-23.24,Mal Alımı,DB-KLARNA-2025-11-11,Tamamlandı,Purchase at AliExpress,İŞ
+2025-11-11,Deutsche Bank,Gider,Allianz Versicherung,-423.44,Sigorta,DB-ALLIANZ-2025-11-11,Tamamlandı,AS-6235897576,İŞ
+2025-11-11,Deutsche Bank,Gider,Zinsen/Kosten/Auslagen,-1.36,Banka Ücreti,DB-FEE-2025-11-11,Tamamlandı,Berechtigte Ablehnung,İŞ
+2025-11-12,Deutsche Bank,Gelir,Klarna eBay Rückgabe,43.06,Geri Ödeme,DB-KLARNA-RET-2025-11-12,Tamamlandı,SEPA Lastschrift-Rückgabe,İŞ
+2025-11-12,Deutsche Bank,Gider,Klarna eBay,-43.06,Mal Alımı,DB-KLARNA-2025-11-12,Tamamlandı,Purchase at eBay,İŞ
+2025-11-12,Deutsche Bank,Gider,Zinsen/Kosten/Auslagen,-0.68,Banka Ücreti,DB-FEE-2025-11-12,Tamamlandı,Berechtigte Ablehnung,İŞ
+2025-11-14,Deutsche Bank,Gider,Klarna AliExpress,-26.74,Mal Alımı,DB-KLARNA-2025-11-14,Tamamlandı,Purchase at AliExpress,İŞ
+2025-11-17,Deutsche Bank,Gelir,Klarna eBay Rückgabe,46.56,Geri Ödeme,DB-KLARNA-RET-2025-11-17,Tamamlandı,SEPA Lastschrift-Rückgabe,İŞ
+2025-11-17,Deutsche Bank,Gider,Klarna eBay,-46.56,Mal Alımı,DB-KLARNA-2025-11-17,Tamamlandı,Purchase at eBay,İŞ
+2025-11-17,Deutsche Bank,Gider,Zinsen/Kosten/Auslagen,-0.68,Banka Ücreti,DB-FEE-2025-11-17,Tamamlandı,Berechtigte Ablehnung,İŞ
+2025-11-18,Deutsche Bank,Gelir,Bargeldeinzahlung,200.00,Nakit Yatırma,DB-BAR-2025-11-18,Tamamlandı,Einzahlung 17.11.2025 (Flohmarkt),İŞ
+2025-11-19,Deutsche Bank,Gider,Klarna AliExpress,-30.24,Mal Alımı,DB-KLARNA-2025-11-19,Tamamlandı,Purchase at AliExpress,İŞ
+2025-11-20,Deutsche Bank,Gider,Vodafone,-6.02,Telefon/Internet,DB-VODA-2025-11-20,Tamamlandı,11/2025 K-NR. 333497866,İŞ
+2025-11-20,Deutsche Bank,Gider,Klarna eBay,-50.06,Mal Alımı,DB-KLARNA-2025-11-20,Tamamlandı,Purchase at eBay,İŞ
+2025-11-25,Deutsche Bank,Gider,IONOS SE,-1.00,Web Hosting,DB-IONOS-2025-11-25,Tamamlandı,22.11.2025,İŞ
+2025-11-26,Vinted,Gelir,Transaction #1672531376,5.00,Satış,FRLT-1672531376,Tamamlandı,26.11.2025 22:20,İŞ
+2025-11-27,Vinted,Gelir,Transaction #16715417269,20.00,Satış,FRLT-16715417269,Tamamlandı,27.11.2025 17:05,İŞ
+2025-11-27,Vinted,Gelir,Transaction #16701769706,15.00,Satış,FRLT-16701769706,Tamamlandı,27.11.2025 18:31,İŞ
+2025-11-27,Vinted,Gelir,Transaction #16702714275,8.00,Satış,FRLT-16702714275,Tamamlandı,27.11.2025 19:42,İŞ
+2025-11-28,Vinted,Gelir,Transaction #167681965696,15.00,Satış,FRLT-167681965696,Tamamlandı,28.11.2025 15:46,İŞ
+2025-11-28,Deutsche Bank,Gelir,Klarna AliExpress Rückgabe,9.39,Geri Ödeme,DB-KLARNA-RET-2025-11-28,Tamamlandı,SEPA Lastschrift-Rückgabe,İŞ
+2025-11-28,Deutsche Bank,Gelir,Klarna AliExpress Rückgabe,18.07,Geri Ödeme,DB-KLARNA-RET-2025-11-28-2,Tamamlandı,SEPA Lastschrift-Rückgabe,İŞ
+2025-11-28,Deutsche Bank,Gider,Klarna AliExpress,-18.07,Mal Alımı,DB-KLARNA-2025-11-28,Tamamlandı,Purchase at AliExpress,İŞ
+2025-11-28,Deutsche Bank,Gider,Klarna AliExpress,-9.39,Mal Alımı,DB-KLARNA-2025-11-28-2,Tamamlandı,Purchase at AliExpress,İŞ
+2025-11-28,Deutsche Bank,Gider,Zinsen/Kosten/Auslagen,-1.36,Banka Ücreti,DB-FEE-2025-11-28,Tamamlandı,Berechtigte Ablehnung,İŞ
+2025-11-29,Vinted,Gelir,Transaction #16722055813,45.00,Satış,FRLT-16722055813,Tamamlandı,29.11.2025 08:47,İŞ
+2025-11-29,Vinted,Gelir,Transaction #16704770302,15.00,Satış,FRLT-16704770302,Tamamlandı,29.11.2025 13:01,İŞ
+2025-12-01,Deutsche Bank,Gelir,Bargeldeinzahlung,100.00,Nakit Yatırma,DB-BAR-2025-12-01,Tamamlandı,Einzahlung 29.11.2025 (Flohmarkt),İŞ
+2025-12-01,Vinted,Gelir,Transaction #16778963621,22.50,Satış,FRLT-16778963621,Tamamlandı,01.12.2025 15:33,İŞ
+2025-12-02,Vinted,Gelir,Transaction #16757632709,19.00,Satış,FRLT-16757632709,Tamamlandı,02.12.2025 14:11,İŞ
+2025-12-02,Deutsche Bank,Gider,Klarna Vinted,-14.74,Mal Alımı,DB-KLARNA-2025-12-02,Tamamlandı,Purchase at Vinted,İŞ
+2025-12-02,Deutsche Bank,Gider,Klarna AliExpress,-10.15,Mal Alımı,DB-KLARNA-2025-12-02-2,Tamamlandı,Purchase at AliExpress,İŞ
+2025-12-03,Vinted,Gelir,Transaction #16763021009,13.00,Satış,FRLT-16763021009,Tamamlandı,03.12.2025 20:26,İŞ
+2025-12-04,Deutsche Bank,Gider,Klarna AliExpress,-12.89,Mal Alımı,DB-KLARNA-2025-12-04,Tamamlandı,Purchase at AliExpress,İŞ
+2025-12-04,Deutsche Bank,Gider,Klarna AliExpress,-21.57,Mal Alımı,DB-KLARNA-2025-12-04-2,Tamamlandı,Purchase at AliExpress,İŞ
+2025-12-06,Vinted,Gelir,Transaction #16706321009,10.00,Satış,FRLT-16706321009,Tamamlandı,06.12.2025 14:28,İŞ
+2025-12-08,Vinted,Gelir,Transaction #16796533038,20.00,Satış,FRLT-16796533038,Tamamlandı,08.12.2025 22:39,İŞ
+2025-12-08,Deutsche Bank,Gider,Klarna Gebündelte Zahlung,-340.24,Mal Alımı,DB-KLARNA-2025-12-08,Tamamlandı,3 Zahlungen birleştirildi,İŞ
+2025-12-10,Deutsche Bank,Gider,TOTAL Service Station,-12.33,Yakıt,DB-TOTAL-2025-12-10,Tamamlandı,09.12.2025,İŞ
+2025-12-12,Vinted,Gelir,Transaction #16901622177,10.00,Satış,FRLT-16901622177,Tamamlandı,12.12.2025 17:21,İŞ
+2025-12-12,Vinted,Gelir,Transaction #16965303638,20.00,Satış,FRLT-16965303638,Tamamlandı,12.12.2025 18:03,İŞ
+2025-12-15,Deutsche Bank,Gelir,eBay S.a.r.l.,70.00,Satış Geliri,DB-EBAY-2025-12-15,Tamamlandı,P.7232921081,İŞ
+2025-12-15,Deutsche Bank,Gider,TOTAL Service Station,-37.50,Yakıt,DB-TOTAL-2025-12-15,Tamamlandı,12.12.2025,İŞ
+2025-12-16,Deutsche Bank,Gelir,Mangopay Vinted,50.00,Satış Geliri,DB-VINTED-2025-12-16,Tamamlandı,Vinted,İŞ
+2025-12-17,Vinted,Gelir,Transaction #17024594613,10.00,Satış,FRLT-17024594613,Tamamlandı,17.12.2025 08:04,İŞ
+2025-12-17,Vinted,Gelir,Transaction #17029060948,20.00,Satış,FRLT-17029060948,Tamamlandı,17.12.2025 15:08,İŞ
+2025-12-17,Vinted,Gelir,Transaction #16966570582,19.00,Satış,FRLT-16966570582,Tamamlandı,17.12.2025 18:52,İŞ
+2025-12-17,Deutsche Bank,Gider,Amazon,-24.91,Mal Alımı,DB-AMAZON-2025-12-17,Tamamlandı,15.12.2025,İŞ
+2025-12-17,Deutsche Bank,Gider,Amazon Prime,-0.99,Abonelik,DB-AMAZON-PRIME-2025-12-17,Tamamlandı,15.12.2025,İŞ
+2025-12-18,Deutsche Bank,Gelir,Mangopay Vinted,50.00,Satış Geliri,DB-VINTED-2025-12-18,Tamamlandı,Vinted,İŞ
+2025-12-18,Deutsche Bank,Gider,Vodafone,-19.99,Telefon/Internet,DB-VODA-2025-12-18,Tamamlandı,12/2025 K-NR. 333497866,İŞ
+2025-12-18,Deutsche Bank,Gider,Vodafone,-6.02,Telefon/Internet,DB-VODA-2025-12-18-2,Tamamlandı,12/2025 K-NR. 333497866,İŞ
+2025-12-19,Vinted,Gelir,Transaction #17092024132,15.00,Satış,FRLT-17092024132,Tamamlandı,19.12.2025 16:31,İŞ
+2025-12-19,Vinted,Gelir,Transaction #17094850873,20.00,Satış,FRLT-17094850873,Tamamlandı,19.12.2025 16:48,İŞ
+2025-12-19,Vinted,Gelir,Icepeak Skijacke,20.00,Satış,VINTED-2025-12-19,Tamamlandı,19.12.2025 satışı,İŞ
+2025-12-19,Vinted,Gelir,ASOS Plissee Kleid,15.00,Satış,VINTED-2025-12-19-2,Tamamlandı,19.12.2025 satışı,İŞ
+2025-12-19,Deutsche Bank,Gider,TOTAL Service Station,-8.99,Yakıt,DB-TOTAL-2025-12-19,Tamamlandı,18.12.2025,İŞ
+2025-12-20,Vinted,Gelir,Transaction #17103072992,25.00,Satış,FRLT-17103072992,Tamamlandı,20.12.2025 10:26,İŞ
+2025-12-20,Vinted,Gelir,Transaction #17110047111,12.00,Satış,FRLT-17110047111,Tamamlandı,20.12.2025 14:11,İŞ
+2025-12-20,Vinted,Gelir,ASOS Chiffon Kleid,12.00,Satış,VINTED-2025-12-20,Tamamlandı,20.12.2025 satışı,İŞ
+2025-12-20,Vinted,Gelir,Adidas Stan Smith Sneaker,25.00,Satış,VINTED-2025-12-20-2,Tamamlandı,20.12.2025 satışı,İŞ
+2025-12-21,Vinted,Gider,Überweisung auf Bankkonto,-50.00,Banka Transferi,DB-2025-12-21,Tamamlandı,Deutsche Bank'a çekildi,İŞ
+2025-12-21,Vinted,Gider,Herren Jacke mit Kunstfell kragen,-19.40,Ürün Alımı,VINTED-ALIS-2025-12-21,Tamamlandı,21.12.2025 alış,İŞ
+2025-12-23,Deutsche Bank,Gelir,Mangopay Vinted,50.00,Satış Geliri,DB-VINTED-2025-12-23,Tamamlandı,Vinted,İŞ
+2025-12-24,Deutsche Bank,Gider,Shell,-8.89,Yakıt,DB-SHELL-2025-12-24,Tamamlandı,23.12.2025,İŞ
+2025-12-24,Deutsche Bank,Gider,Amazon Prime,-8.99,Abonelik,DB-AMAZON-PRIME-2025-12-24,Tamamlandı,22.12.2025,İŞ
+2025-12-29,Deutsche Bank,Gider,IONOS SE,-1.00,Web Hosting,DB-IONOS-2025-12-29,Tamamlandı,22.12.2025,İŞ
+2025-12-30,Deutsche Bank,Gider,Klarna AliExpress,-9.39,Mal Alımı,DB-KLARNA-2025-12-30,Tamamlandı,Purchase at AliExpress,İŞ
+2025-12-30,Deutsche Bank,Gider,Klarna AliExpress,-18.07,Mal Alımı,DB-KLARNA-2025-12-30-2,Tamamlandı,Purchase at AliExpress,İŞ
+2025-12-31,Deutsche Bank,Gider,Kontoabrechnung,-20.70,Banka Ücreti,DB-KONTO-2025-12-31,Tamamlandı,Saldo der Abschlussposten,İŞ
+2025-12-31,Deutsche Bank,Gider,TOTAL Service Station,-58.00,Yakıt,DB-TOTAL-2025-12-31,Tamamlandı,30.12.2025,İŞ
+2025-11-01,eBay,Gelir,Telefon Satışı,90.00,Satış,EBAY-2025-11-01,Tamamlandı,Telefon satışı (70€ net),İŞ
+2025-11-01,eBay,Gider,eBay Komisyon,-10.00,Komisyon,EBAY-KOM-2025-11-01,Tamamlandı,~10€ komisyon,İŞ
+2025-11-01,eBay,Gider,eBay Kargo,-10.00,Kargo,EBAY-KARGO-2025-11-01,Tamamlandı,~10€ kargo,İŞ
+,TOPLAM GELİR,Toplam İş Gelirleri,1,048.50,,
+,TOPLAM GİDER,Toplam İş Giderleri,-1,870.70,,
+,NET KÂR/ZARAR,Net İş Sonucu,-822.20,,
+

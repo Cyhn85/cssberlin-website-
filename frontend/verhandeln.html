@@ -601,6 +601,20 @@
         // ============================================
         // VERHANDELN PAGE LOGIC
         // ============================================
+        const API_BASE = (typeof API_CONFIG !== 'undefined' && API_CONFIG.current) ? API_CONFIG.current : (
+            (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+                ? 'http://localhost:8000'
+                : ''
+        );
+
+        function getAuthHeaders() {
+            const headers = { 'Content-Type': 'application/json' };
+            const token = localStorage.getItem('cssberlin_token');
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+            return headers;
+        }
 
         document.addEventListener('DOMContentLoaded', function() {
             // Check if user is logged in
@@ -642,11 +656,9 @@
 
             try {
                 // Fetch offers from API
-                const response = await fetch(`http://localhost:8000/api/offers/user/${currentUser.userId}`, {
+                const response = await fetch(`${API_BASE}/api/offers/user/${currentUser.userId}`, {
                     method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
+                    headers: getAuthHeaders()
                 });
 
                 if (!response.ok) {

@@ -1,0 +1,94 @@
+Datum,Transaktionstyp,Beschreibung,Betrag,Kategorie,Belegnummer,Status,Notizen,Business/Private
+2025-10-14,Gider,PayPal Vinted Alış,-8.64,Mal Alımı,DB-PAYPAL-2025-10-14,Tamamlandı,MGP Vinted - Kleiderkreisel,İŞ
+2025-10-15,Gider,OA Spandau,-15.00,Diğer,DB-OA-2025-10-15,Tamamlandı,Spandau işlemi,İŞ
+2025-10-20,Gider,IONOS SE Web Hosting,-1.00,Web Hosting,DB-IONOS-2025-10-20,Tamamlandı,Web sitesi hosting,İŞ
+2025-10-22,Gider,Auszahlung,-50.00,Nakit Çekme,DB-AUSZ-2025-10-22,Tamamlandı,GA NR07006430,ÖZEL
+2025-10-27,Gider,Kaufland,-42.71,Alışveriş,DB-KAUF-2025-10-27,Tamamlandı,Berlin-Wilhelmstadt,ÖZEL
+2025-10-27,Gelir,Tipico Gewinn,30.00,Özel Gelir,DB-TIPICO-GEW-2025-10-27,Tamamlandı,Gewinnau/MRwudgSmv,ÖZEL
+2025-10-28,Gider,Tipico,-10.00,Özel Harcama,DB-TIPICO-2025-10-28,Tamamlandı,26.10.2025,ÖZEL
+2025-10-28,Gider,Tipico,-10.00,Özel Harcama,DB-TIPICO-2025-10-28-2,Tamamlandı,26.10.2025,ÖZEL
+2025-10-28,Gider,Tipico,-10.00,Özel Harcama,DB-TIPICO-2025-10-28-3,Tamamlandı,26.10.2025,ÖZEL
+2025-10-28,Gider,Tipico,-10.00,Özel Harcama,DB-TIPICO-2025-10-28-4,Tamamlandı,24.10.2025,ÖZEL
+2025-10-29,Gider,Auszahlung,-30.00,Nakit Çekme,DB-AUSZ-2025-10-29,Tamamlandı,GA NR07006440,ÖZEL
+2025-10-30,Gider,GALERIA PARKEN,-1.50,Park Ücreti,DB-PARK-2025-10-30,Tamamlandı,28.10.2025,İŞ
+2025-11-03,Gider,Klarna AliExpress Alış,-10.15,Mal Alımı,DB-KLARNA-2025-11-03,Tamamlandı,Purchase at AliExpress,İŞ
+2025-11-04,Gider,Tipico,-10.00,Özel Harcama,DB-TIPICO-2025-11-04,Tamamlandı,01.11.2025,ÖZEL
+2025-11-06,Gider,Zinsen/Kosten/Auslagen,-1.36,Banka Ücreti,DB-FEE-2025-11-06,Tamamlandı,Berechtigte Ablehnung,İŞ
+2025-11-06,Gelir,Klarna Booking.com Rückgabe,36.44,Geri Ödeme,DB-KLARNA-RET-2025-11-06,Tamamlandı,SEPA Lastschrift-Rückgabe,ÖZEL
+2025-11-06,Gelir,Allianz Kfz-Versicherung Rückgabe,420.44,Geri Ödeme,DB-ALLIANZ-RET-2025-11-06,Tamamlandı,SEPA Lastschrift-Rückgabe,İŞ
+2025-11-06,Gider,Klarna Booking.com,-36.44,Özel Harcama,DB-KLARNA-BOOK-2025-11-06,Tamamlandı,Purchase at Booking.com,ÖZEL
+2025-11-06,Gider,Allianz Kfz-Versicherung,-420.44,Araç Sigortası,DB-ALLIANZ-2025-11-06,Tamamlandı,Vertrag AS-6235897576,İŞ
+2025-11-10,Gider,Burcu Kurt-Sorguc Transfer,-500.00,Özel Transfer,DB-BURCU-2025-11-10,Tamamlandı,NOTPROVIDED,ÖZEL
+2025-11-10,Gelir,ergema Lohn 10/2025,945.90,Teilzeit Maaş,DB-ERGE-2025-11-10,Tamamlandı,Teilzeit iş maaşı,ÖZEL
+2025-11-11,Gider,Zinsen/Kosten/Auslagen,-1.36,Banka Ücreti,DB-FEE-2025-11-11,Tamamlandı,Berechtigte Ablehnung,İŞ
+2025-11-11,Gelir,Klarna Booking.com Rückgabe,50.58,Geri Ödeme,DB-KLARNA-RET-2025-11-11,Tamamlandı,SEPA Lastschrift-Rückgabe,ÖZEL
+2025-11-11,Gelir,Klarna AliExpress Rückgabe,23.24,Geri Ödeme,DB-KLARNA-RET-2025-11-11-2,Tamamlandı,SEPA Lastschrift-Rückgabe,İŞ
+2025-11-11,Gider,Klarna Booking.com,-50.58,Özel Harcama,DB-KLARNA-BOOK-2025-11-11,Tamamlandı,Purchase at Booking.com,ÖZEL
+2025-11-11,Gider,Klarna AliExpress,-23.24,Mal Alımı,DB-KLARNA-2025-11-11,Tamamlandı,Purchase at AliExpress,İŞ
+2025-11-11,Gider,Allianz Versicherung,-423.44,Sigorta,DB-ALLIANZ-2025-11-11,Tamamlandı,AS-6235897576,İŞ
+2025-11-12,Gider,Zinsen/Kosten/Auslagen,-0.68,Banka Ücreti,DB-FEE-2025-11-12,Tamamlandı,Berechtigte Ablehnung,İŞ
+2025-11-12,Gelir,Klarna eBay Rückgabe,43.06,Geri Ödeme,DB-KLARNA-RET-2025-11-12,Tamamlandı,SEPA Lastschrift-Rückgabe,İŞ
+2025-11-12,Gider,Klarna eBay,-43.06,Mal Alımı,DB-KLARNA-2025-11-12,Tamamlandı,Purchase at eBay,İŞ
+2025-11-14,Gider,Klarna AliExpress,-26.74,Mal Alımı,DB-KLARNA-2025-11-14,Tamamlandı,Purchase at AliExpress,İŞ
+2025-11-14,Gider,Klarna Booking.com,-57.44,Özel Harcama,DB-KLARNA-BOOK-2025-11-14,Tamamlandı,Purchase at Booking.com,ÖZEL
+2025-11-17,Gider,Zinsen/Kosten/Auslagen,-0.68,Banka Ücreti,DB-FEE-2025-11-17,Tamamlandı,Berechtigte Ablehnung,İŞ
+2025-11-17,Gelir,Klarna eBay Rückgabe,46.56,Geri Ödeme,DB-KLARNA-RET-2025-11-17,Tamamlandı,SEPA Lastschrift-Rückgabe,İŞ
+2025-11-17,Gider,Klarna eBay,-46.56,Mal Alımı,DB-KLARNA-2025-11-17,Tamamlandı,Purchase at eBay,İŞ
+2025-11-18,Gelir,Bargeldeinzahlung,200.00,Nakit Yatırma,DB-BAR-2025-11-18,Tamamlandı,Einzahlung 17.11.2025,İŞ
+2025-11-19,Gider,Klarna AliExpress,-30.24,Mal Alımı,DB-KLARNA-2025-11-19,Tamamlandı,Purchase at AliExpress,İŞ
+2025-11-19,Gider,PayPal Tipico,-10.00,Özel Harcama,DB-PAYPAL-TIP-2025-11-19,Tamamlandı,Tipico Co. Ltd.,ÖZEL
+2025-11-20,Gider,Vodafone,-6.02,Telefon/Internet,DB-VODA-2025-11-20,Tamamlandı,11/2025 K-NR. 333497866,İŞ
+2025-11-20,Gider,Klarna eBay,-50.06,Mal Alımı,DB-KLARNA-2025-11-20,Tamamlandı,Purchase at eBay,İŞ
+2025-11-21,Gider,Klarna Booking.com,-98.33,Özel Harcama,DB-KLARNA-BOOK-2025-11-21,Tamamlandı,Klarna Booking.com,ÖZEL
+2025-11-25,Gider,IONOS SE,-1.00,Web Hosting,DB-IONOS-2025-11-25,Tamamlandı,22.11.2025,İŞ
+2025-11-28,Gider,Zinsen/Kosten/Auslagen,-1.36,Banka Ücreti,DB-FEE-2025-11-28,Tamamlandı,Berechtigte Ablehnung,İŞ
+2025-11-28,Gelir,Klarna AliExpress Rückgabe,9.39,Geri Ödeme,DB-KLARNA-RET-2025-11-28,Tamamlandı,SEPA Lastschrift-Rückgabe,İŞ
+2025-11-28,Gelir,Klarna AliExpress Rückgabe,18.07,Geri Ödeme,DB-KLARNA-RET-2025-11-28-2,Tamamlandı,SEPA Lastschrift-Rückgabe,İŞ
+2025-11-28,Gider,Klarna AliExpress,-18.07,Mal Alımı,DB-KLARNA-2025-11-28,Tamamlandı,Purchase at AliExpress,İŞ
+2025-11-28,Gider,Klarna AliExpress,-9.39,Mal Alımı,DB-KLARNA-2025-11-28-2,Tamamlandı,Purchase at AliExpress,İŞ
+2025-12-01,Gelir,Bargeldeinzahlung,100.00,Nakit Yatırma,DB-BAR-2025-12-01,Tamamlandı,Einzahlung 29.11.2025,İŞ
+2025-12-02,Gider,PayPal Tipico,-10.00,Özel Harcama,DB-PAYPAL-TIP-2025-12-02,Tamamlandı,Tipico Co. Ltd.,ÖZEL
+2025-12-02,Gider,Klarna Vinted,-14.74,Mal Alımı,DB-KLARNA-2025-12-02,Tamamlandı,Purchase at Vinted,İŞ
+2025-12-02,Gider,Klarna AliExpress,-10.15,Mal Alımı,DB-KLARNA-2025-12-02-2,Tamamlandı,Purchase at AliExpress,İŞ
+2025-12-03,Gider,IYZICO (Türkiye),-5.15,Özel Harcama,DB-IYZICO-2025-12-03,Tamamlandı,ISTANBUL/TR,ÖZEL
+2025-12-04,Gelir,ergema Lohn 11/2025,945.90,Teilzeit Maaş,DB-ERGE-2025-12-04,Tamamlandı,Teilzeit iş maaşı,ÖZEL
+2025-12-04,Gider,Klarna AliExpress,-12.89,Mal Alımı,DB-KLARNA-2025-12-04,Tamamlandı,Purchase at AliExpress,İŞ
+2025-12-04,Gider,Klarna AliExpress,-21.57,Mal Alımı,DB-KLARNA-2025-12-04-2,Tamamlandı,Purchase at AliExpress,İŞ
+2025-12-05,Gider,Burcu Kurt-Sorguc Transfer,-500.00,Özel Transfer,DB-BURCU-2025-12-05,Tamamlandı,NOTPROVIDED,ÖZEL
+2025-12-05,Gider,PayPal Tipico,-10.00,Özel Harcama,DB-PAYPAL-TIP-2025-12-05,Tamamlandı,Tipico Co. Ltd.,ÖZEL
+2025-12-08,Gider,Klarna Gebündelte Zahlung,-340.24,Mal Alımı,DB-KLARNA-2025-12-08,Tamamlandı,3 Zahlungen birleştirildi,İŞ
+2025-12-09,Gider,PayPal Tipico,-10.00,Özel Harcama,DB-PAYPAL-TIP-2025-12-09,Tamamlandı,Tipico Co. Ltd.,ÖZEL
+2025-12-10,Gider,TOTAL Service Station,-12.33,Yakıt,DB-TOTAL-2025-12-10,Tamamlandı,09.12.2025,İŞ
+2025-12-11,Gider,Kaufland,-16.36,Alışveriş,DB-KAUF-2025-12-11,Tamamlandı,Berlin-Wilhelmstadt,ÖZEL
+2025-12-12,Gider,Tipico,-10.00,Özel Harcama,DB-TIPICO-2025-12-12,Tamamlandı,11.12.2025,ÖZEL
+2025-12-15,Gelir,eBay S.a.r.l.,70.00,Satış Geliri,DB-EBAY-2025-12-15,Tamamlandı,P.7232921081,İŞ
+2025-12-15,Gider,TOTAL Service Station,-37.50,Yakıt,DB-TOTAL-2025-12-15,Tamamlandı,12.12.2025,İŞ
+2025-12-15,Gider,Tipico,-10.00,Özel Harcama,DB-TIPICO-2025-12-15,Tamamlandı,11.12.2025,ÖZEL
+2025-12-16,Gelir,Mangopay Vinted,50.00,Satış Geliri,DB-VINTED-2025-12-16,Tamamlandı,Vinted,İŞ
+2025-12-16,Gider,Tipico,-13.00,Özel Harcama,DB-TIPICO-2025-12-16,Tamamlandı,14.12.2025,ÖZEL
+2025-12-16,Gider,Tipico,-10.00,Özel Harcama,DB-TIPICO-2025-12-16-2,Tamamlandı,13.12.2025,ÖZEL
+2025-12-17,Gider,Amazon,-24.91,Mal Alımı,DB-AMAZON-2025-12-17,Tamamlandı,15.12.2025,İŞ
+2025-12-17,Gider,Amazon Prime,-0.99,Abonelik,DB-AMAZON-PRIME-2025-12-17,Tamamlandı,15.12.2025,İŞ
+2025-12-18,Gelir,Mangopay Vinted,50.00,Satış Geliri,DB-VINTED-2025-12-18,Tamamlandı,Vinted,İŞ
+2025-12-18,Gider,Vodafone,-19.99,Telefon/Internet,DB-VODA-2025-12-18,Tamamlandı,12/2025 K-NR. 333497866,İŞ
+2025-12-18,Gider,Vodafone,-6.02,Telefon/Internet,DB-VODA-2025-12-18-2,Tamamlandı,12/2025 K-NR. 333497866,İŞ
+2025-12-19,Gider,TOTAL Service Station,-8.99,Yakıt,DB-TOTAL-2025-12-19,Tamamlandı,18.12.2025,İŞ
+2025-12-19,Gider,PayPal Tipico,-23.50,Özel Harcama,DB-PAYPAL-TIP-2025-12-19,Tamamlandı,16.12.2025,ÖZEL
+2025-12-23,Gelir,Mangopay Vinted,50.00,Satış Geliri,DB-VINTED-2025-12-23,Tamamlandı,Vinted,İŞ
+2025-12-23,Gider,Tipico,-10.00,Özel Harcama,DB-TIPICO-2025-12-23,Tamamlandı,19.12.2025,ÖZEL
+2025-12-24,Gider,Shell,-8.89,Yakıt,DB-SHELL-2025-12-24,Tamamlandı,23.12.2025,İŞ
+2025-12-24,Gider,Amazon Prime,-8.99,Abonelik,DB-AMAZON-PRIME-2025-12-24,Tamamlandı,22.12.2025,İŞ
+2025-12-24,Gelir,GUTSCHRIFT DB CARD PLUS,20.00,Kart İadesi,DB-CARD-PLUS-2025-12-24,Tamamlandı,5354999999994923,ÖZEL
+2025-12-29,Gider,Kaufland,-22.47,Alışveriş,DB-KAUF-2025-12-29,Tamamlandı,Berlin-Wilhelmstadt,ÖZEL
+2025-12-29,Gider,IONOS SE,-1.00,Web Hosting,DB-IONOS-2025-12-29,Tamamlandı,22.12.2025,İŞ
+2025-12-30,Gelir,GUTSCHRIFT DB CARD PLUS,8.99,Kart İadesi,DB-CARD-PLUS-2025-12-30,Tamamlandı,5354999999994923,ÖZEL
+2025-12-30,Gider,Klarna AliExpress,-9.39,Mal Alımı,DB-KLARNA-2025-12-30,Tamamlandı,Purchase at AliExpress,İŞ
+2025-12-30,Gider,Klarna AliExpress,-18.07,Mal Alımı,DB-KLARNA-2025-12-30-2,Tamamlandı,Purchase at AliExpress,İŞ
+2025-12-31,Gider,Kontoabrechnung,-20.70,Banka Ücreti,DB-KONTO-2025-12-31,Tamamlandı,Saldo der Abschlussposten,İŞ
+2025-12-31,Gider,TOTAL Service Station,-58.00,Yakıt,DB-TOTAL-2025-12-31,Tamamlandı,30.12.2025,İŞ
+,TOPLAM İŞ GELİRLERİ,Toplam İş Gelirleri,220.00,,
+,TOPLAM İŞ GİDERLERİ,Toplam İş Giderleri,-1,042.85,,
+,TOPLAM ÖZEL GELİRLER,Toplam Özel Gelirler,1,005.33,,
+,TOPLAM ÖZEL GİDERLER,Toplam Özel Giderler,-1,234.81,,
+,NET İŞ SONUCU,Net İş Sonucu (Finanzamt için),-822.85,,
+

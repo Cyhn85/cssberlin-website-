@@ -12,7 +12,11 @@
 
 class OfferModalManager {
     constructor() {
-        this.API_BASE = 'http://localhost:8000';
+        this.API_BASE = (typeof API_CONFIG !== 'undefined' && API_CONFIG.current) ? API_CONFIG.current : (
+            (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+                ? 'http://localhost:8000'
+                : ''
+        );
         this.MAX_DISCOUNT = 40;
         this.MAX_DAILY_OFFERS = 25;
         this.currentModal = null;
@@ -26,6 +30,17 @@ class OfferModalManager {
         console.log('🎯 Offer Modal Manager initialized');
         this.createModalContainer();
         this.loadDailyOfferCount();
+    }
+
+    getAuthHeaders() {
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+        const token = localStorage.getItem('cssberlin_token');
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+        return headers;
     }
 
     /**
@@ -48,11 +63,9 @@ class OfferModalManager {
 
         try {
             const today = new Date().toISOString().split('T')[0];
-            const response = await fetch(`${this.API_BASE}/api/offers/user/${user.userId}?role=buyer`, {
+            const response = await fetch(`${this.API_BASE}/api/offers/user/${user.userId}`, {
                 method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+                headers: this.getAuthHeaders()
             });
 
             if (response.ok) {
@@ -114,6 +127,10 @@ class OfferModalManager {
         }
 
         this.currentProductData = productData;
+
+        const discountPercentage = typeof offerData.discount_percentage === 'number'
+            ? offerData.discount_percentage
+            : this.calculateDiscount(offerData.offer_amount, offerData.product_price);
 
         const modalHTML = `
             <div class="offer-modal-overlay" id="sendOfferModal">
@@ -224,7 +241,7 @@ class OfferModalManager {
                             <p><strong>Produkt:</strong> ${offerData.product_name}</p>
                             <p><strong>Originalpreis:</strong> ${parseFloat(offerData.product_price).toFixed(2)}€</p>
                             <p><strong>Käufer-Angebot:</strong> ${parseFloat(offerData.offer_amount).toFixed(2)}€</p>
-                            <p><strong>Rabatt:</strong> ${offerData.discount_percentage.toFixed(1)}%</p>
+                            <p><strong>Rabatt:</strong> ${discountPercentage.toFixed(1)}%</p>
                         </div>
 
                         <!-- Counter Offer Amount -->
@@ -291,9 +308,7 @@ class OfferModalManager {
         try {
             const response = await fetch(`${this.API_BASE}/api/offers/${offerId}/accept`, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: this.getAuthHeaders(),
                 body: JSON.stringify({
                     user_id: user.userId
                 })
@@ -343,9 +358,7 @@ class OfferModalManager {
         try {
             const response = await fetch(`${this.API_BASE}/api/offers/${offerId}/decline`, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: this.getAuthHeaders(),
                 body: JSON.stringify({
                     user_id: user.userId
                 })
@@ -405,19 +418,11 @@ class OfferModalManager {
         if (!user) return;
 
         try {
-            const response = await fetch(`${this.API_BASE}/api/offers/create`, {
+            const response = await fetch(`${this.API_BASE}/api/offers`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: this.getAuthHeaders(),
                 body: JSON.stringify({
                     product_id: productId,
-                    product_name: this.currentProductData.name,
-                    product_price: parseFloat(this.currentProductData.price),
-                    seller_id: this.currentProductData.seller_id || 'seller@cssberlin.de',
-                    buyer_id: user.userId,
-                    buyer_name: `${user.firstName} ${user.lastName}`,
-                    buyer_email: user.email,
                     offer_amount: parseFloat(offerAmount),
                     message: message
                 })
@@ -433,7 +438,7 @@ class OfferModalManager {
                 this.dailyOfferCount++;
                 this.closeModal();
 
-                // Redirect to verhandeln page
+                // Redirect to negotiations page
                 setTimeout(() => {
                     window.location.href = 'verhandeln.html';
                 }, 1500);
@@ -476,10 +481,8 @@ class OfferModalManager {
 
         try {
             const response = await fetch(`${this.API_BASE}/api/offers/${offerId}/counter`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                method: 'PUT',
+                headers: this.getAuthHeaders(),
                 body: JSON.stringify({
                     user_id: user.userId,
                     counter_amount: parseFloat(counterAmount),

@@ -275,13 +275,21 @@ function createProductCard(product) {
     const uploadedAgo = product.uploadedAgo || generateUploadTime();
     const location = product.location || seller.location || 'Berlin';
 
+    const isSold = product.is_sold || product.isSold;
+    const ratingCount = seller.review_count || 0;
+    const ratingLabel = ratingCount > 0 ? `⭐ ${seller.rating.toFixed(1)} (${ratingCount})` : `⭐ ${seller.rating.toFixed(1)}`;
+
     return `
-        <div class="product-card" data-product-id="${product.id}">
+        <div class="product-card ${isSold ? 'product-card-sold' : ''}" data-product-id="${product.id}">
             <div class="product-image-wrapper">
                 <img src="${product.image}"
                      alt="${product.name}"
                      loading="lazy"
                      onerror="this.src='https://via.placeholder.com/400x533?text=Bild+nicht+verfügbar'">
+
+                ${isSold ? `
+                    <div class="product-sold-badge">VERKAUFT</div>
+                ` : ''}
 
                 <button class="wishlist-btn ${inWishlist ? 'active' : ''}"
                         data-product-id="${product.id}"
@@ -321,7 +329,7 @@ function createProductCard(product) {
                             ${seller.badge ? `<span class="seller-badge seller-badge-${seller.badge}">${getBadgeIcon(seller.badge)}</span>` : ''}
                         </div>
                         <div class="seller-meta">
-                            <span>⭐ ${seller.rating.toFixed(1)}</span>
+                            <span>${ratingLabel}</span>
                             <span>•</span>
                             <span>📍 ${location}</span>
                             <span>•</span>
@@ -392,7 +400,7 @@ function generateMockSeller() {
     return {
         name: name,
         initials: initials,
-        rating: (4.0 + Math.random() * 1.0).toFixed(1),
+        rating: Math.round((4.0 + Math.random() * 1.0) * 10) / 10,
         verified: Math.random() > 0.4, // 60% verified
         badge: badges[Math.floor(Math.random() * badges.length)],
         location: locations[Math.floor(Math.random() * locations.length)],
@@ -441,7 +449,7 @@ async function initProducts(category = null) {
 
     try {
         // Build API URL with optional category filter
-        let apiUrl = `${API_BASE_URL}/api/products?limit=16`;
+        let apiUrl = `${API_BASE_URL}/api/products?limit=16&include=seller`;
         if (category) {
             apiUrl += `&category=${encodeURIComponent(category)}`;
         }
@@ -456,15 +464,27 @@ async function initProducts(category = null) {
         const products = data.products.map(p => ({
             id: p.id,
             brand: p.brand || 'Unbekannt',
-            name: p.title || '',
+            name: p.name || '',
             size: p.size || '',
             condition: p.condition || 'Gebraucht',
             price: p.price || 0,
-            newPrice: p.original_price || (p.price * 2),
+            newPrice: (p.original_price || p.price * 2),
             carbonSaved: Math.round((p.price || 0) * 0.4 * 10) / 10,
             tier: 'champion',
             image: (p.images && p.images.length > 0) ? p.images[0] : 'https://images.unsplash.com/photo-1542272454315-7f6f36d69c8d?w=500',
-            sale: false
+            sale: false,
+            is_sold: p.is_sold,
+            seller_id: p.seller_id,
+            seller: p.seller ? {
+                name: p.seller.name,
+                initials: p.seller.initials || 'U',
+                rating: p.seller.rating || 5.0,
+                review_count: p.seller.review_count || 0,
+                verified: true,
+                badge: 'verified',
+                location: 'Berlin',
+                avatarColor: '#2D5016'
+            } : null
         }));
 
         // Store products globally for wishlist/cart functionality
@@ -574,7 +594,7 @@ function attachProductEventListeners() {
 // ADD TO CART HANDLER - WITH TOGGLE
 // ============================================
 function handleAddToCart(productId, buttonElement) {
-    const product = sampleProducts.find(p => p.id === productId);
+    const product = getProductById(productId);
     if (!product) return;
 
     // Get existing cart
@@ -668,7 +688,7 @@ function updateNegotiationCountInHeader() {
 // BUY BUTTON HANDLER
 // ============================================
 function handleBuyClick(productId) {
-    const product = sampleProducts.find(p => p.id === productId);
+    const product = getProductById(productId);
     if (!product) return;
 
     // Direct buy - go to checkout with this single item
@@ -693,7 +713,7 @@ function handleBuyClick(productId) {
 // NEGOTIATE BUTTON HANDLER
 // ============================================
 function handleNegotiateClick(productId) {
-    const product = sampleProducts.find(p => p.id === productId);
+    const product = getProductById(productId);
     if (!product) return;
 
     // Check if user is logged in
@@ -708,23 +728,24 @@ function handleNegotiateClick(productId) {
         return;
     }
 
-    // Add to negotiations list
-    if (window.addToNegotiations) {
-        window.addToNegotiations(productId, {
+    if (typeof offerModal !== 'undefined' && typeof offerModal.showSendOfferModal === 'function') {
+        offerModal.showSendOfferModal(productId, {
             name: product.name,
             price: product.price,
             image: product.image,
             brand: product.brand,
-            size: product.size,
-            condition: product.condition
+            seller_id: product.seller_id || product.sellerId || 'seller@cssberlin.de'
         });
+        return;
     }
 
-    // Update negotiation count in header before redirect
-    updateNegotiationCountInHeader();
+    // Fallback: Redirect to negotiations page
+    window.location.href = 'verhandeln.html';
+}
 
-    // Redirect to messages page
-    window.location.href = 'messages.html';
+function getProductById(productId) {
+    const allProducts = window.loadedProducts || sampleProducts;
+    return allProducts.find(p => p.id === productId);
 }
 
 // ============================================

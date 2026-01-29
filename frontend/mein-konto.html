@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
@@ -846,6 +846,15 @@
                     </li>
 
                     <li class="sidebar-menu-item">
+                        <a href="#bewertungen" class="sidebar-menu-link" data-section="bewertungen">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="12 2 15 9 22 9 16.5 13.5 18.5 21 12 16.5 5.5 21 7.5 13.5 2 9 9 9 12 2"></polygon>
+                            </svg>
+                            Bewertungen
+                        </a>
+                    </li>
+
+                    <li class="sidebar-menu-item">
                         <a href="#einstellungen" class="sidebar-menu-link" data-section="einstellungen">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="12" cy="12" r="3"></circle>
@@ -992,6 +1001,28 @@
                             </li>
                         </ul>
                     </div>
+
+                    <!-- Active Listings -->
+                    <div class="account-section">
+                        <h2>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                                <path d="M7 7h10M7 12h10M7 17h10"></path>
+                            </svg>
+                            Aktive Anzeigen
+                        </h2>
+                        <div id="activeListings" class="orders-list">
+                            <div class="empty-state">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="64" height="64">
+                                    <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                                    <path d="M7 7h10M7 12h10M7 17h10"></path>
+                                </svg>
+                                <h3>Keine aktiven Anzeigen</h3>
+                                <p>Sie haben derzeit keine aktiven Produkte.</p>
+                                <a href="inserieren.html" class="btn-primary-sm">Artikel inserieren</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Profil Section -->
@@ -1112,6 +1143,36 @@
                     <h2>Einstellungen</h2>
                     <p>Einstellungsfunktion wird bald verfÃ¼gbar sein.</p>
                 </div>
+
+                <!-- Bewertungen Section -->
+                <div class="content-section" id="section-bewertungen" style="display: none;">
+                    <h2>Bewertungen</h2>
+                    <div class="stats-grid" style="margin-bottom: 16px;">
+                        <div class="stat-card">
+                            <div class="stat-icon orange">⭐</div>
+                            <div class="stat-info">
+                                <h3 id="userRatingAvg">0.0</h3>
+                                <p>Durchschnitt</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon green">📝</div>
+                            <div class="stat-info">
+                                <h3 id="userRatingCount">0</h3>
+                                <p>Bewertungen</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="userReviewsList" class="orders-list">
+                        <div class="empty-state">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="64" height="64">
+                                <polygon points="12 2 15 9 22 9 16.5 13.5 18.5 21 12 16.5 5.5 21 7.5 13.5 2 9 9 9 12 2"></polygon>
+                            </svg>
+                            <h3>Keine Bewertungen</h3>
+                            <p>Sie haben noch keine Bewertungen erhalten.</p>
+                        </div>
+                    </div>
+                </div>
             </main>
         </div>
     </div>
@@ -1160,7 +1221,7 @@
 
                 // Try to load from API
                 let offersCount = 0;
-                let shipmentsCount = 0;
+                let ordersCount = 0;
 
                 try {
                     if (api && api.isLoggedIn()) {
@@ -1172,11 +1233,33 @@
                             renderOffersFromAPI(offersResponse.offers, currentUser.id);
                         }
 
-                        // Load shipments from API
-                        const shipmentsResponse = await api.getShipments();
-                        if (shipmentsResponse && shipmentsResponse.shipments) {
-                            shipmentsCount = shipmentsResponse.shipments.length;
-                            renderShipmentsFromAPI(shipmentsResponse.shipments, currentUser.id);
+                        // Load orders from API
+                        const ordersResponse = await api.getOrders();
+                        if (ordersResponse && ordersResponse.orders) {
+                            ordersCount = ordersResponse.orders.length;
+                            renderOrdersFromAPI(ordersResponse.orders, currentUser.id);
+                        }
+
+                        // Load active listings from API
+                        const productsResponse = await api.getProducts({
+                            seller_id: currentUser.id,
+                            is_sold: false,
+                            include: 'seller'
+                        });
+                        if (productsResponse && productsResponse.products) {
+                            renderActiveListings(productsResponse.products);
+                        }
+
+                        // Load user reviews summary
+                        const reviewSummary = await api.getUserReviewSummary(currentUser.id);
+                        if (reviewSummary) {
+                            document.getElementById('userRatingAvg').textContent = (reviewSummary.average || 0).toFixed(1);
+                            document.getElementById('userRatingCount').textContent = reviewSummary.count || 0;
+                        }
+
+                        const reviewsResponse = await api.getUserReviews(currentUser.id);
+                        if (reviewsResponse && reviewsResponse.reviews) {
+                            renderUserReviews(reviewsResponse.reviews);
                         }
                     }
                 } catch (apiError) {
@@ -1184,13 +1267,13 @@
                 }
 
                 // Update stats
-                document.getElementById('totalOrders').textContent = shipmentsCount;
+                document.getElementById('totalOrders').textContent = ordersCount;
                 document.getElementById('totalMessages').textContent = '0';
                 document.getElementById('totalWishlist').textContent = wishlist.length;
                 document.getElementById('totalNegotiations').textContent = offersCount || negotiations.length;
 
                 // Update badges
-                document.getElementById('ordersBadge').textContent = shipmentsCount;
+                document.getElementById('ordersBadge').textContent = ordersCount;
                 document.getElementById('messagesBadge').textContent = '0';
                 document.getElementById('wishlistBadge').textContent = wishlist.length;
                 document.getElementById('negotiationsBadge').textContent = negotiations.length;
@@ -1590,6 +1673,138 @@
             if (verkauft.length > 0) {
                 const verkauftHtml = verkauft.map(s => renderShipmentCard(s, true)).join('');
                 document.getElementById('verkauftList').innerHTML = verkauftHtml;
+            }
+        }
+
+        function renderOrdersFromAPI(orders, currentUserId) {
+            const gekauft = orders.filter(o => o.buyer_id === currentUserId);
+            const verkauft = orders.filter(o => o.seller_id === currentUserId);
+
+            document.getElementById('gekauftBadge').textContent = gekauft.length;
+            document.getElementById('verkauftBadge').textContent = verkauft.length;
+
+            if (gekauft.length > 0) {
+                document.getElementById('gekauftList').innerHTML = gekauft.map(o => renderOrderCard(o, false)).join('');
+            }
+
+            if (verkauft.length > 0) {
+                document.getElementById('verkauftList').innerHTML = verkauft.map(o => renderOrderCard(o, true)).join('');
+            }
+        }
+
+        function renderOrderCard(order, isSeller) {
+            const statusLabels = {
+                'pending_payment': 'Zahlung ausstehend',
+                'paid': 'Bezahlt',
+                'shipped': 'Versendet',
+                'delivered': 'Zugestellt'
+            };
+
+            return `
+                <div class="order-card">
+                    <div class="order-card-header">
+                        <img src="${order.product_image || 'https://via.placeholder.com/60'}" alt="${order.product_name}" class="order-product-image">
+                        <div class="order-product-info">
+                            <p class="order-product-name">${order.product_name}</p>
+                            <p class="order-product-price">${order.product_price?.toFixed(2) || '0.00'} €</p>
+                        </div>
+                        <span class="order-status ${order.status}">${statusLabels[order.status] || order.status}</span>
+                    </div>
+                    <div style="display:flex; gap:8px; margin-top:12px;">
+                        <button class="btn-accept" onclick='openReviewModal(${JSON.stringify(order).replace(/"/g, '&quot;')})'>
+                            Bewertung abgeben
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderActiveListings(products) {
+            const container = document.getElementById('activeListings');
+            if (!container) return;
+
+            if (products.length === 0) {
+                return;
+            }
+
+            container.innerHTML = products.map(product => `
+                <div class="order-card">
+                    <div class="order-card-header">
+                        <img src="${product.images?.[0] || 'https://via.placeholder.com/60'}" alt="${product.name}" class="order-product-image">
+                        <div class="order-product-info">
+                            <p class="order-product-name">${product.name}</p>
+                            <p class="order-product-price">${product.price?.toFixed(2) || '0.00'} €</p>
+                        </div>
+                        <span class="order-status paid">Aktiv</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderUserReviews(reviews) {
+            const container = document.getElementById('userReviewsList');
+            if (!container) return;
+
+            if (!reviews.length) {
+                return;
+            }
+
+            container.innerHTML = reviews.map(review => `
+                <div class="order-card">
+                    <div class="order-card-header">
+                        <div class="order-product-info">
+                            <p class="order-product-name">Von ${review.from_user_name || 'Käufer/Verkäufer'}</p>
+                            <p class="order-product-price">⭐ ${review.rating}/5</p>
+                        </div>
+                        <span class="order-status paid">${new Date(review.created_at).toLocaleDateString('de-DE')}</span>
+                    </div>
+                    ${review.comment ? `<p style="color:#666; margin:8px 0 0;">"${review.comment}"</p>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function openReviewModal(order) {
+            const modal = document.createElement('div');
+            modal.className = 'counter-modal';
+            modal.id = 'reviewModal';
+            modal.innerHTML = `
+                <div class="counter-modal-content">
+                    <h3>Bewertung abgeben</h3>
+                    <p style="color:#757575; margin-bottom:16px;">${order.product_name}</p>
+                    <input type="number" class="counter-input" id="reviewRating" placeholder="Bewertung (1-5)" min="1" max="5">
+                    <textarea class="counter-input" id="reviewComment" placeholder="Kurzer Kommentar" style="height:100px;"></textarea>
+                    <div class="counter-modal-actions">
+                        <button class="btn-decline" onclick="closeReviewModal()" style="flex: 1;">Abbrechen</button>
+                        <button class="btn-accept" onclick="submitUserReview(${order.id})" style="flex: 1;">Senden</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeReviewModal();
+            });
+        }
+
+        function closeReviewModal() {
+            document.getElementById('reviewModal')?.remove();
+        }
+
+        async function submitUserReview(orderId) {
+            const rating = parseInt(document.getElementById('reviewRating').value, 10);
+            const comment = document.getElementById('reviewComment').value;
+
+            if (!rating || rating < 1 || rating > 5) {
+                toast.error('Ungültige Bewertung', 'Bitte geben Sie eine Bewertung zwischen 1 und 5 ein.');
+                return;
+            }
+
+            try {
+                await api.createUserReview({ order_id: orderId, rating, comment });
+                toast.success('Danke!', 'Ihre Bewertung wurde gespeichert.');
+                closeReviewModal();
+                loadUserData();
+            } catch (error) {
+                toast.error('Fehler', error.message || 'Bewertung konnte nicht gespeichert werden.');
             }
         }
 

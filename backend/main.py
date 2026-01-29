@@ -14,15 +14,33 @@ from typing import Optional
 import os
 
 from database import get_db, engine, Base
-from models import User, Product, Offer, Message, Order, Shipment, Escrow, Appointment, BundleOffer, SecurityLog
+from models import (
+    User,
+    Product,
+    Offer,
+    Message,
+    Order,
+    Shipment,
+    Escrow,
+    Appointment,
+    BundleOffer,
+    SecurityLog,
+    Payment,
+    UserReview,
+    OfferNotification,
+)
 import re
 import random
+from sqlalchemy import select, or_, and_, func
 from schemas import (
     UserCreate, UserResponse, UserLogin, Token,
     ProductCreate, ProductResponse, ProductUpdate,
     OfferCreate, OfferResponse, OfferUpdate,
     MessageCreate, MessageResponse,
-    ShipmentCreate, ShipmentResponse, ShipmentUpdate
+    ShipmentCreate, ShipmentResponse, ShipmentUpdate,
+    OrderCreate, OrderResponse,
+    PaymentIntentCreate, PaymentIntentResponse,
+    UserReviewCreate, UserReviewResponse
 )
 from auth import (
     get_password_hash, verify_password,
@@ -74,6 +92,29 @@ async def root():
 @app.get("/health")
 async def health_check():
     return {"status": "healthy", "database": "connected"}
+
+
+async def get_user_rating(db: AsyncSession, user_id: int):
+    result = await db.execute(
+        select(func.avg(UserReview.rating), func.count(UserReview.id)).where(
+            UserReview.to_user_id == user_id
+        )
+    )
+    avg_rating, review_count = result.one()
+    return {
+        "average": round(avg_rating or 0, 1),
+        "count": int(review_count or 0),
+    }
+
+
+async def create_offer_notification(db: AsyncSession, user_id: int, offer_id: int, notif_type: str):
+    notification = OfferNotification(
+        user_id=user_id,
+        offer_id=offer_id,
+        type=notif_type,
+        is_read=False
+    )
+    db.add(notification)
 
 
 # ============== AUTH ENDPOINTS ==============
@@ -263,11 +304,12 @@ async def get_products(
     category: Optional[str] = None,
     brand: Optional[str] = None,
     search: Optional[str] = None,
+    seller_id: Optional[int] = None,
+    is_sold: Optional[bool] = None,
+    include: Optional[str] = None,
     db: AsyncSession = Depends(get_db)
 ):
     """Get all products with optional filters"""
-    from sqlalchemy import select, or_
-
     query = select(Product).where(Product.is_active == True)
 
     if category:
@@ -282,26 +324,86 @@ async def get_products(
                 Product.brand.ilike(f"%{search}%")
             )
         )
+    if seller_id:
+        query = query.where(Product.seller_id == seller_id)
+    if is_sold is not None:
+        query = query.where(Product.is_sold == is_sold)
 
     query = query.order_by(Product.created_at.desc()).offset(skip).limit(limit)
     result = await db.execute(query)
     products = result.scalars().all()
+    if include == "seller":
+        enriched = []
+        for product in products:
+            seller = await db.get(User, product.seller_id)
+            rating = await get_user_rating(db, product.seller_id)
+            enriched.append({
+                "id": product.id,
+                "name": product.name,
+                "description": product.description,
+                "price": product.price,
+                "brand": product.brand,
+                "category": product.category,
+                "subcategory": product.subcategory,
+                "condition": product.condition,
+                "size": product.size,
+                "color": product.color,
+                "images": product.images or [],
+                "seller_id": product.seller_id,
+                "is_active": product.is_active,
+                "is_sold": product.is_sold,
+                "views": product.views,
+                "created_at": product.created_at.isoformat(),
+                "seller": {
+                    "id": seller.id,
+                    "name": f"{seller.first_name} {seller.last_name}".strip(),
+                    "initials": f"{seller.first_name[:1]}{seller.last_name[:1]}".upper(),
+                    "rating": rating["average"],
+                    "review_count": rating["count"]
+                }
+            })
+        return {"products": enriched, "total": len(enriched)}
 
     return {"products": products, "total": len(products)}
 
 
-@app.get("/api/products/{product_id}", response_model=ProductResponse)
+@app.get("/api/products/{product_id}")
 async def get_product(product_id: int, db: AsyncSession = Depends(get_db)):
     """Get single product by ID"""
-    from sqlalchemy import select
-
     result = await db.execute(select(Product).where(Product.id == product_id))
     product = result.scalar_one_or_none()
 
     if not product:
         raise HTTPException(status_code=404, detail="Produkt nicht gefunden")
 
-    return product
+    seller = await db.get(User, product.seller_id)
+    rating = await get_user_rating(db, product.seller_id)
+
+    return {
+        "id": product.id,
+        "name": product.name,
+        "description": product.description,
+        "price": product.price,
+        "brand": product.brand,
+        "category": product.category,
+        "subcategory": product.subcategory,
+        "condition": product.condition,
+        "size": product.size,
+        "color": product.color,
+        "images": product.images or [],
+        "seller_id": product.seller_id,
+        "is_active": product.is_active,
+        "is_sold": product.is_sold,
+        "views": product.views,
+        "created_at": product.created_at.isoformat(),
+        "seller": {
+            "id": seller.id,
+            "name": f"{seller.first_name} {seller.last_name}".strip(),
+            "initials": f"{seller.first_name[:1]}{seller.last_name[:1]}".upper(),
+            "rating": rating["average"],
+            "review_count": rating["count"]
+        }
+    }
 
 
 @app.post("/api/products", response_model=ProductResponse)
@@ -375,6 +477,64 @@ async def delete_product(
     return {"success": True, "message": "Produkt gelöscht"}
 
 
+@app.post("/api/products/seed-demo")
+async def seed_demo_products(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """Seed demo products for the current user"""
+    demo_products = [
+        {
+            "name": "Vintage Lederhandtasche",
+            "description": "Echtes Leder, sehr guter Zustand.",
+            "price": 89.99,
+            "brand": "Michael Kors",
+            "category": "damen",
+            "subcategory": "Taschen",
+            "condition": "Sehr gut",
+            "size": "OneSize",
+            "color": "Schwarz",
+            "images": ["https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600"]
+        },
+        {
+            "name": "Nike Air Max 90",
+            "description": "Klassische Sneaker, kaum getragen.",
+            "price": 120.00,
+            "brand": "Nike",
+            "category": "herren",
+            "subcategory": "Sneaker",
+            "condition": "Neuwertig",
+            "size": "42",
+            "color": "Weiß",
+            "images": ["https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600"]
+        },
+        {
+            "name": "Cashmere Pullover",
+            "description": "Weicher Kaschmir, luxuriös.",
+            "price": 79.00,
+            "brand": "Zara",
+            "category": "damen",
+            "subcategory": "Pullover",
+            "condition": "Sehr gut",
+            "size": "M",
+            "color": "Beige",
+            "images": ["https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600"]
+        }
+    ]
+
+    created = []
+    for item in demo_products:
+        product = Product(
+            seller_id=current_user.id,
+            **item
+        )
+        db.add(product)
+        created.append(product)
+
+    await db.commit()
+    return {"success": True, "created": len(created)}
+
+
 # ============== OFFER ENDPOINTS ==============
 
 @app.post("/api/offers", response_model=OfferResponse)
@@ -411,6 +571,10 @@ async def create_offer(
     await db.commit()
     await db.refresh(db_offer)
 
+    # Notify seller about new offer
+    await create_offer_notification(db, product.seller_id, db_offer.id, "new_offer")
+    await db.commit()
+
     return db_offer
 
 
@@ -437,6 +601,8 @@ async def get_user_offers(
     for offer in offers:
         prod_result = await db.execute(select(Product).where(Product.id == offer.product_id))
         product = prod_result.scalar_one_or_none()
+        buyer = await db.get(User, offer.buyer_id)
+        seller = await db.get(User, offer.seller_id)
 
         offer_dict = {
             "id": offer.id,
@@ -446,11 +612,64 @@ async def get_user_offers(
             "product_image": product.images[0] if product and product.images else None,
             "buyer_id": offer.buyer_id,
             "seller_id": offer.seller_id,
+            "buyer_name": f"{buyer.first_name} {buyer.last_name}".strip() if buyer else "Buyer",
+            "seller_name": f"{seller.first_name} {seller.last_name}".strip() if seller else "Seller",
             "offer_amount": offer.offer_amount,
             "counter_amount": offer.counter_amount,
             "status": offer.status,
             "message": offer.message,
             "created_at": offer.created_at.isoformat(),
+            "updated_at": offer.updated_at.isoformat() if offer.updated_at else offer.created_at.isoformat(),
+            "expires_at": offer.expires_at.isoformat() if offer.expires_at else None
+        }
+        enriched_offers.append(offer_dict)
+
+    return {"offers": enriched_offers}
+
+
+@app.get("/api/offers/user/{user_id}")
+async def get_offers_by_user(
+    user_id: int,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """Get all offers for a specific user (buyer or seller)"""
+    if current_user.id != user_id and current_user.email not in ["admin@cssberlin.de", "noreply@cssberlin.de"]:
+        raise HTTPException(status_code=403, detail="Nicht berechtigt")
+
+    query = select(Offer).where(
+        or_(
+            Offer.buyer_id == user_id,
+            Offer.seller_id == user_id
+        )
+    ).order_by(Offer.created_at.desc())
+
+    result = await db.execute(query)
+    offers = result.scalars().all()
+
+    enriched_offers = []
+    for offer in offers:
+        prod_result = await db.execute(select(Product).where(Product.id == offer.product_id))
+        product = prod_result.scalar_one_or_none()
+        buyer = await db.get(User, offer.buyer_id)
+        seller = await db.get(User, offer.seller_id)
+
+        offer_dict = {
+            "id": offer.id,
+            "product_id": offer.product_id,
+            "product_name": product.name if product else "Unknown",
+            "product_price": product.price if product else 0,
+            "product_image": product.images[0] if product and product.images else None,
+            "buyer_id": offer.buyer_id,
+            "seller_id": offer.seller_id,
+            "buyer_name": f"{buyer.first_name} {buyer.last_name}".strip() if buyer else "Buyer",
+            "seller_name": f"{seller.first_name} {seller.last_name}".strip() if seller else "Seller",
+            "offer_amount": offer.offer_amount,
+            "counter_amount": offer.counter_amount,
+            "status": offer.status,
+            "message": offer.message,
+            "created_at": offer.created_at.isoformat(),
+            "updated_at": offer.updated_at.isoformat() if offer.updated_at else offer.created_at.isoformat(),
             "expires_at": offer.expires_at.isoformat() if offer.expires_at else None
         }
         enriched_offers.append(offer_dict)
@@ -480,6 +699,11 @@ async def accept_offer(
     offer.status = "accepted"
     await db.commit()
     await db.refresh(offer)
+
+    # Notify buyer and seller
+    await create_offer_notification(db, offer.buyer_id, offer.id, "offer_accepted")
+    await create_offer_notification(db, offer.seller_id, offer.id, "offer_accepted")
+    await db.commit()
 
     # Get product info for response
     prod_result = await db.execute(select(Product).where(Product.id == offer.product_id))
@@ -526,6 +750,10 @@ async def counter_offer(
 
     await db.commit()
 
+    # Notify buyer about counter offer
+    await create_offer_notification(db, offer.buyer_id, offer.id, "counter_offer")
+    await db.commit()
+
     return {"success": True, "message": "Gegenangebot gesendet"}
 
 
@@ -550,7 +778,52 @@ async def decline_offer(
     offer.status = "declined"
     await db.commit()
 
+    # Notify buyer and seller
+    await create_offer_notification(db, offer.buyer_id, offer.id, "offer_declined")
+    await create_offer_notification(db, offer.seller_id, offer.id, "offer_declined")
+    await db.commit()
+
     return {"success": True, "message": "Angebot abgelehnt"}
+
+
+@app.get("/api/offers/notifications/{user_id}/unread-count")
+async def get_offer_unread_count(
+    user_id: int,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    if current_user.id != user_id and current_user.email not in ["admin@cssberlin.de", "noreply@cssberlin.de"]:
+        raise HTTPException(status_code=403, detail="Nicht berechtigt")
+
+    result = await db.execute(
+        select(func.count(OfferNotification.id)).where(
+            and_(OfferNotification.user_id == user_id, OfferNotification.is_read == False)
+        )
+    )
+    unread_count = result.scalar() or 0
+    return {"unread_count": unread_count}
+
+
+@app.post("/api/offers/notifications/{user_id}/mark-read")
+async def mark_offer_notifications_read(
+    user_id: int,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    if current_user.id != user_id and current_user.email not in ["admin@cssberlin.de", "noreply@cssberlin.de"]:
+        raise HTTPException(status_code=403, detail="Nicht berechtigt")
+
+    result = await db.execute(
+        select(OfferNotification).where(
+            and_(OfferNotification.user_id == user_id, OfferNotification.is_read == False)
+        )
+    )
+    notifications = result.scalars().all()
+    for notification in notifications:
+        notification.is_read = True
+
+    await db.commit()
+    return {"success": True, "marked": len(notifications)}
 
 
 # ============== MESSAGE ENDPOINTS ==============
@@ -596,6 +869,194 @@ async def get_conversation(
     messages = result.scalars().all()
 
     return {"messages": messages}
+
+
+# ============== ORDER ENDPOINTS ==============
+
+@app.post("/api/orders")
+async def create_order(
+    order_data: OrderCreate,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """Create one or more orders (one per product)"""
+    created_orders = []
+    shipping_cost = float(order_data.shipping_cost or 0)
+
+    for index, item in enumerate(order_data.items):
+        product = await db.get(Product, item.product_id)
+        if not product:
+            raise HTTPException(status_code=404, detail=f"Produkt {item.product_id} nicht gefunden")
+
+        if product.is_sold:
+            raise HTTPException(status_code=400, detail=f"Produkt {product.name} ist bereits verkauft")
+
+        order_total = float(item.price) + (shipping_cost if index == 0 else 0.0)
+        order = Order(
+            buyer_id=current_user.id,
+            product_id=item.product_id,
+            offer_id=item.offer_id,
+            total_amount=order_total,
+            shipping_address=order_data.shipping_address,
+            status="pending_payment"
+        )
+        db.add(order)
+        created_orders.append(order)
+
+    await db.commit()
+    for order in created_orders:
+        await db.refresh(order)
+
+    return {
+        "success": True,
+        "orders": [{"id": o.id, "product_id": o.product_id, "total_amount": o.total_amount} for o in created_orders]
+    }
+
+
+@app.get("/api/orders")
+async def get_orders(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """Get orders for current user (buyer or seller)"""
+    query = select(Order).order_by(Order.created_at.desc())
+    result = await db.execute(query)
+    orders = result.scalars().all()
+
+    enriched_orders = []
+    for order in orders:
+        product = await db.get(Product, order.product_id)
+        if not product:
+            continue
+
+        # Filter by ownership
+        if order.buyer_id != current_user.id and product.seller_id != current_user.id:
+            continue
+
+        seller = await db.get(User, product.seller_id)
+        buyer = await db.get(User, order.buyer_id)
+
+        enriched_orders.append({
+            "id": order.id,
+            "product_id": order.product_id,
+            "product_name": product.name,
+            "product_image": product.images[0] if product.images else None,
+            "product_price": order.total_amount,
+            "buyer_id": order.buyer_id,
+            "seller_id": product.seller_id,
+            "seller_name": f"{seller.first_name} {seller.last_name}".strip() if seller else "Unknown",
+            "buyer_name": f"{buyer.first_name} {buyer.last_name}".strip() if buyer else "Unknown",
+            "status": order.status,
+            "created_at": order.created_at.isoformat(),
+            "shipping_address": order.shipping_address
+        })
+
+    return {"orders": enriched_orders}
+
+
+@app.get("/api/orders/{order_id}")
+async def get_order(
+    order_id: int,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    order = await db.get(Order, order_id)
+    if not order:
+        raise HTTPException(status_code=404, detail="Bestellung nicht gefunden")
+
+    product = await db.get(Product, order.product_id)
+    if not product:
+        raise HTTPException(status_code=404, detail="Produkt nicht gefunden")
+
+    if order.buyer_id != current_user.id and product.seller_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Nicht berechtigt")
+
+    return order
+
+
+# ============== USER REVIEWS ==============
+
+@app.post("/api/reviews/user", response_model=UserReviewResponse)
+async def create_user_review(
+    review_data: UserReviewCreate,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """Create a review for the other party in an order"""
+    order = await db.get(Order, review_data.order_id)
+    if not order:
+        raise HTTPException(status_code=404, detail="Bestellung nicht gefunden")
+
+    product = await db.get(Product, order.product_id)
+    if not product:
+        raise HTTPException(status_code=404, detail="Produkt nicht gefunden")
+
+    if current_user.id not in [order.buyer_id, product.seller_id]:
+        raise HTTPException(status_code=403, detail="Nicht berechtigt")
+
+    to_user_id = product.seller_id if current_user.id == order.buyer_id else order.buyer_id
+
+    # Prevent duplicate review per order
+    existing = await db.execute(
+        select(UserReview).where(
+            and_(
+                UserReview.order_id == order.id,
+                UserReview.from_user_id == current_user.id
+            )
+        )
+    )
+    if existing.scalar_one_or_none():
+        raise HTTPException(status_code=400, detail="Bewertung bereits abgegeben")
+
+    review = UserReview(
+        order_id=order.id,
+        product_id=order.product_id,
+        from_user_id=current_user.id,
+        to_user_id=to_user_id,
+        rating=review_data.rating,
+        comment=review_data.comment
+    )
+    db.add(review)
+    await db.commit()
+    await db.refresh(review)
+
+    return review
+
+
+@app.get("/api/reviews/user/{user_id}")
+async def get_user_reviews(
+    user_id: int,
+    db: AsyncSession = Depends(get_db)
+):
+    """Get reviews for a user"""
+    result = await db.execute(
+        select(UserReview).where(UserReview.to_user_id == user_id).order_by(UserReview.created_at.desc())
+    )
+    reviews = result.scalars().all()
+    enriched = []
+    for review in reviews:
+        from_user = await db.get(User, review.from_user_id)
+        enriched.append({
+            "id": review.id,
+            "order_id": review.order_id,
+            "product_id": review.product_id,
+            "from_user_id": review.from_user_id,
+            "to_user_id": review.to_user_id,
+            "from_user_name": f"{from_user.first_name} {from_user.last_name}".strip() if from_user else "User",
+            "rating": review.rating,
+            "comment": review.comment,
+            "created_at": review.created_at.isoformat()
+        })
+    return {"reviews": enriched}
+
+
+@app.get("/api/reviews/user/{user_id}/summary")
+async def get_user_review_summary(
+    user_id: int,
+    db: AsyncSession = Depends(get_db)
+):
+    rating = await get_user_rating(db, user_id)
+    return rating
 
 
 # ============== SHIPMENT ENDPOINTS ==============
@@ -1541,6 +2002,101 @@ async def calculate_checkout(
             "items": len(product_ids),
             "delivery": delivery_type
         }
+    }
+
+
+# ============================================================================
+# PAYMENT ENDPOINTS (MOCK IMPLEMENTATION)
+# ============================================================================
+
+@app.get("/api/payment/config")
+async def get_payment_config():
+    return {
+        "providers": ["card", "paypal", "klarna", "giropay"],
+        "currency": "EUR",
+        "mode": "mock"
+    }
+
+
+@app.post("/api/payment/card/intent", response_model=PaymentIntentResponse)
+async def create_card_payment_intent(
+    payment_data: PaymentIntentCreate,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    order = await db.get(Order, payment_data.order_id)
+    if not order:
+        raise HTTPException(status_code=404, detail="Bestellung nicht gefunden")
+
+    if order.buyer_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Nicht berechtigt")
+
+    # Mask card details
+    last4 = payment_data.card_number[-4:] if payment_data.card_number else None
+    brand = "card"
+    if payment_data.card_number:
+        if payment_data.card_number.startswith("4"):
+            brand = "visa"
+        elif payment_data.card_number.startswith("5"):
+            brand = "mastercard"
+        elif payment_data.card_number.startswith("3"):
+            brand = "amex"
+
+    payment = Payment(
+        order_id=order.id,
+        user_id=current_user.id,
+        amount=order.total_amount,
+        currency="EUR",
+        method=payment_data.method,
+        status="paid",
+        provider="mock",
+        provider_reference=f"PAY_{int(datetime.utcnow().timestamp())}",
+        card_last4=last4,
+        card_brand=brand
+    )
+    db.add(payment)
+
+    # Update order status
+    order.status = "paid"
+
+    # Mark product sold
+    product = await db.get(Product, order.product_id)
+    if product:
+        product.is_sold = True
+
+    await db.commit()
+    await db.refresh(payment)
+
+    return payment
+
+
+@app.post("/api/payment/stripe/create-checkout")
+async def create_stripe_checkout(
+    payload: dict,
+    current_user: User = Depends(get_current_user)
+):
+    return {
+        "checkout_url": f"/payment/mock/stripe?order={payload.get('product_id')}"
+    }
+
+
+@app.post("/api/payment/paypal/create-order")
+async def create_paypal_order(
+    payload: dict,
+    current_user: User = Depends(get_current_user)
+):
+    return {
+        "approve_url": f"/payment/mock/paypal?order={payload.get('product_id')}"
+    }
+
+
+@app.post("/api/payment/klarna/create-session")
+async def create_klarna_session(
+    payload: dict,
+    current_user: User = Depends(get_current_user)
+):
+    return {
+        "redirect_url": f"/payment/mock/klarna?order={payload.get('product_id')}"
     }
 
 

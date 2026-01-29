@@ -137,13 +137,8 @@ html {
 body {
     font-family: var(--font-primary);
     color: var(--text-primary);
-    background: var(--galaxy-navy);
-    background-image: 
-        radial-gradient(circle at 20% 50%, rgba(255, 140, 66, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(45, 80, 22, 0.15) 0%, transparent 50%),
-        linear-gradient(180deg, var(--galaxy-navy-dark) 0%, var(--galaxy-navy) 50%, var(--galaxy-navy-light) 100%);
+    background: linear-gradient(135deg, #FF8C42 0%, #E8854C 30%, #5a9a30 70%, #2D5016 100%);
     background-attachment: fixed;
-    background-size: 100% 100%, 100% 100%, 100% 100%;
     line-height: var(--line-height-normal);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -1010,21 +1005,15 @@ img {
    CATEGORY NAVIGATION WITH MEGA MENUS
    ============================================ */
 .category-navigation {
-    background: linear-gradient(135deg, 
-        rgba(255, 140, 66, 0.15) 0%, 
-        rgba(255, 140, 66, 0.25) 30%,
-        rgba(107, 175, 61, 0.25) 70%,
-        rgba(45, 80, 22, 0.15) 100%);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(135deg, #FF8C42 0%, #E8854C 30%, #5a9a30 70%, #2D5016 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     position: sticky;
     top: 0;
     z-index: 100;
     box-shadow: 
-        0 4px 30px rgba(0, 0, 0, 0.3),
-        0 0 40px rgba(255, 140, 66, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        0 4px 30px rgba(0, 0, 0, 0.2),
+        0 0 40px rgba(255, 140, 66, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .category-container {
@@ -1050,11 +1039,9 @@ img {
 .category-btn {
     font-size: 16px;
     font-weight: var(--font-weight-semibold);
-    color: rgba(255, 255, 255, 0.9);
-    background: linear-gradient(135deg, 
-        rgba(255, 140, 66, 0.2) 0%, 
-        rgba(255, 140, 66, 0.3) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     padding: var(--spacing-md) var(--spacing-xl);
     cursor: pointer;
     transition: all 0.3s ease;
@@ -1063,7 +1050,7 @@ img {
     border-radius: 8px;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .category-btn::after {
@@ -1082,15 +1069,13 @@ img {
 .category-btn:hover,
 .category-btn:active {
     color: white !important;
-    background: linear-gradient(135deg, 
-        rgba(45, 80, 22, 0.8) 0%, 
-        rgba(61, 107, 30, 0.9) 100%) !important;
-    border-color: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.25) !important;
+    border-color: rgba(255, 255, 255, 0.5);
     transform: translateY(-2px);
     box-shadow: 
-        0 4px 20px rgba(45, 80, 22, 0.5),
-        0 0 30px rgba(107, 175, 61, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        0 4px 20px rgba(0, 0, 0, 0.3),
+        0 0 30px rgba(255, 255, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .category-btn:hover::after,
