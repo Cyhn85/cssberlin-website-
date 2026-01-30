@@ -1,0 +1,146 @@
+/* ============================================
+   CSS Berlin — Galaxy Contrast & Button System
+   Goal: Reduce background dominance, increase readability,
+   and enforce Orange→Green hover language sitewide.
+   ============================================ */
+
+:root {
+  /* Readability tuned neutrals (avoid pure black/white) */
+  --galaxy-ink: #0f1a0a;              /* deep forest ink */
+  --galaxy-ink-muted: rgba(15, 26, 10, 0.72);
+  --galaxy-veil: rgba(255, 255, 255, 0.62); /* soft veil over loud backgrounds */
+
+  /* Focus ring */
+  --focus-ring: 0 0 0 3px rgba(255, 140, 66, 0.22), 0 0 0 6px rgba(45, 80, 22, 0.18);
+}
+
+/* --------------------------------------------
+   Background “soft veil” to prevent clashes
+   (keeps existing gradient identity, but calms it)
+   -------------------------------------------- */
+body {
+  color: var(--galaxy-ink);
+  background:
+    linear-gradient(var(--galaxy-veil), var(--galaxy-veil)),
+    var(--gradient-header, linear-gradient(135deg, #0b1b3b 0%, #1b3b1f 100%)) !important;
+  background-attachment: fixed;
+}
+
+/* Slightly stronger default contrast for small text */
+:where(p, span, small, li, label, .muted, .text-muted) {
+  color: var(--galaxy-ink-muted);
+}
+
+/* Ensure headings don’t look “washed out” on gradients */
+:where(h1, h2, h3, .page-header h1, .page-header h2) {
+  color: var(--galaxy-ink);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+/* --------------------------------------------
+   Global button interaction language
+   - Add border frame
+   - Hover: Orange→Green transition
+   - Focus: accessible ring
+   -------------------------------------------- */
+
+:where(
+  .btn,
+  .btn-primary,
+  .btn-secondary,
+  .auth-btn,
+  .header-btn,
+  .header-action-btn,
+  .dashboard-inserieren-btn,
+  .load-more-btn,
+  .buy-btn,
+  .negotiate-btn,
+  .add-to-cart-btn,
+  .order-btn,
+  .oauth-btn,
+  .quick-offer-submit,
+  .offer-submit-btn,
+  .offer-cancel-btn,
+  .tracking-btn,
+  .copy-btn,
+  button
+):not(.order-btn-danger):not(.cookie-btn.reject-all) {
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  outline: none;
+  transition:
+    background var(--transition-smooth, 220ms ease),
+    color var(--transition-smooth, 220ms ease),
+    border-color var(--transition-smooth, 220ms ease),
+    box-shadow var(--transition-smooth, 220ms ease),
+    transform var(--transition-smooth, 220ms ease),
+    filter var(--transition-smooth, 220ms ease);
+}
+
+:where(
+  .btn,
+  .btn-primary,
+  .btn-secondary,
+  .auth-btn,
+  .header-btn,
+  .header-action-btn,
+  .dashboard-inserieren-btn,
+  .load-more-btn,
+  .buy-btn,
+  .negotiate-btn,
+  .order-btn,
+  .oauth-btn,
+  .quick-offer-submit,
+  .offer-submit-btn,
+  .offer-cancel-btn,
+  .tracking-btn,
+  .copy-btn
+):not(.order-btn-danger):hover {
+  background: var(--gradient-button-hover, linear-gradient(135deg, #FF8C42 0%, #2D5016 100%)) !important;
+  color: var(--text-white, #fff) !important;
+  border-color: rgba(255, 255, 255, 0.75) !important;
+  box-shadow: var(--shadow-glow-green, 0 0 0 2px rgba(45, 80, 22, 0.15), 0 10px 30px rgba(45, 80, 22, 0.22));
+  transform: translateY(-2px);
+}
+
+:where(
+  .btn,
+  .btn-primary,
+  .btn-secondary,
+  .auth-btn,
+  .header-btn,
+  .header-action-btn,
+  .dashboard-inserieren-btn,
+  .load-more-btn,
+  .buy-btn,
+  .negotiate-btn,
+  .order-btn,
+  .oauth-btn,
+  .quick-offer-submit,
+  .offer-submit-btn,
+  .offer-cancel-btn,
+  .tracking-btn,
+  .copy-btn
+):not(.order-btn-danger):active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-md, 0 6px 18px rgba(0,0,0,0.16));
+}
+
+:where(a, button, input, select, textarea, [role="button"]):focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* Keep dangerous actions red (don’t convert to green) */
+.order-btn-danger:hover {
+  filter: brightness(0.98);
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  :where(*, *::before, *::after) {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+

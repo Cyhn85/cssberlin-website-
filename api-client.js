@@ -275,6 +275,22 @@ class APIClient {
         return await this.request(`/api/messages/${userId}`);
     }
 
+    // ============== ORDERS ==============
+
+    /**
+     * Get user's orders (buyer or seller)
+     */
+    async getOrders() {
+        return await this.request('/api/orders');
+    }
+
+    /**
+     * Get single order
+     */
+    async getOrder(orderId) {
+        return await this.request(`/api/orders/${orderId}`);
+    }
+
     // ============== SHIPMENTS ==============
 
     /**

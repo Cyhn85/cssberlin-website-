@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kargo Yönetimi (Satıcı) - CSS Berlin</title>
+  <meta name="description" content="Satıcı için sipariş → kargo bilgisi (kargo firması + takip numarası) yönetimi" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="footer.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .ship-admin-hero {
+      background: linear-gradient(135deg, var(--primary-green) 0%, #102108 100%);
+      padding: var(--spacing-3xl) var(--spacing-lg);
+      text-align: center;
+      color: var(--text-white);
+    }
+    .ship-admin-hero h1 {
+      font-size: 2.2rem;
+      font-weight: var(--font-weight-bold);
+      margin: 0 0 var(--spacing-sm);
+    }
+    .ship-admin-hero p {
+      opacity: 0.92;
+      margin: 0 auto;
+      max-width: 820px;
+    }
+    .ship-admin-wrap {
+      max-width: 1100px;
+      margin: -32px auto var(--spacing-3xl);
+      padding: 0 var(--spacing-lg);
+      position: relative;
+      z-index: 2;
+    }
+    .ship-admin-card {
+      background: var(--bg-primary);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-xl);
+      padding: var(--spacing-xl);
+      border: 1px solid rgba(45, 80, 22, 0.10);
+    }
+    .ship-admin-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: var(--spacing-lg);
+    }
+    .ship-admin-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-lg);
+      flex-wrap: wrap;
+    }
+    .ship-admin-title h2 {
+      margin: 0;
+      font-size: 1.2rem;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .hint {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+    .orders-table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 12px;
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+    .orders-table th, .orders-table td {
+      padding: 12px 12px;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      text-align: left;
+      vertical-align: middle;
+    }
+    .orders-table th {
+      background: rgba(45, 80, 22, 0.06);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: rgba(15, 26, 10, 0.72);
+    }
+    .orders-table tr:hover td {
+      background: rgba(255, 140, 66, 0.06);
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      border: 1px solid rgba(0,0,0,0.08);
+      background: rgba(255,255,255,0.7);
+    }
+    .pill.ok { border-color: rgba(45,80,22,0.18); color: var(--primary-green); }
+    .pill.warn { border-color: rgba(255,140,66,0.25); color: #a84a1b; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .field label {
+      display: block;
+      font-weight: 800;
+      font-size: 13px;
+      margin-bottom: 6px;
+      color: var(--text-primary);
+    }
+    .field input, .field select {
+      width: 100%;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(0,0,0,0.14);
+      background: rgba(255,255,255,0.85);
+      outline: none;
+      transition: var(--transition-base);
+    }
+    .field input:focus, .field select:focus {
+      border-color: rgba(255, 140, 66, 0.55);
+      box-shadow: 0 0 0 3px rgba(255, 140, 66, 0.18);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-weight: 900;
+      cursor: pointer;
+      text-decoration: none;
+      user-select: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-orange-dark) 100%);
+      color: var(--text-white);
+      border: 1px solid rgba(255,255,255,0.65);
+    }
+    .btn-secondary {
+      background: rgba(255,255,255,0.65);
+      border: 1px solid rgba(0,0,0,0.10);
+      color: var(--text-primary);
+    }
+    .small {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+      color: var(--text-secondary);
+      gap: 12px;
+    }
+
+    @media (max-width: 960px) {
+      .ship-admin-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="page-wrapper">
+  <main class="page-main">
+    <section class="ship-admin-hero">
+      <h1><i class="fas fa-truck-fast"></i> Kargo Yönetimi (Satıcı)</h1>
+      <p>Etiketi (QR) Hermes/DHL panelinden al, <strong>Sendungsnummer</strong> (takip no) buraya gir. Alıcı sayfasında canlı takip + QR paylaşımı aktif olur.</p>
+    </section>
+
+    <div class="ship-admin-wrap">
+      <div class="ship-admin-card">
+        <div class="ship-admin-grid">
+          <section>
+            <div class="ship-admin-title">
+              <h2><i class="fas fa-receipt"></i> Siparişler</h2>
+              <p class="hint">Sadece satıcı olduğun siparişler listelenir.</p>
+            </div>
+            <div id="ordersArea" class="loading">
+              <i class="fas fa-spinner fa-spin"></i>
+              <span>Yükleniyor...</span>
+            </div>
+          </section>
+
+          <aside>
+            <div class="ship-admin-title">
+              <h2><i class="fas fa-barcode"></i> Kargo Bilgisi Gir</h2>
+            </div>
+
+            <div class="field">
+              <label>Seçili sipariş</label>
+              <div id="selectedOrderMeta" class="small">Henüz bir sipariş seçilmedi.</div>
+            </div>
+
+            <div class="form-row">
+              <div class="field">
+                <label for="carrier">Kargo firması</label>
+                <select id="carrier"></select>
+              </div>
+              <div class="field">
+                <label for="trackingNumber">Sendungsnummer (takip no)</label>
+                <input id="trackingNumber" type="text" placeholder="örn: 1234567890" />
+              </div>
+              <div class="field">
+                <label for="weightKg">Ağırlık (kg) (opsiyonel)</label>
+                <input id="weightKg" type="number" step="0.01" min="0" placeholder="örn: 0.45" />
+              </div>
+              <div class="field">
+                <label for="packageSize">Paket boyutu (opsiyonel)</label>
+                <select id="packageSize">
+                  <option value="">Seç</option>
+                  <option value="S">S</option>
+                  <option value="M">M</option>
+                  <option value="L">L</option>
+                  <option value="XL">XL</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="btn-row">
+              <button class="btn btn-primary" id="saveShipmentBtn" type="button">
+                <i class="fas fa-check"></i> Kaydet
+              </button>
+              <a class="btn btn-secondary" id="openTrackingBtn" href="versand-tracking.html" target="_blank" style="pointer-events:none; opacity:0.6;">
+                <i class="fas fa-arrow-up-right-from-square"></i> Takip sayfası
+              </a>
+            </div>
+
+            <div class="small">
+              Not: Takip no girince alıcıya paylaşılacak URL: <code>versand-tracking.html?tracking=...</code>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="footer-container"></div>
+
+  <script src="api-config.js"></script>
+  <script src="api-client.js"></script>
+  <script src="auth-gate.js"></script>
+  <script src="toast.js"></script>
+  <script>
+    let me = null;
+    let orders = [];
+    let shipmentsByOrderId = new Map();
+    let selectedOrder = null;
+
+    function safeToast(type, title, message) {
+      try {
+        if (typeof toast !== 'undefined' && toast.show) toast.show({ type, title, message });
+        else alert(`${title}\\n${message}`);
+      } catch {
+        alert(`${title}\\n${message}`);
+      }
+    }
+
+    function formatDate(iso) {
+      if (!iso) return '-';
+      const d = new Date(iso);
+      return d.toLocaleString('de-DE', { year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' });
+    }
+
+    function buildOrdersTable() {
+      const area = document.getElementById('ordersArea');
+      if (!orders.length) {
+        area.innerHTML = `<div class="loading"><i class="fas fa-box-open"></i><span>Henüz sipariş yok.</span></div>`;
+        return;
+      }
+
+      area.innerHTML = `
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Ürün</th>
+              <th>Alıcı</th>
+              <th>Tarih</th>
+              <th>Kargo</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${orders.map(o => {
+              const sh = shipmentsByOrderId.get(o.id);
+              const pill = sh
+                ? `<span class="pill ok"><i class="fas fa-check"></i> ${String(sh.carrier || '').toUpperCase()} • ${sh.tracking_number || ''}</span>`
+                : `<span class="pill warn"><i class="fas fa-clock"></i> Bekliyor</span>`;
+              return `
+                <tr data-order-id="${o.id}" style="cursor:pointer;">
+                  <td>#${o.id}</td>
+                  <td>${o.product_name || '-'}</td>
+                  <td>${o.buyer_name || '-'}</td>
+                  <td>${formatDate(o.created_at)}</td>
+                  <td>${pill}</td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+        <div class="small">İpucu: Satıra tıkla → sağdan kargo bilgisi gir.</div>
+      `;
+
+      area.querySelectorAll('tr[data-order-id]').forEach(row => {
+        row.addEventListener('click', () => {
+          const id = Number(row.getAttribute('data-order-id'));
+          const o = orders.find(x => x.id === id);
+          selectOrder(o);
+        });
+      });
+    }
+
+    function selectOrder(order) {
+      selectedOrder = order;
+      const meta = document.getElementById('selectedOrderMeta');
+      const openBtn = document.getElementById('openTrackingBtn');
+
+      if (!order) {
+        meta.textContent = 'Henüz bir sipariş seçilmedi.';
+        openBtn.style.pointerEvents = 'none';
+        openBtn.style.opacity = '0.6';
+        openBtn.href = 'versand-tracking.html';
+        return;
+      }
+
+      const sh = shipmentsByOrderId.get(order.id);
+      meta.innerHTML = `
+        <div><strong>#${order.id}</strong> • ${order.product_name || '-'}</div>
+        <div>Alıcı: ${order.buyer_name || '-'}</div>
+        <div>Tarih: ${formatDate(order.created_at)}</div>
+        <div style="margin-top:6px;">${sh ? `<span class="pill ok"><i class="fas fa-check"></i> Kargo tanımlı</span>` : `<span class="pill warn"><i class="fas fa-clock"></i> Kargo bekliyor</span>`}</div>
+      `;
+
+      // If shipment exists and tracking number present -> enable tracking page link
+      if (sh && sh.tracking_number) {
+        openBtn.style.pointerEvents = 'auto';
+        openBtn.style.opacity = '1';
+        openBtn.href = `versand-tracking.html?tracking=${encodeURIComponent(sh.tracking_number)}`;
+      } else {
+        openBtn.style.pointerEvents = 'none';
+        openBtn.style.opacity = '0.6';
+        openBtn.href = 'versand-tracking.html';
+      }
+    }
+
+    async function loadCarriers() {
+      const select = document.getElementById('carrier');
+      select.innerHTML = `<option value="">Yükleniyor...</option>`;
+      const res = await api.getCarriers();
+      const carriers = (res && res.carriers) ? res.carriers : ['dhl','hermes','dpd','gls'];
+      select.innerHTML = carriers.map(c => `<option value="${c}">${String(c).toUpperCase()}</option>`).join('');
+      if (carriers.includes('hermes')) select.value = 'hermes';
+    }
+
+    async function loadData() {
+      if (!api.isLoggedIn()) {
+        safeToast('info', 'Giriş gerekli', 'Satıcı kargo ekranı için giriş yapmalısın.');
+        if (typeof authGate !== 'undefined' && authGate.showLoginModal) authGate.showLoginModal();
+        return;
+      }
+
+      me = await api.getCurrentUser();
+
+      const [ordersRes, shipmentsRes] = await Promise.all([
+        api.getOrders(),
+        api.getShipments()
+      ]);
+
+      const allOrders = (ordersRes && ordersRes.orders) ? ordersRes.orders : [];
+      orders = allOrders.filter(o => Number(o.seller_id) === Number(me.id));
+
+      shipmentsByOrderId = new Map();
+      const sh = (shipmentsRes && shipmentsRes.shipments) ? shipmentsRes.shipments : [];
+      for (const s of sh) {
+        if (typeof s.order_id !== 'undefined') shipmentsByOrderId.set(Number(s.order_id), s);
+      }
+
+      buildOrdersTable();
+      selectOrder(null);
+    }
+
+    async function saveShipment() {
+      if (!selectedOrder) {
+        safeToast('warning', 'Sipariş seç', 'Önce soldan bir sipariş seç.');
+        return;
+      }
+
+      const existing = shipmentsByOrderId.get(selectedOrder.id);
+      if (existing) {
+        safeToast('warning', 'Zaten var', 'Bu sipariş için kargo zaten tanımlı. Güncelleme için ayrı ekran ekleyebiliriz.');
+        return;
+      }
+
+      const carrier = document.getElementById('carrier').value;
+      const trackingNumber = document.getElementById('trackingNumber').value.trim();
+      const weight = document.getElementById('weightKg').value ? Number(document.getElementById('weightKg').value) : null;
+      const packageSize = document.getElementById('packageSize').value || null;
+
+      if (!carrier) {
+        safeToast('warning', 'Eksik bilgi', 'Kargo firmasını seç.');
+        return;
+      }
+      if (!trackingNumber) {
+        safeToast('warning', 'Eksik bilgi', 'Takip numarasını (Sendungsnummer) gir.');
+        return;
+      }
+
+      try {
+        const created = await api.createShipment({
+          orderId: selectedOrder.id,
+          carrier,
+          trackingNumber,
+          weight,
+          packageSize
+        });
+
+        shipmentsByOrderId.set(Number(created.order_id || selectedOrder.id), created);
+        safeToast('success', 'Kaydedildi', 'Kargo bilgisi kaydedildi. Takip sayfası artık canlı.');
+        buildOrdersTable();
+        selectOrder(selectedOrder);
+      } catch (e) {
+        safeToast('error', 'Hata', 'Kargo kaydedilemedi. Giriş durumunu ve sipariş yetkisini kontrol et.');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadCarriers();
+      await loadData();
+      document.getElementById('saveShipmentBtn').addEventListener('click', saveShipment);
+    });
+  </script>
+</body>
+</html>
+
