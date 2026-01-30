@@ -239,9 +239,115 @@ const sampleProducts = [
 // ============================================
 // GLOBAL STATE
 // ============================================
-let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-let currentPage = 1;
-const productsPerPage = 16;
+// Pagination (2026 launch: 5x4 = 20 products above-the-fold)
+const PRODUCTS_PAGE_SIZE = 20;
+let currentOffset = 0;
+let activeCategoryFilter = null;
+let canLoadMore = true;
+
+// Favorites (unified with favoritesManager when available)
+let favoriteIds = new Set();
+
+// ============================================
+// FAVORITES HELPERS (bridge to favorites.js)
+// ============================================
+function applyFavoriteButtonState(button, isFav) {
+    if (!button) return;
+    const svg = button.querySelector('svg');
+
+    if (isFav) {
+        button.classList.add('active');
+        if (svg) {
+            svg.setAttribute('fill', '#F44336');
+            svg.setAttribute('stroke', '#F44336');
+        }
+        button.title = 'Von Wunschliste entfernen';
+    } else {
+        button.classList.remove('active');
+        if (svg) {
+            svg.setAttribute('fill', 'none');
+            svg.setAttribute('stroke', 'currentColor');
+        }
+        button.title = 'Zur Wunschliste hinzufügen';
+    }
+}
+
+async function refreshFavoriteIds() {
+    try {
+        // Preferred: FavoritesManager (favorites.js)
+        if (typeof favoritesManager !== 'undefined' && favoritesManager) {
+            if (typeof favoritesManager.init === 'function') await favoritesManager.init();
+            if (typeof favoritesManager.getFavorites === 'function') {
+                const favs = await favoritesManager.getFavorites();
+                favoriteIds = new Set(
+                    (favs || [])
+                        .map((f) => Number(f?.id))
+                        .filter((n) => Number.isFinite(n))
+                );
+                return favoriteIds;
+            }
+        }
+    } catch (e) {
+        // fall back
+    }
+
+    // Fallback: legacy wishlist array in localStorage
+    try {
+        const raw = localStorage.getItem('wishlist');
+        const ids = raw ? JSON.parse(raw) : [];
+        favoriteIds = new Set((ids || []).map((n) => Number(n)).filter((n) => Number.isFinite(n)));
+    } catch (e) {
+        favoriteIds = new Set();
+    }
+    return favoriteIds;
+}
+
+async function toggleFavoriteUI(productId, button, productData) {
+    const id = Number(productId);
+
+    try {
+        // Preferred: FavoritesManager (favorites.js)
+        if (typeof favoritesManager !== 'undefined' && favoritesManager) {
+            if (typeof favoritesManager.init === 'function') await favoritesManager.init();
+            if (typeof favoritesManager.toggleFavorite === 'function') {
+                await favoritesManager.toggleFavorite(id, productData || null);
+                const isFav = typeof favoritesManager.isFavorite === 'function'
+                    ? await favoritesManager.isFavorite(id)
+                    : favoriteIds.has(id);
+
+                if (isFav) favoriteIds.add(id);
+                else favoriteIds.delete(id);
+
+                applyFavoriteButtonState(button, isFav);
+                return isFav;
+            }
+        }
+    } catch (e) {
+        // fall back
+    }
+
+    // Fallback: legacy wishlist array in localStorage
+    try {
+        const raw = localStorage.getItem('wishlist');
+        const list = raw ? JSON.parse(raw) : [];
+        const idx = (list || []).findIndex((x) => Number(x) === id);
+        let isFav = false;
+        if (idx >= 0) {
+            list.splice(idx, 1);
+            isFav = false;
+        } else {
+            list.push(id);
+            isFav = true;
+        }
+        localStorage.setItem('wishlist', JSON.stringify(list));
+        if (isFav) favoriteIds.add(id);
+        else favoriteIds.delete(id);
+        applyFavoriteButtonState(button, isFav);
+        return isFav;
+    } catch (e) {
+        return false;
+    }
+}
 
 // ============================================
 // INITIALIZE APP
@@ -253,9 +359,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initNewsSlider();
     initFooterNewsSlider();
     initLoadMore();
-    initWishlist();
-    initWishlistButton();
-    updateWishlistCount();
     initMegaMenus();
     initSearch();
     hideMessageIconForGuests();
@@ -266,7 +369,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ============================================
 function createProductCard(product) {
     // Check if product is in wishlist
-    const inWishlist = wishlist.includes(product.id);
+    const inWishlist = favoriteIds.has(product.id);
 
     const discount = Math.round(((product.newPrice - product.price) / product.newPrice) * 100);
 
@@ -439,14 +542,21 @@ async function initProducts(category = null) {
     const productsGrid = document.getElementById('productsGrid');
     if (!productsGrid) return;
 
+    activeCategoryFilter = category || null;
+    currentOffset = 0;
+    canLoadMore = true;
+
     try {
         // Build API URL with optional category filter
-        let apiUrl = `${API_BASE_URL}/api/products?limit=16`;
+        let apiUrl = `${API_BASE_URL}/api/products?skip=${currentOffset}&limit=${PRODUCTS_PAGE_SIZE}`;
         if (category) {
             apiUrl += `&category=${encodeURIComponent(category)}`;
         }
 
         console.log('[API] Fetching products from:', apiUrl);
+
+        // Load favorites once so hearts render correctly (guest/login)
+        await refreshFavoriteIds();
 
         // Fetch products from backend API
         const response = await fetch(apiUrl);
@@ -468,14 +578,20 @@ async function initProducts(category = null) {
             sale: false
         }));
 
-        // Store products globally for wishlist/cart functionality
+        // Store products globally for card actions
         window.loadedProducts = products;
 
-        // Display products
+        // Display products (replace)
+        productsGrid.innerHTML = '';
         products.forEach(product => {
             const productCard = createProductCard(product);
             productsGrid.innerHTML += productCard;
         });
+
+        // Update pagination state
+        currentOffset += products.length;
+        canLoadMore = products.length === PRODUCTS_PAGE_SIZE;
+        updateLoadMoreVisibility();
 
         // Attach event listeners
         attachProductEventListeners();
@@ -488,13 +604,20 @@ async function initProducts(category = null) {
     } catch (error) {
         console.error('Error loading products:', error);
         // Fallback to sample products if API fails
-        const productsToShow = sampleProducts.slice(0, productsPerPage);
+        await refreshFavoriteIds();
+        const productsToShow = sampleProducts.slice(0, PRODUCTS_PAGE_SIZE);
+        window.loadedProducts = productsToShow;
+        productsGrid.innerHTML = '';
         productsToShow.forEach(product => {
             const productCard = createProductCard(product);
             productsGrid.innerHTML += productCard;
         });
         attachProductEventListeners();
         updateCartButtonStates();
+
+        currentOffset = productsToShow.length;
+        canLoadMore = sampleProducts.length > currentOffset;
+        updateLoadMoreVisibility();
     }
 }
 
@@ -526,7 +649,7 @@ function attachProductEventListeners() {
 
     // Wishlist buttons
     document.querySelectorAll('.wishlist-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
+        btn.addEventListener('click', async function(e) {
             e.preventDefault();
             e.stopPropagation();
             const productId = parseInt(this.dataset.productId);
@@ -536,8 +659,16 @@ function attachProductEventListeners() {
             const product = allProducts.find(p => p.id === productId);
 
             if (product) {
-                // Toggle wishlist
-                toggleWishlist(productId, this);
+                // Toggle favorites (guest/login unified via favoritesManager)
+                const productDataForFav = {
+                    name: product.name,
+                    brand: product.brand,
+                    price: product.price,
+                    images: product.image ? [product.image] : undefined,
+                    size: product.size,
+                    condition: product.condition
+                };
+                await toggleFavoriteUI(productId, this, productDataForFav);
             }
         });
     });
@@ -700,96 +831,24 @@ function handleNegotiateClick(productId) {
     const product = allProducts.find(p => p.id === productId);
     if (!product) return;
 
-    // Check if user is logged in
-    if (!window.isLoggedIn || !window.isLoggedIn()) {
-        // Save redirect info
-        sessionStorage.setItem('redirect_after_login', 'messages.html');
-        sessionStorage.setItem('negotiate_product', productId.toString());
-
-        if (confirm('Bitte melden Sie sich an, um eine Verhandlung zu starten.')) {
-            window.location.href = 'login.html';
-        }
+    // 2026 launch: "Verhandeln" starts offer flow
+    // - Guest: authGate login modal (handled inside openQuickOfferModal)
+    // - Logged-in: submit offer to backend
+    if (typeof openQuickOfferModal === 'function') {
+        openQuickOfferModal(
+            product.id,
+            product.name,
+            Number(product.price || 0),
+            product.image
+        );
         return;
     }
 
-    // Add to negotiations list
-    if (window.addToNegotiations) {
-        window.addToNegotiations(productId, {
-            name: product.name,
-            price: product.price,
-            image: product.image,
-            brand: product.brand,
-            size: product.size,
-            condition: product.condition
-        });
+    // Fallback
+    if (typeof authGate !== 'undefined' && authGate) {
+        authGate.showLoginModal('Verhandeln', 'verhandeln.html');
+        return;
     }
-
-    // Update negotiation count in header before redirect
-    updateNegotiationCountInHeader();
-
-    // Redirect to messages page
-    window.location.href = 'messages.html';
-}
-
-// ============================================
-// WISHLIST TOGGLE
-// ============================================
-function toggleWishlist(productId, button) {
-    const index = wishlist.indexOf(productId);
-
-    if (index > -1) {
-        // Remove from wishlist
-        wishlist.splice(index, 1);
-        button.classList.remove('active');
-        button.querySelector('svg').setAttribute('fill', 'none');
-        button.querySelector('svg').setAttribute('stroke', 'currentColor');
-        button.title = 'Zur Wunschliste hinzufügen';
-    } else {
-        // Add to wishlist
-        wishlist.push(productId);
-        button.classList.add('active');
-        button.querySelector('svg').setAttribute('fill', '#F44336');
-        button.querySelector('svg').setAttribute('stroke', '#F44336');
-        button.title = 'Von Wunschliste entfernen';
-    }
-
-    // Save to localStorage
-    localStorage.setItem('wishlist', JSON.stringify(wishlist));
-
-    // Update header wishlist count
-    updateWishlistCount();
-
-    return index === -1; // Return true if added, false if removed
-}
-
-// ============================================
-// UPDATE WISHLIST COUNT IN HEADER
-// ============================================
-function updateWishlistCount() {
-    const wishlistCountElement = document.getElementById('wishlistCount');
-    if (!wishlistCountElement) return;
-
-    const count = wishlist.length;
-    wishlistCountElement.textContent = count;
-
-    if (count > 0) {
-        wishlistCountElement.classList.add('active');
-    } else {
-        wishlistCountElement.classList.remove('active');
-    }
-}
-
-// ============================================
-// WISHLIST BUTTON CLICK HANDLER
-// ============================================
-function initWishlistButton() {
-    const wishlistBtn = document.getElementById('wishlistBtn');
-    if (!wishlistBtn) return;
-
-    wishlistBtn.addEventListener('click', function() {
-        // Navigate to wishlist page
-        window.location.href = 'wunschliste.html';
-    });
 }
 
 // ============================================
@@ -849,8 +908,16 @@ function initLoadMore() {
     const loadMoreBtn = document.getElementById('loadMoreBtn');
     if (!loadMoreBtn) return;
 
-    loadMoreBtn.addEventListener('click', function() {
+    // Ensure correct initial visibility (after initProducts runs)
+    updateLoadMoreVisibility();
+
+    loadMoreBtn.addEventListener('click', async function() {
         const productsGrid = document.getElementById('productsGrid');
+        if (!productsGrid) return;
+        if (!canLoadMore) {
+            updateLoadMoreVisibility();
+            return;
+        }
 
         // Change button state
         this.disabled = true;
@@ -861,22 +928,74 @@ function initLoadMore() {
             Lädt...
         `;
 
-        // Simulate loading delay
-        setTimeout(() => {
-            // Generate 8 more random products
-            const moreProducts = generateRandomProducts(8);
+        try {
+            let apiUrl = `${API_BASE_URL}/api/products?skip=${currentOffset}&limit=${PRODUCTS_PAGE_SIZE}`;
+            if (activeCategoryFilter) {
+                apiUrl += `&category=${encodeURIComponent(activeCategoryFilter)}`;
+            }
 
-            moreProducts.forEach(product => {
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+
+            const products = (data.products || []).map(p => ({
+                id: p.id,
+                brand: p.brand || 'Unbekannt',
+                name: p.name || '',
+                size: p.size || '',
+                condition: p.condition || 'Gebraucht',
+                price: p.price || 0,
+                newPrice: p.original_price || (p.price * 2),
+                carbonSaved: Math.round((p.price || 0) * 0.4 * 10) / 10,
+                tier: 'champion',
+                image: (p.images && p.images.length > 0) ? p.images[0] : 'https://images.unsplash.com/photo-1542272454315-7f6f36d69c8d?w=500',
+                sale: false
+            }));
+
+            if (products.length === 0) {
+                canLoadMore = false;
+                updateLoadMoreVisibility();
+                return;
+            }
+
+            // Append and keep global list updated
+            const current = window.loadedProducts || [];
+            window.loadedProducts = current.concat(products);
+
+            products.forEach(product => {
                 const productCard = createProductCard(product);
                 productsGrid.innerHTML += productCard;
             });
 
-            // Re-attach event listeners to new products
+            currentOffset += products.length;
+            canLoadMore = products.length === PRODUCTS_PAGE_SIZE;
+            updateLoadMoreVisibility();
+
             attachProductEventListeners();
-
-            // Update cart button states for new products
             updateCartButtonStates();
+        } catch (e) {
+            console.error('Load more failed:', e);
+            // Fallback: paginate sample products
+            const fallbackMore = sampleProducts.slice(currentOffset, currentOffset + PRODUCTS_PAGE_SIZE);
+            if (fallbackMore.length === 0) {
+                canLoadMore = false;
+                updateLoadMoreVisibility();
+                return;
+            }
 
+            const current = window.loadedProducts || [];
+            window.loadedProducts = current.concat(fallbackMore);
+
+            fallbackMore.forEach(product => {
+                const productCard = createProductCard(product);
+                productsGrid.innerHTML += productCard;
+            });
+
+            currentOffset += fallbackMore.length;
+            canLoadMore = sampleProducts.length > currentOffset;
+            updateLoadMoreVisibility();
+            attachProductEventListeners();
+            updateCartButtonStates();
+        } finally {
             // Reset button
             this.disabled = false;
             this.innerHTML = `
@@ -885,58 +1004,16 @@ function initLoadMore() {
                 </svg>
                 Mehr Produkte laden
             `;
-
-            // Products loaded
-
-            currentPage++;
-        }, 1000);
+        }
     });
 }
 
-// ============================================
-// GENERATE RANDOM PRODUCTS
-// ============================================
-function generateRandomProducts(count) {
-    const brands = ['Zara', 'H&M', 'Nike', 'Adidas', 'Mango', 'Esprit', 'Tommy Hilfiger', 'Levis', 'Puma', 'Only'];
-    const items = ['Jacke', 'Hose', 'Kleid', 'Pullover', 'Shirt', 'Jeans', 'Rock', 'Bluse', 'Sneakers', 'Mantel'];
-    const conditions = ['Neu', 'Neuwertig', 'Sehr gut', 'Gut'];
-    const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
-    const tiers = ['champion', 'profi', 'fortgeschritten', 'einsteiger'];
+function updateLoadMoreVisibility() {
+    const btn = document.getElementById('loadMoreBtn');
+    const container = btn?.closest('.load-more-container');
+    if (!container) return;
 
-    const products = [];
-    const startId = sampleProducts.length + (currentPage - 1) * 8 + 1;
-
-    for (let i = 0; i < count; i++) {
-        const brand = brands[Math.floor(Math.random() * brands.length)];
-        const item = items[Math.floor(Math.random() * items.length)];
-        const newPrice = (Math.random() * 150 + 20).toFixed(2);
-        const price = (newPrice * (0.3 + Math.random() * 0.4)).toFixed(2);
-        const carbonSaved = (Math.random() * 30 + 5).toFixed(1);
-
-        products.push({
-            id: startId + i,
-            brand: brand,
-            name: `${item} ${brand} Style`,
-            size: sizes[Math.floor(Math.random() * sizes.length)],
-            condition: conditions[Math.floor(Math.random() * conditions.length)],
-            price: parseFloat(price),
-            newPrice: parseFloat(newPrice),
-            carbonSaved: parseFloat(carbonSaved),
-            tier: tiers[Math.floor(Math.random() * tiers.length)],
-            image: `https://source.unsplash.com/500x667/?fashion,${item}`,
-            sale: Math.random() > 0.7
-        });
-    }
-
-    return products;
-}
-
-// ============================================
-// WISHLIST INITIALIZATION
-// ============================================
-function initWishlist() {
-    // Wishlist is loaded from localStorage at the top
-    console.log(`Wishlist initialized with ${wishlist.length} items`);
+    container.style.display = canLoadMore ? 'flex' : 'none';
 }
 
 // ============================================
@@ -944,7 +1021,8 @@ function initWishlist() {
 // ============================================
 function hideMessageIconForGuests() {
     // Check if user is logged in
-    const loggedIn = window.isLoggedIn && window.isLoggedIn();
+    const loggedIn = (typeof authGate !== 'undefined' && authGate && authGate.isAuthenticated) ||
+        (window.isLoggedIn && window.isLoggedIn());
 
     // Find all message/negotiation icon buttons
     const messageButtons = document.querySelectorAll('[title="Verhandlungen"], .icon-btn[onclick*="messages.html"]');
@@ -1134,7 +1212,7 @@ async function performSearch(query) {
         const products = data.products.map(p => ({
             id: p.id,
             brand: p.brand || 'Unbekannt',
-            name: p.title || '',
+            name: p.name || p.title || '',
             size: p.size || '',
             condition: p.condition || 'Gebraucht',
             price: p.price || 0,
@@ -1147,6 +1225,9 @@ async function performSearch(query) {
 
         // Clear grid and display search results
         productsGrid.innerHTML = '';
+        // Search results are not paginated here
+        canLoadMore = false;
+        updateLoadMoreVisibility();
 
         if (products.length === 0) {
             productsGrid.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #757575;">Keine Produkte gefunden</p>';
@@ -1199,4 +1280,4 @@ function handleQuickView(productId) {
 console.log('%cCSS Berlin V4', 'color: #2D5016; font-size: 24px; font-weight: bold;');
 console.log('%cClimate Smart Solutions - With Seller Info', 'color: #757575; font-size: 14px;');
 console.log(`Loaded ${sampleProducts.length} products`);
-console.log(`Wishlist: ${wishlist.length} items`);
+console.log(`Favorites loaded: ${favoriteIds.size}`);

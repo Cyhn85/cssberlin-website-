@@ -21,6 +21,12 @@ class User(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
+    # Member incentives
+    member_discount_active = Column(Boolean, default=True)
+    member_discount_granted_at = Column(DateTime)
+    member_welcome_seen = Column(Boolean, default=False)
+    member_welcome_seen_at = Column(DateTime)
+
     # Relationships
     products = relationship("Product", back_populates="seller")
     sent_messages = relationship("Message", foreign_keys="Message.sender_id", back_populates="sender")

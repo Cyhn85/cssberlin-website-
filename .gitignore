@@ -39,3 +39,7 @@ logs/
 *.backup
 nul
 credentials/
+
+# Generated reports / artifacts
+reports/
+tests/simulation/artifacts/

@@ -1325,7 +1325,8 @@ img {
 /* Products Grid */
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    /* 2026 launch: Desktop = 5 columns (5x4 above-the-fold) */
+    grid-template-columns: repeat(5, 1fr);
     gap: var(--spacing-lg);
     margin-bottom: var(--spacing-xl);
 }
@@ -2020,7 +2021,8 @@ img {
     }
 
     .products-grid {
-        grid-template-columns: repeat(3, 1fr);
+        /* Keep density high on small desktops */
+        grid-template-columns: repeat(4, 1fr);
     }
 }
 

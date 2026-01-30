@@ -30,6 +30,10 @@ class UserResponse(BaseModel):
     last_name: str
     is_active: bool
     is_verified: bool
+    member_discount_active: Optional[bool] = None
+    member_welcome_seen: Optional[bool] = None
+    member_discount_granted_at: Optional[datetime] = None
+    member_welcome_seen_at: Optional[datetime] = None
     created_at: datetime
 
     class Config:
@@ -41,6 +45,8 @@ class UserInToken(BaseModel):
     email: str
     first_name: str
     last_name: str
+    member_discount_active: Optional[bool] = None
+    member_welcome_seen: Optional[bool] = None
 
 
 class Token(BaseModel):

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
+import sys
 from typing import Literal
 
 
@@ -51,5 +52,16 @@ class LogLine:
 
 
 def log(bot: str, message: str, level: Level = "INFO") -> None:
-    print(LogLine(bot=bot, level=level, message=message).format(), flush=True)
+    line = LogLine(bot=bot, level=level, message=message).format()
+    try:
+        # Prefer UTF-8 on Windows terminals when supported.
+        if hasattr(sys.stdout, "reconfigure"):
+            try:
+                sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+            except Exception:
+                pass
+        print(line, flush=True)
+    except UnicodeEncodeError:
+        safe = line.encode("utf-8", errors="backslashreplace").decode("utf-8", errors="ignore")
+        print(safe, flush=True)
 

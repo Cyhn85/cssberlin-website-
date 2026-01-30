@@ -5,13 +5,14 @@ FastAPI backend for cssberlin.de e-commerce platform
 
 from __future__ import annotations
 
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException, status, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta
 from typing import Optional
 import os
+import httpx
 
 from database import get_db, engine, Base
 from models import (
@@ -31,7 +32,7 @@ from models import (
 )
 import re
 import random
-from sqlalchemy import select, or_, and_, func
+from sqlalchemy import select, or_, and_, func, text
 from schemas import (
     UserCreate, UserResponse, UserLogin, Token,
     ProductCreate, ProductResponse, ProductUpdate,
@@ -47,6 +48,12 @@ from auth import (
     create_access_token, get_current_user,
     ACCESS_TOKEN_EXPIRE_MINUTES
 )
+
+# ============================================================================
+# MEMBER INCENTIVES (WELCOME + PRICING RULES)
+# ============================================================================
+MEMBER_DISCOUNT_RATE = 0.10
+FREE_SHIPPING_THRESHOLD_EUR = 50.0
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -77,6 +84,33 @@ app.add_middleware(
 async def startup():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        # Lightweight schema evolution for SQLite (keeps local/prod DBs running)
+        try:
+            if conn.engine.dialect.name == "sqlite":
+                res = await conn.execute(text("PRAGMA table_info(users)"))
+                rows = res.fetchall()
+                existing_cols = set()
+                for r in rows:
+                    try:
+                        existing_cols.add(r._mapping.get("name"))  # type: ignore[attr-defined]
+                    except Exception:
+                        existing_cols.add(r[1] if len(r) > 1 else None)
+                existing_cols.discard(None)
+
+                async def _add(col_sql: str):
+                    await conn.execute(text(col_sql))
+
+                if "member_discount_active" not in existing_cols:
+                    await _add("ALTER TABLE users ADD COLUMN member_discount_active BOOLEAN DEFAULT 1")
+                if "member_discount_granted_at" not in existing_cols:
+                    await _add("ALTER TABLE users ADD COLUMN member_discount_granted_at DATETIME")
+                if "member_welcome_seen" not in existing_cols:
+                    await _add("ALTER TABLE users ADD COLUMN member_welcome_seen BOOLEAN DEFAULT 0")
+                if "member_welcome_seen_at" not in existing_cols:
+                    await _add("ALTER TABLE users ADD COLUMN member_welcome_seen_at DATETIME")
+        except Exception:
+            # Non-fatal: if migration fails, app still boots (but incentives may be unavailable)
+            pass
     print("Database tables created successfully")
 
 # Health check
@@ -139,7 +173,10 @@ async def register(user_data: UserCreate, db: AsyncSession = Depends(get_db)):
         hashed_password=hashed_password,
         first_name=user_data.first_name,
         last_name=user_data.last_name,
-        is_verified=False
+        is_verified=False,
+        member_discount_active=True,
+        member_discount_granted_at=datetime.utcnow(),
+        member_welcome_seen=False,
     )
 
     db.add(db_user)
@@ -266,7 +303,10 @@ async def verify_magic_link(token: str, db: AsyncSession = Depends(get_db)):
             hashed_password=get_password_hash(secrets.token_urlsafe(16)),  # Random password
             first_name=email.split("@")[0],
             last_name="",
-            is_verified=True
+            is_verified=True,
+            member_discount_active=True,
+            member_discount_granted_at=datetime.utcnow(),
+            member_welcome_seen=False,
         )
         db.add(user)
         await db.commit()
@@ -881,7 +921,44 @@ async def create_order(
 ):
     """Create one or more orders (one per product)"""
     created_orders = []
-    shipping_cost = float(order_data.shipping_cost or 0)
+
+    # Compute totals server-side (prevents tampering + applies member incentives)
+    shipping_method = (order_data.shipping_method or "dhl").lower()
+    shipping_base = {
+        "dhl": 4.99,
+        "hermes": 4.50,
+        "pickup": 0.0,
+    }.get(shipping_method, float(order_data.shipping_cost or 0))
+
+    item_prices: list[float] = []
+    for item in order_data.items:
+        item_prices.append(float(item.price))
+
+    subtotal = float(sum(item_prices))
+
+    # Treat missing/NULL as enabled by default
+    is_member = getattr(current_user, "member_discount_active", True) is not False
+    discount_rate = MEMBER_DISCOUNT_RATE if is_member else 0.0
+    discount_total = round(subtotal * discount_rate, 2)
+    subtotal_after_discount = max(0.0, round(subtotal - discount_total, 2))
+
+    free_shipping_applied = (shipping_method != "pickup") and (subtotal >= FREE_SHIPPING_THRESHOLD_EUR)
+    shipping_cost = 0.0 if shipping_method == "pickup" or free_shipping_applied else float(shipping_base)
+
+    # Allocate discount across items proportionally (so per-order totals add up)
+    discounted_item_prices: list[float] = []
+    if subtotal > 0 and discount_total > 0:
+        running = 0.0
+        for i, p in enumerate(item_prices):
+            if i == len(item_prices) - 1:
+                net = round(subtotal_after_discount - running, 2)
+            else:
+                share = round(discount_total * (p / subtotal), 2)
+                net = round(p - share, 2)
+                running = round(running + net, 2)
+            discounted_item_prices.append(max(0.0, net))
+    else:
+        discounted_item_prices = [round(p, 2) for p in item_prices]
 
     for index, item in enumerate(order_data.items):
         product = await db.get(Product, item.product_id)
@@ -891,7 +968,8 @@ async def create_order(
         if product.is_sold:
             raise HTTPException(status_code=400, detail=f"Produkt {product.name} ist bereits verkauft")
 
-        order_total = float(item.price) + (shipping_cost if index == 0 else 0.0)
+        base_item_total = float(discounted_item_prices[index]) if index < len(discounted_item_prices) else float(item.price)
+        order_total = base_item_total + (shipping_cost if index == 0 else 0.0) + (SERVICE_FEE if index == 0 else 0.0)
         order = Order(
             buyer_id=current_user.id,
             product_id=item.product_id,
@@ -909,7 +987,17 @@ async def create_order(
 
     return {
         "success": True,
-        "orders": [{"id": o.id, "product_id": o.product_id, "total_amount": o.total_amount} for o in created_orders]
+        "orders": [{"id": o.id, "product_id": o.product_id, "total_amount": o.total_amount} for o in created_orders],
+        "pricing": {
+            "subtotal": round(subtotal, 2),
+            "discount": round(discount_total, 2),
+            "discount_rate": discount_rate,
+            "shipping": round(shipping_cost, 2),
+            "service_fee": round(SERVICE_FEE, 2),
+            "free_shipping_threshold": FREE_SHIPPING_THRESHOLD_EUR,
+            "free_shipping_applied": free_shipping_applied,
+            "total": round(subtotal_after_discount + shipping_cost + SERVICE_FEE, 2),
+        }
     }
 
 
@@ -1974,34 +2062,87 @@ async def scan_message(
 @app.post("/api/checkout/calculate")
 async def calculate_checkout(
     checkout_data: dict,
+    current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
     """Checkout toplam hesaplama"""
     from sqlalchemy import select
 
     product_ids = checkout_data.get("product_ids", [])
+    items = checkout_data.get("items", [])
+    shipping_method = (checkout_data.get("shipping_method") or "").lower()
     delivery_type = checkout_data.get("delivery_type", "shipping")
 
-    subtotal = 0
-    for pid in product_ids:
-        result = await db.execute(select(Product).where(Product.id == pid))
-        product = result.scalar_one_or_none()
-        if product:
-            # Teklif fiyatı varsa onu kullan
-            offer_price = checkout_data.get(f"offer_price_{pid}")
-            subtotal += offer_price if offer_price else product.price
+    subtotal = 0.0
+    if items:
+        for it in items:
+            try:
+                subtotal += float(it.get("price") or 0)
+            except Exception:
+                pass
+    else:
+        for pid in product_ids:
+            result = await db.execute(select(Product).where(Product.id == pid))
+            product = result.scalar_one_or_none()
+            if product:
+                offer_price = checkout_data.get(f"offer_price_{pid}")
+                subtotal += float(offer_price) if offer_price else float(product.price)
 
-    shipping_cost = 4.99 if delivery_type == "shipping" else 0  # DHL/Hermes
+    # Shipping cost (supports explicit carrier selection)
+    if shipping_method in ("dhl", "hermes", "pickup"):
+        shipping_base = {"dhl": 4.99, "hermes": 4.50, "pickup": 0.0}[shipping_method]
+    else:
+        shipping_base = 4.99 if delivery_type == "shipping" else 0.0
+
+    # Treat missing/NULL as enabled by default
+    is_member = getattr(current_user, "member_discount_active", True) is not False
+    discount_rate = MEMBER_DISCOUNT_RATE if is_member else 0.0
+    discount_total = round(float(subtotal) * discount_rate, 2)
+    subtotal_after_discount = max(0.0, round(float(subtotal) - discount_total, 2))
+
+    free_shipping_applied = (shipping_method != "pickup") and (float(subtotal) >= FREE_SHIPPING_THRESHOLD_EUR) and float(shipping_base) > 0
+    shipping_cost = 0.0 if shipping_method == "pickup" or free_shipping_applied else float(shipping_base)
 
     return {
-        "subtotal": subtotal,
+        "subtotal": round(float(subtotal), 2),
+        "discount": round(discount_total, 2),
+        "discount_rate": discount_rate,
         "service_fee": SERVICE_FEE,
-        "shipping": shipping_cost,
-        "total": subtotal + SERVICE_FEE + shipping_cost,
+        "shipping": round(float(shipping_cost), 2),
+        "shipping_original": round(float(shipping_base), 2),
+        "free_shipping_threshold": FREE_SHIPPING_THRESHOLD_EUR,
+        "free_shipping_applied": free_shipping_applied,
+        "total": round(subtotal_after_discount + SERVICE_FEE + shipping_cost, 2),
         "breakdown": {
-            "items": len(product_ids),
-            "delivery": delivery_type
+            "items": len(items) if items else len(product_ids),
+            "delivery": shipping_method or delivery_type
         }
+    }
+
+
+# ============================================================================
+# MEMBER INCENTIVES: Welcome tracking
+# ============================================================================
+
+@app.post("/api/users/me/member-incentives/welcome-seen")
+async def mark_member_welcome_seen(
+    payload: dict,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """Mark member welcome overlay as seen (backend persistence)."""
+    db_user = await db.get(User, current_user.id)
+    if not db_user:
+        raise HTTPException(status_code=404, detail="Benutzer nicht gefunden")
+
+    db_user.member_welcome_seen = True
+    db_user.member_welcome_seen_at = datetime.utcnow()
+    await db.commit()
+    await db.refresh(db_user)
+    return {
+        "ok": True,
+        "member_welcome_seen": True,
+        "member_welcome_seen_at": db_user.member_welcome_seen_at.isoformat() if db_user.member_welcome_seen_at else None,
     }
 
 
@@ -2188,6 +2329,85 @@ async def google_oauth(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Google OAuth-Fehler: {str(e)}"
         )
+
+
+# ============================================================================
+# OPS: Approval callbacks for bot-generated PRs
+# ============================================================================
+
+def _ops_token_ok(token: str | None) -> bool:
+    expected = os.getenv("OPS_TOKEN", "")
+    return bool(expected) and bool(token) and token == expected
+
+
+def _ops_repo() -> str:
+    repo = os.getenv("OPS_GH_REPO", "").strip()
+    if not repo:
+        raise HTTPException(status_code=500, detail="OPS_GH_REPO is not configured")
+    return repo
+
+
+def _ops_github_token() -> str:
+    tok = os.getenv("OPS_GH_TOKEN") or os.getenv("GITHUB_TOKEN") or ""
+    if not tok:
+        raise HTTPException(status_code=500, detail="OPS_GH_TOKEN / GITHUB_TOKEN is not configured")
+    return tok
+
+
+async def _gh_add_labels(*, repo: str, pr_number: int, labels: list[str]) -> None:
+    token = _ops_github_token()
+    url = f"https://api.github.com/repos/{repo}/issues/{pr_number}/labels"
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Accept": "application/vnd.github+json",
+        "User-Agent": "cssberlin-ops-bot",
+    }
+    async with httpx.AsyncClient(timeout=20) as client:
+        r = await client.post(url, headers=headers, json={"labels": labels})
+        if r.status_code >= 400:
+            raise HTTPException(status_code=502, detail=f"GitHub label failed: {r.status_code} {r.text}")
+
+
+async def _gh_comment(*, repo: str, pr_number: int, body: str) -> None:
+    token = _ops_github_token()
+    url = f"https://api.github.com/repos/{repo}/issues/{pr_number}/comments"
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Accept": "application/vnd.github+json",
+        "User-Agent": "cssberlin-ops-bot",
+    }
+    async with httpx.AsyncClient(timeout=20) as client:
+        r = await client.post(url, headers=headers, json={"body": body})
+        if r.status_code >= 400:
+            raise HTTPException(status_code=502, detail=f"GitHub comment failed: {r.status_code} {r.text}")
+
+
+@app.get("/ops/approve")
+async def ops_approve(
+    token: str = Query(..., description="Ops approval token"),
+    pr: int = Query(..., description="Pull request number"),
+    repo: Optional[str] = Query(None, description="owner/repo (defaults to OPS_GH_REPO)"),
+):
+    if not _ops_token_ok(token):
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    target_repo = (repo or _ops_repo()).strip()
+    await _gh_add_labels(repo=target_repo, pr_number=pr, labels=["approved-by-owner"])
+    await _gh_comment(repo=target_repo, pr_number=pr, body="✅ Approved by owner via ops callback.")
+    return {"ok": True, "repo": target_repo, "pr": pr, "label": "approved-by-owner"}
+
+
+@app.get("/ops/reject")
+async def ops_reject(
+    token: str = Query(..., description="Ops approval token"),
+    pr: int = Query(..., description="Pull request number"),
+    repo: Optional[str] = Query(None, description="owner/repo (defaults to OPS_GH_REPO)"),
+):
+    if not _ops_token_ok(token):
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    target_repo = (repo or _ops_repo()).strip()
+    await _gh_add_labels(repo=target_repo, pr_number=pr, labels=["rejected-by-owner"])
+    await _gh_comment(repo=target_repo, pr_number=pr, body="❌ Rejected by owner via ops callback.")
+    return {"ok": True, "repo": target_repo, "pr": pr, "label": "rejected-by-owner"}
 
 
 if __name__ == "__main__":

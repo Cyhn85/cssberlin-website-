@@ -632,9 +632,17 @@
                     <span>Zwischensumme:</span>
                     <span id="subtotal">0,00€</span>
                 </div>
+                <div class="summary-row" id="discountRow" style="display:none;">
+                    <span>Mitgliederrabatt (10%):</span>
+                    <span id="discount" style="color:#2D5016; font-weight:700;">-0,00€</span>
+                </div>
                 <div class="summary-row">
                     <span>Versand:</span>
                     <span id="shipping">4,99€</span>
+                </div>
+                <div class="summary-row">
+                    <span>Servicegebühr:</span>
+                    <span id="serviceFee">1,00€</span>
                 </div>
                 <div class="summary-row total">
                     <span>Gesamt:</span>
@@ -662,8 +670,11 @@
     <script src="toast.js"></script>
     <script>
         let checkoutItems = [];
-        let currentSubtotal = 0;
+        let currentSubtotal = 0;      // pre-discount
+        let currentDiscount = 0;
+        let currentServiceFee = 1.00;
         let currentShipping = 4.99;
+        let currentTotal = 0;
 
         // Check authentication and load checkout
         async function initCheckout() {
@@ -675,13 +686,13 @@
                 return;
             }
 
-            loadCheckoutItems();
+            await loadCheckoutItems();
             setupShippingListeners();
             autoFillUserData();
         }
 
         // Load checkout items
-        function loadCheckoutItems() {
+        async function loadCheckoutItems() {
             const singleItem = sessionStorage.getItem('checkout_item');
             const cartItems = localStorage.getItem('cssberlin_cart');
 
@@ -697,7 +708,7 @@
             }
 
             displayOrderItems(checkoutItems);
-            calculateTotal();
+            await calculateTotal();
         }
 
         function displayOrderItems(items) {
@@ -741,17 +752,70 @@
             }
         }
 
-        function calculateTotal() {
-            currentSubtotal = checkoutItems.reduce((sum, item) => {
-                const price = parseFloat(item.price.replace('€', '').replace(',', '.'));
-                return sum + price;
+        async function calculateTotal() {
+            // Always compute local subtotal as fallback
+            const localSubtotal = checkoutItems.reduce((sum, item) => {
+                const price = parseFloat(item.price.toString().replace('€', '').replace(',', '.'));
+                return sum + (isNaN(price) ? 0 : price);
             }, 0);
 
-            const total = currentSubtotal + currentShipping;
+            const shippingMethod = document.querySelector('input[name="shipping"]:checked')?.value || 'dhl';
+
+            // If API is available (and token exists), calculate server-side pricing (member discount + free shipping)
+            try {
+                const pricing = await api.request('/api/checkout/calculate', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        items: checkoutItems.map(item => ({
+                            product_id: item.id,
+                            price: parseFloat(item.price.toString().replace('€', '').replace(',', '.')) || 0,
+                            offer_id: item.offerId || null
+                        })),
+                        shipping_method: shippingMethod
+                    })
+                });
+
+                currentSubtotal = pricing.subtotal || localSubtotal;
+                currentDiscount = pricing.discount || 0;
+                currentServiceFee = pricing.service_fee ?? 1.00;
+                currentShipping = pricing.shipping ?? currentShipping;
+                currentTotal = pricing.total ?? (currentSubtotal - currentDiscount + currentServiceFee + currentShipping);
+
+                // UI
+                document.getElementById('subtotal').textContent = currentSubtotal.toFixed(2).replace('.', ',') + '€';
+
+                const discountRow = document.getElementById('discountRow');
+                if ((currentDiscount || 0) > 0.001) {
+                    discountRow.style.display = 'flex';
+                    document.getElementById('discount').textContent = '-' + currentDiscount.toFixed(2).replace('.', ',') + '€';
+                } else {
+                    discountRow.style.display = 'none';
+                }
+
+                // Shipping label (show free shipping when applied)
+                if ((pricing.free_shipping_applied === true) && shippingMethod !== 'pickup') {
+                    document.getElementById('shipping').innerHTML = `<span style="color:#2D5016; font-weight:800;">KOSTENLOS</span> <span style="color:#999; font-size:12px;">(ab 50€)</span>`;
+                } else {
+                    document.getElementById('shipping').textContent = currentShipping === 0 ? 'KOSTENLOS' : currentShipping.toFixed(2).replace('.', ',') + '€';
+                }
+
+                document.getElementById('serviceFee').textContent = (currentServiceFee || 0).toFixed(2).replace('.', ',') + '€';
+                document.getElementById('total').textContent = currentTotal.toFixed(2).replace('.', ',') + '€';
+                return;
+            } catch (e) {
+                // Fall back to local calculation
+            }
+
+            currentSubtotal = localSubtotal;
+            currentDiscount = 0;
+            currentServiceFee = 1.00;
+            currentTotal = currentSubtotal + currentServiceFee + currentShipping;
 
             document.getElementById('subtotal').textContent = currentSubtotal.toFixed(2).replace('.', ',') + '€';
+            document.getElementById('discountRow').style.display = 'none';
             document.getElementById('shipping').textContent = currentShipping === 0 ? 'KOSTENLOS' : currentShipping.toFixed(2).replace('.', ',') + '€';
-            document.getElementById('total').textContent = total.toFixed(2).replace('.', ',') + '€';
+            document.getElementById('serviceFee').textContent = currentServiceFee.toFixed(2).replace('.', ',') + '€';
+            document.getElementById('total').textContent = currentTotal.toFixed(2).replace('.', ',') + '€';
         }
 
         function autoFillUserData() {
@@ -780,6 +844,9 @@
             btn.innerHTML = '<span style="display: inline-block; animation: spin 1s linear infinite;">⏳</span> Wird verarbeitet...';
 
             try {
+                // Ensure freshest pricing before order placement
+                await calculateTotal();
+
                 const orderPayload = {
                     items: checkoutItems.map(item => ({
                         product_id: item.id,
@@ -800,7 +867,7 @@
                     payment_method: paymentMethod,
                     shipping_method: shippingMethod,
                     shipping_cost: currentShipping,
-                    total_amount: currentSubtotal + currentShipping
+                    total_amount: currentTotal
                 };
 
                 const orderResponse = await api.request('/api/orders', {

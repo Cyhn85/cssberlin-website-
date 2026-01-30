@@ -54,18 +54,45 @@
         try {
             const doc = document;
 
-            function ensureLink(href) {
-                if (doc.querySelector(`link[href="${href}"]`)) return;
+            // Resolve asset URLs relative to the script tag that loaded api-config.js.
+            // This makes it work from subfolders like /frontend/*.html that use ../api-config.js.
+            const current = doc.currentScript || Array.from(doc.scripts).find(s => (s.src || '').includes('api-config.js'));
+            const baseURL = (current && current.src) ? new URL('.', current.src).toString() : new URL('.', window.location.href).toString();
+
+            function resolve(assetPath) {
+                return new URL(assetPath, baseURL).toString();
+            }
+
+            function hasStylesheet(fileName) {
+                const links = Array.from(doc.querySelectorAll('link[rel="stylesheet"]'));
+                return links.some((l) => {
+                    const raw = (l.getAttribute('href') || '').toLowerCase();
+                    const abs = (l.href || '').toLowerCase();
+                    return raw.includes(fileName.toLowerCase()) || abs.includes('/' + fileName.toLowerCase());
+                });
+            }
+
+            function hasScript(fileName) {
+                const scripts = Array.from(doc.querySelectorAll('script[src]'));
+                return scripts.some((s) => {
+                    const raw = (s.getAttribute('src') || '').toLowerCase();
+                    const abs = (s.src || '').toLowerCase();
+                    return raw.includes(fileName.toLowerCase()) || abs.includes('/' + fileName.toLowerCase());
+                });
+            }
+
+            function ensureLink(fileName) {
+                if (hasStylesheet(fileName)) return;
                 const l = doc.createElement('link');
                 l.rel = 'stylesheet';
-                l.href = href;
+                l.href = resolve(fileName);
                 doc.head.appendChild(l);
             }
 
-            function ensureScript(src) {
-                if (doc.querySelector(`script[src="${src}"]`)) return;
+            function ensureScript(fileName) {
+                if (hasScript(fileName)) return;
                 const s = doc.createElement('script');
-                s.src = src;
+                s.src = resolve(fileName);
                 s.defer = true;
                 doc.head.appendChild(s);
             }

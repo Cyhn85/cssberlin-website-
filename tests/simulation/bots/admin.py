@@ -10,6 +10,7 @@ import aiosqlite
 from playwright.async_api import BrowserContext
 
 from ..state import MatrixState
+from ..utils.artifacts import RunArtifacts
 from ..utils.logging import log
 from ..utils.screenshot import screenshot_on_error
 from .base import ActorIdentity, BaseBot
@@ -34,8 +35,9 @@ class AdminBot(BaseBot):
         report_path: Path,
         state: MatrixState,
         screenshots_dir: Path,
+        artifacts: RunArtifacts | None = None,
     ):
-        super().__init__(identity=identity, context=context, base_url=base_url)
+        super().__init__(identity=identity, context=context, base_url=base_url, artifacts=artifacts)
         self.db_path = db_path
         self.report_path = report_path
         self.state = state
@@ -161,7 +163,7 @@ class AdminBot(BaseBot):
             log(bot, f"DB izleme başladı: {self.db_path}", "INFO")
 
             # Monitor until simulation done
-            while not self.state.review_left.is_set():
+            while not (self.state.review_left.is_set() or self.state.done.is_set()):
                 try:
                     stats = await self._read_stats()
                     if last_stats is None:
@@ -188,6 +190,15 @@ class AdminBot(BaseBot):
             await self._write_report(stats=final_stats)
             log(bot, f"REPORT.md yazıldı: {self.report_path}", "OK")
 
+        except asyncio.CancelledError:
+            # Best-effort report on cancellation (e.g., other bot failed).
+            try:
+                final_stats = await self._read_stats()
+                await self._write_report(stats=final_stats)
+            except Exception:
+                pass
+            log(bot, "İptal edildi (başka bot hata verdi).", "WARN")
+            raise
         except Exception as e:
             shot = await screenshot_on_error(page, self.screenshots_dir, "admin")
             log(bot, f"HATA: {e} (screenshot={shot})", "ERR")

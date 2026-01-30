@@ -7,6 +7,7 @@ from playwright.async_api import BrowserContext, APIRequestContext
 
 from ..api import ApiClient
 from ..state import MatrixState
+from ..utils.artifacts import RunArtifacts
 from ..utils.logging import log
 from ..utils.screenshot import screenshot_on_error
 from .base import ActorIdentity, BaseBot
@@ -23,8 +24,9 @@ class BuyerBot(BaseBot):
         api_url: str,
         state: MatrixState,
         screenshots_dir: Path,
+        artifacts: RunArtifacts | None = None,
     ):
-        super().__init__(identity=identity, context=context, base_url=base_url)
+        super().__init__(identity=identity, context=context, base_url=base_url, artifacts=artifacts)
         self.api = ApiClient(request=request, api_base_url=api_url)
         self.state = state
         self.screenshots_dir = screenshots_dir

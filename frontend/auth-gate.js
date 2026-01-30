@@ -506,7 +506,7 @@ class AuthGate {
 
             // Check password (btoa encoded)
             if (user.password && user.password === btoa(data.password)) {
-                this.loginSuccess(user);
+                this.loginSuccess(user, null, 'local');
                 return;
             }
         }
@@ -525,8 +525,7 @@ class AuthGate {
             const result = await response.json();
 
             if (response.ok) {
-                localStorage.setItem('auth_token', result.access_token);
-                this.loginSuccess(result.user);
+                this.loginSuccess(result.user, result.access_token, 'api');
             } else {
                 this.showError(result.detail || 'E-Mail oder Passwort ist falsch');
                 this.showLoading(false);
@@ -541,7 +540,9 @@ class AuthGate {
     /**
      * Login success handler
      */
-    loginSuccess(user) {
+    loginSuccess(user, token = null, source = 'local') {
+        const isJwt = (t) => typeof t === 'string' && t.split('.').length === 3;
+
         // Store user session
         const sessionUser = {
             id: user.id,
@@ -553,7 +554,21 @@ class AuthGate {
         };
 
         localStorage.setItem('cssberlin_current_user', JSON.stringify(sessionUser));
-        localStorage.setItem('auth_token', 'local_' + Date.now());
+
+        // Token handling:
+        // - If API provided a JWT, persist it under BOTH keys used in codebase.
+        // - If local login, keep a local token (and clear api token key).
+        if (token && isJwt(token)) {
+            localStorage.setItem('auth_token', token);
+            localStorage.setItem('cssberlin_token', token);
+        } else {
+            const existing = localStorage.getItem('auth_token') || '';
+            if (!existing || existing.startsWith('local_')) {
+                localStorage.setItem('auth_token', 'local_' + Date.now());
+            }
+            // Local auth should not pretend to be API-authenticated
+            localStorage.removeItem('cssberlin_token');
+        }
 
         this.currentUser = sessionUser;
         this.isAuthenticated = true;

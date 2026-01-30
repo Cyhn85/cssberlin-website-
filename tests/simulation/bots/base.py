@@ -5,6 +5,8 @@ from dataclasses import dataclass
 
 from playwright.async_api import BrowserContext, Page
 
+from ..utils.artifacts import RunArtifacts
+
 
 @dataclass(frozen=True)
 class ActorIdentity:
@@ -16,14 +18,17 @@ class ActorIdentity:
 
 
 class BaseBot:
-    def __init__(self, *, identity: ActorIdentity, context: BrowserContext, base_url: str):
+    def __init__(self, *, identity: ActorIdentity, context: BrowserContext, base_url: str, artifacts: RunArtifacts | None = None):
         self.identity = identity
         self.context = context
         self.base_url = base_url.rstrip("/")
         self.page: Page | None = None
+        self.artifacts = artifacts
 
     async def new_page(self) -> Page:
         self.page = await self.context.new_page()
+        if self.artifacts:
+            self.artifacts.attach_page(page=self.page, bot=self.identity.bot_name)
         return self.page
 
     async def inject_auth_storage(self, *, access_token: str, user: dict) -> None:

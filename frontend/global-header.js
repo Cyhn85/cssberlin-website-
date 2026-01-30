@@ -1,34 +1,38 @@
 /**
  * CSS Berlin - Global Header/Footer Component
- * Tum sayfalarda kullanilacak standart header ve footer
+ * Goal: Standardize header/footer across all pages (homepage rules).
+ *
+ * Key requirement:
+ * - Slogan must appear at the START and END of every ticker loop:
+ *   "Climate Smart Solutions"
+ * - Ticker sizes stay identical, but loop durations can differ per ticker.
  */
 
 const GlobalHeader = {
     isAuthenticated: false,
     currentUser: null,
+    SLOGAN: 'Climate Smart Solutions',
+    __eventsBound: false,
 
     /**
      * Header HTML'ini olustur
      */
     getHeaderHTML() {
+        const S = this.SLOGAN;
         return `
     <!-- News Banner at Top -->
-    <div class="news-banner-v2">
-        <div class="news-slider" id="newsSlider">
-            <div class="news-item" data-link="co2-impact.html">
-                <span>248.5 Tonnen CO2 gespart</span>
-            </div>
-            <div class="news-item" data-link="campaign.html">
-                <span>2 kaufen = 3. Versand GRATIS</span>
-            </div>
-            <div class="news-item" data-link="co2-impact.html">
-                <span>CO2 Top 100 Rangliste</span>
-            </div>
+    <div class="news-banner-v2" data-global-shell="1">
+        <div class="news-slider" id="newsSlider" style="animation-duration: 28s;">
+            <div class="news-item" data-link="index.html"><span>${S}</span></div>
+            <div class="news-item" data-link="co2-impact.html"><span>🌍 248.5 Tonnen CO₂ gespart</span></div>
+            <div class="news-item" data-link="campaign.html"><span>📦 2 kaufen = 3. Versand GRATIS</span></div>
+            <div class="news-item" data-link="co2-impact.html"><span>🏆 CO₂ Top 100 Rangliste</span></div>
+            <div class="news-item" data-link="index.html"><span>${S}</span></div>
         </div>
     </div>
 
     <!-- Modern Header V2 -->
-    <header class="header-v2" id="globalHeader">
+    <header class="header-v2" id="globalHeader" data-global-shell="1">
         <div class="header-container-v2">
             <!-- Mobile Menu Button -->
             <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
@@ -59,19 +63,29 @@ const GlobalHeader = {
 
             <!-- Header Actions -->
             <div class="header-actions-v2">
+                <!-- Cart -->
+                <a href="warenkorb.html" class="header-icon-btn" title="Warenkorb">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="icon-badge" id="cartCount">0</span>
+                </a>
+
                 <!-- Icon Buttons -->
                 <a href="wunschliste.html" class="header-icon-btn" title="Wunschliste">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                     </svg>
-                    <span class="icon-badge" id="wishlistBadge">0</span>
+                    <span class="icon-badge" id="wishlistCount">0</span>
                 </a>
 
                 <a href="messages.html" class="header-icon-btn" title="Nachrichten">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                     </svg>
-                    <span class="icon-badge" id="messageBadge">0</span>
+                    <span class="icon-badge" id="messageCount">0</span>
                 </a>
 
                 <!-- Auth Buttons (Guest) -->
@@ -161,14 +175,18 @@ const GlobalHeader = {
      * Footer HTML'ini olustur
      */
     getFooterHTML() {
+        const S = this.SLOGAN;
         return `
     <!-- Footer -->
-    <footer class="footer" style="background: linear-gradient(135deg, #FF8C42 0%, #2D5016 100%); padding: 0; margin-top: auto; flex-shrink: 0;">
+    <footer class="footer" data-global-shell="1" style="background: linear-gradient(135deg, #FF8C42 0%, #2D5016 100%); padding: 0; margin-top: auto; flex-shrink: 0;">
         <!-- Sliding News Banner -->
         <div class="footer-news-banner" style="background: #2D5016; padding: 12px 0;">
-            <div class="footer-news-slider">
-                <div class="footer-news-item">Nachhaltige Mode fur Berlin | 248.5 Tonnen CO2 gespart</div>
-                <div class="footer-news-item">Jeder Kauf zahlt! Gemeinsam fur eine grune Zukunft</div>
+            <div class="footer-news-slider" style="animation-duration: 36s;">
+                <div class="footer-news-item">${S}</div>
+                <div class="footer-news-item">Nachhaltige Mode • Transparenter Handel • Sicherer Checkout</div>
+                <div class="footer-news-item">🌱 CO₂ Impact • Deine Käufe zählen</div>
+                <div class="footer-news-item">📦 Versand + Abholung • Smart & sicher</div>
+                <div class="footer-news-item">${S}</div>
             </div>
         </div>
 
@@ -235,7 +253,9 @@ const GlobalHeader = {
      */
     logout() {
         localStorage.removeItem('auth_token');
+        localStorage.removeItem('cssberlin_token');
         localStorage.removeItem('current_user');
+        localStorage.removeItem('cssberlin_current_user');
         window.location.href = 'index.html';
     },
 
@@ -309,12 +329,50 @@ const GlobalHeader = {
      * Header'i sayfaya ekle
      */
     injectHeader(containerId = 'header-container') {
+        this.cleanupDuplicateShell();
+
+        const existingModern = document.querySelector('header.header-v2#globalHeader');
+        if (existingModern) return;
+
         const container = document.getElementById(containerId);
-        if (container) {
-            container.innerHTML = this.getHeaderHTML();
-        } else {
-            // Container yoksa body basina ekle
-            document.body.insertAdjacentHTML('afterbegin', this.getHeaderHTML());
+        if (container) container.innerHTML = this.getHeaderHTML();
+        else document.body.insertAdjacentHTML('afterbegin', this.getHeaderHTML());
+    },
+
+    /**
+     * Inline/legacy header ticker duplicate cleanup
+     */
+    cleanupDuplicateShell() {
+        try {
+            document.querySelectorAll('.news-banner-v2').forEach((el) => {
+                if (el.getAttribute('data-global-shell') === '1') return;
+                el.remove();
+            });
+
+            document.querySelectorAll('header.header-v2').forEach((el) => {
+                if (el.id === 'globalHeader') return;
+                if (el.getAttribute('data-global-shell') === '1') return;
+                el.remove();
+            });
+
+            const legacyHeader = document.querySelector('header.header:not(.header-v2)');
+            if (legacyHeader) legacyHeader.remove();
+        } catch (e) {
+            // no-op
+        }
+    },
+
+    /**
+     * Inline/legacy footer duplicate cleanup
+     */
+    cleanupDuplicateFooter() {
+        try {
+            document.querySelectorAll('footer.footer').forEach((el) => {
+                if (el.getAttribute('data-global-shell') === '1') return;
+                el.remove();
+            });
+        } catch (e) {
+            // no-op
         }
     },
 
@@ -322,18 +380,16 @@ const GlobalHeader = {
      * Footer'i sayfaya ekle
      */
     injectFooter(containerId = 'footer-container') {
+        // Ensure we always standardize (even if legacy footer already has a ticker)
+        this.cleanupDuplicateFooter();
+        if (document.querySelector('footer.footer[data-global-shell="1"]')) return;
+
         const container = document.getElementById(containerId);
-        if (container) {
-            container.innerHTML = this.getFooterHTML();
-        } else {
-            // main'den sonra ekle
+        if (container) container.innerHTML = this.getFooterHTML();
+        else {
             const main = document.querySelector('main') || document.querySelector('.main-content');
-            if (main) {
-                main.insertAdjacentHTML('afterend', this.getFooterHTML());
-            } else {
-                // En sona ekle
-                document.body.insertAdjacentHTML('beforeend', this.getFooterHTML());
-            }
+            if (main) main.insertAdjacentHTML('afterend', this.getFooterHTML());
+            else document.body.insertAdjacentHTML('beforeend', this.getFooterHTML());
         }
     },
 
@@ -341,32 +397,75 @@ const GlobalHeader = {
      * Sayfa yuklendikten sonra calistir
      */
     init() {
-        // Dropdown dis tiklamada kapat
-        document.addEventListener('click', (e) => {
-            const userMenu = document.getElementById('userMenuWrapper');
-            const dropdown = document.getElementById('userDropdown');
+        if (!this.__eventsBound) {
+            this.__eventsBound = true;
 
-            if (userMenu && dropdown && !userMenu.contains(e.target)) {
-                this.closeDropdown();
-            }
-        });
+            // Dropdown dis tiklamada kapat
+            document.addEventListener('click', (e) => {
+                const userMenu = document.getElementById('userMenuWrapper');
+                const dropdown = document.getElementById('userDropdown');
 
-        // ESC tusu ile kapat
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                this.closeDropdown();
-            }
-        });
+                if (userMenu && dropdown && !userMenu.contains(e.target)) {
+                    this.closeDropdown();
+                }
+            });
+
+            // ESC tusu ile kapat
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    this.closeDropdown();
+                }
+            });
+        }
 
         // Auth durumunu kontrol et
         this.checkAuthAndUpdateUI();
+
+        // Inject header/footer if page didn't include them (or used legacy ones)
+        this.injectHeader();
+        this.injectFooter();
+
+        // Basic counts (cart/wishlist) for consistency
+        try {
+            const cart = JSON.parse(localStorage.getItem('cssberlin_cart') || '[]');
+            const cartEl = document.getElementById('cartCount') || document.getElementById('cartBadge');
+            if (cartEl) cartEl.textContent = String(cart.length);
+
+            const wl = JSON.parse(localStorage.getItem('wishlist') || '[]');
+            const wlEl = document.getElementById('wishlistCount') || document.getElementById('wishlistBadge');
+            if (wlEl) wlEl.textContent = String(wl.length);
+        } catch (e) {}
     }
 };
 
 // Global erisim
 window.GlobalHeader = GlobalHeader;
 
-// Sayfa yuklendiginde otomatik calistir
-document.addEventListener('DOMContentLoaded', () => {
-    GlobalHeader.init();
-});
+// Sayfa yuklendiginde otomatik calistir (api-config.js autoloader defer ile gec gelebilir)
+(function startGlobalHeader() {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            GlobalHeader.init();
+            // Member incentives (welcome + pricing hints)
+            try {
+                if (!document.querySelector('script[src$="member-incentives.js"]')) {
+                    const s = document.createElement('script');
+                    s.src = 'member-incentives.js';
+                    s.defer = true;
+                    document.head.appendChild(s);
+                }
+            } catch (e) {}
+        });
+    } else {
+        GlobalHeader.init();
+        // Member incentives (welcome + pricing hints)
+        try {
+            if (!document.querySelector('script[src$="member-incentives.js"]')) {
+                const s = document.createElement('script');
+                s.src = 'member-incentives.js';
+                s.defer = true;
+                document.head.appendChild(s);
+            }
+        } catch (e) {}
+    }
+})();

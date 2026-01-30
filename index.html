@@ -569,7 +569,7 @@
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
-                <span data-i18n="products.mehr_laden">Mehr Produkte laden</span>
+                <span data-i18n="products.mehr_laden">Daha fazla göster</span>
             </button>
         </div>
     </section>
@@ -1297,21 +1297,22 @@
         let currentOfferProduct = null;
 
         function openQuickOfferModal(productId, productTitle, productPrice, productImage) {
-            currentOfferProduct = { id: productId, title: productTitle, price: productPrice, image: productImage };
+            const priceNumber = Number(productPrice || 0);
+            currentOfferProduct = { id: productId, title: productTitle, price: priceNumber, image: productImage };
 
             // Update product info
             document.getElementById('offerProductInfo').innerHTML = `
                 <img src="${productImage}" alt="${productTitle}" class="offer-product-image">
                 <div class="offer-product-details">
                     <h3>${productTitle}</h3>
-                    <div class="offer-price-value">€ ${productPrice.toFixed(2)}</div>
+                    <div class="offer-price-value">€ ${priceNumber.toFixed(2)}</div>
                 </div>
             `;
 
             // Calculate discount prices
-            document.getElementById('price10').textContent = '€ ' + (productPrice * 0.90).toFixed(2);
-            document.getElementById('price15').textContent = '€ ' + (productPrice * 0.85).toFixed(2);
-            document.getElementById('price20').textContent = '€ ' + (productPrice * 0.80).toFixed(2);
+            document.getElementById('price10').textContent = '€ ' + (priceNumber * 0.90).toFixed(2);
+            document.getElementById('price15').textContent = '€ ' + (priceNumber * 0.85).toFixed(2);
+            document.getElementById('price20').textContent = '€ ' + (priceNumber * 0.80).toFixed(2);
 
             // Clear custom input
             document.getElementById('customOfferPrice').value = '';
@@ -1338,7 +1339,7 @@
             }
         }
 
-        function submitQuickOffer() {
+        async function submitQuickOffer() {
             const customPrice = parseFloat(document.getElementById('customOfferPrice').value);
             if (!customPrice || customPrice <= 0) {
                 alert('Bitte geben Sie einen gültigen Preis ein.');
@@ -1348,19 +1349,64 @@
             // Check auth
             if (!authGate.isAuthenticated) {
                 closeQuickOfferModal();
-                authGate.showLoginModal();
+                authGate.showLoginModal('Angebot machen', window.location.href);
                 return;
             }
 
-            // Submit offer (placeholder - would connect to backend)
-            console.log('Offer submitted:', {
-                product: currentOfferProduct,
-                offerPrice: customPrice,
-                user: authGate.currentUser
-            });
+            try {
+                const base = (typeof API_BASE_URL !== 'undefined') ? API_BASE_URL : '';
+                const user = authGate.currentUser || {};
 
-            alert(`Angebot von € ${customPrice.toFixed(2)} wurde gesendet!`);
-            closeQuickOfferModal();
+                const buyerName = (
+                    user.firstName || user.first_name || user.username ||
+                    (user.email ? user.email.split('@')[0] : 'User')
+                );
+
+                const payload = {
+                    product_id: currentOfferProduct?.id,
+                    product_name: currentOfferProduct?.title,
+                    product_price: Number(currentOfferProduct?.price || 0),
+                    product_image: currentOfferProduct?.image,
+                    seller_id: 'seller@cssberlin.de',
+                    buyer_id: user.id || user.userId || user.email || 'buyer',
+                    buyer_name: buyerName,
+                    buyer_email: user.email || null,
+                    offer_amount: Number(customPrice),
+                    message: ''
+                };
+
+                const response = await fetch(`${base}/api/offers/create`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json().catch(() => ({}));
+
+                if (!response.ok || result.success === false) {
+                    throw new Error(result.message || result.detail || 'Angebot konnte nicht gesendet werden.');
+                }
+
+                if (typeof toast !== 'undefined' && toast.success) {
+                    toast.success('Angebot gesendet', `Angebot von € ${customPrice.toFixed(2)} wurde gesendet!`);
+                } else {
+                    alert(`Angebot von € ${customPrice.toFixed(2)} wurde gesendet!`);
+                }
+
+                closeQuickOfferModal();
+
+                // Optional: redirect to negotiations page if exists
+                if (result.offer || result.success) {
+                    // keep user on homepage; negotiations can be managed via verhandeln/messages pages
+                }
+            } catch (err) {
+                const msg = err?.message || 'Angebot konnte nicht gesendet werden.';
+                if (typeof toast !== 'undefined' && toast.error) {
+                    toast.error('Fehler', msg);
+                } else {
+                    alert(msg);
+                }
+            }
         }
 
         // Close modal on backdrop click
