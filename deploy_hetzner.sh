@@ -66,7 +66,20 @@ sudo systemctl restart cssberlin-backend
 
 # 5. Initialize Database (Safe)
 echo "🗄️ Initializing database tables..."
-python -c "import asyncio; from database import engine, Base; import models; async def main(): async with engine.begin() as conn: await conn.run_sync(Base.metadata.create_all); asyncio.run(main())"
+python - <<'PY'
+import asyncio
+
+from database import Base, engine
+import models  # noqa: F401
+
+
+async def main() -> None:
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+
+asyncio.run(main())
+PY
 
 echo "✅ Deployment Successful!"
 echo "📡 Backend is running on port 8000"

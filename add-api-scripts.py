@@ -35,6 +35,13 @@ SKIP_DIR_PREFIXES = (
 SKIP_FILE_NAMES = {
     "_header_template.html",
     "platform-selector-snippet.html",
+    # Do not inject API/shell into old/test/admin utilities
+    "damen_backup.html",
+    "wunschliste_old.html",
+    "test-cart.html",
+    "test-wishlist.html",
+    "login_old_admin.html",
+    "init-admin.html",
 }
 
 SKIP_PATH_CONTAINS = (

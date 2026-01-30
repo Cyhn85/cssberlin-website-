@@ -6,11 +6,14 @@
     <title>Mein Konto - CSS Berlin</title>
     <link rel="stylesheet" href="styles.css?v=2026">
     <link rel="stylesheet" href="toast.css">
+    <!-- API Configuration (MUST load first) -->
+    <script src="api-config.js"></script>
     <style>
         .account-container {
             min-height: 100vh;
-            background: linear-gradient(135deg, #FAFAFA 0%, #F5F5F5 100%);
-            padding: 0;
+            background: transparent;
+            /* leave room for global Header V2 */
+            padding: 120px 0 32px;
         }
 
         /* Header Bar */
@@ -80,15 +83,25 @@
             gap: 32px;
         }
 
+        /* Mobile: show sidebar toggle without custom header */
+        .account-mobile-bar {
+            display: none;
+            grid-column: 1 / -1;
+            justify-content: space-between;
+            align-items: center;
+        }
+
         /* Sidebar */
         .account-sidebar {
-            background: white;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
             border-radius: 12px;
             padding: 0;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
             height: fit-content;
             position: sticky;
             top: 120px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
         }
 
         .sidebar-menu {
@@ -174,11 +187,13 @@
 
         /* Content Area */
         .account-content {
-            background: white;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
             border-radius: 12px;
             padding: 32px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
             min-height: 600px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
         }
 
         .account-welcome {
@@ -390,6 +405,9 @@
             .account-header {
                 padding: 16px;
             }
+            .account-container {
+                padding-top: 108px;
+            }
 
             .account-header-content {
                 flex-direction: column;
@@ -426,6 +444,11 @@
         @media (max-width: 768px) {
             .mobile-menu-toggle {
                 display: block;
+            }
+
+            .account-mobile-bar {
+                display: flex;
+                margin-bottom: 12px;
             }
 
             .account-sidebar {
@@ -763,7 +786,7 @@
                         <line x1="3" y1="6" x2="21" y2="6"></line>
                         <line x1="3" y1="18" x2="21" y2="18"></line>
                     </svg>
-                    MenÃ¼
+                    Menü
                 </button>
 
                 <div class="account-user-info">
@@ -778,6 +801,16 @@
 
         <!-- Main Content -->
         <div class="account-main">
+            <div class="account-mobile-bar">
+                <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                    Menü
+                </button>
+            </div>
             <!-- Sidebar -->
             <aside class="account-sidebar" id="accountSidebar">
                 <ul class="sidebar-menu">
@@ -789,7 +822,7 @@
                                 <rect x="14" y="14" width="7" height="7"></rect>
                                 <rect x="3" y="14" width="7" height="7"></rect>
                             </svg>
-                            Ãœbersicht
+                            Übersicht
                         </a>
                     </li>
 
@@ -893,10 +926,10 @@
 
             <!-- Content -->
             <main class="account-content">
-                <!-- Ãœbersicht Section (Default) -->
+                <!-- Übersicht Section (Default) -->
                 <div class="content-section active" id="section-ubersicht">
                     <div class="account-welcome">
-                        <h1>Willkommen zurÃ¼ck, <span id="welcomeName">Benutzer</span>!</h1>
+                        <h1>Willkommen zurück, <span id="welcomeName">Benutzer</span>!</h1>
                         <p>Verwalten Sie Ihr Konto, Bestellungen und vieles mehr.</p>
                     </div>
 
@@ -983,7 +1016,7 @@
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
                             </svg>
-                            Letzte AktivitÃ¤t
+                            Letzte Aktivität
                         </h2>
 
                         <ul class="activity-list" id="activityList">
@@ -1179,11 +1212,7 @@
 
     <!-- Scripts -->
     <script src="api-client.js"></script>
-    <script src="toast.js"></script>    <!-- API Configuration (MUST load first) -->
-    <script src="api-config.js"></script>
-    <script src="api-client.js"></script>
-
-
+    <script src="toast.js"></script>
     <script src="auth.js"></script>
     <script>
         // Load user data

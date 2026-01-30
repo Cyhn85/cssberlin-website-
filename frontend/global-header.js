@@ -209,7 +209,7 @@ const GlobalHeader = {
 
                 <!-- Legal Links -->
                 <nav style="display: flex; gap: 24px; flex-wrap: wrap; align-items: center;">
-                    <a href="ueber-uns.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;">Uber uns</a>
+                    <a href="ueber-uns.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;">Über uns</a>
                     <a href="kontakt.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;">Kontakt</a>
                     <a href="agb.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;">AGB</a>
                     <a href="datenschutz.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;">Datenschutz</a>
@@ -219,8 +219,13 @@ const GlobalHeader = {
 
                 <!-- Copyright -->
                 <div style="color: rgba(255,255,255,0.8); font-size: 12px;">
-                    2025 CSS Berlin GmbH
+                    2026 CSS Berlin
                 </div>
+            </div>
+
+            <!-- Kleinunternehmer (§19 UStG) + PAngV Hinweis -->
+            <div class="footer-vat-notice">
+                <p>*Alle Preise sind Endpreise zzgl. Versandkosten. Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.</p>
             </div>
         </div>
     </footer>
@@ -344,6 +349,17 @@ const GlobalHeader = {
      */
     cleanupDuplicateShell() {
         try {
+            // Remove legacy news banners (older pages use .news-banner).
+            document.querySelectorAll('.news-banner').forEach((el) => {
+                if (el.getAttribute('data-global-shell') === '1') return;
+                el.remove();
+            });
+
+            // Remove dashboard-specific custom header (prevents double header on mein-konto.html).
+            document.querySelectorAll('.account-header').forEach((el) => {
+                el.remove();
+            });
+
             document.querySelectorAll('.news-banner-v2').forEach((el) => {
                 if (el.getAttribute('data-global-shell') === '1') return;
                 el.remove();

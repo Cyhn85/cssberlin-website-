@@ -80,6 +80,53 @@ Test:
 
 ---
 
+## 🖥️ Backend (Hetzner) Deployment (FastAPI)
+
+Frontend Cloudflare ile otomatik deploy olur, **backend için Hetzner sunucuda deploy script** çalıştırılır.
+
+### ✅ Deploy komutu (Hetzner sunucuda)
+
+```bash
+curl -fsSLo /tmp/deploy_hetzner.sh https://raw.githubusercontent.com/Cyhn85/cssberlin-website-/main/deploy_hetzner.sh && bash /tmp/deploy_hetzner.sh
+```
+
+### ✅ Backend sağlık kontrolü (Hetzner)
+
+```bash
+curl -fsS http://127.0.0.1:8000/health && echo OK || echo FAIL
+sudo systemctl status cssberlin-backend --no-pager
+```
+
+### 🧯 Eğer “Could not resolve host: raw.githubusercontent.com” olursa (DNS)
+
+Önce tanı koy:
+
+```bash
+getent hosts raw.githubusercontent.com || (echo DNS_FAIL; cat /etc/resolv.conf)
+```
+
+Geçici çözüm (örnek): sunucu DNS’i düzeltilmeden raw content indirilemez. Bu durumda:
+- Cloudflare/DNS ayarlarınızı bozmayın.
+- Sunucu üzerinde `/etc/resolv.conf` veya provider DNS ayarları düzeltilmelidir (kalıcı çözüm sunucu/network tarafındadır).
+
+---
+
+## ✅ Smoke Test Checklist (Deploy Sonrası)
+
+Frontend (Cloudflare):
+- [ ] `index.html` açılıyor
+- [ ] Header/Footer V2 her sayfada görünüyor
+- [ ] Ürün kartları render oluyor
+- [ ] `mein-konto.html` girişsizken `login.html`’e yönlendiriyor
+
+Backend (Hetzner):
+- [ ] `GET /health` 200
+- [ ] `POST /api/auth/register` çalışıyor
+- [ ] `GET /api/products` 200
+- [ ] `POST /api/offers` 200/201 (auth ile)
+
+---
+
 ## 🎉 Success!
 
 **Frontend:** Deployed on Cloudflare Pages  

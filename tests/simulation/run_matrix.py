@@ -32,6 +32,9 @@ def build_arg_parser() -> argparse.ArgumentParser:
     p.add_argument("--db-path", default=os.getenv("MATRIX_DB_PATH"), help="SQLite DB path for admin monitoring")
     p.add_argument("--headless", action="store_true", default=bool(int(os.getenv("MATRIX_HEADLESS", "0"))))
     p.add_argument("--slowmo-ms", type=int, default=int(os.getenv("MATRIX_SLOWMO_MS", "0")))
+    p.add_argument("--trace", action="store_true", default=bool(int(os.getenv("MATRIX_TRACE", "0"))), help="Record Playwright trace zip files")
+    p.add_argument("--video", action="store_true", default=bool(int(os.getenv("MATRIX_VIDEO", "0"))), help="Record Playwright videos")
+    p.add_argument("--keep-last", type=int, default=int(os.getenv("MATRIX_KEEP_LAST", "20")), help="Keep last N runs under tests/simulation/artifacts/")
     return p
 
 
@@ -89,8 +92,8 @@ async def main() -> int:
             browser = await p.chromium.launch(headless=args.headless, slow_mo=args.slowmo_ms)
 
             # Optional: record videos / traces for debugging
-            record_video = bool(int(os.getenv("MATRIX_VIDEO", "0")))
-            record_trace = bool(int(os.getenv("MATRIX_TRACE", "0")))
+            record_video = bool(args.video)
+            record_trace = bool(args.trace)
             video_dir = (paths.artifacts_dir / "video") if record_video else None
             if video_dir:
                 video_dir.mkdir(parents=True, exist_ok=True)
@@ -241,8 +244,7 @@ async def main() -> int:
 
         # Retention: keep last N runs
         try:
-            keep_last = int(os.getenv("MATRIX_KEEP_LAST", "20"))
-            enforce_retention(artifacts_root=(paths.simulation_root / "artifacts"), keep_last=keep_last)
+            enforce_retention(artifacts_root=(paths.simulation_root / "artifacts"), keep_last=args.keep_last)
         except Exception:
             pass
 

@@ -650,8 +650,22 @@
                 </div>
 
                 <button class="place-order-btn" onclick="placeOrder()">
-                    🔒 Zahlungspflichtig bestellen
+                    Zahlungspflichtig bestellen
                 </button>
+
+                <div style="margin-top: 12px; font-size: 12px; color: #666; line-height: 1.5;">
+                    <p style="margin: 0 0 6px;">
+                        Mit Klick auf „<strong>Zahlungspflichtig bestellen</strong>“ bestätigst du, dass du die
+                        <a href="agb.html" style="color:#2D5016; font-weight:700; text-decoration: underline;">AGB</a>,
+                        <a href="datenschutz.html" style="color:#2D5016; font-weight:700; text-decoration: underline;">Datenschutz</a>
+                        und das
+                        <a href="widerrufsrecht.html" style="color:#2D5016; font-weight:700; text-decoration: underline;">Widerrufsrecht</a>
+                        zur Kenntnis genommen hast.
+                    </p>
+                    <p style="margin: 0;">
+                        <strong>Preishinweis:</strong> Alle Preise sind Endpreise zzgl. Versandkosten. Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.
+                    </p>
+                </div>
 
                 <div style="margin-top: 15px; padding: 15px; background: #f0f8f0; border-radius: 8px; text-align: center; font-size: 13px; color: #666;">
                     🔒 Sichere Zahlung • 🌱 CO₂ neutral versandt
@@ -894,7 +908,7 @@
         function resetOrderButton() {
             const btn = document.querySelector('.place-order-btn');
             btn.disabled = false;
-            btn.innerHTML = '🔒 Zahlungspflichtig bestellen';
+            btn.innerHTML = 'Zahlungspflichtig bestellen';
         }
 
         function openSecureCardModal(orderIds) {
