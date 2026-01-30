@@ -32,6 +32,7 @@ class User(Base):
     sent_messages = relationship("Message", foreign_keys="Message.sender_id", back_populates="sender")
     received_messages = relationship("Message", foreign_keys="Message.receiver_id", back_populates="receiver")
     favorites = relationship("Favorite", back_populates="user")
+    coupon_redemptions = relationship("CouponRedemption", back_populates="user")
 
 
 class Product(Base):
@@ -131,6 +132,52 @@ class Payment(Base):
     card_last4 = Column(String(4))
     card_brand = Column(String(30))
     created_at = Column(DateTime, default=datetime.utcnow)
+
+
+class Coupon(Base):
+    """
+    Coupon / Gutschein
+    Rules:
+    - Code format: CSS + digits (e.g. CSS123456)
+    - Can be assigned to a specific user (optional)
+    - Redemptions tracked in CouponRedemption table (prevents reuse)
+    """
+    __tablename__ = "coupons"
+
+    id = Column(Integer, primary_key=True, index=True)
+    code = Column(String(32), unique=True, index=True, nullable=False)
+
+    # Discount settings (use one or both; percent takes precedence in current implementation)
+    discount_percent = Column(Float, default=0.0)  # 0.10 => 10%
+    discount_amount = Column(Float, default=0.0)   # fixed EUR
+
+    is_active = Column(Boolean, default=True)
+    assigned_user_id = Column(Integer, ForeignKey("users.id"))  # optional: per-user coupon
+
+    created_at = Column(DateTime, default=datetime.utcnow)
+    expires_at = Column(DateTime)
+
+    # Relationships
+    assigned_user = relationship("User", foreign_keys=[assigned_user_id])
+    redemptions = relationship("CouponRedemption", back_populates="coupon")
+
+
+class CouponRedemption(Base):
+    """One coupon can be redeemed once per user (by default)."""
+    __tablename__ = "coupon_redemptions"
+    __table_args__ = (
+        UniqueConstraint("coupon_id", "user_id", name="uq_coupon_user"),
+    )
+
+    id = Column(Integer, primary_key=True, index=True)
+    coupon_id = Column(Integer, ForeignKey("coupons.id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    order_id = Column(Integer, ForeignKey("orders.id"))  # optional link
+    redeemed_at = Column(DateTime, default=datetime.utcnow)
+
+    # Relationships
+    coupon = relationship("Coupon", back_populates="redemptions")
+    user = relationship("User", back_populates="coupon_redemptions")
 
 
 class UserReview(Base):

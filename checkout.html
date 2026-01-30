@@ -121,6 +121,60 @@
             border-top: 2px solid #2D5016;
         }
 
+        /* Coupon box */
+        .coupon-box {
+            margin-top: 18px;
+            padding: 14px 14px;
+            border: 2px dashed rgba(45, 80, 22, 0.25);
+            border-radius: 12px;
+            background: rgba(232, 245, 233, 0.35);
+        }
+        .coupon-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .coupon-row input {
+            flex: 1;
+            padding: 12px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+        .coupon-row button {
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #FF8C42 0%, #E8854C 100%);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.6);
+            cursor: pointer;
+        }
+        .coupon-hint {
+            margin-top: 10px;
+            font-size: 13px;
+            color: #2D5016;
+            font-weight: 600;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .coupon-hint code {
+            background: rgba(255,255,255,0.75);
+            padding: 4px 8px;
+            border-radius: 8px;
+            border: 1px solid rgba(45, 80, 22, 0.15);
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+        .coupon-msg {
+            margin-top: 8px;
+            font-size: 13px;
+            color: #666;
+        }
+        .coupon-msg.ok { color: #2D5016; font-weight: 700; }
+        .coupon-msg.err { color: #c62828; font-weight: 700; }
+
         .payment-methods {
             display: grid;
             gap: 15px;
@@ -618,6 +672,21 @@
                     <span>Servicegebühr:</span>
                     <span id="serviceFee">1,00€</span>
                 </div>
+
+                <!-- Coupon -->
+                <div class="coupon-box">
+                    <div class="coupon-row">
+                        <input id="couponInput" type="text" placeholder="Coupon: CSS123456" autocomplete="off" inputmode="latin" />
+                        <button type="button" id="applyCouponBtn">Anwenden</button>
+                    </div>
+                    <div class="coupon-hint" id="couponHint" style="display:none;"></div>
+                    <div class="coupon-msg" id="couponMsg"></div>
+                </div>
+
+                <div class="summary-row" id="couponRow" style="display:none;">
+                    <span>Coupon:</span>
+                    <span id="couponDiscount" style="color:#2D5016; font-weight:700;">-0,00€</span>
+                </div>
                 <div class="summary-row total">
                     <span>Gesamt:</span>
                     <span id="total">0,00€</span>
@@ -659,7 +728,9 @@
     <script>
         let checkoutItems = [];
         let currentSubtotal = 0;      // pre-discount
-        let currentDiscount = 0;
+        let currentDiscount = 0;      // member discount (if enabled)
+        let currentCouponDiscount = 0;
+        let appliedCouponCode = null;
         let currentServiceFee = 1.00;
         let currentShipping = 4.99;
         let currentTotal = 0;
@@ -677,6 +748,8 @@
             await loadCheckoutItems();
             setupShippingListeners();
             autoFillUserData();
+            setupCouponUI();
+            await loadMyWelcomeCoupon();
         }
 
         // Load checkout items
@@ -757,12 +830,15 @@
                                 product_id: item.id,
                                 price: parseFloat(item.price.toString().replace('€', '').replace(',', '.')) || 0
                             })),
-                            shipping_method: shippingMethod
+                            shipping_method: shippingMethod,
+                            coupon_code: appliedCouponCode
                         })
                     });
 
                     currentSubtotal = pricing.subtotal || localSubtotal;
                     currentDiscount = pricing.discount || 0;
+                    currentCouponDiscount = pricing.coupon_discount || 0;
+                    appliedCouponCode = pricing.coupon_code || appliedCouponCode;
                     currentServiceFee = pricing.service_fee ?? 1.00;
                     currentShipping = pricing.shipping ?? currentShipping;
                     currentTotal = pricing.total ?? (currentSubtotal - currentDiscount + currentServiceFee + currentShipping);
@@ -775,6 +851,14 @@
                         document.getElementById('discount').textContent = '-' + currentDiscount.toFixed(2).replace('.', ',') + '€';
                     } else {
                         discountRow.style.display = 'none';
+                    }
+
+                    const couponRow = document.getElementById('couponRow');
+                    if ((currentCouponDiscount || 0) > 0.001) {
+                        couponRow.style.display = 'flex';
+                        document.getElementById('couponDiscount').textContent = '-' + currentCouponDiscount.toFixed(2).replace('.', ',') + '€';
+                    } else {
+                        couponRow.style.display = 'none';
                     }
 
                     if ((pricing.free_shipping_applied === true) && shippingMethod !== 'pickup') {
@@ -792,14 +876,91 @@
 
             currentSubtotal = localSubtotal;
             currentDiscount = 0;
+            currentCouponDiscount = 0;
             currentServiceFee = 1.00;
             currentTotal = currentSubtotal + currentServiceFee + currentShipping;
 
             document.getElementById('subtotal').textContent = currentSubtotal.toFixed(2).replace('.', ',') + '€';
             document.getElementById('discountRow').style.display = 'none';
+            document.getElementById('couponRow').style.display = 'none';
             document.getElementById('shipping').textContent = currentShipping === 0 ? 'KOSTENLOS' : currentShipping.toFixed(2).replace('.', ',') + '€';
             document.getElementById('serviceFee').textContent = currentServiceFee.toFixed(2).replace('.', ',') + '€';
             document.getElementById('total').textContent = currentTotal.toFixed(2).replace('.', ',') + '€';
+        }
+
+        async function loadMyWelcomeCoupon() {
+            const hint = document.getElementById('couponHint');
+            const msg = document.getElementById('couponMsg');
+            try {
+                if (!api?.request) return;
+                const data = await api.request('/api/coupons/me');
+                if (data?.code) {
+                    hint.style.display = 'flex';
+                    if (data.redeemed) {
+                        hint.innerHTML = `✅ Willkommen-Coupon bereits verwendet: <code>${data.code}</code>`;
+                    } else {
+                        hint.innerHTML = `🎁 Dein Willkommen-Coupon: <code>${data.code}</code> <span style="color:#666; font-weight:600;">(10% auf die erste Bestellung)</span>`;
+                        // Pre-fill for convenience
+                        const input = document.getElementById('couponInput');
+                        if (input && !input.value) input.value = data.code;
+                    }
+                }
+            } catch (e) {
+                // non-fatal
+            } finally {
+                if (msg && !msg.textContent) msg.textContent = 'Coupon-Code mit "CSS" + Zahlen eingeben (einmalig).';
+            }
+        }
+
+        function setupCouponUI() {
+            const input = document.getElementById('couponInput');
+            const btn = document.getElementById('applyCouponBtn');
+            const msg = document.getElementById('couponMsg');
+
+            if (!input || !btn) return;
+
+            btn.addEventListener('click', async () => {
+                const raw = (input.value || '').trim().toUpperCase();
+                if (!raw) {
+                    msg.className = 'coupon-msg err';
+                    msg.textContent = 'Bitte einen Coupon-Code eingeben.';
+                    appliedCouponCode = null;
+                    await calculateTotal();
+                    return;
+                }
+                if (!/^CSS\d{4,}$/.test(raw)) {
+                    msg.className = 'coupon-msg err';
+                    msg.textContent = 'Ungültiges Format. Beispiel: CSS123456';
+                    return;
+                }
+
+                msg.className = 'coupon-msg';
+                msg.textContent = 'Prüfe Coupon…';
+
+                try {
+                    const result = await api.request('/api/coupons/validate', {
+                        method: 'POST',
+                        body: JSON.stringify({ code: raw })
+                    });
+
+                    if (result?.valid) {
+                        appliedCouponCode = raw;
+                        msg.className = 'coupon-msg ok';
+                        msg.textContent = `Coupon aktiv: ${raw}`;
+                        await calculateTotal();
+                    } else {
+                        appliedCouponCode = null;
+                        msg.className = 'coupon-msg err';
+                        msg.textContent = result?.message || 'Coupon ungültig.';
+                        await calculateTotal();
+                    }
+                } catch (e) {
+                    appliedCouponCode = null;
+                    msg.className = 'coupon-msg err';
+                    msg.textContent = 'Coupon konnte nicht geprüft werden.';
+                    await calculateTotal();
+                }
+            });
         }
 
         function autoFillUserData() {
@@ -830,32 +991,65 @@
             // Ensure freshest pricing before saving order
             await calculateTotal();
 
-            // Create order object
+            const shippingAddress = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                street: document.getElementById('street').value,
+                postalCode: document.getElementById('postalCode').value,
+                city: document.getElementById('city').value,
+                country: document.getElementById('country').value
+            };
+
+            // Prefer server-side order creation (secure, prevents abuse)
+            let serverOrderResult = null;
+            try {
+                if (api?.request) {
+                    const payload = {
+                        items: checkoutItems.map(item => ({
+                            product_id: item.id,
+                            // Backend recalculates prices; keep for UI/debug only
+                            price: parseFloat(item.price.toString().replace('€', '').replace(',', '.')) || 0,
+                            offer_id: item.offerId || item.offer_id || item.offerID || null
+                        })),
+                        shipping_address: shippingAddress,
+                        payment_method: paymentMethod,
+                        shipping_method: shippingMethod,
+                        shipping_cost: currentShipping,
+                        total_amount: currentTotal,
+                        coupon_code: appliedCouponCode
+                    };
+
+                    serverOrderResult = await api.request('/api/orders', {
+                        method: 'POST',
+                        body: JSON.stringify(payload)
+                    });
+                }
+            } catch (e) {
+                serverOrderResult = null;
+            }
+
+            // Build local order object for confirmation UI (keeps current pages working)
             const order = {
                 id: 'ORD-' + Date.now(),
                 items: checkoutItems,
                 subtotal: currentSubtotal,
                 shipping: currentShipping,
                 discount: currentDiscount,
+                couponCode: appliedCouponCode,
+                couponDiscount: currentCouponDiscount,
                 serviceFee: currentServiceFee,
                 total: currentTotal,
                 paymentMethod: paymentMethod,
                 shippingMethod: shippingMethod,
-                shippingAddress: {
-                    firstName: document.getElementById('firstName').value,
-                    lastName: document.getElementById('lastName').value,
-                    email: document.getElementById('email').value,
-                    phone: document.getElementById('phone').value,
-                    street: document.getElementById('street').value,
-                    postalCode: document.getElementById('postalCode').value,
-                    city: document.getElementById('city').value,
-                    country: document.getElementById('country').value
-                },
+                shippingAddress,
                 status: 'pending_payment',
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString(),
+                server: serverOrderResult || null
             };
 
-            // Save order to localStorage (for demo)
+            // Save order locally for demo UI
             const orders = JSON.parse(localStorage.getItem('cssberlin_orders') || '[]');
             orders.push(order);
             localStorage.setItem('cssberlin_orders', JSON.stringify(orders));

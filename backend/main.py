@@ -29,6 +29,8 @@ from models import (
     Payment,
     UserReview,
     OfferNotification,
+    Coupon,
+    CouponRedemption,
 )
 import re
 import random
@@ -41,7 +43,8 @@ from schemas import (
     ShipmentCreate, ShipmentResponse, ShipmentUpdate,
     OrderCreate, OrderResponse,
     PaymentIntentCreate, PaymentIntentResponse,
-    UserReviewCreate, UserReviewResponse
+    UserReviewCreate, UserReviewResponse,
+    CouponMeResponse, CouponValidateRequest, CouponValidateResponse,
 )
 from auth import (
     get_password_hash, verify_password,
@@ -52,8 +55,92 @@ from auth import (
 # ============================================================================
 # MEMBER INCENTIVES (WELCOME + PRICING RULES)
 # ============================================================================
-MEMBER_DISCOUNT_RATE = 0.10
+MEMBER_DISCOUNT_RATE = 0.00  # Coupon-based welcome discount is used instead
 FREE_SHIPPING_THRESHOLD_EUR = 50.0
+
+# Coupon rules
+COUPON_CODE_RE = re.compile(r"^CSS\d{4,}$")
+WELCOME_COUPON_PERCENT = 0.10
+
+
+def normalize_coupon_code(code: str | None) -> str | None:
+    if not code:
+        return None
+    return str(code).strip().upper()
+
+
+async def ensure_welcome_coupon_for_user(db: AsyncSession, user: User) -> Coupon:
+    """
+    Ensure the user has a personal, one-time welcome coupon (first order).
+    Creates if missing.
+    """
+    # Find existing assigned coupon
+    result = await db.execute(
+        select(Coupon).where(Coupon.assigned_user_id == user.id).order_by(Coupon.created_at.desc())
+    )
+    existing = result.scalar_one_or_none()
+    if existing:
+        return existing
+
+    # Create a unique code
+    for _ in range(10):
+        code = f"CSS{random.randint(100000, 999999)}"
+        res = await db.execute(select(Coupon).where(Coupon.code == code))
+        if res.scalar_one_or_none() is None:
+            c = Coupon(
+                code=code,
+                discount_percent=WELCOME_COUPON_PERCENT,
+                discount_amount=0.0,
+                is_active=True,
+                assigned_user_id=user.id,
+            )
+            db.add(c)
+            await db.commit()
+            await db.refresh(c)
+            return c
+
+    # Extremely unlikely
+    raise HTTPException(status_code=500, detail="Coupon konnte nicht erstellt werden")
+
+
+async def validate_coupon_for_user(
+    db: AsyncSession,
+    user: User,
+    code: str | None,
+) -> tuple[Coupon | None, float]:
+    """
+    Returns (coupon, discount_amount) where discount_amount is computed later
+    (percent or fixed). Here we validate eligibility and return coupon.
+    """
+    code_norm = normalize_coupon_code(code)
+    if not code_norm:
+        return None, 0.0
+
+    if not COUPON_CODE_RE.match(code_norm):
+        raise HTTPException(status_code=400, detail="Ungültiger Coupon-Code")
+
+    res = await db.execute(select(Coupon).where(Coupon.code == code_norm))
+    coupon = res.scalar_one_or_none()
+    if not coupon or not coupon.is_active:
+        raise HTTPException(status_code=404, detail="Coupon nicht gefunden oder inaktiv")
+
+    # If coupon is assigned, it must match the user
+    if coupon.assigned_user_id and coupon.assigned_user_id != user.id:
+        raise HTTPException(status_code=403, detail="Dieser Coupon gehört einem anderen Konto")
+
+    if coupon.expires_at and coupon.expires_at < datetime.utcnow():
+        raise HTTPException(status_code=400, detail="Coupon ist abgelaufen")
+
+    # Prevent reuse: coupon redeemed already by this user
+    red = await db.execute(
+        select(CouponRedemption).where(
+            and_(CouponRedemption.coupon_id == coupon.id, CouponRedemption.user_id == user.id)
+        )
+    )
+    if red.scalar_one_or_none():
+        raise HTTPException(status_code=400, detail="Coupon wurde bereits verwendet")
+
+    return coupon, 0.0
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -112,6 +199,56 @@ async def startup():
             # Non-fatal: if migration fails, app still boots (but incentives may be unavailable)
             pass
     print("Database tables created successfully")
+
+
+# ============================================================================
+# COUPONS
+# ============================================================================
+
+@app.get("/api/coupons/me", response_model=CouponMeResponse)
+async def get_my_coupon(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Returns the welcome coupon for the current user.
+    If missing, it will be created (one-time, per user).
+    """
+    coupon = await ensure_welcome_coupon_for_user(db, current_user)
+
+    red = await db.execute(
+        select(CouponRedemption).where(
+            and_(CouponRedemption.coupon_id == coupon.id, CouponRedemption.user_id == current_user.id)
+        )
+    )
+    redeemed = red.scalar_one_or_none() is not None
+
+    return CouponMeResponse(
+        code=coupon.code,
+        discount_percent=float(coupon.discount_percent or 0.0),
+        is_active=bool(coupon.is_active),
+        redeemed=redeemed,
+        expires_at=coupon.expires_at,
+    )
+
+
+@app.post("/api/coupons/validate", response_model=CouponValidateResponse)
+async def validate_coupon(
+    payload: CouponValidateRequest,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    code = normalize_coupon_code(payload.code)
+    try:
+        coupon, _ = await validate_coupon_for_user(db, current_user, code)
+        return CouponValidateResponse(
+            valid=True,
+            code=coupon.code if coupon else None,
+            discount_percent=float(coupon.discount_percent or 0.0) if coupon else None,
+            message="OK",
+        )
+    except HTTPException as e:
+        return CouponValidateResponse(valid=False, message=str(e.detail))
 
 # Health check
 @app.get("/")
@@ -174,14 +311,22 @@ async def register(user_data: UserCreate, db: AsyncSession = Depends(get_db)):
         first_name=user_data.first_name,
         last_name=user_data.last_name,
         is_verified=False,
-        member_discount_active=True,
-        member_discount_granted_at=datetime.utcnow(),
+        # Do NOT auto-apply permanent discount: welcome coupon handles first order
+        member_discount_active=False,
+        member_discount_granted_at=None,
         member_welcome_seen=False,
     )
 
     db.add(db_user)
     await db.commit()
     await db.refresh(db_user)
+
+    # Create welcome coupon for new user (one-time)
+    try:
+        await ensure_welcome_coupon_for_user(db, db_user)
+    except Exception:
+        # Non-fatal: user can still register/login
+        pass
 
     return db_user
 
@@ -304,13 +449,18 @@ async def verify_magic_link(token: str, db: AsyncSession = Depends(get_db)):
             first_name=email.split("@")[0],
             last_name="",
             is_verified=True,
-            member_discount_active=True,
-            member_discount_granted_at=datetime.utcnow(),
+            member_discount_active=False,
+            member_discount_granted_at=None,
             member_welcome_seen=False,
         )
         db.add(user)
         await db.commit()
         await db.refresh(user)
+
+        try:
+            await ensure_welcome_coupon_for_user(db, user)
+        except Exception:
+            pass
 
     # Delete used token
     del magic_link_tokens[token]
@@ -931,18 +1081,57 @@ async def create_order(
     }.get(shipping_method, float(order_data.shipping_cost or 0))
 
     item_prices: list[float] = []
+    validated_items: list[tuple[int, Optional[int], float]] = []
     for item in order_data.items:
-        item_prices.append(float(item.price))
+        product = await db.get(Product, item.product_id)
+        if not product:
+            raise HTTPException(status_code=404, detail=f"Produkt {item.product_id} nicht gefunden")
+        if product.is_sold:
+            raise HTTPException(status_code=400, detail=f"Produkt {product.name} ist bereits verkauft")
+
+        # If purchased via negotiation, validate the accepted offer (optional)
+        final_price = float(product.price)
+        if item.offer_id:
+            offer = await db.get(Offer, item.offer_id)
+            if (
+                offer
+                and offer.product_id == product.id
+                and offer.buyer_id == current_user.id
+                and offer.status == "accepted"
+            ):
+                final_price = float(offer.counter_amount or offer.offer_amount or product.price)
+            else:
+                # Ignore client-provided price/offer_id if not valid
+                final_price = float(product.price)
+
+        item_prices.append(final_price)
+        validated_items.append((product.id, item.offer_id, final_price))
 
     subtotal = float(sum(item_prices))
 
-    # Treat missing/NULL as enabled by default
-    is_member = getattr(current_user, "member_discount_active", True) is not False
+    # Membership discount disabled by default (use coupons to avoid margin leakage)
+    is_member = bool(getattr(current_user, "member_discount_active", False) is True)
     discount_rate = MEMBER_DISCOUNT_RATE if is_member else 0.0
     discount_total = round(subtotal * discount_rate, 2)
     subtotal_after_discount = max(0.0, round(subtotal - discount_total, 2))
 
-    free_shipping_applied = (shipping_method != "pickup") and (subtotal >= FREE_SHIPPING_THRESHOLD_EUR)
+    # Coupon discount (validated + one-time per user)
+    coupon_code = normalize_coupon_code(getattr(order_data, "coupon_code", None))
+    coupon_discount = 0.0
+    applied_coupon = None
+    if coupon_code:
+        coupon, _ = await validate_coupon_for_user(db, current_user, coupon_code)
+        applied_coupon = coupon
+        if coupon:
+            if float(coupon.discount_percent or 0) > 0:
+                coupon_discount = round(subtotal_after_discount * float(coupon.discount_percent), 2)
+            elif float(coupon.discount_amount or 0) > 0:
+                coupon_discount = min(float(coupon.discount_amount), float(subtotal_after_discount))
+            coupon_discount = max(0.0, float(coupon_discount))
+
+    subtotal_after_all_discounts = max(0.0, round(subtotal_after_discount - coupon_discount, 2))
+
+    free_shipping_applied = (shipping_method != "pickup") and (subtotal_after_all_discounts >= FREE_SHIPPING_THRESHOLD_EUR)
     shipping_cost = 0.0 if shipping_method == "pickup" or free_shipping_applied else float(shipping_base)
 
     # Allocate discount across items proportionally (so per-order totals add up)
@@ -960,20 +1149,17 @@ async def create_order(
     else:
         discounted_item_prices = [round(p, 2) for p in item_prices]
 
-    for index, item in enumerate(order_data.items):
-        product = await db.get(Product, item.product_id)
+    for index, (product_id, offer_id, _final_price) in enumerate(validated_items):
+        product = await db.get(Product, product_id)
         if not product:
-            raise HTTPException(status_code=404, detail=f"Produkt {item.product_id} nicht gefunden")
+            raise HTTPException(status_code=404, detail=f"Produkt {product_id} nicht gefunden")
 
-        if product.is_sold:
-            raise HTTPException(status_code=400, detail=f"Produkt {product.name} ist bereits verkauft")
-
-        base_item_total = float(discounted_item_prices[index]) if index < len(discounted_item_prices) else float(item.price)
+        base_item_total = float(discounted_item_prices[index]) if index < len(discounted_item_prices) else float(product.price)
         order_total = base_item_total + (shipping_cost if index == 0 else 0.0) + (SERVICE_FEE if index == 0 else 0.0)
         order = Order(
             buyer_id=current_user.id,
-            product_id=item.product_id,
-            offer_id=item.offer_id,
+            product_id=product_id,
+            offer_id=offer_id,
             total_amount=order_total,
             shipping_address=order_data.shipping_address,
             status="pending_payment"
@@ -985,6 +1171,16 @@ async def create_order(
     for order in created_orders:
         await db.refresh(order)
 
+    # Mark coupon redeemed once (link to first order)
+    if applied_coupon and coupon_code and created_orders:
+        redemption = CouponRedemption(
+            coupon_id=applied_coupon.id,
+            user_id=current_user.id,
+            order_id=created_orders[0].id,
+        )
+        db.add(redemption)
+        await db.commit()
+
     return {
         "success": True,
         "orders": [{"id": o.id, "product_id": o.product_id, "total_amount": o.total_amount} for o in created_orders],
@@ -992,11 +1188,13 @@ async def create_order(
             "subtotal": round(subtotal, 2),
             "discount": round(discount_total, 2),
             "discount_rate": discount_rate,
+            "coupon_code": applied_coupon.code if applied_coupon else None,
+            "coupon_discount": round(float(coupon_discount), 2),
             "shipping": round(shipping_cost, 2),
             "service_fee": round(SERVICE_FEE, 2),
             "free_shipping_threshold": FREE_SHIPPING_THRESHOLD_EUR,
             "free_shipping_applied": free_shipping_applied,
-            "total": round(subtotal_after_discount + shipping_cost + SERVICE_FEE, 2),
+            "total": round(subtotal_after_all_discounts + shipping_cost + SERVICE_FEE, 2),
         }
     }
 
@@ -2072,17 +2270,33 @@ async def calculate_checkout(
     items = checkout_data.get("items", [])
     shipping_method = (checkout_data.get("shipping_method") or "").lower()
     delivery_type = checkout_data.get("delivery_type", "shipping")
+    coupon_code = normalize_coupon_code(checkout_data.get("coupon_code"))
 
     subtotal = 0.0
+    # Always compute prices server-side (prevents client tampering)
     if items:
         for it in items:
-            try:
-                subtotal += float(it.get("price") or 0)
-            except Exception:
-                pass
+            pid = it.get("product_id")
+            if not pid:
+                continue
+            result = await db.execute(select(Product).where(Product.id == int(pid)))
+            product = result.scalar_one_or_none()
+            if not product:
+                continue
+            # Negotiated purchase path (optional)
+            offer_id = it.get("offer_id")
+            if offer_id:
+                offer_res = await db.execute(select(Offer).where(Offer.id == int(offer_id)))
+                offer = offer_res.scalar_one_or_none()
+                if offer and offer.product_id == product.id and offer.buyer_id == current_user.id and offer.status == "accepted":
+                    subtotal += float(offer.counter_amount or offer.offer_amount or product.price)
+                else:
+                    subtotal += float(product.price)
+            else:
+                subtotal += float(product.price)
     else:
         for pid in product_ids:
-            result = await db.execute(select(Product).where(Product.id == pid))
+            result = await db.execute(select(Product).where(Product.id == int(pid)))
             product = result.scalar_one_or_none()
             if product:
                 offer_price = checkout_data.get(f"offer_price_{pid}")
@@ -2094,25 +2308,43 @@ async def calculate_checkout(
     else:
         shipping_base = 4.99 if delivery_type == "shipping" else 0.0
 
-    # Treat missing/NULL as enabled by default
-    is_member = getattr(current_user, "member_discount_active", True) is not False
+    # Membership discount disabled by default (use coupons to avoid margin leakage)
+    is_member = bool(getattr(current_user, "member_discount_active", False) is True)
     discount_rate = MEMBER_DISCOUNT_RATE if is_member else 0.0
     discount_total = round(float(subtotal) * discount_rate, 2)
     subtotal_after_discount = max(0.0, round(float(subtotal) - discount_total, 2))
 
-    free_shipping_applied = (shipping_method != "pickup") and (float(subtotal) >= FREE_SHIPPING_THRESHOLD_EUR) and float(shipping_base) > 0
+    # Coupon discount (validated + one-time per user)
+    coupon_discount = 0.0
+    applied_coupon = None
+    if coupon_code:
+        coupon, _ = await validate_coupon_for_user(db, current_user, coupon_code)
+        applied_coupon = coupon
+        if coupon:
+            if float(coupon.discount_percent or 0) > 0:
+                coupon_discount = round(subtotal_after_discount * float(coupon.discount_percent), 2)
+            elif float(coupon.discount_amount or 0) > 0:
+                coupon_discount = min(float(coupon.discount_amount), float(subtotal_after_discount))
+            coupon_discount = max(0.0, float(coupon_discount))
+
+    subtotal_after_all_discounts = max(0.0, round(subtotal_after_discount - coupon_discount, 2))
+
+    # Free shipping rule should be based on discounted subtotal to prevent abuse
+    free_shipping_applied = (shipping_method != "pickup") and (float(subtotal_after_all_discounts) >= FREE_SHIPPING_THRESHOLD_EUR) and float(shipping_base) > 0
     shipping_cost = 0.0 if shipping_method == "pickup" or free_shipping_applied else float(shipping_base)
 
     return {
         "subtotal": round(float(subtotal), 2),
-        "discount": round(discount_total, 2),
+        "discount": round(discount_total, 2),  # member discount (if enabled)
         "discount_rate": discount_rate,
+        "coupon_code": applied_coupon.code if applied_coupon else None,
+        "coupon_discount": round(float(coupon_discount), 2),
         "service_fee": SERVICE_FEE,
         "shipping": round(float(shipping_cost), 2),
         "shipping_original": round(float(shipping_base), 2),
         "free_shipping_threshold": FREE_SHIPPING_THRESHOLD_EUR,
         "free_shipping_applied": free_shipping_applied,
-        "total": round(subtotal_after_discount + SERVICE_FEE + shipping_cost, 2),
+        "total": round(subtotal_after_all_discounts + SERVICE_FEE + shipping_cost, 2),
         "breakdown": {
             "items": len(items) if items else len(product_ids),
             "delivery": shipping_method or delivery_type

@@ -172,6 +172,7 @@ class OrderCreate(BaseModel):
     shipping_method: str
     shipping_cost: float
     total_amount: float
+    coupon_code: Optional[str] = None
 
 
 class OrderResponse(BaseModel):
@@ -186,6 +187,27 @@ class OrderResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+# ============== COUPON SCHEMAS ==============
+
+class CouponMeResponse(BaseModel):
+    code: str
+    discount_percent: float
+    is_active: bool
+    redeemed: bool
+    expires_at: Optional[datetime] = None
+
+
+class CouponValidateRequest(BaseModel):
+    code: str
+
+
+class CouponValidateResponse(BaseModel):
+    valid: bool
+    code: Optional[str] = None
+    discount_percent: Optional[float] = None
+    message: Optional[str] = None
 
 
 # ============== PAYMENT SCHEMAS ==============
