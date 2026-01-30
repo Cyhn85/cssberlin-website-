@@ -39,8 +39,48 @@
     window.API_CONFIG = {
         LOCAL: 'http://localhost:8000',
         PRODUCTION: 'https://api.cssberlin.de',
-        current: config.BASE_URL
+        current: config.BASE_URL,
+
+        // Some older modules expect API_CONFIG.BASE_URL (e.g. favorites.js)
+        BASE_URL: config.BASE_URL
     };
+
+    // ============================
+    // GLOBAL SHELL AUTO-LOADER
+    // ============================
+    // Goal: Standardize header/footer across ALL pages without editing every HTML file.
+    // This loads CSS + GlobalHeader injector if not already present.
+    (function autoLoadShell() {
+        try {
+            const doc = document;
+
+            function ensureLink(href) {
+                if (doc.querySelector(`link[href="${href}"]`)) return;
+                const l = doc.createElement('link');
+                l.rel = 'stylesheet';
+                l.href = href;
+                doc.head.appendChild(l);
+            }
+
+            function ensureScript(src) {
+                if (doc.querySelector(`script[src="${src}"]`)) return;
+                const s = doc.createElement('script');
+                s.src = src;
+                s.defer = true;
+                doc.head.appendChild(s);
+            }
+
+            // Keep sizes consistent by reusing homepage assets
+            ensureLink('header-v2.css');
+            ensureLink('footer-kleinanzeigen.css');
+            ensureLink('toast.css');
+
+            // Inject standardized header/footer + tickers
+            ensureScript('global-header.js');
+        } catch (e) {
+            // no-op
+        }
+    })();
 
     // Log configuration on load
     console.log('==========================================');

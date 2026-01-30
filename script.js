@@ -453,10 +453,11 @@ async function initProducts(category = null) {
         const data = await response.json();
 
         // Transform backend data to frontend format
+        // NOTE: Backend schema uses `name` (not `title`).
         const products = data.products.map(p => ({
             id: p.id,
             brand: p.brand || 'Unbekannt',
-            name: p.title || '',
+            name: p.name || '',
             size: p.size || '',
             condition: p.condition || 'Gebraucht',
             price: p.price || 0,
@@ -574,7 +575,8 @@ function attachProductEventListeners() {
 // ADD TO CART HANDLER - WITH TOGGLE
 // ============================================
 function handleAddToCart(productId, buttonElement) {
-    const product = sampleProducts.find(p => p.id === productId);
+    const allProducts = window.loadedProducts || sampleProducts;
+    const product = allProducts.find(p => p.id === productId);
     if (!product) return;
 
     // Get existing cart
@@ -668,7 +670,8 @@ function updateNegotiationCountInHeader() {
 // BUY BUTTON HANDLER
 // ============================================
 function handleBuyClick(productId) {
-    const product = sampleProducts.find(p => p.id === productId);
+    const allProducts = window.loadedProducts || sampleProducts;
+    const product = allProducts.find(p => p.id === productId);
     if (!product) return;
 
     // Direct buy - go to checkout with this single item
@@ -693,7 +696,8 @@ function handleBuyClick(productId) {
 // NEGOTIATE BUTTON HANDLER
 // ============================================
 function handleNegotiateClick(productId) {
-    const product = sampleProducts.find(p => p.id === productId);
+    const allProducts = window.loadedProducts || sampleProducts;
+    const product = allProducts.find(p => p.id === productId);
     if (!product) return;
 
     // Check if user is logged in

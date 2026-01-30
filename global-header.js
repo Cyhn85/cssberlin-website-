@@ -1,29 +1,32 @@
 /**
  * CSS Berlin - Global Header/Footer Component
- * Tum sayfalarda kullanilacak standart header ve footer
+ * Goal: Standardize header/footer across all pages (homepage rules).
+ *
+ * Key requirement:
+ * - Slogan must appear at the START and END of every ticker loop:
+ *   "Climate Smart Solutions"
+ * - Ticker sizes stay identical, but loop durations can differ per ticker.
  */
 
 const GlobalHeader = {
     isAuthenticated: false,
     currentUser: null,
+    SLOGAN: 'Climate Smart Solutions',
 
     /**
      * Header HTML'ini olustur
      */
     getHeaderHTML() {
+        const S = this.SLOGAN;
         return `
     <!-- News Banner at Top -->
     <div class="news-banner-v2">
-        <div class="news-slider" id="newsSlider">
-            <div class="news-item" data-link="co2-impact.html">
-                <span>248.5 Tonnen CO2 gespart</span>
-            </div>
-            <div class="news-item" data-link="campaign.html">
-                <span>2 kaufen = 3. Versand GRATIS</span>
-            </div>
-            <div class="news-item" data-link="co2-impact.html">
-                <span>CO2 Top 100 Rangliste</span>
-            </div>
+        <div class="news-slider" id="newsSlider" style="animation-duration: 28s;">
+            <div class="news-item" data-link="index.html"><span>${S}</span></div>
+            <div class="news-item" data-link="co2-impact.html"><span>🌍 248.5 Tonnen CO₂ gespart</span></div>
+            <div class="news-item" data-link="campaign.html"><span>📦 2 kaufen = 3. Versand GRATIS</span></div>
+            <div class="news-item" data-link="co2-impact.html"><span>🏆 CO₂ Top 100 Rangliste</span></div>
+            <div class="news-item" data-link="index.html"><span>${S}</span></div>
         </div>
     </div>
 
@@ -59,6 +62,16 @@ const GlobalHeader = {
 
             <!-- Header Actions -->
             <div class="header-actions-v2">
+                <!-- Cart -->
+                <a href="warenkorb.html" class="header-icon-btn" title="Warenkorb">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="icon-badge" id="cartBadge">0</span>
+                </a>
+
                 <!-- Icon Buttons -->
                 <a href="wunschliste.html" class="header-icon-btn" title="Wunschliste">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -161,14 +174,18 @@ const GlobalHeader = {
      * Footer HTML'ini olustur
      */
     getFooterHTML() {
+        const S = this.SLOGAN;
         return `
     <!-- Footer -->
     <footer class="footer" style="background: linear-gradient(135deg, #FF8C42 0%, #2D5016 100%); padding: 0; margin-top: auto; flex-shrink: 0;">
         <!-- Sliding News Banner -->
         <div class="footer-news-banner" style="background: #2D5016; padding: 12px 0;">
-            <div class="footer-news-slider">
-                <div class="footer-news-item">Nachhaltige Mode fur Berlin | 248.5 Tonnen CO2 gespart</div>
-                <div class="footer-news-item">Jeder Kauf zahlt! Gemeinsam fur eine grune Zukunft</div>
+            <div class="footer-news-slider" style="animation-duration: 36s;">
+                <div class="footer-news-item">${S}</div>
+                <div class="footer-news-item">Nachhaltige Mode • Transparenter Handel • Sicherer Checkout</div>
+                <div class="footer-news-item">🌱 CO₂ Impact • Deine Käufe zählen</div>
+                <div class="footer-news-item">📦 Versand + Abholung • Smart & sicher</div>
+                <div class="footer-news-item">${S}</div>
             </div>
         </div>
 
@@ -236,6 +253,7 @@ const GlobalHeader = {
     logout() {
         localStorage.removeItem('auth_token');
         localStorage.removeItem('current_user');
+        localStorage.removeItem('cssberlin_current_user');
         window.location.href = 'index.html';
     },
 
@@ -250,7 +268,7 @@ const GlobalHeader = {
             this.currentUser = authGate.currentUser;
         } else {
             const token = localStorage.getItem('auth_token');
-            const userData = localStorage.getItem('current_user');
+            const userData = localStorage.getItem('cssberlin_current_user') || localStorage.getItem('current_user');
             if (token && userData) {
                 this.isAuthenticated = true;
                 this.currentUser = JSON.parse(userData);
@@ -309,31 +327,33 @@ const GlobalHeader = {
      * Header'i sayfaya ekle
      */
     injectHeader(containerId = 'header-container') {
+        // If legacy header exists, replace it.
+        const existingModern = document.querySelector('header.header-v2#globalHeader');
+        if (existingModern) return;
+
+        const legacyHeader = document.querySelector('header.header:not(.header-v2)');
+        if (legacyHeader) legacyHeader.remove();
+
         const container = document.getElementById(containerId);
-        if (container) {
-            container.innerHTML = this.getHeaderHTML();
-        } else {
-            // Container yoksa body basina ekle
-            document.body.insertAdjacentHTML('afterbegin', this.getHeaderHTML());
-        }
+        if (container) container.innerHTML = this.getHeaderHTML();
+        else document.body.insertAdjacentHTML('afterbegin', this.getHeaderHTML());
     },
 
     /**
      * Footer'i sayfaya ekle
      */
     injectFooter(containerId = 'footer-container') {
+        const existing = document.querySelector('footer.footer');
+        // Replace legacy footer with our standardized footer
+        if (existing && !existing.querySelector('.footer-news-banner')) existing.remove();
+        if (document.querySelector('footer.footer .footer-news-banner')) return;
+
         const container = document.getElementById(containerId);
-        if (container) {
-            container.innerHTML = this.getFooterHTML();
-        } else {
-            // main'den sonra ekle
+        if (container) container.innerHTML = this.getFooterHTML();
+        else {
             const main = document.querySelector('main') || document.querySelector('.main-content');
-            if (main) {
-                main.insertAdjacentHTML('afterend', this.getFooterHTML());
-            } else {
-                // En sona ekle
-                document.body.insertAdjacentHTML('beforeend', this.getFooterHTML());
-            }
+            if (main) main.insertAdjacentHTML('afterend', this.getFooterHTML());
+            else document.body.insertAdjacentHTML('beforeend', this.getFooterHTML());
         }
     },
 
@@ -360,6 +380,21 @@ const GlobalHeader = {
 
         // Auth durumunu kontrol et
         this.checkAuthAndUpdateUI();
+
+        // Inject header/footer if page didn't include them (or used legacy ones)
+        this.injectHeader();
+        this.injectFooter();
+
+        // Basic counts (cart/wishlist) for consistency
+        try {
+            const cart = JSON.parse(localStorage.getItem('cssberlin_cart') || '[]');
+            const cartEl = document.getElementById('cartBadge');
+            if (cartEl) cartEl.textContent = String(cart.length);
+
+            const wl = JSON.parse(localStorage.getItem('wishlist') || '[]');
+            const wlEl = document.getElementById('wishlistBadge');
+            if (wlEl) wlEl.textContent = String(wl.length);
+        } catch (e) {}
     }
 };
 
