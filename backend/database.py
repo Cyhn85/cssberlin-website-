@@ -7,11 +7,14 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker, declarative_base
 import os
 
-# Database URL - SQLite for development
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./cssberlin.db")
+# Database URL
+_raw_database_url = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./cssberlin.db")
 
-# For PostgreSQL in production:
-# DATABASE_URL = "postgresql+asyncpg://user:password@localhost/cssberlin"
+# Allow DATABASE_URL to be provided as postgresql://... and normalize to asyncpg driver.
+if _raw_database_url.startswith("postgresql://"):
+    DATABASE_URL = _raw_database_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+else:
+    DATABASE_URL = _raw_database_url
 
 engine = create_async_engine(
     DATABASE_URL,

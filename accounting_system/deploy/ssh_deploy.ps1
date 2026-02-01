@@ -4,8 +4,17 @@
 param(
     [string]$ServerIP = "195.201.146.224",
     [string]$ServerUser = "root",
-    [string]$ServerPassword = "FmJ9caKAHFmM"
+    [string]$ServerPassword = $env:CSSBERLIN_HETZNER_ROOT_PASSWORD,
+    [string]$AccountingDbPassword = $env:CSSBERLIN_ACCOUNTING_DB_PASSWORD
 )
+
+if (-not $ServerPassword) {
+    throw "Missing ServerPassword. Provide -ServerPassword or set env var CSSBERLIN_HETZNER_ROOT_PASSWORD."
+}
+
+if (-not $AccountingDbPassword) {
+    throw "Missing AccountingDbPassword. Provide -AccountingDbPassword or set env var CSSBERLIN_ACCOUNTING_DB_PASSWORD."
+}
 
 Write-Host "==========================================" -ForegroundColor Cyan
 Write-Host "HETZNER SSH DEPLOYMENT" -ForegroundColor Cyan
@@ -21,6 +30,8 @@ $ErrorActionPreference = "Stop"
 $deployScript = @"
 #!/bin/bash
 set -e
+
+: "${CSSBERLIN_ACCOUNTING_DB_PASSWORD:?Missing CSSBERLIN_ACCOUNTING_DB_PASSWORD}" 
 
 echo '=========================================='
 echo 'DEPLOYMENT BASLIYOR'
@@ -38,7 +49,7 @@ apt install -y python3.11 python3.11-venv python3-pip postgresql postgresql-cont
 echo '[3/9] PostgreSQL yapilandiriliyor...'
 sudo -u postgres psql -c "CREATE DATABASE accounting_db;" 2>/dev/null || echo "Database zaten var"
 sudo -u postgres psql -c "DROP USER IF EXISTS accounting_user;" 2>/dev/null || true
-sudo -u postgres psql -c "CREATE USER accounting_user WITH PASSWORD 'CSSBerlin2026!';"
+sudo -u postgres psql -c "CREATE USER accounting_user WITH PASSWORD '$CSSBERLIN_ACCOUNTING_DB_PASSWORD';"
 sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE accounting_db TO accounting_user;"
 
 # 4. Uygulama dizini
@@ -68,15 +79,16 @@ pip install -r requirements.txt
 
 # 7. Environment variables
 echo '[6/9] Environment variables ayarlaniyor...'
-cat > .env << 'ENVEOF'
-DATABASE_URL=postgresql://accounting_user:CSSBerlin2026!@localhost:5432/accounting_db
-SECRET_KEY=CHANGE_THIS_IN_PRODUCTION
+cat > .env << ENVEOF
+DATABASE_URL=postgresql://accounting_user:$CSSBERLIN_ACCOUNTING_DB_PASSWORD@localhost:5432/accounting_db
+SECRET_KEY=
 ENVIRONMENT=production
+CSSBERLIN_ACCOUNTING_DB_PASSWORD=$CSSBERLIN_ACCOUNTING_DB_PASSWORD
 ENVEOF
 
 # 8. Database migration
 echo '[7/9] Database migration calistiriliyor...'
-export DATABASE_URL="postgresql://accounting_user:CSSBerlin2026!@localhost:5432/accounting_db"
+export DATABASE_URL="postgresql://accounting_user:$CSSBERLIN_ACCOUNTING_DB_PASSWORD@localhost:5432/accounting_db"
 if [ ! -d "alembic/versions" ]; then
     alembic revision --autogenerate -m "Initial migration"
 fi
@@ -166,7 +178,7 @@ Write-Host ""
 Write-Host "[2/3] Script server'a yukleniyor..." -ForegroundColor Yellow
 
 # SSH ile script'i yükle ve çalıştır
-$sshCommand = "echo '$ServerPassword' | sshpass -p '$ServerPassword' ssh -o StrictHostKeyChecking=no root@$ServerIP 'bash -s' < deploy_remote.sh"
+$sshCommand = "echo '$ServerPassword' | sshpass -p '$ServerPassword' ssh -o StrictHostKeyChecking=no root@$ServerIP 'export CSSBERLIN_ACCOUNTING_DB_PASSWORD=\"$AccountingDbPassword\"; bash -s' < deploy_remote.sh"
 
 # Alternatif: Manuel adımlar
 Write-Host ""

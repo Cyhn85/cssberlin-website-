@@ -27,6 +27,9 @@ class User(Base):
     member_welcome_seen = Column(Boolean, default=False)
     member_welcome_seen_at = Column(DateTime)
 
+    # Gamification
+    badges = Column(JSON, default=list)
+
     # Relationships
     products = relationship("Product", back_populates="seller")
     sent_messages = relationship("Message", foreign_keys="Message.sender_id", back_populates="sender")
@@ -52,6 +55,8 @@ class Product(Base):
     seller_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     is_active = Column(Boolean, default=True)
     is_sold = Column(Boolean, default=False)
+    is_featured = Column(Boolean, default=False)
+    featured_until = Column(DateTime, nullable=True)
     views = Column(Integer, default=0)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

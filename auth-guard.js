@@ -44,20 +44,14 @@ const AuthGuard = {
      * Check if user is logged in
      */
     isLoggedIn() {
-        const user = localStorage.getItem('cssberlin_current_user');
-        const token = localStorage.getItem('auth_token');
-        return !!(user && token);
+        return authGate.isAuthenticated;
     },
 
     /**
      * Get current user
      */
     getCurrentUser() {
-        try {
-            return JSON.parse(localStorage.getItem('cssberlin_current_user') || 'null');
-        } catch {
-            return null;
-        }
+        return authGate.currentUser;
     },
 
     /**

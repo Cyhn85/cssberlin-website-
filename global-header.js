@@ -266,31 +266,23 @@ const GlobalHeader = {
      * Logout islemi
      */
     logout() {
-        localStorage.removeItem('auth_token');
-        localStorage.removeItem('cssberlin_token');
-        localStorage.removeItem('current_user');
-        localStorage.removeItem('cssberlin_current_user');
-        window.location.href = 'index.html';
+        if (typeof authGate !== 'undefined' && authGate.logout) {
+            authGate.logout();
+        } else {
+            // Fallback for older pages without auth-gate
+            window.location.href = 'index.html';
+        }
     },
 
     /**
      * Auth durumunu kontrol et ve UI guncelle
      */
     async checkAuthAndUpdateUI() {
-        // authGate varsa kullan, yoksa localStorage kontrol et
         if (typeof authGate !== 'undefined' && authGate.checkAuthStatus) {
             await authGate.checkAuthStatus();
             this.isAuthenticated = authGate.isAuthenticated;
             this.currentUser = authGate.currentUser;
-        } else {
-            const token = localStorage.getItem('auth_token');
-            const userData = localStorage.getItem('cssberlin_current_user') || localStorage.getItem('current_user');
-            if (token && userData) {
-                this.isAuthenticated = true;
-                this.currentUser = JSON.parse(userData);
-            }
         }
-
         this.updateHeaderUI();
     },
 

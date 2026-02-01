@@ -1,85 +1,150 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anmelden - CSS Berlin</title>
-    <link rel="stylesheet" href="styles.css?v=2026">
+    <link rel="stylesheet" href="styles.css?v=2028">
+    <link rel="stylesheet" href="header-v2.css">
+    <link rel="stylesheet" href="footer-kleinanzeigen.css">
     <link rel="stylesheet" href="toast.css">
     <style>
-        .auth-container {
-            min-height: 80vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: var(--spacing-2xl);
+        body {
+            background: var(--bg-secondary);
         }
-
-        .auth-card {
-            max-width: 500px;
+        .auth-page-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .auth-gate-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 440px;
             width: 100%;
-            background: var(--bg-primary);
-            border-radius: var(--radius-xl);
-            box-shadow: var(--shadow-lg);
-            padding: var(--spacing-2xl);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
+            animation: authModalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .auth-header {
+        @keyframes authModalSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .auth-gate-header {
+            padding: 32px 32px 20px;
             text-align: center;
-            margin-bottom: var(--spacing-xl);
         }
 
-        .auth-icon {
-            width: 64px;
-            height: 64px;
-            margin: 0 auto var(--spacing-md);
-            background: linear-gradient(135deg, rgba(255, 140, 66, 0.1) 0%, rgba(45, 80, 22, 0.1) 100%);
-            border-radius: 50%;
+        .auth-gate-logo {
+            margin-bottom: 16px;
+        }
+
+        .auth-gate-header h2 {
+            margin: 0 0 8px;
+            font-size: 24px;
+            color: #333;
+            font-weight: 700;
+        }
+        
+        .auth-gate-body {
+            padding: 0 32px 32px;
+        }
+        
+        .auth-gate-oauth {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .oauth-btn {
+            width: 100%;
+            padding: 14px 20px;
+            border: 2px solid #e8e8e8;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 2px solid #2D5016;
+            gap: 12px;
+            transition: all 0.2s;
+            color: #333;
         }
 
-        .auth-icon svg {
-            width: 32px;
-            height: 32px;
-            color: #2D5016;  /* DoÄŸa yeÅŸili */
+        .oauth-btn:hover {
+            border-color: #ccc;
+            background: #fafafa;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .oauth-divider {
+            text-align: center;
+            margin: 24px 0;
+            position: relative;
         }
 
-        .auth-header h1 {
-            font-size: 28px;
-            color: var(--text-primary);
-            margin-bottom: var(--spacing-sm);
+        .oauth-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e8e8e8;
         }
 
-        .auth-header p {
-            color: var(--text-secondary);
+        .oauth-divider span {
+            position: relative;
+            background: white;
+            padding: 0 16px;
+            color: #999;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .auth-gate-form {
+            display: block;
         }
 
         .form-group {
-            margin-bottom: var(--spacing-lg);
+            margin-bottom: 16px;
         }
 
-        .form-label {
+        label {
             display: block;
-            font-weight: var(--font-weight-medium);
-            margin-bottom: var(--spacing-sm);
-            color: var(--text-primary);
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #333;
+            font-size: 13px;
         }
 
-        .form-input {
+        input[type="email"],
+        input[type="password"] {
             width: 100%;
-            padding: 12px 16px;
-            border: 2px solid var(--border-color);
-            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            border: 2px solid #e8e8e8;
+            border-radius: 10px;
             font-size: 15px;
-            transition: all var(--transition-base);
+            transition: all 0.2s;
+            box-sizing: border-box;
         }
 
-        .form-input:focus {
+        input:focus {
             outline: none;
-            border-color: var(--primary-green);
+            border-color: #2D5016;
             box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.1);
         }
 
@@ -87,381 +152,122 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: var(--spacing-lg);
+            margin-bottom: 20px;
         }
-
-        .checkbox-group {
+        
+        .checkbox-wrapper {
             display: flex;
             align-items: center;
-            gap: var(--spacing-sm);
-        }
-
-        .checkbox-group label {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        .forgot-link {
-            font-size: 14px;
-            color: var(--primary-green);
-            text-decoration: none;
-        }
-
-        .forgot-link:hover {
-            text-decoration: underline;
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 14px;
-            background: #2D5016;  /* DoÄŸa yeÅŸili - brand rengi */
-            color: white;
-            font-size: 16px;
-            font-weight: var(--font-weight-semibold);
-            border: none;
-            border-radius: var(--radius-lg);
+            gap: 10px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            font-size: 13px;
+            color: #666;
         }
-
-        .submit-btn:hover {
-            background: #4A7C2C;  /* Hover: daha aÃ§Ä±k yeÅŸil */
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(45, 80, 22, 0.3);
-        }
-
-        .auth-divider {
-            text-align: center;
-            margin: var(--spacing-xl) 0;
-            position: relative;
-        }
-
-        .auth-divider::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            width: 100%;
-            height: 1px;
-            background: var(--border-color);
-        }
-
-        .auth-divider span {
-            background: var(--bg-primary);
-            padding: 0 var(--spacing-md);
-            position: relative;
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-
-        .auth-footer {
-            text-align: center;
-            margin-top: var(--spacing-xl);
-            padding-top: var(--spacing-xl);
-            border-top: 1px solid var(--border-color);
-        }
-
-        .auth-footer p {
-            color: var(--text-secondary);
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .auth-footer a {
-            color: var(--primary-green);
-            font-weight: var(--font-weight-semibold);
+        
+        .forgot-link {
+            font-size: 13px;
+            color: #E8854C;
             text-decoration: none;
+            font-weight: 500;
         }
 
-        .auth-footer a:hover {
-            text-decoration: underline;
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #2D5016 0%, #3d6b1e 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
-
-        .error-message {
-            display: none;
-            padding: var(--spacing-md);
-            background: #ffebee;
-            border: 1px solid var(--error);
-            border-radius: var(--radius-md);
-            color: var(--error);
-            margin-bottom: var(--spacing-lg);
+        
+        .auth-gate-footer {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #e8e8e8;
+            text-align: center;
+        }
+        .auth-gate-footer p {
+            margin: 0;
             font-size: 14px;
+            color: #666;
         }
 
-        .error-message.show {
-            display: block;
+        .auth-gate-footer a {
+            color: #2D5016;
+            font-weight: 600;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
-    <!-- News Banner at Top -->
-    <div class="news-banner" style="position: sticky; top: 0; z-index: 999;">
-        <div class="news-slider" id="newsSlider">
-            <div class="news-item" data-link="co2-impact.html">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
-                </svg>
-                <span>ðŸŒ 248.5 Tonnen COâ‚‚ gespart - Jeder Kauf zÃ¤hlt fÃ¼r unseren Planeten!</span>
-            </div>
-            <div class="news-item" data-link="/campaign/3for2-shipping">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
-                </svg>
-                <span>ðŸ“¦ 2 Produkte kaufen, 3. Produkt Versand GRATIS!</span>
-            </div>
-            <div class="news-item" data-link="/leaderboard">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
-                </svg>
-                <span>ðŸ† COâ‚‚ Rangliste - Wer spart am meisten? Klick fÃ¼r die Top 100!</span>
-            </div>
-            <div class="news-item" data-link="/trees">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2v20M5 9l7-7 7 7M12 22l-3-3h6l-3 3z"></path>
-                </svg>
-                <span>ðŸŒ³ 8,234 BÃ¤ume gepflanzt - Dein Beitrag macht den Unterschied!</span>
-            </div>
-            <div class="news-item" data-link="/sale">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <path d="M12 6v6l4 2" stroke="white" fill="none"></path>
-                </svg>
-                <span>ðŸ”¥ Sale: 780 neue Produkte - Bis zu 70% Rabatt diese Woche!</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Header - SadeleÅŸtirilmiÅŸ -->
-    <header class="header" style="position: sticky; top: 40px; z-index: 998;">
-        <div class="header-container">
-            <a href="index.html" style="text-decoration: none; display: flex; flex-direction: column; align-items: stretch; gap: 0; width: 200px;">
-                <div style="font-size: 36px; font-weight: 800; color: white; letter-spacing: 2px; text-align: center;">CSS Berlin</div>
-                <div style="font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.9); letter-spacing: 1px; text-transform: uppercase; text-align: center;">Climate Smart Solutions</div>
-            </a>
-            <div class="header-actions" style="gap: 12px; margin-left: auto; display: flex; align-items: center;">
-                <button onclick="authGate.showLoginModal(null, null, 'login')" class="header-btn auth-btn" style="padding: 10px 18px; background: #E8854C; color: white; border-radius: 8px; display: flex; align-items: center; gap: 8px; font-weight: 600; text-decoration: none; font-size: 14px; transition: all 0.3s ease; border: none; cursor: pointer;">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                    Anmelden
-                </button>
-                <button onclick="authGate.showLoginModal(null, null, 'register')" class="header-btn auth-btn" style="padding: 10px 18px; background: #E8854C; color: white; border-radius: 8px; display: flex; align-items: center; gap: 8px; font-weight: 600; text-decoration: none; font-size: 14px; transition: all 0.3s ease; border: none; cursor: pointer;">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="8.5" cy="7" r="4"></circle>
-                        <line x1="20" y1="8" x2="20" y2="14"></line>
-                        <line x1="23" y1="11" x2="17" y2="11"></line>
-                    </svg>
-                    Registrieren
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- User Dashboard Bar -->
-    <div class="user-dashboard-bar">
-        <div class="user-dashboard-container">
-            <div class="dashboard-actions">
-                <button class="dashboard-icon-btn" title="Benachrichtigungen">
-                    <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                    <span class="label">Benachrichtigungen</span>
-                    <span class="badge">2</span>
-                </button>
-                <a href="pazarlik.html" class="dashboard-icon-btn" title="Verhandlungen">
-                    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-                    <span class="label">Verhandlungen</span>
-                    <span class="badge" id="negotiationCount">0</span>
+    <div class="auth-page-wrapper">
+        <div class="auth-gate-content">
+            <div class="auth-gate-header">
+                <a href="index.html" class="auth-gate-logo">
+                    <span style="font-size: 28px; font-weight: 800; color: #2D5016;">CSS</span>
+                    <span style="font-size: 28px; font-weight: 800; color: #E8854C;">Berlin</span>
                 </a>
-                <a href="wunschliste.html" class="dashboard-icon-btn" title="Wunschliste">
-                    <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-                    <span class="label">Wunschliste</span>
-                    <span class="badge" id="wishlistCount">0</span>
-                </a>
-                <a href="warenkorb.html" class="dashboard-icon-btn" title="Warenkorb">
-                    <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                    <span class="label">Warenkorb</span>
-                    <span class="badge" id="cartCount">0</span>
-                </a>
+                <h2>Willkommen zurück</h2>
             </div>
-            <div class="dashboard-right">
-                <a href="inserieren.html" class="dashboard-inserieren-btn">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"></path></svg>
-                    <span>Inserieren</span>
-                </a>
-                <div class="dashboard-divider"></div>
-                <div class="dashboard-lang-selector">
-                    <button onclick="setLanguage('de')" id="lang-de" class="dashboard-lang-btn active">DE</button>
-                    <button onclick="setLanguage('en')" id="lang-en" class="dashboard-lang-btn">EN</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="auth-container">
-        <div class="login-container">
-            <!-- Header -->
-            <div class="login-header">
-                <h1>Willkommen bei CSS Berlin</h1>
-                <p>Melden Sie sich mit einem Klick an</p>
-            </div>
-
-            <!-- Social Login Buttons -->
-            <div class="social-login-section">
-                <button class="social-btn social-btn-google" onclick="handleGoogleLogin()">
-                    <svg viewBox="0 0 24 24" width="20" height="20">
-                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                    </svg>
-                    Mit Google fortfahren
-                </button>
-                <button class="social-btn social-btn-apple" onclick="handleAppleLogin()">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="white">
-                        <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
-                    </svg>
-                    Mit Apple fortfahren
-                </button>
-            </div>
-
-            <!-- Divider -->
-            <div class="login-divider">oder</div>
-
-            <!-- Magic Link Form -->
-            <form class="magic-link-form" id="magicLinkForm">
-                <div class="magic-link-input-group">
-                    <span class="magic-link-input-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                            <polyline points="22,6 12,13 2,6"></polyline>
+            <div class="auth-gate-body">
+                <div class="auth-gate-oauth">
+                    <button class="oauth-btn google-btn" onclick="authGate.loginWithGoogle()">
+                        <svg width="20" height="20" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                         </svg>
-                    </span>
-                    <input type="email" id="magicLinkEmail" class="magic-link-input" placeholder="ihre@email.de" required>
+                        Mit Google fortfahren
+                    </button>
                 </div>
-                <button type="submit" class="magic-link-btn" id="magicLinkBtn">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                    </svg>
-                    Magic Link senden
-                </button>
-            </form>
-
-            <!-- Magic Link Success Message -->
-            <div class="magic-link-success" id="magicLinkSuccess">
-                <div class="magic-link-success-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                    </svg>
+                <div class="oauth-divider"><span>ODER</span></div>
+                <form id="auth-gate-login-form" class="auth-gate-form active">
+                    <div class="form-group">
+                        <label for="login-email">E-Mail</label>
+                        <input type="email" id="login-email" name="email" placeholder="ihre@email.de" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Passwort</label>
+                        <input type="password" id="login-password" name="password" placeholder="Ihr Passwort" required>
+                    </div>
+                    <div class="form-options">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" id="remember-me">
+                            <span>Angemeldet bleiben</span>
+                        </label>
+                        <a href="forgot-password.html" class="forgot-link">Passwort vergessen?</a>
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <span>Anmelden</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </form>
+                <div class="auth-gate-footer">
+                    <p>Noch kein Konto? <a href="registrieren.html">Jetzt registrieren</a></p>
                 </div>
-                <h3>E-Mail gesendet!</h3>
-                <p>Wir haben einen Login-Link an <span class="magic-link-email-highlight" id="sentEmailDisplay"></span> gesendet. Klicken Sie auf den Link in der E-Mail, um sich anzumelden.</p>
-            </div>
-
-            <!-- Security Note -->
-            <div class="login-security-note">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                </svg>
-                <span>Sichere Anmeldung mit SSL-Verschlusselung</span>
-            </div>
-
-            <!-- Footer -->
-            <div style="text-align: center; margin-top: 24px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
-                <p style="font-size: 14px; color: #666; margin-bottom: 8px;">Noch kein Konto?</p>
-                <a href="registrieren.html" style="font-size: 15px; font-weight: 600; color: #2D5016; text-decoration: none;">Jetzt registrieren</a>
             </div>
         </div>
     </div>
-
-    <script>
-        // Magic Link Form Handler
-        document.getElementById('magicLinkForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const email = document.getElementById('magicLinkEmail').value;
-            const btn = document.getElementById('magicLinkBtn');
-            const form = document.getElementById('magicLinkForm');
-            const success = document.getElementById('magicLinkSuccess');
-
-            // Disable button and show loading
-            btn.disabled = true;
-            btn.innerHTML = `
-                <svg class="spinner" width="20" height="20" viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" stroke-dasharray="60" stroke-dashoffset="20">
-                        <animate attributeName="stroke-dashoffset" values="60;0" dur="1s" repeatCount="indefinite"/>
-                    </circle>
-                </svg>
-                Link wird gesendet...
-            `;
-
-            try {
-                // API call to send magic link
-                const response = await fetch(window.API_BASE_URL + '/api/auth/magic-link', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: email })
-                });
-
-                if (response.ok) {
-                    // Show success message
-                    form.style.display = 'none';
-                    document.querySelector('.social-login-section').style.display = 'none';
-                    document.querySelector('.login-divider').style.display = 'none';
-                    document.getElementById('sentEmailDisplay').textContent = email;
-                    success.classList.add('visible');
-                } else {
-                    throw new Error('Failed to send magic link');
-                }
-            } catch (error) {
-                console.error('Magic link error:', error);
-                // Fallback: simulate success for demo
-                form.style.display = 'none';
-                document.querySelector('.social-login-section').style.display = 'none';
-                document.querySelector('.login-divider').style.display = 'none';
-                document.getElementById('sentEmailDisplay').textContent = email;
-                success.classList.add('visible');
-            }
-        });
-
-        // Social login handlers (placeholders)
-        function handleGoogleLogin() {
-            alert('Google Login wird in Kurze verfugbar sein!');
-            // TODO: Implement Google OAuth
-        }
-
-        function handleAppleLogin() {
-            alert('Apple Login wird in Kurze verfugbar sein!');
-            // TODO: Implement Apple OAuth
-        }
-    </script>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-bottom">
-                <p>&copy; 2025 CSS Berlin. Alle Rechte vorbehalten.</p>
-                <div class="footer-links-bottom">
-                    <a href="impressum.html">Impressum</a>
-                    <a href="datenschutz.html">Datenschutz</a>
-                    <a href="agb.html">AGB</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- EmailJS for Direct Email Sending -->
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-
-    <script src="toast.js"></script>
-    <!-- API Configuration (MUST load first) -->
     <script src="api-config.js"></script>
-    <script src="api-client.js"></script>
-    <script src="auth.js"></script>
-    <script src="script.js"></script>
-    <script src="auth-admin.js"></script>
+    <script src="auth-gate.js"></script>
+    <script>
+        document.getElementById('auth-gate-login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            await authGate.handleLogin({ email, password });
+        });
+    </script>
 </body>
 </html>

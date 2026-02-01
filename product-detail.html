@@ -1252,7 +1252,7 @@
                         <line x1="12" y1="16" x2="12" y2="12"></line>
                         <line x1="12" y1="8" x2="12.01" y2="8"></line>
                     </svg>
-                    <span>Du kannst bis zu 15% Rabatt verhandeln (5 kostenlose Verhandlungen pro Tag)</span>
+                    <span>Du kannst bis zu 15% Rabatt verhandeln</span>
                 </div>
 
                 <!-- Shipping Info -->
@@ -1570,17 +1570,14 @@
         // Load Similar Products
         async function loadSimilarProducts() {
             const container = document.getElementById('similarProductsGrid');
+            const productId = productData.id;
 
             try {
-                // Get products from same category
-                const response = await fetch(window.API_CONFIG.BASE_URL + '/api/products?category=' + productData.category + '&limit=8');
+                const response = await fetch(`${window.API_CONFIG.BASE_URL}/api/products/recommendations/${productId}`);
 
                 if (response.ok) {
                     const data = await response.json();
-                    const products = data.products || [];
-
-                    // Filter out current product
-                    const similarProducts = products.filter(p => p.id !== productData.id).slice(0, 4);
+                    const similarProducts = data.recommendations || [];
 
                     if (similarProducts.length === 0) {
                         container.innerHTML = '<p class="loading-spinner">Keine ähnlichen Produkte gefunden</p>';

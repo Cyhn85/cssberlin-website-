@@ -15,56 +15,93 @@ if (typeof toast === 'undefined') {
 /**
  * Register a new user
  */
-function register(userData) {
-    const users = JSON.parse(localStorage.getItem('cssberlin_users') || '[]');
+async function register(userData) {
+    try {
+        if (!window.api && typeof APIClient !== 'undefined') {
+            window.api = new APIClient();
+        }
 
-    // Check if email already exists
-    if (users.find(u => u.email === userData.email)) {
-        return { success: false, error: 'Diese E-Mail ist bereits registriert.' };
+        if (!window.api || typeof window.api.register !== 'function') {
+            throw new Error('API client not available');
+        }
+
+        const created = await window.api.register({
+            email: userData.email,
+            password: userData.password,
+            firstName: userData.firstName,
+            lastName: userData.lastName
+        });
+
+        return { success: true, user: created };
+    } catch (error) {
+        return { success: false, error: error.message || 'Registrierung fehlgeschlagen.' };
     }
-
-    // Create new user
-    const newUser = {
-        id: 'user_' + Date.now(),
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        email: userData.email,
-        password: btoa(userData.password), // Simple encoding (not secure, for demo only)
-        newsletter: userData.newsletter || false,
-        createdAt: new Date().toISOString(),
-        wishlist: [],
-        negotiations: [],
-        loginMethod: 'email'
-    };
-
-    users.push(newUser);
-    localStorage.setItem('cssberlin_users', JSON.stringify(users));
-
-    return { success: true, user: newUser };
 }
 
 /**
  * Login user
  */
-function login(user, redirect = true) {
-    // Store current user session
-    const sessionUser = {
-        id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        picture: user.picture || null,
-        loginMethod: user.loginMethod || 'email'
-    };
+async function login(email, password, redirect = true) {
+    try {
+        const baseURL = (typeof API_CONFIG !== 'undefined' && API_CONFIG.current) ? API_CONFIG.current : (window.API_BASE || '');
+        const url = `${baseURL}/api/token`;
 
-    localStorage.setItem('cssberlin_current_user', JSON.stringify(sessionUser));
-    localStorage.setItem('auth_token', 'local_' + Date.now()); // Fake token for local auth
+        const body = new URLSearchParams();
+        body.set('username', email);
+        body.set('password', password);
 
-    if (redirect) {
-        window.location.href = 'index.html';
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: body.toString()
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(data.detail || 'E-Mail oder Passwort ist falsch');
+        }
+
+        if (data.access_token) {
+            localStorage.setItem('cssberlin_token', data.access_token);
+            localStorage.setItem('auth_token', data.access_token);
+        }
+
+        if (data.user) {
+            const sessionUser = {
+                id: data.user.id,
+                firstName: data.user.first_name,
+                lastName: data.user.last_name,
+                email: data.user.email,
+                picture: null,
+                loginMethod: 'email'
+            };
+            localStorage.setItem('cssberlin_current_user', JSON.stringify(sessionUser));
+        }
+
+        if (redirect) {
+            window.location.href = 'index.html';
+        }
+
+        return { success: true, data };
+    } catch (error) {
+        return { success: false, error: error.message || 'Login fehlgeschlagen.' };
     }
+}
 
-    return { success: true };
+async function fetchWithAuth(url, options = {}) {
+    const token = localStorage.getItem('cssberlin_token') || localStorage.getItem('auth_token');
+    const headers = {
+        ...(options.headers || {})
+    };
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+    return fetch(url, {
+        ...options,
+        headers
+    });
 }
 
 /**
@@ -73,6 +110,8 @@ function login(user, redirect = true) {
 function logout() {
     localStorage.removeItem('cssberlin_current_user');
     localStorage.removeItem('auth_token');
+    localStorage.removeItem('cssberlin_token');
+    sessionStorage.removeItem('cssberlin_session');
     window.location.href = 'index.html';
 }
 
@@ -80,7 +119,7 @@ function logout() {
  * Check if user is logged in
  */
 function isLoggedIn() {
-    return localStorage.getItem('cssberlin_current_user') !== null;
+    return localStorage.getItem('cssberlin_token') !== null || localStorage.getItem('auth_token') !== null;
 }
 
 /**
@@ -94,25 +133,12 @@ function getCurrentUser() {
 /**
  * Authenticate user with email/password
  */
-function authenticate(email, password) {
-    const users = JSON.parse(localStorage.getItem('cssberlin_users') || '[]');
-    const user = users.find(u => u.email === email);
-
-    if (!user) {
-        return { success: false, error: 'E-Mail nicht gefunden.' };
+async function authenticate(email, password) {
+    const result = await login(email, password, false);
+    if (!result.success) {
+        return { success: false, error: result.error };
     }
-
-    // Check Google users
-    if (user.loginMethod === 'google') {
-        return { success: false, error: 'Bitte melden Sie sich mit Google an.' };
-    }
-
-    // Check password
-    if (user.password !== btoa(password)) {
-        return { success: false, error: 'Falsches Passwort.' };
-    }
-
-    return { success: true, user: user };
+    return { success: true, user: getCurrentUser() };
 }
 
 // Registration Form Handler
@@ -121,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const errorMessage = document.getElementById('errorMessage');
 
     if (registerForm) {
-        registerForm.addEventListener('submit', function(e) {
+        registerForm.addEventListener('submit', async function(e) {
             e.preventDefault();
 
             // Get form values
@@ -155,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             // Register user
-            const result = register({
+            const result = await register({
                 firstName,
                 lastName,
                 email,
@@ -173,7 +199,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
                 // Login the user
-                login(result.user, false);
+                const loginResult = await login(email, password, false);
+                if (!loginResult.success) {
+                    showError(loginResult.error);
+                    return;
+                }
 
                 // Redirect to home
                 setTimeout(() => {
@@ -189,7 +219,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('loginForm');
 
     if (loginForm) {
-        loginForm.addEventListener('submit', function(e) {
+        loginForm.addEventListener('submit', async function(e) {
             e.preventDefault();
 
             const email = document.getElementById('loginEmail').value.trim();
@@ -200,14 +230,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            const result = authenticate(email, password);
+            const result = await authenticate(email, password);
 
             if (result.success) {
                 if (typeof toast !== 'undefined') {
                     toast.success('Angemeldet!', `Willkommen zurück, ${result.user.firstName}!`);
                 }
-
-                login(result.user, false);
 
                 setTimeout(() => {
                     window.location.href = 'index.html';

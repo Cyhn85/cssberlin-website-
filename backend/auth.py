@@ -14,12 +14,14 @@ import hashlib
 import hmac
 
 # Configuration
-SECRET_KEY = os.getenv("SECRET_KEY", "css-berlin-secret-key-change-in-production-2024")
+SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    raise RuntimeError("Missing required environment variable SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 7 days
 
 # OAuth2 scheme
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/token")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:

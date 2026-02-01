@@ -97,7 +97,7 @@
 .header-logo {
     display: flex;
     align-items: baseline;
-    gap: 4px;
+    gap: 10px;
     text-decoration: none;
     flex-shrink: 0;
 }
@@ -127,6 +127,7 @@
     flex: 1;
     max-width: 600px;
     position: relative;
+    margin-top: 6px;
 }
 
 .search-form-v2 {

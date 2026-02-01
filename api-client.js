@@ -7,7 +7,6 @@ class APIClient {
     constructor() {
         // API base URL
         this.baseURL = this.getBaseURL();
-        this.token = localStorage.getItem('cssberlin_token');
     }
 
     getBaseURL() {
@@ -25,30 +24,12 @@ class APIClient {
     }
 
     /**
-     * Set auth token
-     */
-    setToken(token) {
-        this.token = token;
-        if (token) {
-            localStorage.setItem('cssberlin_token', token);
-        } else {
-            localStorage.removeItem('cssberlin_token');
-        }
-    }
-
-    /**
      * Get auth headers
      */
     getHeaders() {
-        const headers = {
+        return {
             'Content-Type': 'application/json'
         };
-
-        if (this.token) {
-            headers['Authorization'] = `Bearer ${this.token}`;
-        }
-
-        return headers;
     }
 
     /**
@@ -67,7 +48,6 @@ class APIClient {
 
             // Handle 401 Unauthorized
             if (response.status === 401) {
-                this.setToken(null);
                 window.dispatchEvent(new CustomEvent('auth:logout'));
             }
 
@@ -107,34 +87,16 @@ class APIClient {
      * Login user
      */
     async login(email, password) {
-        const data = await this.request('/api/auth/login', {
+        return await this.request('/api/auth/login', {
             method: 'POST',
             body: JSON.stringify({ email, password })
         });
-
-        if (data.access_token) {
-            this.setToken(data.access_token);
-
-            // Store user session
-            const session = {
-                userId: data.user.id,
-                email: data.user.email,
-                firstName: data.user.first_name,
-                lastName: data.user.last_name,
-                loginTime: new Date().toISOString()
-            };
-            sessionStorage.setItem('cssberlin_session', JSON.stringify(session));
-        }
-
-        return data;
     }
 
     /**
      * Logout user
      */
     logout() {
-        this.setToken(null);
-        sessionStorage.removeItem('cssberlin_session');
         window.dispatchEvent(new CustomEvent('auth:logout'));
     }
 

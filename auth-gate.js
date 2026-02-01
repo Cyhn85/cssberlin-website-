@@ -15,27 +15,10 @@ class AuthGate {
      * Check if user is authenticated
      */
     async checkAuthStatus() {
-        // First check localStorage (offline support)
-        const localUser = localStorage.getItem('cssberlin_current_user');
-        if (localUser) {
-            this.currentUser = JSON.parse(localUser);
-            this.isAuthenticated = true;
-            return true;
-        }
-
-        const token = localStorage.getItem('auth_token');
-        if (!token) {
-            this.isAuthenticated = false;
-            return false;
-        }
-
-        // Try API if available
         try {
             const baseUrl = window.CSS_BERLIN_API?.BASE_URL || 'http://localhost:8000';
             const response = await fetch(baseUrl + '/api/auth/me', {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                // Cookies are sent automatically, no Authorization header needed
             });
 
             if (response.ok) {
@@ -43,13 +26,14 @@ class AuthGate {
                 this.isAuthenticated = true;
                 return true;
             } else {
-                localStorage.removeItem('auth_token');
                 this.isAuthenticated = false;
+                this.currentUser = null;
                 return false;
             }
         } catch (error) {
-            console.log('API not available, using local auth');
+            console.log('API not available, user is not authenticated');
             this.isAuthenticated = false;
+            this.currentUser = null;
             return false;
         }
     }
@@ -492,26 +476,6 @@ class AuthGate {
     async handleLogin(data) {
         this.showLoading(true);
 
-        // Try localStorage first (for demo/offline support)
-        const users = JSON.parse(localStorage.getItem('cssberlin_users') || '[]');
-        const user = users.find(u => u.email === data.email);
-
-        if (user) {
-            // Check if Google user
-            if (user.loginMethod === 'google') {
-                this.showError('Bitte melden Sie sich mit Google an.');
-                this.showLoading(false);
-                return;
-            }
-
-            // Check password (btoa encoded)
-            if (user.password && user.password === btoa(data.password)) {
-                this.loginSuccess(user, null, 'local');
-                return;
-            }
-        }
-
-        // Try API
         try {
             const baseUrl = window.CSS_BERLIN_API?.BASE_URL || 'http://localhost:8000';
             const response = await fetch(baseUrl + '/api/auth/login', {
@@ -525,7 +489,7 @@ class AuthGate {
             const result = await response.json();
 
             if (response.ok) {
-                this.loginSuccess(result.user, result.access_token, 'api');
+                this.loginSuccess(result.user, null, 'api');
             } else {
                 this.showError(result.detail || 'E-Mail oder Passwort ist falsch');
                 this.showLoading(false);
@@ -540,10 +504,7 @@ class AuthGate {
     /**
      * Login success handler
      */
-    loginSuccess(user, token = null, source = 'local') {
-        const isJwt = (t) => typeof t === 'string' && t.split('.').length === 3;
-
-        // Store user session
+    loginSuccess(user, token = null, source = 'api') {
         const sessionUser = {
             id: user.id,
             firstName: user.firstName || user.first_name,
@@ -553,27 +514,10 @@ class AuthGate {
             loginMethod: user.loginMethod || 'email'
         };
 
-        localStorage.setItem('cssberlin_current_user', JSON.stringify(sessionUser));
-
-        // Token handling:
-        // - If API provided a JWT, persist it under BOTH keys used in codebase.
-        // - If local login, keep a local token (and clear api token key).
-        if (token && isJwt(token)) {
-            localStorage.setItem('auth_token', token);
-            localStorage.setItem('cssberlin_token', token);
-        } else {
-            const existing = localStorage.getItem('auth_token') || '';
-            if (!existing || existing.startsWith('local_')) {
-                localStorage.setItem('auth_token', 'local_' + Date.now());
-            }
-            // Local auth should not pretend to be API-authenticated
-            localStorage.removeItem('cssberlin_token');
-        }
-
         this.currentUser = sessionUser;
         this.isAuthenticated = true;
 
-        // Immediately hide modal and redirect - no toast notifications
+        // Immediately hide modal and redirect
         this.hideLoginModal();
         this.showLoading(false);
 
@@ -599,47 +543,31 @@ class AuthGate {
     async handleRegister(data) {
         this.showLoading(true);
 
-        // Check if email already exists in localStorage
-        const users = JSON.parse(localStorage.getItem('cssberlin_users') || '[]');
-        if (users.find(u => u.email === data.email)) {
-            this.showError('Diese E-Mail ist bereits registriert.');
-            this.showLoading(false);
-            return;
-        }
-
-        // Create new user locally
-        const newUser = {
-            id: 'user_' + Date.now(),
-            firstName: data.first_name,
-            lastName: data.last_name,
-            email: data.email,
-            password: btoa(data.password),
-            newsletter: data.newsletter || false,
-            createdAt: new Date().toISOString(),
-            wishlist: [],
-            negotiations: [],
-            loginMethod: 'email'
-        };
-
-        users.push(newUser);
-        localStorage.setItem('cssberlin_users', JSON.stringify(users));
-
-        // Try API registration as well
         try {
             const baseUrl = window.CSS_BERLIN_API?.BASE_URL || 'http://localhost:8000';
-            await fetch(baseUrl + '/api/auth/register', {
+            const response = await fetch(baseUrl + '/api/auth/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(data)
             });
-        } catch (error) {
-            console.log('API registration failed, using local storage');
-        }
 
-        // Login the new user
-        this.loginSuccess(newUser);
+            const result = await response.json();
+
+            if (response.ok) {
+                // After successful registration, log the user in
+                await this.handleLogin({email: data.email, password: data.password});
+            } else {
+                this.showError(result.detail || 'Registrierung fehlgeschlagen.');
+                this.showLoading(false);
+            }
+
+        } catch (error) {
+            console.log('API registration failed', error);
+            this.showError('Registrierung fehlgeschlagen.');
+            this.showLoading(false);
+        }
     }
 
     /**
@@ -939,12 +867,19 @@ class AuthGate {
     /**
      * Logout
      */
-    logout() {
-        localStorage.removeItem('auth_token');
-        localStorage.removeItem('cssberlin_current_user');
-        this.isAuthenticated = false;
-        this.currentUser = null;
-        window.location.reload();
+    async logout() {
+        try {
+            const baseUrl = window.CSS_BERLIN_API?.BASE_URL || 'http://localhost:8000';
+            await fetch(baseUrl + '/api/auth/logout', {
+                method: 'POST',
+            });
+        } catch (error) {
+            console.error('Logout error:', error);
+        } finally {
+            this.isAuthenticated = false;
+            this.currentUser = null;
+            window.location.reload();
+        }
     }
 }
 

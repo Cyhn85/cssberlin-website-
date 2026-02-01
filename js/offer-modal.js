@@ -14,10 +14,8 @@ class OfferModalManager {
     constructor() {
         this.API_BASE = 'http://localhost:8000';
         this.MAX_DISCOUNT = 40;
-        this.MAX_DAILY_OFFERS = 25;
         this.currentModal = null;
         this.currentProductData = null;
-        this.dailyOfferCount = 0;
 
         this.init();
     }
@@ -25,7 +23,6 @@ class OfferModalManager {
     init() {
         console.log('🎯 Offer Modal Manager initialized');
         this.createModalContainer();
-        this.loadDailyOfferCount();
     }
 
     /**
@@ -37,37 +34,6 @@ class OfferModalManager {
         const container = document.createElement('div');
         container.id = 'offerModalContainer';
         document.body.appendChild(container);
-    }
-
-    /**
-     * Load daily offer count for current user
-     */
-    async loadDailyOfferCount() {
-        const user = this.getCurrentUser();
-        if (!user) return;
-
-        try {
-            const today = new Date().toISOString().split('T')[0];
-            const response = await fetch(`${this.API_BASE}/api/offers/user/${user.userId}?role=buyer`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                // Count offers made today
-                const todayOffers = data.offers.filter(offer => {
-                    const offerDate = new Date(offer.created_at).toISOString().split('T')[0];
-                    return offerDate === today;
-                });
-                this.dailyOfferCount = todayOffers.length;
-                console.log(`📊 Daily offers: ${this.dailyOfferCount}/${this.MAX_DAILY_OFFERS}`);
-            }
-        } catch (error) {
-            console.error('Error loading daily offer count:', error);
-        }
     }
 
     /**
@@ -101,14 +67,6 @@ class OfferModalManager {
         if (!user) {
             if (typeof toast !== 'undefined') {
                 toast.error('Nicht angemeldet', 'Bitte melden Sie sich an, um ein Angebot zu machen.', 4000);
-            }
-            return;
-        }
-
-        // Check daily limit
-        if (this.dailyOfferCount >= this.MAX_DAILY_OFFERS) {
-            if (typeof toast !== 'undefined') {
-                toast.warning('Tageslimit erreicht', `Sie können maximal ${this.MAX_DAILY_OFFERS} Angebote pro Tag senden.`, 5000);
             }
             return;
         }
@@ -162,11 +120,6 @@ class OfferModalManager {
                                       class="offer-textarea"
                                       rows="3"
                                       placeholder="z.B. Ich würde das Produkt gerne kaufen, aber mein Budget ist begrenzt."></textarea>
-                        </div>
-
-                        <!-- Daily Limit Info -->
-                        <div class="offer-daily-limit">
-                            <p>📊 Tagesangebote: <strong>${this.dailyOfferCount}/${this.MAX_DAILY_OFFERS}</strong></p>
                         </div>
                     </div>
 
@@ -429,8 +382,6 @@ class OfferModalManager {
                 if (typeof toast !== 'undefined') {
                     toast.success('Angebot gesendet', 'Ihr Angebot wurde erfolgreich gesendet!', 4000);
                 }
-
-                this.dailyOfferCount++;
                 this.closeModal();
 
                 // Redirect to verhandeln page

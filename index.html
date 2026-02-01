@@ -160,6 +160,146 @@
             content: '🌿';
             font-size: 12px;
         }
+
+/* ============================================
+   Hero Section Styling
+   ============================================ */
+.hero-section {
+    background: linear-gradient(135deg, #2D5016 0%, #1A3A0A 100%);
+    color: white;
+    padding: 80px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 60%);
+    animation: hero-pulse 10s infinite;
+}
+
+@keyframes hero-pulse {
+    0% { transform: scale(0.5); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero-title {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    letter-spacing: -1px;
+}
+
+.hero-subtitle {
+    font-size: 18px;
+    font-weight: 400;
+    max-width: 600px;
+    margin: 0 auto 32px auto;
+    opacity: 0.9;
+    line-height: 1.6;
+}
+
+.hero-cta-btn {
+    padding: 14px 32px;
+    background: linear-gradient(135deg, #FF8C42 0%, #E8854C 100%);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 15px rgba(255, 140, 66, 0.3);
+}
+
+.hero-cta-btn:hover {
+    background: linear-gradient(135deg, #2D5016 0%, #3d6b1e 100%);
+    border-color: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 0 25px rgba(45, 80, 22, 0.4), 0 5px 20px rgba(45, 80, 22, 0.3);
+    transform: translateY(-3px);
+}
+
+/* ============================================
+   Features Grid Section Styling
+   ============================================ */
+.features-grid {
+    background: var(--bg-secondary);
+    padding: var(--spacing-3xl) var(--spacing-xl);
+}
+
+.features-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-xl);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.feature-item {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    text-align: center;
+    transition: all var(--transition-hover);
+}
+
+.feature-item:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-green);
+}
+
+.feature-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-full);
+    background: var(--accent-green);
+    color: var(--primary-green);
+    margin-bottom: var(--spacing-lg);
+    transition: all var(--transition-hover);
+}
+
+.feature-item:hover .feature-icon {
+    background: var(--primary-green);
+    color: var(--text-white);
+    transform: scale(1.1) rotate(10deg);
+}
+
+.feature-icon svg {
+    width: 32px;
+    height: 32px;
+}
+
+.feature-title {
+    font-size: 20px;
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.feature-text {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: var(--line-height-normal);
+}
     </style>
 </head>
 <body class="page-wrapper">
@@ -345,6 +485,53 @@
             </div>
         </div>
     </header>
+
+    <!-- ============================================
+         Hero Section - Modern & Gradient
+         ============================================ -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title" data-i18n="hero.title">Stilini Koru, Gezegeni Koru</h1>
+            <p class="hero-subtitle" data-i18n="hero.subtitle">İkinci el modanın en şık ve sürdürülebilir adresi. Aradığın parçaları keşfet, sat ve CO₂ tasarrufu yap.</p>
+            <a href="damen.html" class="hero-cta-btn" data-i18n="hero.cta">Şimdi Keşfet</a>
+        </div>
+    </section>
+
+    <!-- ============================================
+         Features Grid Section
+         ============================================ -->
+    <section class="features-grid">
+        <div class="features-container">
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+                </div>
+                <h3 class="feature-title" data-i18n="features.oeko_freundlich">Öko-freundlich</h3>
+                <p class="feature-text" data-i18n="features.oeko_text">Jeder Kauf reduziert den CO₂-Fußabdruck.</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                </div>
+                <h3 class="feature-title" data-i18n="features.sichere_zahlung">Sichere Zahlung</h3>
+                <p class="feature-text" data-i18n="features.sichere_text">Deine Daten sind mit unserer Verschlüsselung sicher.</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 17l5-5-5-5M6 17l5-5-5-5"></path></svg>
+                </div>
+                <h3 class="feature-title" data-i18n="features.einfache_rueckgabe">Einfache Rückgabe</h3>
+                <p class="feature-text" data-i18n="features.einfache_text">Problemlose Rückgabe innerhalb von 14 Tagen.</p>
+            </div>
+             <div class="feature-item">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 18L12 22L16 18"></path><path d="M12 2L12 22"></path></svg>
+                </div>
+                <h3 class="feature-title" data-i18n="features.handeln">Handeln</h3>
+                <p class="feature-text" data-i18n="features.handeln_text">Verhandle direkt mit Verkäufern über den Preis.</p>
+            </div>
+        </div>
+    </section>
 
     <!-- Mobile Search Overlay -->
     <div class="mobile-search-overlay" id="mobileSearchOverlay">
@@ -544,6 +731,17 @@
         </div>
     </div>
 
+    <!-- Featured Products Section -->
+    <section class="products-section">
+        <div class="section-header">
+            <h2 data-i18n="products.featured">Öne Çıkanlar</h2>
+        </div>
+
+        <div class="products-grid" id="featuredProductsGrid">
+            <!-- Featured products will be generated by JavaScript -->
+        </div>
+    </section>
+
     <!-- Products Section -->
     <section class="products-section">
         <div class="section-header">
@@ -571,6 +769,17 @@
                 </svg>
                 <span data-i18n="products.mehr_laden">Daha fazla göster</span>
             </button>
+        </div>
+    </section>
+
+    <!-- Recommendations Section -->
+    <section class="products-section">
+        <div class="section-header">
+            <h2 data-i18n="products.recommendations">Für dich empfohlen</h2>
+        </div>
+
+        <div class="products-grid" id="recommendationsGrid">
+            <!-- Recommendations will be generated by JavaScript -->
         </div>
     </section>
     </main>

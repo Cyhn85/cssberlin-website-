@@ -29,6 +29,11 @@ backend/*.sqlite
 backend/*.log
 backend/.env
 
+# Environment files
+.env
+.env.*
+!.env.example
+
 # Logs
 *.log
 logs/
@@ -49,3 +54,11 @@ ops/reports/
 # Local databases (generated)
 cssberlin.db
 accounting_system/test_accounting.db
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Deployment scripts with credentials
+**/deploy/*.ps1

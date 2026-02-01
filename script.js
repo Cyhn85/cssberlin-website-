@@ -362,7 +362,101 @@ document.addEventListener('DOMContentLoaded', function() {
     initMegaMenus();
     initSearch();
     hideMessageIconForGuests();
+    loadRecommendations();
+    loadFeaturedProducts();
 });
+
+...
+
+// ============================================
+// FEATURED PRODUCTS
+// ============================================
+async function loadFeaturedProducts() {
+    const featuredGrid = document.getElementById('featuredProductsGrid');
+    if (!featuredGrid) return;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/products?is_featured=true`);
+        const data = await response.json();
+        const products = data.products.map(p => ({
+            id: p.id,
+            brand: p.brand || 'Unbekannt',
+            name: p.name || '',
+            size: p.size || '',
+            condition: p.condition || 'Gebraucht',
+            price: p.price || 0,
+            newPrice: p.original_price || (p.price * 2),
+            carbonSaved: Math.round((p.price || 0) * 0.4 * 10) / 10,
+            tier: 'champion',
+            image: (p.images && p.images.length > 0) ? p.images[0] : 'https://images.unsplash.com/photo-1542272454315-7f6f36d69c8d?w=500',
+            sale: false
+        }));
+
+        if (products.length === 0) {
+            featuredGrid.innerHTML = '<p>Keine hervorgehobenen Produkte gefunden.</p>';
+            return;
+        }
+
+        featuredGrid.innerHTML = '';
+        products.forEach(product => {
+            const productCard = createProductCard(product);
+            featuredGrid.innerHTML += productCard;
+        });
+
+        attachProductEventListeners();
+        updateCartButtonStates();
+
+    } catch (error) {
+        console.error('Error loading featured products:', error);
+        featuredGrid.innerHTML = '<p>Fehler beim Laden der hervorgehobenen Produkte.</p>';
+    }
+}
+
+...
+
+// ============================================
+// RECOMMENDATIONS
+// ============================================
+async function loadRecommendations() {
+    const recommendationsGrid = document.getElementById('recommendationsGrid');
+    if (!recommendationsGrid) return;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/products/recommendations/user`);
+        const data = await response.json();
+        const products = data.recommendations.map(p => ({
+            id: p.id,
+            brand: p.brand || 'Unbekannt',
+            name: p.name || '',
+            size: p.size || '',
+            condition: p.condition || 'Gebraucht',
+            price: p.price || 0,
+            newPrice: p.original_price || (p.price * 2),
+            carbonSaved: Math.round((p.price || 0) * 0.4 * 10) / 10,
+            tier: 'champion',
+            image: (p.images && p.images.length > 0) ? p.images[0] : 'https://images.unsplash.com/photo-1542272454315-7f6f36d69c8d?w=500',
+            sale: false
+        }));
+
+        if (products.length === 0) {
+            recommendationsGrid.innerHTML = '<p>Keine Empfehlungen gefunden.</p>';
+            return;
+        }
+
+        recommendationsGrid.innerHTML = '';
+        products.forEach(product => {
+            const productCard = createProductCard(product);
+            recommendationsGrid.innerHTML += productCard;
+        });
+
+        attachProductEventListeners();
+        updateCartButtonStates();
+
+    } catch (error) {
+        console.error('Error loading recommendations:', error);
+        recommendationsGrid.innerHTML = '<p>Fehler beim Laden der Empfehlungen.</p>';
+    }
+}
 
 // ============================================
 // PRODUCT CARD CREATION - V4 WITH SELLER INFO
