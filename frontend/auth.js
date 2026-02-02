@@ -1,132 +1,197 @@
-/* ============================================
-   CSS BERLIN AUTHENTICATION BRIDGE
-   Handles both Registration and Login Forms
-   ============================================ */
+/**
+ * CSS BERLIN - AUTH SYSTEM (v2026)
+ * Bağlantı: api-config.js üzerinden 8001 portuna gider.
+ */
 
-const API_URL = "http://localhost:8000"; // Geliştirme ortamı için
-// const API_URL = "https://api.cssberlin.de"; // Canlı ortam için (Deploy ederken bunu aç)
-
-// --- Helper: Toast Message (Eğer toast.js yoksa basit alert kullanır) ---
-function showMessage(type, title, message) {
-    if (typeof toast !== 'undefined' && toast[type]) {
-        toast[type](title, message);
-    } else {
-        alert(`${title}: ${message}`);
-    }
-}
-
-// --- Auth Gate Object (login.html uyumluluğu için) ---
 const authGate = {
+    isAuthenticated: false,
+    currentUser: null,
+
+    // SİSTEMİ BAŞLAT
+    init: async function() {
+        console.log("Auth Sistemi Başlatılıyor...");
+        this.bindEvents();
+        await this.checkAuthStatus();
+    },
+
+    // EVENTLERİ DİNLE (Login Formu vb.)
+    bindEvents: function() {
+        // Login Formu
+        const loginForm = document.querySelector('form#auth-gate-login-form');
+        if (loginForm) {
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                await this.handleLogin({ email, password });
+            });
+        }
+
+        // Register Formu
+        const registerForm = document.querySelector('form#auth-gate-register-form');
+        if (registerForm) {
+            registerForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(registerForm);
+                const data = Object.fromEntries(formData.entries());
+                
+                // Şifre kontrolü
+                if (data.password !== data.confirm_password) {
+                    this.showToast('Hata', 'Şifreler eşleşmiyor', 'error');
+                    return;
+                }
+                
+                await this.handleRegister(data);
+            });
+        }
+    },
+
+    // LOGIN İŞLEMİ
     handleLogin: async function(credentials) {
+        const btn = document.querySelector('.auth-btn-login-submit');
+        if (btn) btn.innerHTML = 'Giriş yapılıyor...';
+
         try {
-            const response = await fetch(`${API_URL}/api/auth/login`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(credentials)
+            // URL alırken API_CONFIG kullanıyoruz
+            const url = (window.API_CONFIG && window.API_CONFIG.getUrl) 
+                ? window.API_CONFIG.getUrl('/auth/token')
+                : 'http://195.201.146.224:8001/auth/token'; // Fallback
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    username: credentials.email,
+                    password: credentials.password
+                })
+            });
+
+            if (!response.ok) throw new Error('E-posta veya şifre hatalı');
+
+            const data = await response.json();
+            
+            // Token'ı kaydet
+            localStorage.setItem('auth_token', data.access_token);
+            
+            this.showToast('Başarılı', 'Giriş yapıldı, yönlendiriliyorsunuz...', 'success');
+            
+            // Kullanıcı verisini çek ve yönlendir
+            await this.checkAuthStatus();
+            setTimeout(() => { window.location.href = 'index.html'; }, 1000);
+
+        } catch (error) {
+            console.error('Login Hatası:', error);
+            this.showToast('Hata', error.message, 'error');
+            if (btn) btn.innerHTML = 'Giriş Yap';
+        }
+    },
+
+    // KAYIT İŞLEMİ
+    handleRegister: async function(userData) {
+        const btn = document.querySelector('.auth-btn-register-submit');
+        if (btn) btn.innerHTML = 'Kaydediliyor...';
+
+        try {
+            const payload = {
+                email: userData.email,
+                password: userData.password,
+                first_name: userData.first_name || '',
+                last_name: userData.last_name || '',
+                role: 'user'
+            };
+
+            const url = (window.API_CONFIG && window.API_CONFIG.getUrl) 
+                ? window.API_CONFIG.getUrl('/auth/register')
+                : 'http://195.201.146.224:8001/auth/register';
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
             });
 
             const data = await response.json();
 
-            if (response.ok) {
-                // Token'ı kaydet
-                localStorage.setItem("css_access_token", data.access_token);
-                localStorage.setItem("css_user_name", data.user_name);
-                
-                showMessage('success', 'Erfolg', 'Anmeldung erfolgreich! Weiterleitung...');
-                
-                setTimeout(() => {
-                    window.location.href = "index.html";
-                }, 1500);
-            } else {
-                showMessage('error', 'Fehler', data.detail || "Login fehlgeschlagen.");
+            if (!response.ok) {
+                throw new Error(data.detail || 'Kayıt başarısız');
             }
+
+            this.showToast('Başarılı', 'Hesap oluşturuldu! Şimdi giriş yapabilirsiniz.', 'success');
+            setTimeout(() => { window.location.href = 'login.html'; }, 2000);
+
         } catch (error) {
-            console.error("Login Error:", error);
-            showMessage('error', 'Verbindungsfehler', "Server nicht erreichbar.");
+            console.error('Register Hatası:', error);
+            this.showToast('Hata', error.message, 'error');
+            if (btn) btn.innerHTML = 'Kayıt Ol';
         }
     },
-    
-    loginWithGoogle: function() {
-        showMessage('info', 'Info', 'Google Login ist bald verfügbar!');
+
+    // KULLANICI DURUMUNU KONTROL ET
+    checkAuthStatus: async function() {
+        const token = localStorage.getItem('auth_token');
+        if (!token) {
+            this.updateUI(false);
+            return;
+        }
+
+        try {
+            const url = (window.API_CONFIG && window.API_CONFIG.getUrl) 
+                ? window.API_CONFIG.getUrl('/auth/me')
+                : 'http://195.201.146.224:8001/auth/me';
+
+            const response = await fetch(url, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (response.ok) {
+                const user = await response.json();
+                this.currentUser = user;
+                this.isAuthenticated = true;
+                localStorage.setItem('current_user', JSON.stringify(user));
+                this.updateUI(true);
+            } else {
+                this.logout();
+            }
+        } catch (e) {
+            console.error("Auth Check Hatası", e);
+            this.logout();
+        }
     },
 
-    showLoginModal: function(a, b, type) {
-        // Header butonları için yönlendirme
-        if(type === 'login') window.location.href = 'login.html';
-        if(type === 'register') window.location.href = 'registrieren.html';
+    // ÇIKIŞ YAP
+    logout: function() {
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('current_user');
+        this.isAuthenticated = false;
+        this.currentUser = null;
+        this.updateUI(false);
+        // Sadece login sayfasında değilsek yönlendir
+        if (!window.location.pathname.includes('login.html')) {
+            window.location.href = 'login.html';
+        }
+    },
+
+    // ARAYÜZÜ GÜNCELLE
+    updateUI: function(isLoggedIn) {
+        if (window.GlobalHeader && typeof window.GlobalHeader.updateHeaderUI === 'function') {
+            window.GlobalHeader.updateHeaderUI();
+        }
+    },
+
+    // BİLDİRİM GÖSTER (Toast)
+    showToast: function(title, message, type = 'info') {
+        if (typeof toast !== 'undefined' && toast[type]) {
+            toast[type](title, message);
+        } else {
+            alert(`${title}: ${message}`);
+        }
     }
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-    
-    // 1. KAYIT FORMU (registrieren.html)
-    const registerForm = document.getElementById("registerForm");
-    
-    if (registerForm) {
-        registerForm.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            
-            const submitBtn = registerForm.querySelector(".submit-btn");
-            const originalText = submitBtn.innerHTML;
-            
-            // Verileri Topla (HTML ID'lerine göre)
-            const firstName = document.getElementById("firstName").value;
-            const lastName = document.getElementById("lastName").value;
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-            const confirmPassword = document.getElementById("confirmPassword").value;
-            const terms = document.getElementById("terms").checked;
-
-            // Basit Doğrulamalar
-            if (password !== confirmPassword) {
-                showMessage('error', 'Fehler', 'Passwörter stimmen nicht überein.');
-                return;
-            }
-            if (!terms) {
-                showMessage('error', 'Fehler', 'Bitte akzeptieren Sie die AGB.');
-                return;
-            }
-
-            submitBtn.innerHTML = "Verarbeitung...";
-            submitBtn.disabled = true;
-
-            try {
-                const response = await fetch(`${API_URL}/api/auth/register`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        email: email,
-                        password: password,
-                        first_name: firstName,
-                        last_name: lastName
-                    })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    localStorage.setItem("css_access_token", data.access_token);
-                    localStorage.setItem("css_user_name", data.user_name);
-                    showMessage('success', 'Willkommen', 'Konto erfolgreich erstellt!');
-                    setTimeout(() => {
-                        window.location.href = "index.html";
-                    }, 2000);
-                } else {
-                    showMessage('error', 'Fehler', data.detail || "Registrierung fehlgeschlagen.");
-                }
-            } catch (error) {
-                console.error("Register Error:", error);
-                showMessage('error', 'Fehler', "Server Verbindung fehlgeschlagen.");
-            } finally {
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            }
-        });
-    }
-
-    // 2. GİRİŞ FORMU (login.html)
-    // Not: login.html içinde inline script var, ancak biz buraya da listener ekleyelim.
-    const loginForm = document.getElementById("auth-gate-login-form");
-    // login.html içindeki inline script authGate.handleLogin'i çağırıyor,
-    // authGate nesnesini yukarıda tanımladığımız için sorun çıkmayacak.
+// Sayfa yüklendiğinde başlat
+document.addEventListener('DOMContentLoaded', () => {
+    authGate.init();
 });
+
+// Global erişim
+window.authGate = authGate;
