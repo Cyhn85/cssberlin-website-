@@ -1,27 +1,42 @@
+# backend/main.py
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from auth import router as auth_router
+import uvicorn
+import os
 
+app = FastAPI(
+    title="CSS Berlin API",
+    description="Climate Smart Solutions Backend System",
+    version="2.1.0"
+)
 
-# ============== ADMIN ENDPOINTS ==============
+# --- CORS Ayarları (Frontend'in Backend'e erişmesi için) ---
+origins = [
+    "http://localhost:5500",
+    "http://127.0.0.1:5500",
+    "http://localhost:3000",
+    "https://cssberlin.de",
+    "https://www.cssberlin.de",
+    "https://cssberlin-website.pages.dev"
+]
 
-@app.get("/api/admin/users", response_model=List[UserResponse])
-async def get_all_users(skip: int = 0, limit: int = 100, db: AsyncSession = Depends(get_db)):
-    """Get all users (admin only)"""
-    # TODO: Add admin role check
-    result = await db.execute(select(User).offset(skip).limit(limit))
-    users = result.scalars().all()
-    return users
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # Geliştirme aşamasında tüm kaynaklara izin ver
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-@app.get("/api/admin/products", response_model=List[ProductResponse])
-async def get_all_products(skip: int = 0, limit: int = 100, db: AsyncSession = Depends(get_db)):
-    """Get all products (admin only)"""
-    # TODO: Add admin role check
-    result = await db.execute(select(Product).offset(skip).limit(limit))
-    products = result.scalars().all()
-    return products
+# --- Router Bağlantısı ---
+app.include_router(auth_router)
 
-@app.get("/api/admin/orders", response_model=List[OrderResponse])
-async def get_all_orders(skip: int = 0, limit: int = 100, db: AsyncSession = Depends(get_db)):
-    """Get all orders (admin only)"""
-    # TODO: Add admin role check
-    result = await db.execute(select(Order).offset(skip).limit(limit))
-    orders = result.scalars().all()
-    return orders
+# --- Ana Endpoint ---
+@app.get("/")
+def read_root():
+    return {"status": "online", "message": "CSS Berlin Backend System Operational"}
+
+if __name__ == "__main__":
+    port = int(os.getenv("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)

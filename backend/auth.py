@@ -1,90 +1,130 @@
-"""
-Authentication utilities for CSS Berlin API
-JWT token handling and password hashing
-"""
-
-from __future__ import annotations
-
+# backend/auth.py
+from fastapi import APIRouter, HTTPException, Depends, status
+from pydantic import BaseModel, EmailStr
+from typing import Optional
 from datetime import datetime, timedelta
-from jose import JWTError, jwt
-from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
+import jwt
+from passlib.context import CryptContext
 import os
-import hashlib
-import hmac
+from dotenv import load_dotenv
 
-# Configuration
-SECRET_KEY = os.getenv("SECRET_KEY")
-if not SECRET_KEY:
-    raise RuntimeError("Missing required environment variable SECRET_KEY")
+# Environment Yükle
+load_dotenv()
+
+# Ayarlar
+SECRET_KEY = os.getenv("SECRET_KEY", "super_secret_key_css_berlin_2026")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 7 days
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 1 Hafta
 
-# OAuth2 scheme
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/token")
+# Şifreleme Aracı
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verify a password against its hash using HMAC-SHA256"""
-    computed_hash = get_password_hash(plain_password)
-    return hmac.compare_digest(computed_hash, hashed_password)
+# --- Veri Modelleri (HTML Formunla Eşleşir) ---
+class UserRegister(BaseModel):
+    email: EmailStr
+    password: str
+    first_name: str  # HTML'deki id="firstName"
+    last_name: str   # HTML'deki id="lastName"
 
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
 
-def get_password_hash(password: str) -> str:
-    """Hash a password using HMAC-SHA256"""
-    return hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), SECRET_KEY.encode('utf-8'), 100000).hex()
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+    user_name: str
 
+# --- Mock Veritabanı (Geçici Hafıza) ---
+# Sunucu kapanınca silinir. Kalıcı olması için PostgreSQL bağlanacak.
+fake_users_db = {}
 
-def create_access_token(data: dict, expires_delta: timedelta | None = None) -> str:
-    """Create a JWT access token"""
+# --- Yardımcı Fonksiyonlar ---
+def verify_password(plain_password, hashed_password):
+    return pwd_context.verify(plain_password, hashed_password)
+
+def get_password_hash(password):
+    return pwd_context.hash(password)
+
+def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()
-
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-
+        expire = datetime.utcnow() + timedelta(minutes=15)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-
     return encoded_jwt
 
+# --- Endpointler ---
 
-async def get_current_user(token: str = Depends(oauth2_scheme)):
-    """Get current user from JWT token"""
-    from database import AsyncSessionLocal
-    from models import User
-    from sqlalchemy import select
-
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Ungültige Anmeldedaten",
-        headers={"WWW-Authenticate": "Bearer"},
+@router.post("/register", response_model=Token)
+async def register(user: UserRegister):
+    # 1. Kullanıcı var mı kontrol et
+    if user.email in fake_users_db:
+        raise HTTPException(
+            status_code=400,
+            detail="Bu email adresi zaten kayıtlı."
+        )
+    
+    # 2. Şifreyi hashle ve kaydet
+    hashed_password = get_password_hash(user.password)
+    fake_users_db[user.email] = {
+        "email": user.email,
+        "password": hashed_password,
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "full_name": f"{user.first_name} {user.last_name}"
+    }
+    
+    # 3. Otomatik giriş için Token üret
+    access_token = create_access_token(
+        data={"sub": user.email}
     )
+    
+    return {
+        "access_token": access_token, 
+        "token_type": "bearer",
+        "user_name": user.first_name
+    }
 
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        email: str = payload.get("sub")
-        user_id: int = payload.get("user_id")
+@router.post("/login", response_model=Token)
+async def login(user_data: UserLogin):
+    # 1. Kullanıcıyı bul
+    user = fake_users_db.get(user_data.email)
+    
+    # Test için Demo Kullanıcı (Veritabanı boşsa çalışsın diye)
+    if not user and user_data.email == "demo@cssberlin.de" and user_data.password == "demo123":
+        user = {"email": "demo@cssberlin.de", "password": get_password_hash("demo123"), "first_name": "Demo"}
 
-        if email is None:
-            raise credentials_exception
+    if not user:
+        raise HTTPException(
+            status_code=401,
+            detail="Kullanıcı bulunamadı veya şifre hatalı.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    # 2. Şifreyi doğrula
+    if not verify_password(user_data.password, user["password"]):
+         raise HTTPException(
+            status_code=401,
+            detail="Şifre hatalı.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
-    except JWTError:
-        raise credentials_exception
-
-    # Get user from database
-    async with AsyncSessionLocal() as session:
-        result = await session.execute(select(User).where(User.id == user_id))
-        user = result.scalar_one_or_none()
-
-        if user is None:
-            raise credentials_exception
-
-        if not user.is_active:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Benutzer ist deaktiviert"
-            )
-
-        return user
+    # 3. Token üret
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": user["email"]}, expires_delta=access_token_expires
+    )
+    
+    # İsim bilgisini güvenli çek
+    user_name = user.get("first_name", "User")
+    
+    return {
+        "access_token": access_token, 
+        "token_type": "bearer",
+        "user_name": user_name
+    }

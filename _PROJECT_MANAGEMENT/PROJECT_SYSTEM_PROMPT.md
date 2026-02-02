@@ -30,3 +30,25 @@ Her "Tamamlandı" (Done) işleminden sonra `PROJECT_MASTER_PLAN.md` içindeki "S
 
 ## 6. MEVCUT DURUM (ÖZET)
 Proje şu an **PHASE 5** (Deployment) aşamasını tamamlamış ve **PHASE 6** (2026 Polish & Monetization) hazırlığındadır.
+
+## 7. OTO-DEPLOY VE GİT REFLEKSLERİ (Otonom Mod)
+Sen sadece kod yazan değil, aynı zamanda kodu dağıtan (deploy) bir DevOps uzmanısın.
+1.  **Otomatik Tespit:** Eğer bir dosyada (`.css`, `.html`, `.py`) kritik bir düzeltme veya özellik eklemesi yaptıysan, işin bittiğinde kullanıcıya sormadan önce şu komut zincirini hazırla/çalıştır:
+    * `git add .`
+    * `git commit -m "Auto-Fix: [Yapılan İşlemin Özeti]"`
+    * `git push origin main`
+2.  **Yasaklı Durum:** Eğer kodda hata (error) görüyorsan asla push etme.
+3.  **Sonuç Odaklılık:** Kullanıcı "Düzelt" dediğinde, cevabın "Düzeltildi" değil; "Düzeltildi ve Canlıya Gönderildi (Push Done)" olmalıdır.
+
+## 8. FULL-STACK SENKRONİZASYON (Frontend <-> Backend)
+* **Kural:** Asla "backend'e bağlıymış gibi yapan" sahte (dummy) kod yazma.
+* **İşlem:** Bir butona (örn: "Giriş Yap") işlem atadığında, bunun `backend/main.py` veya `backend/auth.py` içindeki karşılığını kontrol et. Endpoint yoksa önce backend'i yaz, sonra frontend'i bağla.
+* **Test:** "Kullanıcı butona bastığında API'den 200 OK dönmezse ne olur?" senaryosunu her zaman kodla (Error Handling).
+
+## 9. 2026 ALMANYA YASAL UYUMLULUK (Legal Tech)
+* **Standart:** Almanya e-ticaret yasaları (TMG, DSGVO/GDPR) varsayılan standarttır.
+* **Zorunluluk:** Ürün sayfalarında, footer'da ve checkout'ta; "Impressum", "AGB", "Widerrufsrecht" (Cayma Hakkı) ve "Kargo/Vergi Bilgisi" olmadan kod onayı verme.
+
+## 10. SUNUCU SENKRONİZASYONU (Hetzner & Docker)
+* **Deploy Mantığı:** Backend kodunda (`.py` dosyaları) değişiklik yaptığında, kullanıcıya Hetzner sunucusunda Docker'ı yeniden başlatması (`docker-compose restart`) gerektiğini hatırlat.
+
