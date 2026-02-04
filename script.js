@@ -364,9 +364,10 @@ document.addEventListener('DOMContentLoaded', function() {
     hideMessageIconForGuests();
     loadRecommendations();
     loadFeaturedProducts();
+    initHeroSlider();
+    initSocialHub();
 });
 
-...
 
 // ============================================
 // FEATURED PRODUCTS
@@ -412,7 +413,6 @@ async function loadFeaturedProducts() {
     }
 }
 
-...
 
 // ============================================
 // RECOMMENDATIONS
@@ -473,99 +473,93 @@ function createProductCard(product) {
     const location = product.location || seller.location || 'Berlin';
 
     return `
-        <div class="product-card" data-product-id="${product.id}">
-            <div class="product-image-wrapper">
-                <img src="${product.image}"
-                     alt="${product.name}"
-                     loading="lazy"
-                     onerror="this.src='https://via.placeholder.com/400x533?text=Bild+nicht+verfügbar'">
+        <div class="product-card-v3" data-product-id="${product.id}">
+            <div class="product-card-v3-inner">
+                <div class="product-card-v3-img-wrap">
+                    <img src="${product.image}"
+                         alt="${product.name}"
+                         loading="lazy"
+                         onerror="this.src='https://via.placeholder.com/400x533?text=Bild+nicht+verfuegbar'">
 
-                <button class="wishlist-btn ${inWishlist ? 'active' : ''}"
-                        data-product-id="${product.id}"
-                        title="${inWishlist ? 'Von Wunschliste entfernen' : 'Zur Wunschliste hinzufügen'}">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="${inWishlist ? '#F44336' : 'none'}" stroke="${inWishlist ? '#F44336' : 'currentColor'}" stroke-width="2">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                    </svg>
-                </button>
+                    <div class="product-card-v3-badge">${product.condition}</div>
 
-                <div class="carbon-badge ${product.tier}">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
-                    </svg>
-                    <span>-${product.carbonSaved}kg CO₂</span>
-                </div>
-
-                <!-- Quick View Button -->
-                <button class="quick-view-btn" data-product-id="${product.id}" title="Schnellansicht">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                        <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
-                    Schnellansicht
-                </button>
-            </div>
-
-            <div class="product-info">
-                <!-- ⭐ NEW: Seller Info Section -->
-                <div class="product-seller-info">
-                    <div class="seller-avatar-mini" style="background: ${seller.avatarColor}">
-                        ${seller.initials}
+                    <div class="carbon-badge ${product.tier}" style="position:absolute;bottom:10px;left:10px;z-index:2;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                        </svg>
+                        <span>-${product.carbonSaved}kg CO₂</span>
                     </div>
-                    <div class="seller-details">
-                        <div class="seller-name-line">
-                            <span class="seller-name">${seller.name}</span>
-                            ${seller.verified ? '<svg class="verified-badge" width="14" height="14" viewBox="0 0 24 24" fill="#2196F3"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path></svg>' : ''}
-                            ${seller.badge ? `<span class="seller-badge seller-badge-${seller.badge}">${getBadgeIcon(seller.badge)}</span>` : ''}
-                        </div>
-                        <div class="seller-meta">
-                            <span>⭐ ${seller.rating.toFixed(1)}</span>
-                            <span>•</span>
-                            <span>📍 ${location}</span>
-                            <span>•</span>
-                            <span>🕐 ${uploadedAgo}</span>
-                        </div>
+
+                    <div class="product-card-v3-overlay">
+                        <button class="wishlist-btn ${inWishlist ? 'active' : ''}"
+                                data-product-id="${product.id}"
+                                title="${inWishlist ? 'Von Wunschliste entfernen' : 'Zur Wunschliste hinzufuegen'}">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="${inWishlist ? '#F44336' : 'none'}" stroke="${inWishlist ? '#F44336' : 'currentColor'}" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
+                        <button class="add-to-cart-btn"
+                                data-product-id="${product.id}"
+                                title="In den Warenkorb">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="20" cy="21" r="1"></circle>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            </svg>
+                        </button>
+                        <button class="quick-view-btn"
+                                data-product-id="${product.id}"
+                                title="Schnellansicht">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </button>
                     </div>
                 </div>
 
-                <div class="product-brand">${product.brand}</div>
-                <h3 class="product-title">${product.name}</h3>
+                <div class="product-card-v3-body">
+                    <div class="product-card-v3-price-row">
+                        <div>
+                            <span class="product-card-v3-price">${product.price.toFixed(2)}€</span>
+                            <span style="font-size:10px;color:#999;margin-left:6px;text-decoration:line-through;">Neu: ${product.newPrice.toFixed(2)}€</span>
+                        </div>
+                        <span class="product-card-v3-brand">${product.brand}</span>
+                    </div>
 
-                <div class="product-meta">
-                    <span>Größe ${product.size}</span>
-                    <span>|</span>
-                    <span>${product.condition}</span>
-                </div>
+                    <h3 class="product-card-v3-name">${product.name}</h3>
 
-                <div class="product-price-container">
-                    <span class="product-price">${product.price.toFixed(2)}€</span>
-                    <span class="product-new-price">Neupreis: ${product.newPrice.toFixed(2)}€</span>
-                </div>
+                    <div class="product-meta" style="font-size:11px;color:#888;margin-bottom:8px;">
+                        <span>Größe ${product.size}</span><span style="margin:0 4px;">|</span><span>${product.condition}</span>
+                    </div>
 
-                <!-- V4: 2-Button Layout (Icon Cart + Full Kaufen) -->
-                <div class="product-actions" style="display: flex; gap: 8px;">
-                    <button class="add-to-cart-btn" data-product-id="${product.id}" title="In den Warenkorb" style="width: 48px; padding: 12px; background: white; border: 2px solid #2D5016; color: #2D5016; border-radius: 8px; cursor: pointer; font-weight: 600; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="9" cy="21" r="1"></circle>
-                            <circle cx="20" cy="21" r="1"></circle>
-                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                        </svg>
-                    </button>
-                    <button class="buy-btn" data-product-id="${product.id}" style="flex: 1; padding: 12px; background: #2D5016; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.3s ease;">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                        </svg>
-                        Kaufen
-                    </button>
+                    <div class="product-card-v3-seller">
+                        <div class="product-card-v3-seller-avatar" style="background:${seller.avatarColor || '#FF8C42'};">${seller.initials}</div>
+                        <div class="product-card-v3-seller-info">
+                            <strong>${seller.name}</strong>${seller.verified ? ' ✓' : ''}${seller.badge ? ` <span class="seller-badge seller-badge-${seller.badge}">${getBadgeIcon(seller.badge)}</span>` : ''}
+                            <br>⭐ ${seller.rating.toFixed(1)} · 📍 ${location} · 🕐 ${uploadedAgo}
+                        </div>
+                    </div>
+
+                    <div class="product-card-v3-actions">
+                        <button class="btn-energy-brand negotiate-btn" data-product-id="${product.id}">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                            Chat
+                        </button>
+                        <button class="btn-rainbow buy-btn" data-product-id="${product.id}">
+                            <span>
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                                </svg>
+                                Kaufen
+                            </span>
+                        </button>
+                    </div>
                 </div>
-                <button class="negotiate-btn" data-product-id="${product.id}" style="width: 100%; padding: 12px; background: #FF8C42; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 8px; transition: all 0.3s ease;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                        <path d="M8 10h.01M12 10h.01M16 10h.01"></path>
-                    </svg>
-                    Verhandeln
-                </button>
             </div>
         </div>
     `;
@@ -720,7 +714,7 @@ async function initProducts(category = null) {
 // ============================================
 function attachProductEventListeners() {
     // Product card click - go to product detail
-    document.querySelectorAll('.product-card').forEach(card => {
+    document.querySelectorAll('.product-card, .product-card-v3').forEach(card => {
         card.addEventListener('click', function(e) {
             // Don't navigate if clicking on buttons
             if (e.target.closest('.wishlist-btn, .buy-btn, .negotiate-btn, .quick-view-btn, .add-to-cart-btn')) {
@@ -1341,10 +1335,10 @@ async function performSearch(query) {
     } catch (error) {
         console.error('Error searching products:', error);
         // Fallback to client-side filtering on existing cards
-        const productCards = document.querySelectorAll('.product-card');
+        const productCards = document.querySelectorAll('.product-card, .product-card-v3');
         productCards.forEach(card => {
-            const title = card.querySelector('.product-title')?.textContent.toLowerCase() || '';
-            const brand = card.querySelector('.product-brand')?.textContent.toLowerCase() || '';
+            const title = (card.querySelector('.product-title') || card.querySelector('.product-card-v3-name'))?.textContent.toLowerCase() || '';
+            const brand = (card.querySelector('.product-brand') || card.querySelector('.product-card-v3-brand'))?.textContent.toLowerCase() || '';
 
             if (title.includes(lowerQuery) || brand.includes(lowerQuery)) {
                 card.style.display = 'block';
@@ -1375,3 +1369,337 @@ console.log('%cCSS Berlin V4', 'color: #2D5016; font-size: 24px; font-weight: bo
 console.log('%cClimate Smart Solutions - With Seller Info', 'color: #757575; font-size: 14px;');
 console.log(`Loaded ${sampleProducts.length} products`);
 console.log(`Favorites loaded: ${favoriteIds.size}`);
+
+// PHASE E — HeroSlider (auto-play campaign carousel)
+// ============================================
+const HERO_SLIDES = [
+    {
+        id: 1,
+        title: "Willkommensgeschenk: 10% Rabatt",
+        subtitle: "Melde dich jetzt an und erhalte 10% Rabatt auf deine erste Bestellung. Code: HELLO10",
+        imageUrl: "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070&auto=format&fit=crop"
+    },
+    {
+        id: 2,
+        title: "Kostenloser Versand ab 50€",
+        subtitle: "Nachhaltig shoppen lohnt sich. Wir übernehmen die Versandkosten für alle Bestellungen über 50€.",
+        imageUrl: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?q=80&w=2070&auto=format&fit=crop"
+    },
+    {
+        id: 3,
+        title: "Technik, die weiterlebt",
+        subtitle: "Geprüfte Elektronik und Kameras mit 12 Monaten Garantie. Weniger Elektroschrott.",
+        imageUrl: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?q=80&w=2070&auto=format&fit=crop"
+    }
+];
+
+function initHeroSlider() {
+    const container = document.getElementById('heroSliderContainer');
+    if (!container) return;
+
+    // Render slides
+    let slidesHTML = '';
+    HERO_SLIDES.forEach((slide, i) => {
+        slidesHTML += `
+            <div class="hero-slide ${i === 0 ? 'active' : ''}" data-slide="${i}">
+                <img src="${slide.imageUrl}" alt="${slide.title}" loading="lazy">
+                <div class="hero-slide-overlay"></div>
+                <div class="hero-slide-caption">
+                    <span class="hero-tag">Featured Collection</span>
+                    <h3>${slide.title}</h3>
+                    <p>${slide.subtitle}</p>
+                </div>
+            </div>`;
+    });
+
+    // Render indicators
+    let dotsHTML = '<div class="hero-indicators">';
+    HERO_SLIDES.forEach((_, i) => {
+        dotsHTML += `<button class="hero-dot ${i === 0 ? 'active' : ''}" data-dot="${i}"></button>`;
+    });
+    dotsHTML += '</div>';
+
+    container.innerHTML = `
+        <div class="hero-slider">
+            ${slidesHTML}
+            <button class="hero-nav-btn prev" id="heroPrevBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"></path></svg>
+            </button>
+            <button class="hero-nav-btn next" id="heroNextBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"></path></svg>
+            </button>
+            ${dotsHTML}
+        </div>`;
+
+    // State
+    let current = 0;
+    let locked = false;
+    let autoplayTimer = null;
+
+    const slides = container.querySelectorAll('.hero-slide');
+    const dots = container.querySelectorAll('.hero-dot');
+
+    function goTo(index) {
+        if (locked) return;
+        locked = true;
+        slides[current].classList.remove('active');
+        dots[current].classList.remove('active');
+        current = index;
+        slides[current].classList.add('active');
+        dots[current].classList.add('active');
+        // Unlock after transition duration
+        setTimeout(() => { locked = false; }, 500);
+    }
+
+    function next() {
+        goTo(current === HERO_SLIDES.length - 1 ? 0 : current + 1);
+    }
+    function prev() {
+        goTo(current === 0 ? HERO_SLIDES.length - 1 : current - 1);
+    }
+
+    function startAutoplay() {
+        stopAutoplay();
+        autoplayTimer = setInterval(next, 5000);
+    }
+    function stopAutoplay() {
+        if (autoplayTimer) { clearInterval(autoplayTimer); autoplayTimer = null; }
+    }
+
+    // Event listeners
+    document.getElementById('heroNextBtn').addEventListener('click', function(e) {
+        e.stopPropagation();
+        next();
+        startAutoplay(); // reset timer on manual click
+    });
+    document.getElementById('heroPrevBtn').addEventListener('click', function(e) {
+        e.stopPropagation();
+        prev();
+        startAutoplay();
+    });
+    dots.forEach(dot => {
+        dot.addEventListener('click', function(e) {
+            e.stopPropagation();
+            goTo(parseInt(this.dataset.dot));
+            startAutoplay();
+        });
+    });
+
+    // Start autoplay
+    startAutoplay();
+}
+
+// ============================================
+// PHASE F — ArgentLoopInfiniteSlider (Social Hub)
+// Infinite vertical scroll: parallax + snap + RAF
+// ============================================
+function initSocialHub() {
+    var container = document.getElementById('socialHubContainer');
+    if (!container) return;
+
+    var SOCIAL_DATA = [
+        { title: "Instagram",   image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1974&auto=format&fit=crop", category: "Visual Stories", handle: "@css_berlin" },
+        { title: "LinkedIn",    image: "https://images.unsplash.com/photo-1560179707-f14e90ef3dab?q=80&w=1974&auto=format&fit=crop", category: "Corporate",      handle: "CSS Berlin GmbH" },
+        { title: "TikTok",      image: "https://images.unsplash.com/photo-1520466809213-7b9a56adcd45?q=80&w=1887&auto=format&fit=crop", category: "Viral Trends",   handle: "@css_watch" },
+        { title: "Twitter / X", image: "https://images.unsplash.com/photo-1611605698335-8b1569810432?q=80&w=1974&auto=format&fit=crop", category: "Updates",        handle: "@css_support" },
+        { title: "Pinterest",   image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop", category: "Moodboards",     handle: "CSS_Official" }
+    ];
+
+    var LERP = 0.08, BUFFER = 2, MAX_VEL = 100, SNAP_DUR = 700;
+
+    // Replace placeholder with clean viewport
+    container.innerHTML = '<div class="social-hub-viewport" style="position:relative;width:100%;height:100%;overflow:hidden;background:#111;"></div>';
+    var viewport = container.querySelector('.social-hub-viewport');
+
+    // Append label pill (outside viewport so it stays fixed)
+    var label = document.createElement('div');
+    label.className = 'social-hub-label';
+    label.innerHTML = '<span class="social-hub-label-dot"></span><span>Social Hub</span>';
+    container.appendChild(label);
+
+    // --- State ---
+    var currentY = 0, targetY = 0;
+    var isDragging = false, isSnapping = false;
+    var snapStart = { time: 0, y: 0, target: 0 };
+    var lastScrollTime = Date.now();
+    var dragStart = { y: 0, scrollY: 0 };
+    var itemH = container.clientHeight;
+    var rafId = null;
+    var pool = {};          // index -> DOM element
+    var parallaxMap = {};   // index -> current parallax value
+
+    // --- Helpers ---
+    function getData(i) {
+        return SOCIAL_DATA[((i % SOCIAL_DATA.length) + SOCIAL_DATA.length) % SOCIAL_DATA.length];
+    }
+    function lerp(a, b, t) { return a + (b - a) * t; }
+
+    // --- Slide pool management ---
+    function createSlide(idx) {
+        if (pool[idx]) return;
+        var d = getData(idx);
+        var el = document.createElement('div');
+        el.className = 'social-hub-slide';
+        el.innerHTML =
+            '<img src="' + d.image + '" alt="' + d.title + '" loading="lazy" class="social-hub-slide-img">' +
+            '<div class="social-hub-slide-content">' +
+              '<span class="social-hub-slide-cat">' + d.category + '</span>' +
+              '<h3 class="social-hub-slide-title">' + d.title + '</h3>' +
+              '<p class="social-hub-slide-handle">' + d.handle + '</p>' +
+              '<button class="social-hub-slide-follow">Folgen</button>' +
+            '</div>';
+        viewport.appendChild(el);
+        pool[idx] = el;
+    }
+    function removeSlide(idx) {
+        if (pool[idx]) { pool[idx].remove(); delete pool[idx]; }
+    }
+    function syncPool() {
+        var ci = Math.round(-targetY / itemH);
+        var min = ci - BUFFER, max = ci + BUFFER;
+        // Remove out-of-range
+        Object.keys(pool).forEach(function(k) {
+            var i = parseInt(k);
+            if (i < min || i > max) removeSlide(i);
+        });
+        // Add in-range
+        for (var i = min; i <= max; i++) createSlide(i);
+    }
+
+    // --- Snap logic ---
+    function snapTo() {
+        var ci = Math.round(-targetY / itemH);
+        isSnapping = true;
+        snapStart = { time: Date.now(), y: targetY, target: -ci * itemH };
+    }
+    function updateSnap() {
+        var p = Math.min((Date.now() - snapStart.time) / SNAP_DUR, 1);
+        var eased = 1 - Math.pow(1 - p, 3); // cubic ease-out
+        targetY = snapStart.y + (snapStart.target - snapStart.y) * eased;
+        if (p >= 1) isSnapping = false;
+    }
+
+    // --- RAF loop ---
+    function updatePositions() {
+        Object.keys(pool).forEach(function(k) {
+            var idx = parseInt(k);
+            var el = pool[idx];
+            var y = idx * itemH + currentY;
+            el.style.transform = 'translateY(' + y + 'px)';
+
+            // Parallax on image
+            var img = el.querySelector('.social-hub-slide-img');
+            if (img) {
+                var cur = parallaxMap[idx] || 0;
+                var tgt = (-currentY - idx * itemH) * 0.15;
+                cur = lerp(cur, tgt, 0.1);
+                parallaxMap[idx] = cur;
+                img.style.transform = 'translateY(' + cur + 'px) scale(1.3)';
+            }
+        });
+    }
+
+    function animate() {
+        var now = Date.now();
+        // Trigger snap when idle
+        if (!isSnapping && !isDragging && now - lastScrollTime > 100) {
+            var sp = -Math.round(-targetY / itemH) * itemH;
+            if (Math.abs(targetY - sp) > 1) snapTo();
+        }
+        if (isSnapping) updateSnap();
+        if (!isDragging) currentY += (targetY - currentY) * LERP;
+
+        updatePositions();
+        syncPool();
+        rafId = requestAnimationFrame(animate);
+    }
+
+    // --- Input handlers ---
+    function onWheel(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        isSnapping = false;
+        lastScrollTime = Date.now();
+        targetY -= Math.max(Math.min(e.deltaY * 0.5, MAX_VEL), -MAX_VEL);
+    }
+    function onTouchStart(e) {
+        isDragging = true;
+        isSnapping = false;
+        dragStart = { y: e.touches[0].clientY, scrollY: targetY };
+        lastScrollTime = Date.now();
+    }
+    function onTouchMove(e) {
+        if (!isDragging) return;
+        if (e.cancelable) e.preventDefault();
+        targetY = dragStart.scrollY + (e.touches[0].clientY - dragStart.y) * 1.5;
+        lastScrollTime = Date.now();
+    }
+    function onTouchEnd() { isDragging = false; }
+
+    // Bind events to container
+    container.addEventListener('wheel',      onWheel,      { passive: false });
+    container.addEventListener('touchstart', onTouchStart, { passive: false });
+    container.addEventListener('touchmove',  onTouchMove,  { passive: false });
+    container.addEventListener('touchend',   onTouchEnd);
+
+    function onResize() { itemH = container.clientHeight; }
+    window.addEventListener('resize', onResize);
+
+    // --- Kick off ---
+    syncPool();
+    rafId = requestAnimationFrame(animate);
+}
+
+// ═══════════════════════════════════════════════════════
+// FEATURED COLLECTION — Statik kartlar (Resim 1 match)
+// ═══════════════════════════════════════════════════════
+function initFeaturedCollection() {
+    const container = document.getElementById('featuredCollectionGrid');
+    if (!container) return;
+
+    const featured = [
+        {
+            label: 'FEATURED COLLECTION',
+            title: 'Technik, die weiterlebt',
+            desc: 'Geprüfte Elektronik und Kameras mit 12 Monaten Garantie. Weniger Elektroschrott.',
+            bg: 'linear-gradient(135deg, #1a2a1a 0%, #2d4a2d 100%)',
+            link: 'herren.html',
+            icon: '📷'
+        },
+        {
+            label: 'NEW ARRIVALS',
+            title: 'Frühlings-Kollektion',
+            desc: 'Neue Styles für die kommende Saison. Nachhaltig, stylisch und bezahlbar.',
+            bg: 'linear-gradient(135deg, #2D5016 0%, #4a8025 100%)',
+            link: 'damen.html',
+            icon: '👗'
+        },
+        {
+            label: 'SALE',
+            title: 'Bis zu 70% Rabatt',
+            desc: 'Bis zu 70% Rabatt auf ausgewählte Artikel. Begrenztes Angebot!',
+            bg: 'linear-gradient(135deg, #FF8C42 0%, #E8854C 100%)',
+            link: 'damen.html',
+            icon: '🔥'
+        }
+    ];
+
+    container.innerHTML = featured.map(item => `
+        <a href="${item.link}" class="featured-card" style="text-decoration:none;">
+            <div style="width:100%;height:100%;min-height:280px;background:${item.bg};display:flex;align-items:center;justify-content:center;">
+                <span style="font-size:64px;opacity:0.25;">${item.icon}</span>
+            </div>
+            <div class="featured-card-overlay">
+                <span class="featured-card-label">${item.label}</span>
+                <h3 class="featured-card-title">${item.title}</h3>
+                <p class="featured-card-desc">${item.desc}</p>
+            </div>
+        </a>
+    `).join('');
+}
+
+// Auto-init on DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+    initFeaturedCollection();
+});
+

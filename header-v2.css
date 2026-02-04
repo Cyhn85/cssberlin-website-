@@ -1062,3 +1062,112 @@
 .user-dashboard-bar {
     display: none !important;
 }
+
+/* ============================================================
+   PHASE B — Nav Bar V2 (orange→green gradient with dropdowns)
+   ============================================================ */
+
+.nav-bar-v2 {
+    background: linear-gradient(90deg, #FF8C42 0%, #E8854C 25%, #4a8025 75%, #165B33 100%);
+    width: 100%;
+    box-shadow: 0 2px 8px rgba(22, 91, 51, 0.18);
+    position: relative;
+    z-index: 40;
+}
+.nav-bar-v2-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: stretch;
+}
+.nav-bar-v2-item {
+    position: relative;
+}
+.nav-bar-v2-link {
+    display: block;
+    padding: 12px 20px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    text-decoration: none;
+    transition: color 0.2s, background 0.2s, transform 0.2s;
+    border-radius: 6px 6px 0 0;
+}
+.nav-bar-v2-link:hover {
+    color: #165B33;
+    background: #fff;
+    transform: translateY(-2px);
+}
+.nav-bar-v2-link.sale-highlight {
+    position: relative;
+}
+.nav-bar-v2-link.sale-highlight::after {
+    content: 'SALE';
+    position: absolute;
+    top: -8px;
+    right: -4px;
+    background: #e63946;
+    color: #fff;
+    font-size: 8px;
+    font-weight: 800;
+    padding: 1px 5px;
+    border-radius: 10px;
+    letter-spacing: 0.08em;
+}
+
+/* Dropdown panel */
+.nav-bar-v2-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 180px;
+    background: #fff;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.14);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition: opacity 0.22s ease, visibility 0.22s ease, transform 0.22s ease;
+    z-index: 100;
+    overflow: hidden;
+}
+.nav-bar-v2-dropdown::before {
+    content: '';
+    display: block;
+    height: 3px;
+    background: linear-gradient(90deg, #FF8C42, #165B33);
+}
+.nav-bar-v2-item:hover .nav-bar-v2-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+.nav-bar-v2-dropdown-inner a {
+    display: block;
+    padding: 9px 18px;
+    color: #333;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.18s, padding-left 0.18s, color 0.18s;
+}
+.nav-bar-v2-dropdown-inner a:hover {
+    background: #f0f7f0;
+    color: #165B33;
+    padding-left: 24px;
+}
+.nav-bar-v2-dropdown-inner a:hover::before {
+    content: '›';
+    color: #FF8C42;
+    margin-right: 6px;
+    font-weight: 700;
+}
+
+/* Hide on mobile */
+@media (max-width: 768px) {
+    .nav-bar-v2 {
+        display: none;
+    }
+}

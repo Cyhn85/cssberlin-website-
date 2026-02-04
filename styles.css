@@ -5554,3 +5554,820 @@ footer, .footer {
     width: 14px;
     height: 14px;
 }
+
+/* ============================================================
+   PHASE C — ProductCard v3 Eco-Gradient Border + EnergyButton
+   Ported from _GITHUB_TASARIM ProductCard.tsx / EnergyButton.tsx
+   ============================================================ */
+
+/* --- Eco-gradient animated border (wrapper trick) --- */
+.product-card-v3 {
+    position: relative;
+    border-radius: 16px;
+    padding: 3px;                          /* border thickness */
+    background: linear-gradient(135deg, #FF8C42, #ffffff 50%, #165B33);
+    background-size: 200% 200%;
+    animation: eco-flow 4s ease infinite;
+    opacity: 0.6;                          /* resting state */
+    transition: opacity 0.35s ease, box-shadow 0.35s ease, transform 0.25s ease;
+    cursor: pointer;
+}
+.product-card-v3:hover {
+    opacity: 1;
+    box-shadow: 0 8px 32px rgba(22, 91, 51, 0.18);
+    transform: translateY(-3px);
+}
+
+/* Inner white card panel (eats the gradient border) */
+.product-card-v3-inner {
+    background: #fff;
+    border-radius: 13px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* Dark-mode inner panel */
+@media (prefers-color-scheme: dark) {
+    .product-card-v3-inner {
+        background: #1a1a2e;
+    }
+}
+
+/* --- eco-flow keyframes (orange → white → green gradient shift) --- */
+@keyframes eco-flow {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* --- Card image wrapper + overlay buttons --- */
+.product-card-v3-img-wrap {
+    position: relative;
+    width: 100%;
+    padding-top: 125%;                     /* 4:5 aspect ratio */
+    overflow: hidden;
+    background: #f0f0f0;
+}
+.product-card-v3-img-wrap img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+.product-card-v3:hover .product-card-v3-img-wrap img {
+    transform: scale(1.04);
+}
+
+/* Condition badge (top-left) */
+.product-card-v3-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+    background: rgba(22, 91, 51, 0.88);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 20px;
+    backdrop-filter: blur(4px);
+}
+
+/* Overlay action row (cart + wishlist icons) — appears on hover */
+.product-card-v3-overlay {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%) translateY(8px);
+    z-index: 3;
+    display: flex;
+    gap: 8px;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.product-card-v3:hover .product-card-v3-overlay {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+.product-card-v3-overlay button {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.product-card-v3-overlay button:hover {
+    background: #FF8C42;
+    transform: scale(1.1);
+}
+.product-card-v3-overlay button svg {
+    width: 18px;
+    height: 18px;
+    stroke: #333;
+    fill: none;
+    stroke-width: 2;
+}
+.product-card-v3-overlay button:hover svg {
+    stroke: #fff;
+}
+
+/* --- Card body (info section) --- */
+.product-card-v3-body {
+    padding: 14px 14px 16px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+/* Price + brand row */
+.product-card-v3-price-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+.product-card-v3-price {
+    font-size: 18px;
+    font-weight: 800;
+    color: #165B33;
+}
+.product-card-v3-brand {
+    font-size: 11px;
+    font-weight: 600;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+/* Product name */
+.product-card-v3-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 6px;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Seller mini row */
+.product-card-v3-seller {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+    margin-top: auto;
+}
+.product-card-v3-seller-avatar {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FF8C42, #165B33);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+}
+.product-card-v3-seller-info {
+    font-size: 10px;
+    color: #777;
+    line-height: 1.3;
+}
+.product-card-v3-seller-info strong {
+    color: #444;
+    font-weight: 600;
+}
+
+/* 2-button row: Chat (outline brand) + Kaufen (rainbow) */
+.product-card-v3-actions {
+    display: flex;
+    gap: 8px;
+}
+.product-card-v3-actions button {
+    flex: 1;
+    height: 36px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+.product-card-v3-actions button:active {
+    transform: scale(0.94);
+}
+
+/* --- EnergyButton: brand variant (orange outline for Chat) --- */
+.btn-energy-brand {
+    background: transparent !important;
+    border: 2px solid #FF8C42 !important;
+    color: #FF8C42 !important;
+}
+.btn-energy-brand:hover {
+    background: #FF8C42 !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(255,140,66,0.3);
+}
+
+/* --- EnergyButton: eco variant (dark green solid) --- */
+.btn-energy-eco {
+    background: #165B33 !important;
+    border: none !important;
+    color: #fff !important;
+    box-shadow: 0 3px 10px rgba(22,91,51,0.25);
+}
+.btn-energy-eco:hover {
+    background: #0B2E1A !important;
+    box-shadow: 0 4px 14px rgba(11,46,26,0.35);
+}
+
+/* --- EnergyButton: rainbow variant (animated gradient border) --- */
+.btn-rainbow {
+    position: relative;
+    background: #fff !important;
+    color: #111 !important;
+    border: none !important;
+    z-index: 1;
+    overflow: hidden;
+}
+/* Animated gradient border via ::before */
+.btn-rainbow::before {
+    content: '';
+    position: absolute;
+    inset: -2px;                           /* border thickness = 2px */
+    border-radius: 12px;
+    background: linear-gradient(135deg, #FF8C42, #ffffff 40%, #165B33 70%, #FF8C42);
+    background-size: 300% 300%;
+    animation: rainbow-move 3s ease infinite;
+    z-index: -1;
+}
+/* Soft glow layer behind */
+.btn-rainbow::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 13px;
+    background: linear-gradient(135deg, #FF8C42, #165B33);
+    background-size: 300% 300%;
+    animation: rainbow-move 3s ease infinite;
+    filter: blur(4px);
+    opacity: 0.35;
+    z-index: -2;
+}
+/* Inner white mask to create the "border-only" effect */
+.btn-rainbow span {
+    position: relative;
+    z-index: 1;
+    background: #fff;
+    padding: 7px 14px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    width: 100%;
+    height: 100%;
+}
+.btn-rainbow:hover::after {
+    opacity: 0.55;
+}
+
+/* rainbow-move keyframes */
+@keyframes rainbow-move {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* ============================================================
+   PHASE E — Split-Hero Section (Social Hub left + HeroSlider right)
+   ============================================================ */
+
+.split-hero {
+    width: 95%;
+    max-width: 1400px;
+    margin: 24px auto 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    height: 340px;
+}
+@media (max-width: 900px) {
+    .split-hero {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+    .split-hero-left,
+    .split-hero-right {
+        height: 260px;
+    }
+}
+@media (max-width: 600px) {
+    .split-hero {
+        width: 100%;
+        padding: 0 12px;
+        gap: 12px;
+        margin-top: 16px;
+    }
+    .split-hero-left,
+    .split-hero-right {
+        height: 220px;
+    }
+}
+
+/* Left panel (Social Hub — placeholder until PHASE F) */
+.split-hero-left {
+    border-radius: 22px;
+    overflow: hidden;
+    background: #111;
+    position: relative;
+}
+
+/* Right panel (HeroSlider) */
+.split-hero-right {
+    border-radius: 22px;
+    overflow: hidden;
+    position: relative;
+    background: #1a1a1a;
+}
+
+/* --- HeroSlider internals --- */
+.hero-slider {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.hero-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.7s ease, opacity 0.7s ease;
+    transform: scale(1.1);
+    opacity: 0;
+    pointer-events: none;
+}
+.hero-slide.active {
+    transform: scale(1);
+    opacity: 1;
+    pointer-events: auto;
+}
+.hero-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Bottom gradient overlay for text readability */
+.hero-slide-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.2) 45%, transparent 75%);
+    pointer-events: none;
+}
+
+/* Caption block (bottom-left) */
+.hero-slide-caption {
+    position: absolute;
+    bottom: 28px;
+    left: 28px;
+    z-index: 2;
+    max-width: 55%;
+}
+.hero-slide-caption .hero-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    background: rgba(255,255,255,0.18);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.28);
+    border-radius: 20px;
+    font-size: 9px;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    margin-bottom: 8px;
+}
+.hero-slide-caption h3 {
+    color: #fff;
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1.25;
+    margin: 0 0 6px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+@media (max-width: 600px) {
+    .hero-slide-caption h3 { font-size: 17px; }
+}
+.hero-slide-caption p {
+    color: rgba(255,255,255,0.88);
+    font-size: 13px;
+    line-height: 1.45;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Arrow nav buttons (appear on hover) */
+.hero-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.22);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s, background 0.2s;
+}
+.split-hero-right:hover .hero-nav-btn {
+    opacity: 1;
+}
+.hero-nav-btn:hover {
+    background: #FF8C42;
+    border-color: transparent;
+}
+.hero-nav-btn.prev { left: 14px; }
+.hero-nav-btn.next { right: 14px; }
+.hero-nav-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Dot indicators (bottom-right) */
+.hero-indicators {
+    position: absolute;
+    bottom: 28px;
+    right: 28px;
+    z-index: 10;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+.hero-dot {
+    height: 5px;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.45);
+    cursor: pointer;
+    transition: background 0.3s, width 0.3s;
+    width: 8px;
+    border: none;
+    padding: 0;
+}
+.hero-dot.active {
+    width: 28px;
+    background: #FF8C42;
+    box-shadow: 0 1px 4px rgba(255,140,66,0.4);
+}
+.hero-dot:hover:not(.active) {
+    background: rgba(255,255,255,0.75);
+}
+
+/* ============================================================
+   PHASE F — Social Hub (ArgentLoopInfiniteSlider)
+   Infinite vertical scroll with parallax + snap
+   ============================================================ */
+
+/* Pulsing green dot animation */
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.4; }
+}
+
+/* Social Hub label pill (top-left) */
+.social-hub-label {
+    position: absolute;
+    top: 14px;
+    left: 16px;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    pointer-events: none;
+}
+.social-hub-label-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4CAF50;
+    animation: pulse 1.8s ease-in-out infinite;
+}
+.social-hub-label span:last-child {
+    font-size: 9px;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+}
+
+/* Each slide in the infinite loop */
+.social-hub-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    will-change: transform;
+    cursor: pointer;
+}
+
+/* Background image */
+.social-hub-slide-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    will-change: transform;
+    opacity: 0.6;
+    transition: opacity 0.4s ease;
+}
+.social-hub-slide:hover .social-hub-slide-img {
+    opacity: 0.4;
+}
+
+/* Centered overlay content */
+.social-hub-slide-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    z-index: 1;
+    padding: 24px;
+    pointer-events: none;
+}
+
+/* Category tag (orange) */
+.social-hub-slide-cat {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: #FF8C42;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* Platform title */
+.social-hub-slide-title {
+    font-size: 32px;
+    font-weight: 900;
+    margin: 0 0 6px;
+    line-height: 1.1;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+@media (max-width: 600px) {
+    .social-hub-slide-title { font-size: 24px; }
+}
+
+/* Handle / username */
+.social-hub-slide-handle {
+    font-size: 13px;
+    font-weight: 500;
+    opacity: 0.82;
+    margin: 0;
+}
+
+/* "Folgen" button */
+.social-hub-slide-follow {
+    margin-top: 20px;
+    padding: 6px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    background: transparent;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: background 0.25s ease, border-color 0.25s ease;
+}
+.social-hub-slide-follow:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* ═══════════════════════════════════════════════════════
+   FEATURES GRID — Trust Badges (Öko / Zahlung / Rückgabe / Handeln)
+   ═══════════════════════════════════════════════════════ */
+.features-grid-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 48px 24px;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+.feature-card {
+    background: #fff;
+    border: 1.5px solid #E8F0E4;
+    border-radius: 16px;
+    padding: 36px 24px 32px;
+    text-align: center;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.feature-card:hover {
+    border-color: #2D5016;
+    box-shadow: 0 8px 24px rgba(45, 80, 22, 0.12);
+    transform: translateY(-4px);
+}
+
+.feature-icon {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #E8F5E9 0%, #F1F8E9 100%);
+    border-radius: 50%;
+}
+
+.feature-card h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #2D5016;
+    margin-bottom: 8px;
+    font-family: 'Inter', sans-serif;
+}
+
+.feature-card p {
+    font-size: 14px;
+    color: #6B7A5E;
+    line-height: 1.5;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Mobile: 2 col → 1 col */
+@media (max-width: 900px) {
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 520px) {
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    .features-grid-section {
+        padding: 32px 16px;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════
+   FEATURED COLLECTION — Horizontal scroll cards
+   ═══════════════════════════════════════════════════════ */
+.featured-collection-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px 48px;
+}
+
+.featured-collection-header {
+    margin-bottom: 20px;
+}
+
+.featured-label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: #FF8C42;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+
+.featured-collection-header h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+.featured-collection-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.featured-card {
+    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #f5f5f3;
+    min-height: 280px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.featured-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.14);
+}
+
+.featured-card-img {
+    width: 100%;
+    height: 100%;
+    min-height: 280px;
+    object-fit: cover;
+    display: block;
+}
+
+.featured-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.1) 50%, transparent 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 24px;
+}
+
+.featured-card-label {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: #fff;
+    background: rgba(255, 140, 66, 0.85);
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    width: fit-content;
+}
+
+.featured-card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 6px;
+    font-family: 'Inter', sans-serif;
+}
+
+.featured-card-desc {
+    font-size: 13px;
+    color: rgba(255,255,255,0.85);
+    margin: 0;
+    line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+    .featured-collection-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+@media (max-width: 480px) {
+    .featured-collection-grid {
+        grid-template-columns: 1fr;
+    }
+}

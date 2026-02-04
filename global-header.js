@@ -177,6 +177,77 @@ const GlobalHeader = {
             </div>
         </div>
     </header>
+
+    <!-- Nav Bar Row 3: Orange→Green gradient with category dropdowns -->
+    <nav class="nav-bar-v2" data-global-shell="1">
+        <div class="nav-bar-v2-inner">
+            <div class="nav-bar-v2-item">
+                <a href="damen.html" class="nav-bar-v2-link">Damen</a>
+                <div class="nav-bar-v2-dropdown"><div class="nav-bar-v2-dropdown-inner">
+                    <a href="damen.html">Kleider</a>
+                    <a href="damen.html">Blusen &amp; Tuniken</a>
+                    <a href="damen.html">Hosen &amp; Jeans</a>
+                    <a href="damen.html">Röcke</a>
+                    <a href="damen.html">Jacken &amp; Mäntel</a>
+                    <a href="damen.html">Schuhe</a>
+                    <a href="damen.html">Accessoires</a>
+                    <a href="damen.html">Sport</a>
+                </div></div>
+            </div>
+            <div class="nav-bar-v2-item">
+                <a href="herren.html" class="nav-bar-v2-link">Herren</a>
+                <div class="nav-bar-v2-dropdown"><div class="nav-bar-v2-dropdown-inner">
+                    <a href="herren.html">Hemden &amp; T-Shirts</a>
+                    <a href="herren.html">Jeans &amp; Hosen</a>
+                    <a href="herren.html">Anzüge &amp; Sakkos</a>
+                    <a href="herren.html">Schuhe</a>
+                    <a href="herren.html">Uhren</a>
+                    <a href="herren.html">Sport</a>
+                    <a href="herren.html">Jacken</a>
+                </div></div>
+            </div>
+            <div class="nav-bar-v2-item">
+                <a href="kinder.html" class="nav-bar-v2-link">Kinder</a>
+                <div class="nav-bar-v2-dropdown"><div class="nav-bar-v2-dropdown-inner">
+                    <a href="kinder.html">Mädchen</a>
+                    <a href="kinder.html">Jungen</a>
+                    <a href="kinder.html">Baby</a>
+                    <a href="kinder.html">Spielzeug</a>
+                    <a href="kinder.html">Schuhe</a>
+                    <a href="kinder.html">Schulbedarf</a>
+                </div></div>
+            </div>
+            <div class="nav-bar-v2-item">
+                <a href="index.html" class="nav-bar-v2-link">Elektronik</a>
+                <div class="nav-bar-v2-dropdown"><div class="nav-bar-v2-dropdown-inner">
+                    <a href="index.html">Smartphones</a>
+                    <a href="index.html">Laptops</a>
+                    <a href="index.html">Tablets</a>
+                    <a href="index.html">Kameras</a>
+                    <a href="index.html">Audio</a>
+                    <a href="index.html">Gaming</a>
+                </div></div>
+            </div>
+            <div class="nav-bar-v2-item">
+                <a href="index.html" class="nav-bar-v2-link sale-highlight">Sale</a>
+                <div class="nav-bar-v2-dropdown"><div class="nav-bar-v2-dropdown-inner">
+                    <a href="index.html">Bis 50% Rabatt</a>
+                    <a href="index.html">Neue Arrivals</a>
+                    <a href="index.html">Flash Deals</a>
+                    <a href="index.html">Clearance</a>
+                </div></div>
+            </div>
+            <div class="nav-bar-v2-item">
+                <a href="wie-funktioniert-es.html" class="nav-bar-v2-link">Wie funktioniert's</a>
+                <div class="nav-bar-v2-dropdown"><div class="nav-bar-v2-dropdown-inner">
+                    <a href="wie-funktioniert-es.html">Verkaufen</a>
+                    <a href="wie-funktioniert-es.html">Kaufen</a>
+                    <a href="wie-funktioniert-es.html">Verhandeln</a>
+                    <a href="wie-funktioniert-es.html">FAQ</a>
+                </div></div>
+            </div>
+        </div>
+    </nav>
         `;
     },
 
