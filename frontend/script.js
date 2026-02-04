@@ -1497,3 +1497,56 @@ function initSocialHub() {
     syncPool();
     rafId = requestAnimationFrame(animate);
 }
+
+// ═══════════════════════════════════════════════════════
+// FEATURED COLLECTION — Statik kartlar (Resim 1 match)
+// ═══════════════════════════════════════════════════════
+function initFeaturedCollection() {
+    const container = document.getElementById('featuredCollectionGrid');
+    if (!container) return;
+
+    const featured = [
+        {
+            label: 'FEATURED COLLECTION',
+            title: 'Technik, die weiterlebt',
+            desc: 'Geprüfte Elektronik und Kameras mit 12 Monaten Garantie. Weniger Elektroschrott.',
+            bg: 'linear-gradient(135deg, #1a2a1a 0%, #2d4a2d 100%)',
+            link: 'herren.html',
+            icon: '📷'
+        },
+        {
+            label: 'NEW ARRIVALS',
+            title: 'Frühlings-Kollektion',
+            desc: 'Neue Styles für die kommende Saison. Nachhaltig, stylisch und bezahlbar.',
+            bg: 'linear-gradient(135deg, #2D5016 0%, #4a8025 100%)',
+            link: 'damen.html',
+            icon: '👗'
+        },
+        {
+            label: 'SALE',
+            title: 'Bis zu 70% Rabatt',
+            desc: 'Bis zu 70% Rabatt auf ausgewählte Artikel. Begrenztes Angebot!',
+            bg: 'linear-gradient(135deg, #FF8C42 0%, #E8854C 100%)',
+            link: 'damen.html',
+            icon: '🔥'
+        }
+    ];
+
+    container.innerHTML = featured.map(item => `
+        <a href="${item.link}" class="featured-card" style="text-decoration:none;">
+            <div style="width:100%;height:100%;min-height:280px;background:${item.bg};display:flex;align-items:center;justify-content:center;">
+                <span style="font-size:64px;opacity:0.25;">${item.icon}</span>
+            </div>
+            <div class="featured-card-overlay">
+                <span class="featured-card-label">${item.label}</span>
+                <h3 class="featured-card-title">${item.title}</h3>
+                <p class="featured-card-desc">${item.desc}</p>
+            </div>
+        </a>
+    `).join('');
+}
+
+// Auto-init on DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+    initFeaturedCollection();
+});
