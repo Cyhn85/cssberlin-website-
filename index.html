@@ -606,8 +606,15 @@
 
     <!-- Featured Products Section -->
     <section class="products-section">
-        <div class="section-header">
-            <h2 data-i18n="products.featured">Öne Çıkanlar</h2>
+        <div class="section-header" style="display:flex; justify-content:space-between; align-items:flex-end; border-bottom:1px solid #e5e7eb; padding-bottom:20px; margin-bottom:28px; gap:12px;">
+          <div>
+            <span style="display:block; font-size:11px; font-weight:800; color:#FF8C42; text-transform:uppercase; letter-spacing:0.15em; margin-bottom:4px;">Aktuelle Kollektion</span>
+            <h2 style="margin:0; font-size:28px; font-weight:800; color:#111;">Frisch Eingetroffen</h2>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="section-filter-pill">Alle Filter</button>
+            <button class="section-filter-pill">Sortieren</button>
+          </div>
         </div>
 
         <div class="products-grid" id="featuredProductsGrid">
@@ -641,7 +648,7 @@
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
-                <span data-i18n="products.mehr_laden">Daha fazla göster</span>
+                <span data-i18n="products.mehr_laden">Mehr Produkte laden</span>
             </button>
         </div>
     </section>

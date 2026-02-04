@@ -233,6 +233,322 @@ const sampleProducts = [
         tier: 'champion',
         image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500',
         sale: false
+    },
+    // === DAMEN (17-26) ===
+    {
+        id: 17,
+        brand: 'COS',
+        name: 'Midi Kleid Minimalist',
+        size: 'S',
+        condition: 'Neuwertig',
+        price: 58.00,
+        newPrice: 115.00,
+        carbonSaved: 21.3,
+        tier: 'champion',
+        image: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=500',
+        sale: false
+    },
+    {
+        id: 18,
+        brand: 'Massimo Dutti',
+        name: 'Seidenbluse Creme',
+        size: 'M',
+        condition: 'Sehr gut',
+        price: 42.00,
+        newPrice: 89.95,
+        carbonSaved: 14.8,
+        tier: 'profi',
+        image: 'https://images.unsplash.com/photo-1598554747436-c9293d6a588f?w=500',
+        sale: true
+    },
+    {
+        id: 19,
+        brand: 'Mango',
+        name: 'Plissee Rock Schwarz',
+        size: 'S',
+        condition: 'Gut',
+        price: 28.00,
+        newPrice: 59.99,
+        carbonSaved: 11.2,
+        tier: 'profi',
+        image: 'https://images.unsplash.com/photo-1577900232427-18219b9166a0?w=500',
+        sale: false
+    },
+    {
+        id: 20,
+        brand: 'Arket',
+        name: 'Wollmantel Camel',
+        size: 'M',
+        condition: 'Sehr gut',
+        price: 95.00,
+        newPrice: 199.00,
+        carbonSaved: 32.5,
+        tier: 'champion',
+        image: 'https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=500',
+        sale: false
+    },
+    {
+        id: 21,
+        brand: 'Steve Madden',
+        name: 'Ankle Boots Schwarz',
+        size: '38',
+        condition: 'Neuwertig',
+        price: 65.00,
+        newPrice: 139.00,
+        carbonSaved: 18.7,
+        tier: 'champion',
+        image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=500',
+        sale: true
+    },
+    {
+        id: 22,
+        brand: 'Sandro',
+        name: 'Tweed Blazer Rosa',
+        size: 'S',
+        condition: 'Sehr gut',
+        price: 78.00,
+        newPrice: 165.00,
+        carbonSaved: 24.1,
+        tier: 'champion',
+        image: 'https://images.unsplash.com/photo-1591369822096-ffd140ec948f?w=500',
+        sale: false
+    },
+    {
+        id: 23,
+        brand: 'Reformation',
+        name: 'Leinenkleid Sommer',
+        size: 'M',
+        condition: 'Gut',
+        price: 52.00,
+        newPrice: 110.00,
+        carbonSaved: 19.6,
+        tier: 'profi',
+        image: 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=500',
+        sale: true
+    },
+    {
+        id: 24,
+        brand: 'Ganni',
+        name: 'Statement Bluse Print',
+        size: 'S',
+        condition: 'Neuwertig',
+        price: 68.00,
+        newPrice: 145.00,
+        carbonSaved: 16.9,
+        tier: 'champion',
+        image: 'https://images.unsplash.com/photo-1564257631407-4deb1f99d992?w=500',
+        sale: false
+    },
+    {
+        id: 25,
+        brand: 'Sam Edelman',
+        name: 'Pumps Nude Leder',
+        size: '39',
+        condition: 'Sehr gut',
+        price: 55.00,
+        newPrice: 120.00,
+        carbonSaved: 15.3,
+        tier: 'profi',
+        image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=500',
+        sale: false
+    },
+    {
+        id: 26,
+        brand: 'All Saints',
+        name: 'Lederjacke Biker',
+        size: 'M',
+        condition: 'Sehr gut',
+        price: 145.00,
+        newPrice: 320.00,
+        carbonSaved: 42.8,
+        tier: 'champion',
+        image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500',
+        sale: true
+    },
+    // === HERREN (27-36) ===
+    {
+        id: 27,
+        brand: 'Hugo Boss',
+        name: 'Slim Fit Hemd Weiß',
+        size: 'L',
+        condition: 'Neuwertig',
+        price: 45.00,
+        newPrice: 89.95,
+        carbonSaved: 13.2,
+        tier: 'profi',
+        image: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=500',
+        sale: false
+    },
+    {
+        id: 28,
+        brand: 'Diesel',
+        name: 'Slim Jeans Dunkelblau',
+        size: '32',
+        condition: 'Gut',
+        price: 48.00,
+        newPrice: 109.00,
+        carbonSaved: 16.5,
+        tier: 'profi',
+        image: 'https://images.unsplash.com/photo-1542272454315-7f6f36d69c8d?w=500',
+        sale: true
+    },
+    {
+        id: 29,
+        brand: 'Tiger of Sweden',
+        name: 'Anzug Anthrazit',
+        size: '50',
+        condition: 'Sehr gut',
+        price: 185.00,
+        newPrice: 450.00,
+        carbonSaved: 58.4,
+        tier: 'champion',
+        image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=500',
+        sale: false
+    },
+    {
+        id: 30,
+        brand: 'New Balance',
+        name: 'Sneaker 550 Weiß',
+        size: '43',
+        condition: 'Gut',
+        price: 72.00,
+        newPrice: 149.00,
+        carbonSaved: 21.7,
+        tier: 'champion',
+        image: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=500',
+        sale: false
+    },
+    {
+        id: 31,
+        brand: 'Barbour',
+        name: 'Wachsjacke Oliv',
+        size: 'L',
+        condition: 'Sehr gut',
+        price: 125.00,
+        newPrice: 279.00,
+        carbonSaved: 35.2,
+        tier: 'champion',
+        image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=500',
+        sale: true
+    },
+    {
+        id: 32,
+        brand: 'Ralph Lauren',
+        name: 'Oxford Hemd Blau',
+        size: 'M',
+        condition: 'Neuwertig',
+        price: 52.00,
+        newPrice: 99.95,
+        carbonSaved: 14.1,
+        tier: 'profi',
+        image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500',
+        sale: false
+    },
+    {
+        id: 33,
+        brand: 'Nudie Jeans',
+        name: 'Jeans Gritty Jackson',
+        size: '31',
+        condition: 'Gut',
+        price: 58.00,
+        newPrice: 129.00,
+        carbonSaved: 18.9,
+        tier: 'profi',
+        image: 'https://images.unsplash.com/photo-1542272454315-7f6f36d69c8d?w=500',
+        sale: false
+    },
+    {
+        id: 34,
+        brand: 'Converse',
+        name: 'Chuck Taylor High',
+        size: '44',
+        condition: 'Sehr gut',
+        price: 38.00,
+        newPrice: 85.00,
+        carbonSaved: 12.4,
+        tier: 'fortgeschritten',
+        image: 'https://images.unsplash.com/photo-1607522370275-f14206abe5d3?w=500',
+        sale: true
+    },
+    {
+        id: 35,
+        brand: 'The North Face',
+        name: 'Puffer Jacke Schwarz',
+        size: 'L',
+        condition: 'Neuwertig',
+        price: 115.00,
+        newPrice: 249.00,
+        carbonSaved: 38.6,
+        tier: 'champion',
+        image: 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=500',
+        sale: false
+    },
+    {
+        id: 36,
+        brand: 'Carhartt WIP',
+        name: 'Chino Hose Beige',
+        size: 'M',
+        condition: 'Gut',
+        price: 42.00,
+        newPrice: 89.00,
+        carbonSaved: 13.8,
+        tier: 'profi',
+        image: 'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=500',
+        sale: false
+    },
+    // === KINDER (37-39) ===
+    {
+        id: 37,
+        brand: 'Mini Rodini',
+        name: 'Kinder Hoodie Bunt',
+        size: '110',
+        condition: 'Sehr gut',
+        price: 28.00,
+        newPrice: 65.00,
+        carbonSaved: 8.5,
+        tier: 'fortgeschritten',
+        image: 'https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=500',
+        sale: true
+    },
+    {
+        id: 38,
+        brand: 'Petit Bateau',
+        name: 'Kinder T-Shirt Set',
+        size: '128',
+        condition: 'Neuwertig',
+        price: 22.00,
+        newPrice: 45.00,
+        carbonSaved: 6.2,
+        tier: 'einsteiger',
+        image: 'https://images.unsplash.com/photo-1503919545889-aef636e10ad4?w=500',
+        sale: false
+    },
+    {
+        id: 39,
+        brand: 'Geox',
+        name: 'Kinder Sneaker Blau',
+        size: '32',
+        condition: 'Gut',
+        price: 32.00,
+        newPrice: 69.95,
+        carbonSaved: 9.8,
+        tier: 'fortgeschritten',
+        image: 'https://images.unsplash.com/photo-1555274175-75f79b09d5b8?w=500',
+        sale: false
+    },
+    // === ACCESSOIRES (40) ===
+    {
+        id: 40,
+        brand: 'Michael Kors',
+        name: 'Crossbody Tasche',
+        size: 'OneSize',
+        condition: 'Sehr gut',
+        price: 85.00,
+        newPrice: 195.00,
+        carbonSaved: 22.4,
+        tier: 'champion',
+        image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500',
+        sale: true
     }
 ];
 
@@ -459,7 +775,7 @@ async function loadRecommendations() {
 }
 
 // ============================================
-// PRODUCT CARD CREATION - V4 WITH SELLER INFO
+// PRODUCT CARD CREATION - PHASE G REDESIGN
 // ============================================
 function createProductCard(product) {
     // Check if product is in wishlist
@@ -472,6 +788,9 @@ function createProductCard(product) {
     const uploadedAgo = product.uploadedAgo || generateUploadTime();
     const location = product.location || seller.location || 'Berlin';
 
+    // PHASE G: Badge class - "Neu" gets orange, others get dark default
+    const badgeClass = product.condition === 'Neu' || product.condition === 'Neuwertig' ? 'neu' : '';
+
     return `
         <div class="product-card-v3" data-product-id="${product.id}">
             <div class="product-card-v3-inner">
@@ -481,48 +800,34 @@ function createProductCard(product) {
                          loading="lazy"
                          onerror="this.src='https://via.placeholder.com/400x533?text=Bild+nicht+verfuegbar'">
 
-                    <div class="product-card-v3-badge">${product.condition}</div>
+                    <div class="product-card-v3-badge ${badgeClass}">${product.condition}</div>
 
-                    <div class="carbon-badge ${product.tier}" style="position:absolute;bottom:10px;left:10px;z-index:2;">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                    <!-- PHASE G: Independent Cart button (bottom-left) -->
+                    <button class="product-card-v3-btn-cart add-to-cart-btn"
+                            data-product-id="${product.id}"
+                            title="In den Warenkorb">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                         </svg>
-                        <span>-${product.carbonSaved}kg CO₂</span>
-                    </div>
+                    </button>
 
-                    <div class="product-card-v3-overlay">
-                        <button class="wishlist-btn ${inWishlist ? 'active' : ''}"
-                                data-product-id="${product.id}"
-                                title="${inWishlist ? 'Von Wunschliste entfernen' : 'Zur Wunschliste hinzufuegen'}">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="${inWishlist ? '#F44336' : 'none'}" stroke="${inWishlist ? '#F44336' : 'currentColor'}" stroke-width="2">
-                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                            </svg>
-                        </button>
-                        <button class="add-to-cart-btn"
-                                data-product-id="${product.id}"
-                                title="In den Warenkorb">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="9" cy="21" r="1"></circle>
-                                <circle cx="20" cy="21" r="1"></circle>
-                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                            </svg>
-                        </button>
-                        <button class="quick-view-btn"
-                                data-product-id="${product.id}"
-                                title="Schnellansicht">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                <circle cx="12" cy="12" r="3"></circle>
-                            </svg>
-                        </button>
-                    </div>
+                    <!-- PHASE G: Independent Heart button (bottom-right) -->
+                    <button class="product-card-v3-btn-heart wishlist-btn ${inWishlist ? 'active' : ''}"
+                            data-product-id="${product.id}"
+                            title="${inWishlist ? 'Von Wunschliste entfernen' : 'Zur Wunschliste hinzufuegen'}">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="${inWishlist ? '#F44336' : 'none'}" stroke="${inWishlist ? '#F44336' : 'currentColor'}" stroke-width="2">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </button>
                 </div>
 
                 <div class="product-card-v3-body">
                     <div class="product-card-v3-price-row">
                         <div>
-                            <span class="product-card-v3-price">${product.price.toFixed(2)}€</span>
-                            <span style="font-size:10px;color:#999;margin-left:6px;text-decoration:line-through;">Neu: ${product.newPrice.toFixed(2)}€</span>
+                            <span class="product-card-v3-price">${product.price.toFixed(0)}€</span>
+                            <span style="font-size:10px;color:#999;margin-left:6px;text-decoration:line-through;">Neu: ${product.newPrice.toFixed(0)}€</span>
                         </div>
                         <span class="product-card-v3-brand">${product.brand}</span>
                     </div>
@@ -537,8 +842,16 @@ function createProductCard(product) {
                         <div class="product-card-v3-seller-avatar" style="background:${seller.avatarColor || '#FF8C42'};">${seller.initials}</div>
                         <div class="product-card-v3-seller-info">
                             <strong>${seller.name}</strong>${seller.verified ? ' ✓' : ''}${seller.badge ? ` <span class="seller-badge seller-badge-${seller.badge}">${getBadgeIcon(seller.badge)}</span>` : ''}
-                            <br>⭐ ${seller.rating.toFixed(1)} · 📍 ${location} · 🕐 ${uploadedAgo}
+                            <br>⭐ ${seller.rating} · 📍 ${location} · 🕐 ${uploadedAgo}
                         </div>
+                    </div>
+
+                    <!-- PHASE G: CO2 badge moved to body (below seller) -->
+                    <div class="product-card-v3-co2">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17,8C8,10,5.9,16.17,3.82,21.34L5.71,22L6.66,19.7C7.14,19.87,7.64,20,8,20C19,20,22,3,22,3C21,5,14,5.25,9,6.25C4,7.25,2,11.5,2,13.5C2,15.5,3.75,17.25,3.75,17.25C7,8,17,8,17,8Z"></path>
+                        </svg>
+                        <span>-${product.carbonSaved}kg CO₂</span>
                     </div>
 
                     <div class="product-card-v3-actions">

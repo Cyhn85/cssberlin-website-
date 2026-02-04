@@ -24,9 +24,11 @@ const GlobalHeader = {
     <div class="news-banner-v2" data-global-shell="1">
         <div class="news-slider" id="newsSlider" style="animation-duration: 28s;">
             <div class="news-item" data-link="index.html"><span>${S}</span></div>
-            <div class="news-item" data-link="co2-impact.html"><span>🌍 248.5 Tonnen CO₂ gespart</span></div>
-            <div class="news-item" data-link="campaign.html"><span>📦 2 kaufen = 3. Versand GRATIS</span></div>
-            <div class="news-item" data-link="co2-impact.html"><span>🏆 CO₂ Top 100 Rangliste</span></div>
+            <div class="news-item" data-link="campaign.html"><span>📦 Kostenloser Versand ab 50€</span></div>
+            <div class="news-item" data-link="co2-impact.html"><span>🌍 100% Klimaneutraler Versand</span></div>
+            <div class="news-item" data-link="index.html"><span>⭐ Geprüfte Qualität aus zweiter Hand</span></div>
+            <div class="news-item" data-link="inserieren.html"><span>♻️ Verkaufe deine alten Schätze gebührenfrei</span></div>
+            <div class="news-item" data-link="index.html"><span>⚡ Neu: Express-Lieferung in Berlin verfügbar</span></div>
             <div class="news-item" data-link="index.html"><span>${S}</span></div>
         </div>
     </div>
