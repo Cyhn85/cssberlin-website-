@@ -1,4 +1,9 @@
 # backend/auth.py
+"""
+CSS Berlin — Auth Router (v3 — Real DB)
+fake_users_db KALDIRILDI.  SQLite üzerinden models.User kullanılır.
+"""
+
 from fastapi import APIRouter, HTTPException, Depends, status
 from pydantic import BaseModel, EmailStr
 from typing import Optional
@@ -8,96 +13,153 @@ from passlib.context import CryptContext
 import os
 from dotenv import load_dotenv
 
+# ─── DB imports ─────────────────────────────────────────
+from sqlalchemy.ext.asyncio import AsyncSession
+from database import get_db
+from models import User
+from sqlalchemy import select
+
 # Environment Yükle
 load_dotenv()
 
-# Ayarlar
+# ─── Ayarlar ────────────────────────────────────────────
 SECRET_KEY = os.getenv("SECRET_KEY", "super_secret_key_css_berlin_2026")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 1 Hafta
 
-# Şifreleme Aracı
+# Şifreleme
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 
-# --- Veri Modelleri (HTML Formunla Eşleşir) ---
+
+# ─── Pydantic Schemas ───────────────────────────────────
 class UserRegister(BaseModel):
     email: EmailStr
     password: str
-    first_name: str  # HTML'deki id="firstName"
-    last_name: str   # HTML'deki id="lastName"
+    first_name: str
+    last_name: str
+
 
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
+
 
 class Token(BaseModel):
     access_token: str
     token_type: str
     user_name: str
 
-# --- Mock Veritabanı (Geçici Hafıza) ---
-# Sunucu kapanınca silinir. Kalıcı olması için PostgreSQL bağlanacak.
-fake_users_db = {}
 
-# --- Yardımcı Fonksiyonlar ---
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+class UserOut(BaseModel):
+    id: int
+    email: str
+    first_name: str
+    last_name: str
 
-def get_password_hash(password):
+    class Config:
+        from_attributes = True
+
+
+# ─── Yardımcı Fonksiyonlar ──────────────────────────────
+def verify_password(plain: str, hashed: str) -> bool:
+    return pwd_context.verify(plain, hashed)
+
+
+def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
-def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
-    to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.utcnow() + expires_delta
-    else:
-        expire = datetime.utcnow() + timedelta(minutes=15)
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
 
-# --- Endpointler ---
+def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
+    to_encode = data.copy()
+    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
+    to_encode.update({"exp": expire})
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+
+async def get_current_user(token: str, db: AsyncSession) -> User:
+    """Token'dan kullanıcıyı çek — /auth/me endpoint'i için."""
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get("sub")
+        if not email:
+            raise HTTPException(status_code=401, detail="Token geçersiz")
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token süresi doldu")
+    except jwt.JWTError:
+        raise HTTPException(status_code=401, detail="Token geçersiz")
+
+    result = await db.execute(select(User).where(User.email == email))
+    user = result.scalar_one_or_none()
+    if not user:
+        raise HTTPException(status_code=401, detail="Kullanıcı bulunamadı")
+    return user
+
+
+# ─── DB Başlangıç: Tabloları Oto-Oluştur ───────────────
+async def init_db():
+    """App başlarken tabloları oluştur (create_all)."""
+    from database import engine
+    from models import Base
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+
+# ─── Endpointler ────────────────────────────────────────
 
 @router.post("/register", response_model=Token)
-async def register(user: UserRegister):
-    # 1. Kullanıcı var mı kontrol et
-    if user.email in fake_users_db:
-        raise HTTPException(
-            status_code=400,
-            detail="Bu email adresi zaten kayıtlı."
-        )
-    
-    # 2. Şifreyi hashle ve kaydet
-    hashed_password = get_password_hash(user.password)
-    fake_users_db[user.email] = {
-        "email": user.email,
-        "password": hashed_password,
-        "first_name": user.first_name,
-        "last_name": user.last_name,
-        "full_name": f"{user.first_name} {user.last_name}"
-    }
-    
-    # 3. Otomatik giriş için Token üret
-    access_token = create_access_token(
-        data={"sub": user.email}
+async def register(user: UserRegister, db: AsyncSession = Depends(get_db)):
+    # 1. Zaten kayıtlı mı?
+    result = await db.execute(select(User).where(User.email == user.email))
+    if result.scalar_one_or_none():
+        raise HTTPException(status_code=400, detail="Bu email adresi zaten kayıtlı.")
+
+    # 2. Yeni kullanıcı oluştur
+    hashed = get_password_hash(user.password)
+    new_user = User(
+        email=user.email,
+        hashed_password=hashed,
+        first_name=user.first_name,
+        last_name=user.last_name,
+        is_active=True,
+        is_verified=False,
     )
-    
+    db.add(new_user)
+    await db.commit()
+    await db.refresh(new_user)
+
+    # 3. Token üret
+    token = create_access_token(data={"sub": new_user.email})
+
     return {
-        "access_token": access_token, 
+        "access_token": token,
         "token_type": "bearer",
-        "user_name": user.first_name
+        "user_name": new_user.first_name,
     }
 
+
 @router.post("/login", response_model=Token)
-async def login(user_data: UserLogin):
+async def login(user_data: UserLogin, db: AsyncSession = Depends(get_db)):
     # 1. Kullanıcıyı bul
-    user = fake_users_db.get(user_data.email)
-    
-    # Test için Demo Kullanıcı (Veritabanı boşsa çalışsın diye)
+    result = await db.execute(select(User).where(User.email == user_data.email))
+    user = result.scalar_one_or_none()
+
+    # Demo kullanıcı — DB boşsa bile giriş yapılabilsin
     if not user and user_data.email == "demo@cssberlin.de" and user_data.password == "demo123":
-        user = {"email": "demo@cssberlin.de", "password": get_password_hash("demo123"), "first_name": "Demo"}
+        # Demo'yu DB'ye oluştur
+        demo = User(
+            email="demo@cssberlin.de",
+            hashed_password=get_password_hash("demo123"),
+            first_name="Demo",
+            last_name="User",
+            is_active=True,
+            is_verified=True,
+        )
+        db.add(demo)
+        await db.commit()
+        await db.refresh(demo)
+        user = demo
 
     if not user:
         raise HTTPException(
@@ -105,26 +167,105 @@ async def login(user_data: UserLogin):
             detail="Kullanıcı bulunamadı veya şifre hatalı.",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
-    # 2. Şifreyi doğrula
-    if not verify_password(user_data.password, user["password"]):
-         raise HTTPException(
+
+    # 2. Şifre doğrula
+    if not verify_password(user_data.password, user.hashed_password):
+        raise HTTPException(
             status_code=401,
             detail="Şifre hatalı.",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
     # 3. Token üret
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": user["email"]}, expires_delta=access_token_expires
+    token = create_access_token(
+        data={"sub": user.email},
+        expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES),
     )
-    
-    # İsim bilgisini güvenli çek
-    user_name = user.get("first_name", "User")
-    
+
     return {
-        "access_token": access_token, 
+        "access_token": token,
         "token_type": "bearer",
-        "user_name": user_name
+        "user_name": user.first_name,
+    }
+
+
+from fastapi import Header as _Header
+
+
+@router.get("/me", response_model=UserOut)
+async def get_me(
+    authorization: Optional[str] = _Header(default=None),
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Authorization: Bearer <token> header'dan kullanıcıyı çek.
+    """
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Token eksik veya geçersiz")
+
+    token = authorization[len("Bearer "):]
+    user = await get_current_user(token, db)
+    return user
+
+
+@router.get("/me-token")
+async def get_me_with_token(token: str, db: AsyncSession = Depends(get_db)):
+    """Query param ile token alan alternatif endpoint (geçici)."""
+    user = await get_current_user(token, db)
+    return {
+        "id": user.id,
+        "email": user.email,
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+    }
+
+
+# ─── /auth/token endpoint (form-urlencoded — OAuth2 uyumlu) ─
+from fastapi.security import OAuth2PasswordRequestForm
+
+
+@router.post("/token", response_model=Token)
+async def token_endpoint(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    OAuth2 standart token endpoint.
+    Frontend auth.js bu endpointi kullanıyor (form-urlencoded).
+    username = email, password = şifre
+    """
+    result = await db.execute(select(User).where(User.email == form_data.username))
+    user = result.scalar_one_or_none()
+
+    # Demo fallback
+    if not user and form_data.username == "demo@cssberlin.de" and form_data.password == "demo123":
+        demo = User(
+            email="demo@cssberlin.de",
+            hashed_password=get_password_hash("demo123"),
+            first_name="Demo",
+            last_name="User",
+            is_active=True,
+            is_verified=True,
+        )
+        db.add(demo)
+        await db.commit()
+        await db.refresh(demo)
+        user = demo
+
+    if not user or not verify_password(form_data.password, user.hashed_password):
+        raise HTTPException(
+            status_code=401,
+            detail="E-posta veya şifre hatalı",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    token = create_access_token(
+        data={"sub": user.email},
+        expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES),
+    )
+
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "user_name": user.first_name,
     }
