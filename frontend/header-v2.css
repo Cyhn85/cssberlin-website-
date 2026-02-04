@@ -6,17 +6,46 @@
    NEWS BANNER V2 - Compact
    ============================================ */
 .news-banner-v2 {
-    background: linear-gradient(90deg, #2D5016 0%, #3d6b1e 100%);
+    background: linear-gradient(90deg, #FF8C42 0%, #E8854C 30%, #4a8025 70%, #165B33 100%);
     color: white;
     overflow: hidden;
-    height: 36px;
+    height: 40px;
     display: flex;
     align-items: center;
+    position: relative;
+    border-bottom: 1px solid rgba(22, 91, 51, 0.3);
+    z-index: 50;
+}
+
+/* Edge fade overlays -- left (orange) and right (green) */
+.news-banner-v2::before,
+.news-banner-v2::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 80px;
+    z-index: 10;
+    pointer-events: none;
+}
+.news-banner-v2::before {
+    left: 0;
+    background: linear-gradient(to right, #FF8C42, transparent);
+}
+.news-banner-v2::after {
+    right: 0;
+    background: linear-gradient(to left, #165B33, transparent);
 }
 
 .news-banner-v2 .news-slider {
     display: flex;
-    animation: slideNews 30s linear infinite;
+    animation: slideNews 120s linear infinite;
+    white-space: nowrap;
+}
+
+/* Pause on hover */
+.news-banner-v2:hover .news-slider {
+    animation-play-state: paused;
 }
 
 .news-banner-v2 .news-item {
@@ -24,15 +53,31 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 13px;
-    font-weight: 500;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
     cursor: pointer;
     white-space: nowrap;
-    padding: 0 20px;
+    padding: 0 40px;
+    opacity: 0.9;
+    transition: opacity 0.3s;
 }
 
 .news-banner-v2 .news-item:hover {
-    text-decoration: underline;
+    opacity: 1;
+    text-decoration: none;
+}
+
+/* Separator dot between ticker items */
+.news-banner-v2 .news-item .ticker-dot {
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    margin-left: 24px;
 }
 
 /* ============================================
@@ -1051,6 +1096,151 @@
 .category-nav-item.active {
     background: #2D5016;
     color: white;
+}
+
+/* ============================================
+   NAV BAR ROW 3 - Orange→Green Gradient with Dropdowns
+   Matches _GITHUB_TASARIM Header Row 3 exactly
+   ============================================ */
+.nav-bar-v2 {
+    background: linear-gradient(90deg, #FF8C42 0%, #E8854C 30%, #4a8025 70%, #165B33 100%);
+    box-shadow: 0 3px 12px rgba(45, 80, 22, 0.25);
+    position: relative;
+    z-index: 10;
+}
+
+.nav-bar-v2-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 0;
+    padding: 0 16px;
+}
+
+.nav-bar-v2-item {
+    position: relative;
+}
+
+.nav-bar-v2-link {
+    display: block;
+    padding: 14px 20px;
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: all 0.25s ease;
+    position: relative;
+    z-index: 20;
+    border-radius: 0;
+}
+
+.nav-bar-v2-link:hover,
+.nav-bar-v2-item:hover .nav-bar-v2-link {
+    color: #165B33;
+    background: white;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+}
+
+/* Sale highlight badge */
+.nav-bar-v2-link.sale-highlight {
+    position: relative;
+}
+.nav-bar-v2-link.sale-highlight::after {
+    content: 'SALE';
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: rgba(255,255,255,0.25);
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 4px;
+    font-size: 8px;
+    padding: 1px 5px;
+    color: white;
+    font-weight: 700;
+}
+.nav-bar-v2-item:hover .nav-bar-v2-link.sale-highlight::after {
+    background: #dc2626;
+    border-color: #dc2626;
+    color: white;
+}
+
+/* Dropdown panel */
+.nav-bar-v2-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 260px;
+    background: white;
+    border-radius: 0 12px 12px 12px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+    border: 1px solid #e8e8e8;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease, margin-top 0.2s ease;
+    margin-top: 8px;
+    z-index: 100;
+    overflow: hidden;
+}
+
+/* Green accent bar at top of dropdown */
+.nav-bar-v2-dropdown::before {
+    content: '';
+    display: block;
+    height: 3px;
+    background: linear-gradient(90deg, #FF8C42, #165B33);
+}
+
+.nav-bar-v2-item:hover .nav-bar-v2-dropdown {
+    opacity: 1;
+    visibility: visible;
+    margin-top: 0;
+}
+
+.nav-bar-v2-dropdown-inner {
+    padding: 12px 0;
+}
+
+.nav-bar-v2-dropdown a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 18px;
+    color: #444;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.15s ease;
+}
+
+.nav-bar-v2-dropdown a:hover {
+    background: #f0f7f0;
+    color: #165B33;
+    padding-left: 22px;
+}
+
+/* Arrow indicator on hover */
+.nav-bar-v2-dropdown a::after {
+    content: '›';
+    font-size: 18px;
+    color: transparent;
+    transition: color 0.15s;
+}
+.nav-bar-v2-dropdown a:hover::after {
+    color: #FF8C42;
+}
+
+/* Hide nav bar on mobile (< 768px) -- mobile menu handles it */
+@media (max-width: 768px) {
+    .nav-bar-v2 {
+        display: none;
+    }
 }
 
 /* Hide old header and user dashboard */
