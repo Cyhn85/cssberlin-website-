@@ -41,7 +41,12 @@ app.add_middleware(
 )
 
 # ─── Routers ─────────────────────────────────────────────
+from products import router as products_router
+from offers import router as offers_router
+
 app.include_router(auth_router)
+app.include_router(products_router)
+app.include_router(offers_router)
 
 # ─── Ana / Health Endpoints ──────────────────────────────
 @app.get("/")
