@@ -157,6 +157,15 @@
         if (overlay) {
             overlay.classList.add('active');
             document.body.style.overflow = 'hidden';
+
+            // Auto-focus on first input after modal opens (standard UX)
+            setTimeout(() => {
+                if (mode === 'login') {
+                    document.getElementById('loginEmail')?.focus();
+                } else {
+                    document.getElementById('registerName')?.focus();
+                }
+            }, 300);
         }
     }
 
