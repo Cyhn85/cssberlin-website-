@@ -287,3 +287,148 @@ def send_magic_link_email(to_email: str, magic_link: str):
         server.starttls()
         server.login(SMTP_USER, SMTP_PASSWORD)
         server.send_message(msg)
+
+
+# ═══════════════════════════════════════════════════════════
+# FORGOT PASSWORD (Password Reset)
+# ═══════════════════════════════════════════════════════════
+
+@router.post("/forgot-password")
+async def forgot_password(data: MagicLinkRequest, db: AsyncSession = Depends(get_db)):
+    """Send password reset link to user's email"""
+
+    # Check if user exists
+    result = await db.execute(select(User).where(User.email == data.email))
+    user = result.scalar_one_or_none()
+
+    # Don't reveal if email exists (security best practice)
+    # Always return success message
+    if not user:
+        return {
+            "success": True,
+            "message": "If the email exists, a reset link has been sent.",
+        }
+
+    # Generate reset token
+    token = serializer.dumps(data.email, salt='password-reset')
+    reset_link = f"{FRONTEND_URL}/reset-password?token={token}"
+
+    # Send email
+    try:
+        send_password_reset_email(data.email, reset_link, user.first_name)
+        return {
+            "success": True,
+            "message": "Password reset link sent! Check your email.",
+            "email": data.email
+        }
+    except Exception as e:
+        print(f"[Email Error] {str(e)}")
+        return {
+            "success": True,
+            "message": "If the email exists, a reset link has been sent.",
+        }
+
+
+class PasswordResetRequest(BaseModel):
+    token: str
+    new_password: str
+
+
+@router.post("/reset-password")
+async def reset_password(data: PasswordResetRequest, db: AsyncSession = Depends(get_db)):
+    """Reset user password with token"""
+
+    try:
+        # Verify token (expires after 30 minutes)
+        email = serializer.loads(
+            data.token,
+            salt='password-reset',
+            max_age=30 * 60  # 30 minutes
+        )
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid or expired reset link")
+
+    # Find user
+    result = await db.execute(select(User).where(User.email == email))
+    user = result.scalar_one_or_none()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    # Update password
+    user.hashed_password = get_password_hash(data.new_password)
+    await db.commit()
+
+    return {
+        "success": True,
+        "message": "Password successfully reset! You can now log in.",
+    }
+
+
+# ─── Email Sending Function for Password Reset ──────────────
+def send_password_reset_email(to_email: str, reset_link: str, user_name: str):
+    """Send password reset email via SMTP"""
+
+    # If SMTP not configured, just print to console (dev mode)
+    if not SMTP_USER or not SMTP_PASSWORD:
+        print(f"\n{'='*60}")
+        print(f"[DEV MODE] Password Reset Email")
+        print(f"To: {to_email}")
+        print(f"Link: {reset_link}")
+        print(f"{'='*60}\n")
+        return
+
+    # Create email
+    msg = MIMEMultipart('alternative')
+    msg['Subject'] = '🔒 Reset Your CSS Berlin Password'
+    msg['From'] = FROM_EMAIL
+    msg['To'] = to_email
+
+    # Email body (HTML)
+    html = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body {{ font-family: 'Inter', Arial, sans-serif; background: #f9fafb; padding: 40px 20px; }}
+            .container {{ max-width: 600px; margin: 0 auto; background: white; border-radius: 16px; padding: 40px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }}
+            .logo {{ font-size: 32px; font-weight: 900; margin-bottom: 20px; }}
+            .logo span {{ color: #2D5016; }}
+            h1 {{ color: #2D5016; font-size: 24px; margin-bottom: 16px; }}
+            p {{ color: #555; line-height: 1.6; margin-bottom: 24px; }}
+            .btn {{ display: inline-block; background: linear-gradient(135deg, #FF8C42, #2D5016); color: white; padding: 16px 32px; text-decoration: none; border-radius: 12px; font-weight: 700; }}
+            .footer {{ margin-top: 32px; padding-top: 24px; border-top: 1px solid #eee; color: #999; font-size: 13px; }}
+            .alert {{ background: #FFF3CD; border: 1px solid #FFE69C; color: #856404; padding: 16px; border-radius: 8px; margin: 20px 0; }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="logo">CSS<span>berlin</span></div>
+            <h1>🔒 Reset Your Password</h1>
+            <p>Hi {user_name}!</p>
+            <p>We received a request to reset your CSS Berlin password. Click the button below to create a new password. This link expires in 30 minutes.</p>
+            <a href="{reset_link}" class="btn">Reset Password</a>
+            <p style="margin-top: 24px; font-size: 13px; color: #777;">
+                Or copy this link: <br>
+                <code style="background: #f5f5f5; padding: 8px; border-radius: 6px; display: inline-block; margin-top: 8px; word-break: break-all;">{reset_link}</code>
+            </p>
+            <div class="alert">
+                ⚠️ If you didn't request this password reset, please ignore this email. Your password will remain unchanged.
+            </div>
+            <div class="footer">
+                <p>For security reasons, this link will expire in 30 minutes.</p>
+                <p>© 2026 CSS Berlin - Climate Smart Solutions</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+
+    part = MIMEText(html, 'html')
+    msg.attach(part)
+
+    # Send via SMTP
+    with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
+        server.starttls()
+        server.login(SMTP_USER, SMTP_PASSWORD)
+        server.send_message(msg)

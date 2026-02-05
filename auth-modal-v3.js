@@ -31,6 +31,13 @@
                             </svg>
                             Anmelden
                         </button>
+                        <button class="auth-modal-v3-tab magic-link" id="authTabMagicLink">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                <polyline points="22,6 12,13 2,6"/>
+                            </svg>
+                            Magic Link
+                        </button>
                         <button class="auth-modal-v3-tab" id="authTabRegister">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
@@ -57,6 +64,10 @@
                                     <input type="password" class="auth-modal-v3-input" id="loginPassword" placeholder="Passwort" required>
                                 </div>
 
+                                <div class="auth-modal-v3-forgot">
+                                    <a href="#" onclick="window.authModalV3.switchMode('forgot'); return false;">Passwort vergessen?</a>
+                                </div>
+
                                 <button type="submit" class="auth-modal-v3-submit">
                                     <span>Einloggen</span>
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -80,6 +91,23 @@
                                     </svg>
                                 </button>
                             </div>
+                        </div>
+
+                        <!-- MAGIC LINK VIEW -->
+                        <div id="magicLinkView" class="auth-view" style="display:none;">
+                            <form id="magicLinkForm">
+                                <div class="auth-modal-v3-field">
+                                    <input type="email" class="auth-modal-v3-input" id="magicLinkEmail" placeholder="E-Mail Adresse" required>
+                                </div>
+
+                                <button type="submit" class="auth-modal-v3-submit">
+                                    <span>Magic Link Senden</span>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                        <polyline points="22,6 12,13 2,6"/>
+                                    </svg>
+                                </button>
+                            </form>
                         </div>
 
                         <!-- REGISTER VIEW -->
@@ -110,6 +138,27 @@
                                 </button>
                             </form>
                         </div>
+
+                        <!-- FORGOT PASSWORD VIEW -->
+                        <div id="forgotView" class="auth-view" style="display:none;">
+                            <form id="forgotForm">
+                                <div class="auth-modal-v3-field">
+                                    <input type="email" class="auth-modal-v3-input" id="forgotEmail" placeholder="E-Mail Adresse" required>
+                                </div>
+
+                                <button type="submit" class="auth-modal-v3-submit">
+                                    <span>Reset-Link Senden</span>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                        <polyline points="22,6 12,13 2,6"/>
+                                    </svg>
+                                </button>
+
+                                <div class="auth-modal-v3-forgot" style="text-align: center; margin-top: 16px;">
+                                    <a href="#" onclick="window.authModalV3.switchMode('login'); return false;">Zurück zur Anmeldung</a>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -123,26 +172,45 @@
         currentMode = mode;
 
         const tabLogin = document.getElementById('authTabLogin');
+        const tabMagicLink = document.getElementById('authTabMagicLink');
         const tabRegister = document.getElementById('authTabRegister');
         const loginView = document.getElementById('loginView');
+        const magicLinkView = document.getElementById('magicLinkView');
         const registerView = document.getElementById('registerView');
+        const forgotView = document.getElementById('forgotView');
         const title = document.getElementById('authTitle');
         const subtitle = document.getElementById('authSubtitle');
 
+        // Hide all views
+        loginView.style.display = 'none';
+        magicLinkView.style.display = 'none';
+        registerView.style.display = 'none';
+        forgotView.style.display = 'none';
+
+        // Remove all active tabs
+        tabLogin.classList.remove('active');
+        tabMagicLink.classList.remove('active');
+        tabRegister.classList.remove('active');
+
         if (mode === 'login') {
             tabLogin.classList.add('active');
-            tabRegister.classList.remove('active');
             loginView.style.display = 'block';
-            registerView.style.display = 'none';
             title.textContent = 'Willkommen zurück';
             subtitle.textContent = 'Bitte melde dich an, um fortzufahren.';
-        } else {
-            tabLogin.classList.remove('active');
+        } else if (mode === 'magiclink') {
+            tabMagicLink.classList.add('active');
+            magicLinkView.style.display = 'block';
+            title.textContent = 'Magic Link';
+            subtitle.textContent = 'Erhalte einen sicheren Login-Link per E-Mail.';
+        } else if (mode === 'register') {
             tabRegister.classList.add('active');
-            loginView.style.display = 'none';
             registerView.style.display = 'block';
             title.textContent = 'Konto erstellen';
             subtitle.textContent = 'Werde Teil der nachhaltigen Bewegung.';
+        } else if (mode === 'forgot') {
+            forgotView.style.display = 'block';
+            title.textContent = 'Passwort zurücksetzen';
+            subtitle.textContent = 'Wir senden dir einen Link zum Zurücksetzen.';
         }
 
         hideMessage();
@@ -300,10 +368,12 @@
     function resetForms() {
         document.getElementById('loginEmail').value = '';
         document.getElementById('loginPassword').value = '';
+        document.getElementById('magicLinkEmail').value = '';
         document.getElementById('registerName').value = '';
         document.getElementById('registerEmail').value = '';
         document.getElementById('registerPassword').value = '';
         document.getElementById('registerPasswordConfirm').value = '';
+        document.getElementById('forgotEmail').value = '';
         hideMessage();
     }
 
@@ -316,6 +386,76 @@
         window.location.href = `${API_BASE}/api/auth/apple`;
     }
 
+    // ─── Magic Link Submit ──────────────────────────────────────
+    async function handleMagicLinkSubmit(e) {
+        e.preventDefault();
+
+        const email = document.getElementById('magicLinkEmail').value;
+        const submitBtn = e.target.querySelector('.auth-modal-v3-submit');
+
+        submitBtn.classList.add('loading');
+        hideMessage();
+
+        try {
+            const response = await fetch(`${API_BASE}/api/auth/magic-link`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.detail || 'Magic Link konnte nicht gesendet werden');
+            }
+
+            showMessage('Magic Link wurde an deine E-Mail gesendet! Bitte überprüfe deinen Posteingang.', 'success');
+            document.getElementById('magicLinkEmail').value = '';
+
+        } catch (error) {
+            showMessage(error.message, 'error');
+        } finally {
+            submitBtn.classList.remove('loading');
+        }
+    }
+
+    // ─── Forgot Password Submit ─────────────────────────────────
+    async function handleForgotSubmit(e) {
+        e.preventDefault();
+
+        const email = document.getElementById('forgotEmail').value;
+        const submitBtn = e.target.querySelector('.auth-modal-v3-submit');
+
+        submitBtn.classList.add('loading');
+        hideMessage();
+
+        try {
+            const response = await fetch(`${API_BASE}/api/auth/forgot-password`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.detail || 'Reset-Link konnte nicht gesendet werden');
+            }
+
+            showMessage('Reset-Link wurde gesendet! Bitte überprüfe deine E-Mails.', 'success');
+            document.getElementById('forgotEmail').value = '';
+
+            setTimeout(() => {
+                switchMode('login');
+            }, 2000);
+
+        } catch (error) {
+            showMessage(error.message, 'error');
+        } finally {
+            submitBtn.classList.remove('loading');
+        }
+    }
+
     // ─── Event Listeners ────────────────────────────────────────
     function attachEvents() {
         // Close button removed, only overlay click and ESC key work
@@ -324,10 +464,13 @@
         });
 
         document.getElementById('authTabLogin').addEventListener('click', () => switchMode('login'));
+        document.getElementById('authTabMagicLink').addEventListener('click', () => switchMode('magiclink'));
         document.getElementById('authTabRegister').addEventListener('click', () => switchMode('register'));
 
         document.getElementById('loginForm').addEventListener('submit', handleLoginSubmit);
+        document.getElementById('magicLinkForm').addEventListener('submit', handleMagicLinkSubmit);
         document.getElementById('registerForm').addEventListener('submit', handleRegisterSubmit);
+        document.getElementById('forgotForm').addEventListener('submit', handleForgotSubmit);
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && document.getElementById('authModalV3Overlay')?.classList.contains('active')) {

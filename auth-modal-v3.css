@@ -22,15 +22,17 @@
     opacity: 1;
 }
 
-/* Modal Container - ULTRA COMPACT */
+/* Modal Container - ENHANCED SIZE */
 .auth-modal-v3 {
     background: white;
     border-radius: 24px;
-    max-width: 420px;
-    width: 92%;
+    max-width: 520px;
+    width: 94%;
     position: relative;
     animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-height: 95vh;
+    overflow-y: auto;
 }
 
 @keyframes slideUp {
@@ -185,18 +187,18 @@
     background: #e5e7eb;
 }
 
-/* Social Buttons - MINIMAL ICONS */
+/* Social Buttons - ENHANCED */
 .auth-modal-v3-socials {
     display: flex;
     justify-content: center;
-    gap: 12px;
-    margin-top: 20px;
+    gap: 16px;
+    margin-top: 24px;
 }
 
 .auth-modal-v3-social-btn {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
     border: 2px solid #e5e7eb;
     background: white;
     color: #6b7280;
@@ -204,13 +206,51 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s;
+    transition: all 0.3s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.auth-modal-v3-social-btn svg {
+    width: 26px;
+    height: 26px;
 }
 
 .auth-modal-v3-social-btn:hover {
     border-color: #FF8C42;
     background: #fff7ed;
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(255, 140, 66, 0.3);
+}
+
+/* Magic Link Tab */
+.auth-modal-v3-tab.magic-link {
+    background: linear-gradient(135deg, #FF8C42 0%, #c4621b 100%);
+    color: white;
+    border: none;
+}
+
+.auth-modal-v3-tab.magic-link:hover {
+    background: linear-gradient(135deg, #c4621b 0%, #FF8C42 100%);
+}
+
+/* Forgot Password Link */
+.auth-modal-v3-forgot {
+    text-align: right;
+    margin-top: 8px;
+    margin-bottom: 20px;
+}
+
+.auth-modal-v3-forgot a {
+    color: #6b7280;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.auth-modal-v3-forgot a:hover {
+    color: #FF8C42;
+    text-decoration: underline;
 }
 
 /* Error/Success Messages */
