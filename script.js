@@ -1072,7 +1072,8 @@ function attachProductEventListeners() {
             if (e.target.closest('.wishlist-btn, .buy-btn, .negotiate-btn, .quick-view-btn, .add-to-cart-btn')) {
                 return;
             }
-            window.location.href = 'product.html';
+            const productId = this.dataset.productId;
+            window.location.href = `product-detail.html?id=${productId}`;
         });
         card.style.cursor = 'pointer';
     });
