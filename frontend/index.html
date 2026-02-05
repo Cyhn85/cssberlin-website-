@@ -300,10 +300,10 @@
     </header>
 
     <!-- MAIN CONTENT -->
-    <main class="flex-grow pt-6">
+    <main class="flex-grow pt-2">
 
         <!-- HERO SECTION (Split Layout) -->
-        <section class="px-4 max-w-[95%] mx-auto mb-10">
+        <section class="px-4 max-w-[95%] mx-auto mb-4">
             <!-- REDUCED HEIGHT: h-[320px] md:h-[380px] -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[320px] md:h-[380px]">
 
@@ -354,7 +354,7 @@
         </section>
 
         <!-- PRODUCT SHOWCASE -->
-        <section class="pb-24">
+        <section class="pb-12">
             <div class="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
                 <div
                     class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4 border-b border-gray-100 pb-6">
@@ -376,6 +376,125 @@
                         class="px-8 py-3 bg-gradient-to-r from-brand-orange to-brand-rust hover:from-brand-green hover:to-brand-darkGreen text-white font-bold rounded-full transition-all shadow-lg">
                         Mehr Produkte laden
                     </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- KONTAKT SECTION -->
+        <section class="py-16 bg-gradient-to-br from-gray-50 to-gray-100">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-10">
+                    <span
+                        class="text-brand-orange font-bold text-xs tracking-widest uppercase mb-2 block">Kontakt</span>
+                    <h2 class="text-3xl md:text-4xl font-heading font-bold text-gray-900 mb-3">Wir freuen uns auf deine
+                        Nachricht</h2>
+                    <p class="text-gray-500 max-w-lg mx-auto">Hast du Fragen oder Anregungen? Schreib uns einfach!</p>
+                </div>
+
+                <!-- Contact Form Card -->
+                <div class="bg-white rounded-[32px] shadow-2xl p-8 md:p-12 relative overflow-hidden">
+                    <!-- Decorative gradient -->
+                    <div
+                        class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-brand-orange/10 to-brand-green/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2">
+                    </div>
+
+                    <form id="contact-form" class="relative z-10 space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Name Field -->
+                            <div class="relative group">
+                                <input type="text" id="contact-name" required
+                                    class="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-brand-orange focus:border-brand-orange block p-4 outline-none transition-all placeholder-transparent peer"
+                                    placeholder="Name" />
+                                <label for="contact-name"
+                                    class="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-transparent px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-2">
+                                    Dein Name
+                                </label>
+                            </div>
+
+                            <!-- Email Field -->
+                            <div class="relative group">
+                                <input type="email" id="contact-email" required
+                                    class="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-brand-green focus:border-brand-green block p-4 outline-none transition-all placeholder-transparent peer"
+                                    placeholder="Email" />
+                                <label for="contact-email"
+                                    class="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-transparent px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-2">
+                                    E-Mail Adresse
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Subject Field -->
+                        <div class="relative group">
+                            <select id="contact-subject" required
+                                class="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-brand-orange focus:border-brand-orange block p-4 outline-none transition-all appearance-none cursor-pointer">
+                                <option value="">Betreff auswählen...</option>
+                                <option value="general">Allgemeine Anfrage</option>
+                                <option value="support">Technischer Support</option>
+                                <option value="order">Bestellungen & Versand</option>
+                                <option value="partnership">Partnerschaften</option>
+                                <option value="feedback">Feedback</option>
+                            </select>
+                            <i data-lucide="chevron-down"
+                                class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none"></i>
+                        </div>
+
+                        <!-- Message Field -->
+                        <div class="relative group">
+                            <textarea id="contact-message" rows="5" required
+                                class="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-brand-green focus:border-brand-green block p-4 outline-none transition-all placeholder-transparent peer resize-none"
+                                placeholder="Message"></textarea>
+                            <label for="contact-message"
+                                class="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-transparent px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-6 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-2">
+                                Deine Nachricht
+                            </label>
+                        </div>
+
+                        <!-- Privacy Checkbox -->
+                        <div class="flex items-start gap-3">
+                            <input type="checkbox" id="contact-privacy" required
+                                class="mt-1 w-5 h-5 rounded border-gray-300 text-brand-green focus:ring-brand-green cursor-pointer" />
+                            <label for="contact-privacy" class="text-sm text-gray-600 cursor-pointer">
+                                Ich stimme der <a href="datenschutz.html"
+                                    class="text-brand-orange hover:underline">Datenschutzerklärung</a> zu und bin damit
+                                einverstanden, dass meine Daten zur Bearbeitung meiner Anfrage verwendet werden.
+                            </label>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="pt-4">
+                            <button type="submit" id="contact-submit"
+                                class="w-full md:w-auto px-12 py-4 rounded-xl font-heading font-bold text-white shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-3 bg-gradient-to-r from-brand-orange to-brand-green hover:from-brand-rust hover:to-brand-darkGreen mx-auto">
+                                <i data-lucide="send" class="w-5 h-5"></i>
+                                Nachricht senden
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Contact Info -->
+                    <div class="mt-12 pt-8 border-t border-gray-100 grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                        <div class="flex flex-col items-center gap-2">
+                            <div class="w-12 h-12 rounded-full bg-brand-orange/10 flex items-center justify-center">
+                                <i data-lucide="mail" class="w-5 h-5 text-brand-orange"></i>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900">E-Mail</span>
+                            <a href="mailto:info@cssberlin.de"
+                                class="text-sm text-gray-500 hover:text-brand-orange">info@cssberlin.de</a>
+                        </div>
+                        <div class="flex flex-col items-center gap-2">
+                            <div class="w-12 h-12 rounded-full bg-brand-green/10 flex items-center justify-center">
+                                <i data-lucide="map-pin" class="w-5 h-5 text-brand-green"></i>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900">Standort</span>
+                            <span class="text-sm text-gray-500">Berlin, Deutschland</span>
+                        </div>
+                        <div class="flex flex-col items-center gap-2">
+                            <div class="w-12 h-12 rounded-full bg-brand-orange/10 flex items-center justify-center">
+                                <i data-lucide="clock" class="w-5 h-5 text-brand-orange"></i>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900">Antwortzeit</span>
+                            <span class="text-sm text-gray-500">Innerhalb von 24h</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -799,6 +918,42 @@
         });
 
         requestAnimationFrame(updateSlider);
+
+        // 6. CONTACT FORM HANDLER
+        const contactForm = document.getElementById('contact-form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                const btn = document.getElementById('contact-submit');
+                const originalHTML = btn.innerHTML;
+
+                // Loading state
+                btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Wird gesendet...`;
+                btn.disabled = true;
+                lucide.createIcons();
+
+                // Simulate sending (replace with actual API call)
+                setTimeout(() => {
+                    // Success state
+                    btn.innerHTML = `<i data-lucide="check-circle" class="w-5 h-5"></i> Erfolgreich gesendet!`;
+                    btn.classList.remove('from-brand-orange', 'to-brand-green');
+                    btn.classList.add('from-brand-green', 'to-brand-darkGreen');
+                    lucide.createIcons();
+
+                    // Reset form
+                    contactForm.reset();
+
+                    // Reset button after 3 seconds
+                    setTimeout(() => {
+                        btn.innerHTML = originalHTML;
+                        btn.disabled = false;
+                        btn.classList.remove('from-brand-green', 'to-brand-darkGreen');
+                        btn.classList.add('from-brand-orange', 'to-brand-green');
+                        lucide.createIcons();
+                    }, 3000);
+                }, 1500);
+            });
+        }
 
     </script>
 </body>
