@@ -794,8 +794,11 @@ function createProductCard(product) {
     // PHASE G: Badge class - "Neu" gets orange, others get dark default
     const badgeClass = product.condition === 'Neu' || product.condition === 'Neuwertig' ? 'neu' : '';
 
+    // Check if product is sold
+    const isSold = product.status === 'sold';
+
     return `
-        <div class="product-card-v3" data-product-id="${product.id}">
+        <div class="product-card-v3 ${isSold ? 'sold' : ''}" data-product-id="${product.id}" data-status="${product.status || 'active'}">
             <div class="product-card-v3-inner">
                 <div class="product-card-v3-img-wrap">
                     <img src="${product.image}"
@@ -803,6 +806,7 @@ function createProductCard(product) {
                          loading="lazy"
                          onerror="this.src='https://via.placeholder.com/400x533?text=Bild+nicht+verfuegbar'">
 
+                    ${isSold ? '<div class="sold-badge">VERKAUFT</div>' : ''}
                     <div class="product-card-v3-badge ${badgeClass}">${product.condition}</div>
 
                     <!-- PHASE G: Independent Cart button (bottom-left) -->

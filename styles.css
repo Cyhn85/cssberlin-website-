@@ -1916,6 +1916,23 @@ img {
     pointer-events: none;
 }
 
+/* Sold Badge - Top Left Corner */
+.sold-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: #dc2626;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 5;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+}
+
 /* Sold items - Buttons disabled style override */
 .product-card-v3.sold .btn-rainbow:disabled {
     background: #ccc;
