@@ -369,6 +369,9 @@
 
     <!-- Product Card Glassmorphism Redesign -->
     <link rel="stylesheet" href="product-card-glass.css?v=4">
+
+    <!-- Auth Modal v2 (Glassmorphism) -->
+    <link rel="stylesheet" href="auth-modal-v2.css?v=1">
 </head>
 
 <body>
@@ -395,7 +398,7 @@
                 <button class="header-btn" title="Favoriten">❤️</button>
                 <button class="header-btn" title="Verhandeln" onclick="window.location.href='meine-anzeigen.html?tab=negotiations'">🔨</button>
                 <button class="header-btn" title="Warenkorb">🛒</button>
-                <button class="btn-anmelden">Anmelden</button>
+                <button class="btn-anmelden" onclick="window.authModalV2.open('login')">Anmelden</button>
             </div>
         </div>
 
@@ -540,6 +543,9 @@
         });
     })();
     </script>
+
+    <!-- Auth Modal v2 Script -->
+    <script src="auth-modal-v2.js"></script>
 </body>
 
 </html>
