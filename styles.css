@@ -6446,3 +6446,290 @@ footer, .footer {
   border-color: #165B33;
   background: #f0faf4;
 }
+
+/* ============================================
+   PHASE I: Split Hero Section
+   Sol: Social Hub | Sağ: Campaign Slider
+   ============================================ */
+.split-hero {
+    display: flex;
+    gap: 20px;
+    padding: 20px 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+    height: 280px;
+}
+
+.split-hero-left,
+.split-hero-right {
+    flex: 1;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    background: #111;
+}
+
+/* ============================================
+   PHASE J: Hero Slider (Campaign Carousel)
+   ============================================ */
+.hero-slider {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 16px;
+}
+
+.hero-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.hero-slide.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.hero-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-slide-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 100%);
+}
+
+.hero-slide-caption {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    right: 24px;
+    color: white;
+}
+
+.hero-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    background: rgba(255,140,66,0.9);
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+}
+
+.hero-slide-caption h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    color: #fff;
+}
+
+.hero-slide-caption p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.9);
+    margin: 0;
+    line-height: 1.4;
+}
+
+.hero-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.95);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.hero-nav-btn:hover {
+    background: #FF8C42;
+}
+
+.hero-nav-btn:hover svg {
+    stroke: white;
+}
+
+.hero-nav-btn.prev {
+    left: 12px;
+}
+
+.hero-nav-btn.next {
+    right: 12px;
+}
+
+.hero-nav-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke: #333;
+}
+
+.hero-indicators {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    display: flex;
+    gap: 6px;
+    z-index: 10;
+}
+
+.hero-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.hero-dot.active {
+    background: #FF8C42;
+    width: 24px;
+    border-radius: 10px;
+}
+
+/* ============================================
+   PHASE K: Social Hub (Infinite Vertical Slider)
+   ============================================ */
+.social-hub-viewport {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #111;
+}
+
+.social-hub-slide {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    will-change: transform;
+}
+
+.social-hub-slide-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    will-change: transform;
+    transform: scale(1.3);
+}
+
+.social-hub-slide-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 24px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.8));
+    color: white;
+}
+
+.social-hub-slide-cat {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 4px;
+    display: block;
+}
+
+.social-hub-slide-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 4px;
+}
+
+.social-hub-slide-handle {
+    font-size: 13px;
+    color: rgba(255,255,255,0.8);
+    margin: 0 0 12px;
+}
+
+.social-hub-slide-follow {
+    padding: 8px 20px;
+    background: #FF8C42;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.social-hub-slide-follow:hover {
+    background: #2D5016;
+    transform: scale(1.05);
+}
+
+.social-hub-label {
+    position: absolute;
+    top: 14px;
+    left: 16px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(6px);
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.social-hub-label-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4CAF50;
+    animation: pulse 1.8s infinite;
+}
+
+.social-hub-label span:last-child {
+    font-size: 9px;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.9); }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .split-hero {
+        flex-direction: column;
+        height: auto;
+        gap: 12px;
+    }
+    
+    .split-hero-left,
+    .split-hero-right {
+        height: 200px;
+    }
+}

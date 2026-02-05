@@ -2014,5 +2014,9 @@ function initFeaturedCollection() {
 // Auto-init on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
     initFeaturedCollection();
+    initHeroSlider();
+    initSocialHub();
+    initNewsSlider();
+    initFooterNewsSlider();
 });
 
