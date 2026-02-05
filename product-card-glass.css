@@ -1,0 +1,411 @@
+/* ═══════════════════════════════════════════════════════════════
+   CSS Berlin — PRODUCT CARD v4 (Glassmorphism Redesign)
+   Modern glass card with subtle gradient, smooth animations
+   ═══════════════════════════════════════════════════════════════ */
+
+.product-card-v3 {
+    position: relative;
+    border-radius: 20px;
+    padding: 1px;
+    background: linear-gradient(145deg,
+            rgba(255, 140, 66, 0.15) 0%,
+            rgba(255, 255, 255, 0.05) 45%,
+            rgba(45, 80, 22, 0.15) 100%);
+    backdrop-filter: blur(8px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04),
+        0 0 0 1px rgba(255, 140, 66, 0.06);
+}
+
+.product-card-v3:hover {
+    transform: translateY(-6px) scale(1.01);
+    background: linear-gradient(145deg,
+            rgba(255, 140, 66, 0.25) 0%,
+            rgba(255, 255, 255, 0.08) 40%,
+            rgba(45, 80, 22, 0.25) 100%);
+    box-shadow: 0 12px 40px rgba(45, 80, 22, 0.15),
+        0 6px 20px rgba(255, 140, 66, 0.12),
+        0 0 0 1px rgba(255, 140, 66, 0.2);
+}
+
+/* Inner glass panel */
+.product-card-v3-inner {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px) saturate(180%);
+    border-radius: 19px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+@media (prefers-color-scheme: dark) {
+    .product-card-v3-inner {
+        background: rgba(26, 26, 46, 0.85);
+        border-color: rgba(255, 255, 255, 0.08);
+    }
+}
+
+/* Image wrapper */
+.product-card-v3-img-wrap {
+    position: relative;
+    width: 100%;
+    padding-top: 125%;
+    overflow: hidden;
+    background: linear-gradient(135deg, #f7f7f7 0%, #eee 100%);
+}
+
+.product-card-v3-img-wrap img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-card-v3:hover .product-card-v3-img-wrap img {
+    transform: scale(1.08) rotate(0.5deg);
+}
+
+/* Condition badge — glassmorphism pill */
+.product-card-v3-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(10px) saturate(150%);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.product-card-v3-badge.neu {
+    background: linear-gradient(135deg, rgba(255, 140, 66, 0.95), rgba(232, 133, 76, 0.9));
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Overlay buttons: glass morphism */
+.product-card-v3-btn-cart,
+.product-card-v3-btn-heart {
+    position: absolute;
+    z-index: 3;
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(10px) saturate(180%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    opacity: 0;
+}
+
+.product-card-v3-btn-cart {
+    bottom: 12px;
+    left: 12px;
+}
+
+.product-card-v3-btn-heart {
+    bottom: 12px;
+    right: 12px;
+}
+
+.product-card-v3:hover .product-card-v3-btn-cart,
+.product-card-v3:hover .product-card-v3-btn-heart {
+    opacity: 1;
+}
+
+.product-card-v3-btn-cart:hover {
+    background: rgba(255, 140, 66, 0.95);
+    border-color: rgba(255, 140, 66, 0.6);
+    transform: scale(1.12) translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 140, 66, 0.3);
+}
+
+.product-card-v3-btn-heart:hover {
+    background: rgba(244, 67, 54, 0.95);
+    border-color: rgba(244, 67, 54, 0.5);
+    transform: scale(1.12) translateY(-2px);
+    box-shadow: 0 6px 20px rgba(244, 67, 54, 0.25);
+}
+
+.product-card-v3-btn-cart svg,
+.product-card-v3-btn-heart svg {
+    width: 19px;
+    height: 19px;
+    stroke: #2B2D2E;
+    fill: none;
+    stroke-width: 2.2;
+    transition: stroke 0.2s;
+}
+
+.product-card-v3-btn-cart:hover svg,
+.product-card-v3-btn-heart:hover svg {
+    stroke: #fff;
+}
+
+/* Heart active state */
+.product-card-v3-btn-heart.active {
+    background: rgba(255, 220, 220, 0.9);
+    border-color: rgba(244, 67, 54, 0.4);
+    opacity: 1;
+}
+
+.product-card-v3-btn-heart.active svg {
+    fill: #F44336;
+    stroke: #F44336;
+}
+
+/* Card body — refined typography */
+.product-card-v3-body {
+    padding: 16px 16px 18px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 2px;
+}
+
+.product-card-v3-price-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.product-card-v3-price {
+    font-size: 20px;
+    font-weight: 900;
+    color: #2D5016;
+    letter-spacing: -0.02em;
+}
+
+.product-card-v3-brand {
+    font-size: 11px;
+    font-weight: 700;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.product-card-v3-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2B2D2E;
+    margin-bottom: 8px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Seller info — subtle glass pill */
+.product-card-v3-seller {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    background: rgba(45, 80, 22, 0.04);
+    border: 1px solid rgba(45, 80, 22, 0.08);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    margin-top: auto;
+    transition: background 0.2s;
+}
+
+.product-card-v3:hover .product-card-v3-seller {
+    background: rgba(45, 80, 22, 0.07);
+    border-color: rgba(45, 80, 22, 0.12);
+}
+
+.product-card-v3-seller-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FF8C42, #2D5016);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    box-shadow: 0 2px 6px rgba(45, 80, 22, 0.2);
+}
+
+.product-card-v3-seller-info {
+    font-size: 10px;
+    color: #777;
+    line-height: 1.4;
+}
+
+.product-card-v3-seller-info strong {
+    color: #2B2D2E;
+    font-weight: 700;
+}
+
+/* CO2 badge — glass pill */
+.product-card-v3-co2 {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    background: linear-gradient(135deg,
+            rgba(45, 80, 22, 0.08) 0%,
+            rgba(107, 175, 61, 0.12) 100%);
+    border: 1px solid rgba(45, 80, 22, 0.15);
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #2D5016;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 6px rgba(45, 80, 22, 0.06);
+}
+
+.product-card-v3-co2 svg {
+    width: 14px;
+    height: 14px;
+    fill: #2D5016;
+}
+
+/* Action buttons row */
+.product-card-v3-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.product-card-v3-actions button {
+    flex: 1;
+    height: 38px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border: none;
+}
+
+.product-card-v3-actions button:active {
+    transform: scale(0.96);
+}
+
+/* Chat button — glass outline */
+.btn-energy-brand {
+    background: rgba(255, 140, 66, 0.08) !important;
+    border: 2px solid rgba(255, 140, 66, 0.4) !important;
+    color: #FF8C42 !important;
+    backdrop-filter: blur(4px);
+}
+
+.btn-energy-brand:hover {
+    background: rgba(255, 140, 66, 0.95) !important;
+    border-color: #FF8C42 !important;
+    color: white !important;
+    box-shadow: 0 4px 16px rgba(255, 140, 66, 0.25);
+    transform: translateY(-1px);
+}
+
+/* Kaufen button — gradient glass */
+.btn-rainbow {
+    background: linear-gradient(135deg, #FF8C42 0%, #2D5016 100%) !important;
+    color: white !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 4px 12px rgba(45, 80, 22, 0.2);
+}
+
+.btn-rainbow:hover {
+    background: linear-gradient(135deg, #e67a30 0%, #244112 100%) !important;
+    box-shadow: 0 6px 20px rgba(45, 80, 22, 0.3);
+    transform: translateY(-2px);
+}
+
+.btn-rainbow span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Sold card state */
+.product-card-v3.sold {
+    opacity: 0.7;
+    filter: grayscale(0.4);
+    background: linear-gradient(145deg,
+            rgba(120, 120, 120, 0.12) 0%,
+            rgba(180, 180, 180, 0.08) 100%);
+}
+
+.product-card-v3.sold .product-card-v3-inner {
+    background: rgba(245, 245, 245, 0.85);
+}
+
+.product-card-v3.sold:hover {
+    transform: translateY(-2px);
+}
+
+/* Sold badge */
+.sold-badge {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    z-index: 10;
+    background: rgba(244, 67, 54, 0.95);
+    backdrop-filter: blur(8px);
+    color: white;
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 10px 24px;
+    border-radius: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 8px 24px rgba(244, 67, 54, 0.4);
+}
+
+/* Responsive refinements */
+@media (max-width: 768px) {
+    .product-card-v3 {
+        border-radius: 16px;
+    }
+
+    .product-card-v3-inner {
+        border-radius: 15px;
+    }
+
+    .product-card-v3-btn-cart,
+    .product-card-v3-btn-heart {
+        width: 38px;
+        height: 38px;
+        opacity: 1;
+        /* Always visible on mobile */
+    }
+
+    .product-card-v3-body {
+        padding: 14px;
+    }
+
+    .product-card-v3-price {
+        font-size: 18px;
+    }
+
+    .product-card-v3-name {
+        font-size: 13px;
+    }
+}
