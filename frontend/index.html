@@ -1,1463 +1,805 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSS Berlin - Climate Smart Solutions</title>
-    <link rel="stylesheet" href="styles.css?v=2030">
-    <!-- header-v2.css KALDIRILDI - Sadece V3 aktif -->
-    <link rel="stylesheet" href="header-v3.css">
-    <link rel="stylesheet" href="auth-modal.css">
-    <link rel="stylesheet" href="footer-kleinanzeigen.css">
-    <link rel="stylesheet" href="toast.css">
+    <title>CSS Berlin | Climate Smart Solutions</title>
+
+    <!-- FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- ICONS -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- TAILWIND CSS (Modern Styling Engine) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            orange: '#FF8C42',
+                            green: '#165B33',
+                            darkGreen: '#0B2E1A',
+                            rust: '#c4621b',
+                            panelBase: '#121816',
+                        },
+                    },
+                    animation: {
+                        marquee: 'marquee 120s linear infinite',
+                        "eco-flow": 'eco-flow 3s linear infinite',
+                        "fade-in": 'fadeIn 0.3s ease-out forwards',
+                        "slide-up": 'slideUp 0.4s ease-out forwards',
+                    },
+                    keyframes: {
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-100%)' },
+                        },
+                        "eco-flow": {
+                            '0%': { backgroundPosition: '0% 50%' },
+                            '100%': { backgroundPosition: '200% 50%' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(10px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        /* ============================================
-           2026 Kapsamlı Geliştirme Planı - Inline Stiller
-           Eco-Tech Design - Turuncu→Yeşil Hover System
-           ============================================ */
-
-        /* Header Action Buttons - 1px beyaz border, turuncu dolgu, yeşil hover */
-        .header-action-btn {
-            padding: 10px 18px;
-            background: linear-gradient(135deg, #FF8C42 0%, #E8854C 100%);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 600;
-            font-size: 14px;
-            font-family: 'Inter', sans-serif;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.3s ease-in-out;
-            box-shadow: 0 2px 8px rgba(255, 140, 66, 0.25);
+        /* --- GLOBAL STYLES --- */
+        body {
+            background-color: #f9fafb;
+            color: #111827;
         }
 
-        .header-action-btn:hover {
-            background: linear-gradient(135deg, #2D5016 0%, #3d6b1e 100%);
-            border-color: rgba(255, 255, 255, 0.7);
-            box-shadow: 0 0 20px rgba(45, 80, 22, 0.35), 0 4px 15px rgba(45, 80, 22, 0.25);
-            transform: translateY(-2px);
+        .dark body {
+            background-color: #09090b;
+            color: #f3f4f6;
         }
 
-        .header-action-btn.auth-btn {
-            padding: 10px 20px;
-            gap: 10px;
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
 
-        /* Language Selector - Modern Pills Style */
-        .lang-selector {
-            display: flex;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            border-radius: 25px;
-            padding: 3px;
-            transition: all 0.3s ease;
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
         }
 
-        .lang-selector:hover {
-            border-color: rgba(255, 255, 255, 0.6);
-            background: rgba(255, 255, 255, 0.2);
+        ::-webkit-scrollbar-thumb {
+            background: #165B33;
+            border-radius: 4px;
         }
 
-        .lang-btn {
-            padding: 8px 14px;
-            background: transparent;
-            color: rgba(255, 255, 255, 0.8);
-            border: none;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 13px;
-            font-family: 'Inter', sans-serif;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        /* Eco Gradient Border Animation Class */
+        .eco-gradient-border {
+            background: linear-gradient(90deg, #FF8C42, #ffffff, #165B33, #FF8C42);
+            background-size: 300% 100%;
         }
 
-        .lang-btn:hover {
-            color: white;
-            background: rgba(255, 255, 255, 0.15);
+        /* Antigravity Slider Styles */
+        .social-slider-container {
+            perspective: 1000px;
+            cursor: grab;
         }
 
-        .lang-btn.active {
-            background: linear-gradient(135deg, #FF8C42 0%, #E8854C 100%);
-            color: white;
+        .social-slider-container:active {
+            cursor: grabbing;
         }
 
-        .lang-btn.active:hover {
-            background: linear-gradient(135deg, #2D5016 0%, #3d6b1e 100%);
-        }
-
-        /* Category Pills - Yatay Filtreleme */
-        .category-pills-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 16px 24px;
-            background: rgba(232, 245, 233, 0.4);
-        }
-
-        .category-pills-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-        }
-
-        .category-pill-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 10px 18px;
-            background: white;
-            color: #4a5a3a;
-            border: 1.5px solid #D8E4D0;
-            border-radius: 9999px;
-            font-size: 14px;
-            font-weight: 500;
-            font-family: 'Inter', sans-serif;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-
-        .category-pill-btn:hover {
-            background: #E8F5E9;
-            border-color: #2D5016;
-            color: #2D5016;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(45, 80, 22, 0.12);
-        }
-
-        .category-pill-btn.active {
-            background: linear-gradient(135deg, #FF8C42 0%, #E8854C 100%);
-            color: white;
-            border-color: transparent;
-        }
-
-        .category-pill-btn.active:hover {
-            background: linear-gradient(135deg, #2D5016 0%, #3d6b1e 100%);
-        }
-
-        /* CO2 Badge Styles for Product Cards */
-        .product-co2-badge {
+        .social-item {
             position: absolute;
-            bottom: 12px;
-            left: 12px;
-            display: inline-flex;
+            width: 100%;
+            height: 100%;
+            will-change: transform;
+            display: flex;
             align-items: center;
-            gap: 4px;
-            padding: 5px 10px;
-            background: linear-gradient(135deg, rgba(45, 80, 22, 0.9) 0%, rgba(107, 175, 61, 0.9) 100%);
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            color: white;
-            backdrop-filter: blur(4px);
-            z-index: 2;
+            justify-content: center;
+            overflow: hidden;
         }
 
-        .product-co2-badge::before {
-            content: '🌿';
-            font-size: 12px;
+        .social-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.6;
+            transition: opacity 0.5s ease;
+        }
+
+        .social-container:hover .social-item img {
+            opacity: 0.4;
+        }
+
+        /* Form Transition Helper Classes */
+        .hidden-mode {
+            display: none;
+        }
+
+        .auth-btn-active {
+            opacity: 1;
+            transform: scale(1.05);
+            z-index: 10;
+        }
+
+        .auth-btn-inactive {
+            opacity: 0.5;
+            filter: grayscale(100%);
+            transform: scale(0.95);
+        }
+
+        .auth-btn-inactive:hover {
+            filter: grayscale(0%);
+            opacity: 1;
         }
     </style>
+    <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
+    "clsx": "https://esm.sh/clsx@^2.1.1",
+    "tailwind-merge": "https://esm.sh/tailwind-merge@^3.4.0",
+    "motion/": "https://esm.sh/motion@^12.31.2/"
+  }
+}
+</script>
 </head>
 
-<body class="page-wrapper">
-    <!-- Main Content Wrapper for Flex Layout -->
-    <main class="page-main">
-        <!-- News Banner at Top -->
-        <div class="news-banner-v2">
-            <div class="news-slider" id="newsSlider">
-                <div class="news-item" data-link="co2-impact.html">
-                    <span>🌍 248.5 Tonnen CO₂ gespart</span>
+<body class="font-sans antialiased transition-colors duration-300">
+
+    <!-- 1. TOP TICKER (Kayar Bant) -->
+    <div
+        class="relative w-full bg-gradient-to-r from-brand-orange to-brand-green text-white overflow-hidden h-10 flex items-center z-50 border-b border-brand-green/30">
+        <!-- Fading Edges -->
+        <div
+            class="absolute left-0 top-0 bottom-0 w-8 md:w-20 bg-gradient-to-r from-brand-orange to-transparent z-10 pointer-events-none">
+        </div>
+        <div
+            class="absolute right-0 top-0 bottom-0 w-8 md:w-20 bg-gradient-to-l from-brand-green to-transparent z-10 pointer-events-none">
+        </div>
+
+        <!-- Marquee Content -->
+        <div class="flex animate-marquee hover:[animation-play-state:paused] whitespace-nowrap items-center">
+            <!-- Items repeated for infinite loop illusion -->
+            <div class="flex items-center" id="ticker-content">
+                <!-- Javascript will populate this -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. HEADER -->
+    <header class="sticky top-0 z-40 w-full shadow-sm bg-white/95 backdrop-blur-md transition-colors duration-300">
+        <!-- Top Row: Logo & Actions -->
+        <div class="w-full max-w-[95%] mx-auto px-4 sm:px-6">
+            <div class="flex justify-between items-center h-20 md:h-24">
+
+                <!-- LOGO -->
+                <div class="flex-shrink-0 flex items-center cursor-pointer group">
+                    <span
+                        class="font-heading font-extrabold text-4xl md:text-5xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-brand-orange to-brand-green drop-shadow-sm group-hover:scale-105 transition-transform duration-300">
+                        CSSberlin
+                    </span>
                 </div>
-                <div class="news-item" data-link="campaign.html">
-                    <span>📦 2 kaufen = 3. Versand GRATIS</span>
-                </div>
-                <div class="news-item" data-link="co2-impact.html">
-                    <span>🏆 CO₂ Top 100 Rangliste</span>
-                </div>
-                <div class="news-item" data-link="co2-impact.html">
-                    <span>🌳 8,234 Bäume gepflanzt</span>
-                </div>
-                <div class="news-item" data-link="damen.html">
-                    <span>🔥 780 neue Sale-Produkte</span>
+
+                <!-- ACTIONS -->
+                <div class="hidden md:flex items-center gap-4">
+                    <button
+                        class="w-12 h-12 rounded-full bg-gray-50 text-gray-500 hover:text-brand-orange hover:bg-brand-orange/10 flex items-center justify-center transition-all"><i
+                            data-lucide="heart" class="w-5 h-5"></i></button>
+                    <button
+                        class="w-12 h-12 rounded-full bg-gray-50 text-gray-500 hover:text-brand-green hover:bg-brand-green/10 flex items-center justify-center transition-all relative">
+                        <i data-lucide="gavel" class="w-5 h-5"></i>
+                        <span class="absolute top-2 right-2 flex h-2 w-2"><span
+                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-orange opacity-75"></span><span
+                                class="relative inline-flex rounded-full h-2 w-2 bg-brand-orange"></span></span>
+                    </button>
+                    <button
+                        class="w-12 h-12 rounded-full bg-gray-50 text-gray-500 hover:text-brand-orange hover:bg-brand-orange/10 flex items-center justify-center transition-all relative">
+                        <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                        <span
+                            class="absolute -top-1 -right-1 bg-brand-green text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white">2</span>
+                    </button>
+                    <div class="w-px h-8 bg-gray-200 mx-2"></div>
+                    <!-- ANMELDEN BUTTON: Orange -> Green Gradient -->
+                    <button onclick="openAuthModal()"
+                        class="bg-gradient-to-r from-brand-orange to-brand-green hover:from-brand-rust hover:to-brand-darkGreen text-white h-12 px-8 rounded-full font-heading font-bold text-sm transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-2">
+                        Anmelden
+                    </button>
                 </div>
             </div>
         </div>
 
-        <!-- V3 Header - Gradient Background (HEADER-V2 KALDIRILDI) -->
-        <header class="header-v3">
-            <!-- Logo Row -->
-            <div class="header-row-logo">
-                <!-- Logo -->
-                <a href="index.html" class="logo-v3">
-                    <span class="logo-css">CSS</span><span class="logo-berlin">berlin</span>
-                </a>
-
-                <!-- Right Actions -->
-                <div class="header-right-v3">
-                    <!-- Favorites -->
-                    <a href="wunschliste.html" class="header-icon-v3" title="Favoriten">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path
-                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                            </path>
-                        </svg>
-                    </a>
-
-                    <!-- Negotiations (Pazarlıklarım) -->
-                    <a href="meine-anzeigen.html?tab=negotiations" class="header-icon-v3" title="Verhandlungen">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M17 10H3"></path>
-                            <path d="M21 6H3"></path>
-                            <path d="M21 14H3"></path>
-                            <path d="M17 18H3"></path>
-                        </svg>
-                    </a>
-
-                    <!-- Edit/Pen Icon -->
-                    <a href="inserieren.html" class="header-icon-v3" title="Inserieren">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                        </svg>
-                    </a>
-
-                    <!-- Cart -->
-                    <a href="warenkorb.html" class="header-icon-v3" title="Warenkorb">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <circle cx="9" cy="21" r="1"></circle>
-                            <circle cx="20" cy="21" r="1"></circle>
-                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                        </svg>
-                        <span class="icon-badge-v3" id="cartCount">0</span>
-                    </a>
-
-                    <!-- Anmelden Button -->
-                    <button type="button" class="btn-anmelden-v3" id="btnAnmeldenV3"
-                        onclick="authModal.open('login')">Anmelden</button>
-                </div>
-            </div>
-
-            <!-- Search Row -->
-            <div class="header-row-search">
-                <!-- Dark Mode Toggle -->
-                <button class="dark-mode-toggle-v3" id="darkModeToggle" title="Modus wechseln"></button>
-
-                <!-- Language Selector -->
-                <button class="lang-selector-v3" onclick="toggleLanguageDropdown()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="2" y1="12" x2="22" y2="12"></line>
-                        <path
-                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
-                        </path>
-                    </svg>
+        <!-- Middle Row: Search & Filter -->
+        <div class="hidden md:flex items-center justify-center border-b border-gray-100 py-6 px-4 relative z-20">
+            <!-- Language (Standard Style) -->
+            <div class="absolute left-6 lg:left-12 flex items-center gap-3 z-30">
+                <button
+                    class="flex items-center gap-2 text-black bg-white border border-brand-green hover:bg-gray-50 transition-colors font-bold text-xs uppercase px-4 py-3 rounded-xl shadow-sm">
+                    <i data-lucide="globe" class="w-4 h-4 text-gray-500"></i>
                     <span>DE</span>
                 </button>
+            </div>
 
-                <!-- Category Dropdown -->
-                <button class="category-dropdown-v3">
-                    <span>Alle Kategorien</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg>
-                </button>
-
-                <!-- Search Input -->
-                <div class="search-input-v3">
-                    <input type="text" placeholder="CLIMATE SMART SOLUTIONS" id="searchInputV3">
-                    <button class="search-btn-icon" title="Sprachsuche">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
-                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                            <line x1="12" y1="19" x2="12" y2="23"></line>
-                            <line x1="8" y1="23" x2="16" y2="23"></line>
-                        </svg>
+            <!-- Search Bar Complex -->
+            <div class="w-full max-w-5xl flex items-center gap-3 z-20 mx-auto">
+                <div
+                    class="flex-grow h-14 flex items-stretch shadow-sm hover:shadow-md transition-shadow duration-300 rounded-2xl group">
+                    <!-- Category Dropdown -->
+                    <button
+                        class="h-full pl-6 pr-4 flex items-center gap-2 bg-white border border-brand-green rounded-l-2xl text-sm font-bold text-black hover:bg-gray-50 transition-all min-w-[180px] justify-between">
+                        <span>Alle Kategorien</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
                     </button>
-                    <button class="search-btn-icon" title="Bildsuche">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z">
-                            </path>
-                            <circle cx="12" cy="13" r="4"></circle>
-                        </svg>
-                    </button>
+                    <!-- Input -->
+                    <div class="relative flex-grow">
+                        <input type="text"
+                            class="block w-full h-full pl-6 pr-24 bg-white rounded-r-2xl border-y border-r border-brand-green focus:outline-none font-heading font-bold tracking-wide text-black placeholder-gray-400"
+                            placeholder="CLIMATE SMART SOLUTIONS">
+                        <div class="absolute inset-y-0 right-2 flex items-center gap-1">
+                            <button class="p-2 text-gray-400 hover:text-brand-orange"><i data-lucide="mic"
+                                    class="w-5 h-5"></i></button>
+                            <div class="h-6 w-px bg-gray-200 mx-1"></div>
+                            <button class="p-2 text-gray-400 hover:text-brand-green"><i data-lucide="camera"
+                                    class="w-5 h-5"></i></button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Filter Button -->
-                <button class="filter-btn-v3">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="4" y1="21" x2="4" y2="14"></line>
-                        <line x1="4" y1="10" x2="4" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="12"></line>
-                        <line x1="12" y1="8" x2="12" y2="3"></line>
-                        <line x1="20" y1="21" x2="20" y2="16"></line>
-                        <line x1="20" y1="12" x2="20" y2="3"></line>
-                        <line x1="1" y1="14" x2="7" y2="14"></line>
-                        <line x1="9" y1="8" x2="15" y2="8"></line>
-                        <line x1="17" y1="16" x2="23" y2="16"></line>
-                    </svg>
-                    Filter
+                <button
+                    class="h-full flex items-center gap-2 px-6 rounded-2xl text-sm font-bold transition-all shadow-sm bg-white text-black border border-brand-green hover:shadow-md">
+                    <i data-lucide="sliders-horizontal" class="w-4 h-4"></i> Filter
                 </button>
 
-                <!-- Search Submit -->
-                <button class="search-submit-v3">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="M21 21l-4.35-4.35"></path>
-                    </svg>
+                <!-- Search Button -->
+                <button
+                    class="h-14 rounded-2xl bg-white border border-brand-green px-8 flex items-center justify-center hover:shadow-md transition-all">
+                    <i data-lucide="search" class="w-5 h-5 text-black"></i>
                 </button>
             </div>
-
-            <!-- Navigation Bar -->
-            <nav class="nav-bar-v3">
-                <div class="nav-container-v3">
-                    <a href="damen.html" class="nav-link-v3">DAMEN</a>
-                    <a href="herren.html" class="nav-link-v3">HERREN</a>
-                    <a href="kinder.html" class="nav-link-v3">KINDER</a>
-                    <a href="elektronik.html" class="nav-link-v3">ELEKTRONIK</a>
-                    <a href="sale.html" class="nav-link-v3 sale">SALE</a>
-                    <a href="wie-funktioniert.html" class="nav-link-v3">WIE FUNKTIONIERT'S</a>
-                </div>
-            </nav>
-        </header>
-
-        <!-- Mobile Search Overlay (varsayılan gizli) -->
-        <div class="mobile-search-overlay" id="mobileSearchOverlay" style="display: none;">
-            <div class="mobile-search-container">
-                <form action="search.html" method="GET" class="mobile-search-form">
-                    <button type="button" class="mobile-search-back" id="mobileSearchBack">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M19 12H5M12 19l-7-7 7-7"></path>
-                        </svg>
-                    </button>
-                    <input type="text" name="q" placeholder="Suche..." autofocus>
-                    <button type="submit" class="mobile-search-submit">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <path d="M21 21l-4.35-4.35"></path>
-                        </svg>
-                    </button>
-                </form>
-            </div>
         </div>
 
-        <!-- Mobile Menu Overlay (varsayılan gizli) -->
-        <div class="mobile-menu-overlay" id="mobileMenuOverlay" style="display: none;">
-            <div class="mobile-menu-panel">
-                <div class="mobile-menu-header">
-                    <span class="mobile-menu-title">Menü</span>
-                    <button class="mobile-menu-close" id="mobileMenuClose">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M18 6L6 18M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-                <nav class="mobile-menu-nav">
-                    <a href="damen.html" class="mobile-menu-item">
-                        <span>👗</span> Damen
-                    </a>
-                    <a href="herren.html" class="mobile-menu-item">
-                        <span>👔</span> Herren
-                    </a>
-                    <a href="kinder.html" class="mobile-menu-item">
-                        <span>👶</span> Kinder
-                    </a>
-                    <div class="mobile-menu-divider"></div>
-                    <a href="co2-impact.html" class="mobile-menu-item">
-                        <span>🌍</span> CO₂ Impact
-                    </a>
-                    <a href="ueber-uns.html" class="mobile-menu-item">
-                        <span>ℹ️</span> Über uns
-                    </a>
-                    <a href="hilfe.html" class="mobile-menu-item">
-                        <span>❓</span> Hilfe
-                    </a>
-                </nav>
+        <!-- Bottom Row: Nav Links -->
+        <div class="hidden md:block bg-gradient-to-r from-brand-orange to-brand-green shadow-md">
+            <div class="max-w-7xl mx-auto flex justify-center space-x-12 py-0">
+                <a href="damen.html"
+                    class="block py-4 font-heading font-bold text-sm uppercase tracking-widest text-white hover:text-white/90">Damen</a>
+                <a href="herren.html"
+                    class="block py-4 font-heading font-bold text-sm uppercase tracking-widest text-white hover:text-white/90">Herren</a>
+                <a href="kinder.html"
+                    class="block py-4 font-heading font-bold text-sm uppercase tracking-widest text-white hover:text-white/90">Kinder</a>
+                <a href="elektronik.html"
+                    class="block py-4 font-heading font-bold text-sm uppercase tracking-widest text-white hover:text-white/90">Elektronik</a>
+                <a href="sale.html"
+                    class="block py-4 font-heading font-bold text-sm uppercase tracking-widest text-white hover:text-white/90"><span
+                        class="bg-red-500/20 px-2 py-0.5 rounded border border-white/20">Sale</span></a>
             </div>
         </div>
+    </header>
 
-        <!-- Category Navigation with Mega Menus (header-v3'te zaten var, burada gizle) -->
-        <div class="category-navigation" style="display: none;">
-            <div class="category-container">
-                <!-- Category Buttons -->
-                <div class="category-buttons">
-                    <div class="category-item" data-category="damen">
-                        <a href="damen.html" style="text-decoration: none;"><button class="category-btn"
-                                data-i18n="categories.damen">DAMEN</button></a>
-                        <!-- Mega Menu for Damen -->
-                        <div class="mega-menu">
-                            <div class="mega-menu-content">
-                                <div class="mega-menu-column">
-                                    <h3 class="mega-menu-title">Kleidung</h3>
-                                    <ul class="mega-menu-list">
-                                        <li><a href="damen.html">Kleider</a></li>
-                                        <li><a href="damen.html">Blusen & Tuniken</a></li>
-                                        <li><a href="damen.html">Pullover & Strickjacken</a></li>
-                                        <li><a href="damen.html">Hosen</a></li>
-                                        <li><a href="damen.html">Jeans</a></li>
-                                        <li><a href="damen.html">Röcke</a></li>
-                                        <li><a href="damen.html">Jacken & Mäntel</a></li>
-                                    </ul>
-                                </div>
-                                <div class="mega-menu-column">
-                                    <h3 class="mega-menu-title">Schuhe & Accessoires</h3>
-                                    <ul class="mega-menu-list">
-                                        <li><a href="damen.html">Stiefel & Stiefeletten</a></li>
-                                        <li><a href="damen.html">Sneaker</a></li>
-                                        <li><a href="damen.html">Pumps & High Heels</a></li>
-                                        <li><a href="damen.html">Sandalen</a></li>
-                                        <li><a href="damen.html">Taschen & Rucksäcke</a></li>
-                                        <li><a href="damen.html">Schmuck</a></li>
-                                        <li><a href="damen.html">Schals & Tücher</a></li>
-                                    </ul>
-                                </div>
-                                <div class="mega-menu-column">
-                                    <h3 class="mega-menu-title">Premium & Besonderes</h3>
-                                    <ul class="mega-menu-list">
-                                        <li><a href="damen.html">Designer-Stücke</a></li>
-                                        <li><a href="damen.html">Vintage</a></li>
-                                        <li><a href="damen.html">Abendkleider</a></li>
-                                        <li><a href="damen.html">Sportbekleidung</a></li>
-                                        <li><a href="damen.html">Umstandsmode</a></li>
-                                        <li><a href="damen.html">Große Größen</a></li>
-                                        <li><a href="damen.html">Neu eingetroffen</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow pt-6">
 
-                    <div class="category-item" data-category="herren">
-                        <a href="herren.html" style="text-decoration: none;"><button class="category-btn"
-                                data-i18n="categories.herren">HERREN</button></a>
-                        <!-- Mega Menu for Herren -->
-                        <div class="mega-menu">
-                            <div class="mega-menu-content">
-                                <div class="mega-menu-column">
-                                    <h3 class="mega-menu-title">Oberbekleidung</h3>
-                                    <ul class="mega-menu-list">
-                                        <li><a href="herren.html">T-Shirts & Polo</a></li>
-                                        <li><a href="herren.html">Hemden</a></li>
-                                        <li><a href="herren.html">Pullover & Hoodies</a></li>
-                                        <li><a href="herren.html">Sweatshirts</a></li>
-                                        <li><a href="herren.html">Jacken & Mäntel</a></li>
-                                        <li><a href="herren.html">Anzüge & Sakkos</a></li>
-                                        <li><a href="herren.html">Westen</a></li>
-                                    </ul>
-                                </div>
-                                <div class="mega-menu-column">
-                                    <h3 class="mega-menu-title">Hosen & Schuhe</h3>
-                                    <ul class="mega-menu-list">
-                                        <li><a href="herren.html">Jeans</a></li>
-                                        <li><a href="herren.html">Chinos & Stoffhosen</a></li>
-                                        <li><a href="herren.html">Shorts</a></li>
-                                        <li><a href="herren.html">Sportswear</a></li>
-                                        <li><a href="herren.html">Sneaker & Sportschuhe</a></li>
-                                        <li><a href="herren.html">Business-Schuhe</a></li>
-                                        <li><a href="herren.html">Stiefel & Boots</a></li>
-                                    </ul>
-                                </div>
-                                <div class="mega-menu-column">
-                                    <h3 class="mega-menu-title">Accessoires</h3>
-                                    <ul class="mega-menu-list">
-                                        <li><a href="herren.html">Taschen & Rucksäcke</a></li>
-                                        <li><a href="herren.html">Gürtel</a></li>
-                                        <li><a href="herren.html">Mützen & Caps</a></li>
-                                        <li><a href="herren.html">Schals</a></li>
-                                        <li><a href="herren.html">Uhren</a></li>
-                                        <li><a href="herren.html">Geldbörsen</a></li>
-                                        <li><a href="herren.html">Sonnenbrillen</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <!-- HERO SECTION (Split Layout) -->
+        <section class="px-4 max-w-[95%] mx-auto mb-10">
+            <!-- REDUCED HEIGHT: h-[320px] md:h-[380px] -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[320px] md:h-[380px]">
 
-                    <div class="category-item" data-category="kinder">
-                        <a href="kinder.html" style="text-decoration: none;"><button class="category-btn"
-                                data-i18n="categories.kinder">KINDER</button></a>
-                        <!-- Mega Menu for Kinder -->
-                        <div class="mega-menu">
-                            <div class="mega-menu-content">
-                                <div class="mega-menu-column">
-                                    <h3 class="mega-menu-title">Mädchen</h3>
-                                    <ul class="mega-menu-list">
-                                        <li><a href="kinder.html">Kleider & Röcke</a></li>
-                                        <li><a href="kinder.html">Oberteile</a></li>
-                                        <li><a href="kinder.html">Hosen & Jeans</a></li>
-                                        <li><a href="kinder.html">Jacken & Mäntel</a></li>
-                                        <li><a href="kinder.html">Schuhe</a></li>
-                                        <li><a href="kinder.html">Accessoires</a></li>
-                                        <li><a href="kinder.html">Sportbekleidung</a></li>
-                                    </ul>
-                                </div>
-                                <div class="mega-menu-column">
-                                    <h3 class="mega-menu-title">Jungen</h3>
-                                    <ul class="mega-menu-list">
-                                        <li><a href="kinder.html">T-Shirts & Polo</a></li>
-                                        <li><a href="kinder.html">Hemden</a></li>
-                                        <li><a href="kinder.html">Hosen & Jeans</a></li>
-                                        <li><a href="kinder.html">Pullover & Hoodies</a></li>
-                                        <li><a href="kinder.html">Jacken</a></li>
-                                        <li><a href="kinder.html">Schuhe</a></li>
-                                        <li><a href="kinder.html">Sportswear</a></li>
-                                    </ul>
-                                </div>
-                                <div class="mega-menu-column">
-                                    <h3 class="mega-menu-title">Baby & Kleinkind</h3>
-                                    <ul class="mega-menu-list">
-                                        <li><a href="kinder.html">Babykleidung (0-24 M)</a></li>
-                                        <li><a href="kinder.html">Strampler & Bodies</a></li>
-                                        <li><a href="kinder.html">Jacken & Overall</a></li>
-                                        <li><a href="kinder.html">Schuhe & Söckchen</a></li>
-                                        <li><a href="kinder.html">Mützen & Accessoires</a></li>
-                                        <li><a href="kinder.html">Spielzeug</a></li>
-                                        <li><a href="kinder.html">Baby-Ausstattung</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                <!-- 1. ANTIGRAVITY SLIDER (Social Hub) -->
+                <div class="h-full w-full rounded-[24px] overflow-hidden shadow-lg border border-gray-200 bg-black relative group cursor-pointer"
+                    id="antigravity-container">
+                    <!-- Javascript will render the infinite loop here -->
+                    <div id="antigravity-track" class="relative w-full h-full"></div>
+
+                    <!-- Label -->
+                    <div
+                        class="absolute top-4 left-4 z-20 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 pointer-events-none">
+                        <span class="text-[10px] font-bold text-white uppercase flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-brand-green animate-pulse"></span> Social Hub
+                        </span>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Split Hero: Social Hub (left) + Campaign Slider (right) -->
-        <section class="split-hero">
-            <!-- Left panel: Social Hub — populated by PHASE F (ArgentLoopInfiniteSlider) -->
-            <div class="split-hero-left" id="socialHubContainer">
-                <!-- Placeholder until vanilla-JS infinite slider initialises -->
+                <!-- 2. STANDARD HERO SLIDER (Campaigns) -->
+                <div class="h-full w-full relative overflow-hidden rounded-[24px] shadow-inner bg-gray-200 group">
+                    <!-- Slide 1 (Static Example for HTML) -->
+                    <div class="absolute inset-0 w-full h-full">
+                        <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070&auto=format&fit=crop"
+                            class="w-full h-full object-cover">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90">
+                        </div>
+                        <div class="absolute bottom-8 left-8 z-10 max-w-lg">
+                            <span
+                                class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md border border-white/30 rounded-full text-[10px] font-bold text-white mb-3 uppercase tracking-wider">Featured
+                                Collection</span>
+                            <h3
+                                class="text-white font-heading font-bold text-2xl md:text-3xl drop-shadow-lg leading-tight mb-2">
+                                Willkommensgeschenk</h3>
+                            <p class="text-white/90 text-sm md:text-base">Melde dich jetzt an und erhalte 10% Rabatt.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Arrows -->
+                    <button
+                        class="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/20 text-white hover:bg-brand-orange transition-all opacity-0 group-hover:opacity-100"><i
+                            data-lucide="chevron-left"></i></button>
+                    <button
+                        class="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/20 text-white hover:bg-brand-orange transition-all opacity-0 group-hover:opacity-100"><i
+                            data-lucide="chevron-right"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRODUCT SHOWCASE -->
+        <section class="pb-24">
+            <div class="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
                 <div
-                    style="width:100%;height:100%;background:#111;display:flex;align-items:center;justify-content:center;position:relative;">
-                    <span
-                        style="position:absolute;top:14px;left:16px;z-index:2;display:flex;align-items:center;gap:6px;background:rgba(0,0,0,0.5);backdrop-filter:blur(6px);padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,0.1);">
-                        <span
-                            style="width:8px;height:8px;border-radius:50%;background:#4CAF50;animation:pulse 1.8s infinite;"></span>
-                        <span
-                            style="font-size:9px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:0.15em;">Social
-                            Hub</span>
-                    </span>
-                    <span style="color:rgba(255,255,255,0.25);font-size:13px;font-weight:600;">Loading…</span>
+                    class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4 border-b border-gray-100 pb-6">
+                    <div>
+                        <span class="text-brand-orange font-bold text-xs tracking-widest uppercase mb-1 block">Aktuelle
+                            Kollektion</span>
+                        <h2 class="text-3xl font-heading font-bold text-gray-900">Frisch Eingetroffen</h2>
+                    </div>
                 </div>
-            </div>
-            <!-- Right panel: Campaign HeroSlider -->
-            <div class="split-hero-right" id="heroSliderContainer"></div>
-        </section>
 
-        <!-- ═══ FEATURED COLLECTION ════════════════════════════ -->
-        <section class="featured-collection-section">
-            <div class="featured-collection-header">
-                <span class="featured-label">AKTUELLE KOLLEKTION</span>
-                <h2>Neue Arrivals</h2>
-            </div>
-            <div class="featured-collection-grid" id="featuredCollectionGrid">
-                <!-- JS ile doldurulacak — script.js initFeaturedCollection() -->
-            </div>
-        </section>
-
-        <!-- Products Section -->
-        <section class="products-section">
-            <div class="section-header">
-                <h2 data-i18n="products.alle_produkte">Alle Produkte</h2>
-                <div class="filter-controls">
-                    <select class="sort-dropdown">
-                        <option data-i18n="products.sortieren">Sortieren</option>
-                        <option data-i18n="products.preis_aufsteigend">Preis aufsteigend</option>
-                        <option data-i18n="products.preis_absteigend">Preis absteigend</option>
-                        <option data-i18n="products.neu_zuerst">Neu zuerst</option>
-                        <option data-i18n="products.meiste_co2">Meiste CO₂ Einsparung</option>
-                    </select>
+                <!-- Product Grid (Static Items) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-x-6 gap-y-10"
+                    id="product-grid">
+                    <!-- Products will be injected by JS or you can paste HTML here -->
                 </div>
-            </div>
 
-            <div class="products-grid" id="productsGrid">
-                <!-- Products will be generated by JavaScript -->
-            </div>
-
-            <!-- Load More Button -->
-            <div class="load-more-container">
-                <button class="load-more-btn" id="loadMoreBtn">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg>
-                    <span data-i18n="products.mehr_laden">Mehr Produkte laden</span>
-                </button>
+                <div class="mt-16 text-center">
+                    <button
+                        class="px-8 py-3 bg-gradient-to-r from-brand-orange to-brand-rust hover:from-brand-green hover:to-brand-darkGreen text-white font-bold rounded-full transition-all shadow-lg">
+                        Mehr Produkte laden
+                    </button>
+                </div>
             </div>
         </section>
     </main>
-    <!-- End of Main Content -->
 
-    <!-- Footer -->
-    <footer class="footer" style="background: linear-gradient(135deg, #FF8C42 0%, #2D5016 100%); padding: 0;">
-        <!-- Sliding News Banner -->
-        <div class="footer-news-banner" style="background: #2D5016; padding: 12px 0;">
-            <div class="footer-news-slider" id="footerNewsSlider">
-                <div class="footer-news-item" data-link="co2-impact.html">
-                    <span style="color: white;">🌍 248.5 Tonnen CO₂ gespart - Jeder Kauf zählt für unseren
-                        Planeten!</span>
+    <!-- FOOTER -->
+    <footer class="bg-gradient-to-r from-brand-orange to-brand-green text-white pt-12 pb-6 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 relative z-10">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+                <div class="col-span-2 md:col-span-1">
+                    <span class="font-heading font-extrabold text-xl tracking-tighter text-white">CSS<span
+                            class="text-white/80">berlin</span></span>
+                    <p class="mt-2 text-xs text-white/70 leading-relaxed max-w-xs">Der Marktplatz für bewussten Konsum.
+                    </p>
                 </div>
-                <div class="footer-news-item" data-link="campaign.html">
-                    <span style="color: white;">📦 2 Produkte kaufen, 3. Produkt Versand GRATIS!</span>
+                <div>
+                    <h4 class="font-bold text-white text-sm mb-3">Stöbern</h4>
+                    <ul class="space-y-2 text-xs text-white/70">
+                        <li><a href="damen.html" class="hover:text-white">Kleidung</a></li>
+                        <li><a href="elektronik.html" class="hover:text-white">Elektronik</a></li>
+                    </ul>
                 </div>
-                <div class="footer-news-item" data-link="co2-impact.html">
-                    <span style="color: white;">🏆 CO₂ Rangliste - Wer spart am meisten? Klick für die Top 100!</span>
+                <div>
+                    <h4 class="font-bold text-white text-sm mb-3">Hilfe</h4>
+                    <ul class="space-y-2 text-xs text-white/70">
+                        <li><a href="kontakt.html" class="hover:text-white">Kontakt</a></li>
+                        <li><a href="wie-funktioniert-es.html" class="hover:text-white">Wie funktioniert's</a></li>
+                    </ul>
                 </div>
-                <div class="footer-news-item" data-link="co2-impact.html">
-                    <span style="color: white;">🌳 8,234 Bäume gepflanzt - Dein Beitrag macht den Unterschied!</span>
-                </div>
-                <div class="footer-news-item" data-link="damen.html">
-                    <span style="color: white;">🔥 Sale: 780 neue Produkte - Bis zu 70% Rabatt diese Woche!</span>
+                <div>
+                    <h4 class="font-bold text-white text-sm mb-3">Rechtliches</h4>
+                    <ul class="space-y-2 text-xs text-white/70">
+                        <li><a href="impressum.html" class="hover:text-white">Impressum</a></li>
+                        <li><a href="datenschutz.html" class="hover:text-white">Datenschutz</a></li>
+                        <li><a href="agb.html" class="hover:text-white">AGB</a></li>
+                    </ul>
                 </div>
             </div>
-        </div>
-
-        <!-- Footer Content -->
-        <div style="max-width: 1400px; margin: 0 auto; padding: 24px 32px;">
-            <div
-                style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
-                <!-- Social Media Icons -->
-                <div style="display: flex; gap: 16px; align-items: center;">
-                    <a href="https://instagram.com/cssberlin" target="_blank" title="Instagram"
-                        style="color: white; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 8px; transition: background 0.3s;">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-                            <path
-                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                        </svg>
-                    </a>
-                    <a href="https://tiktok.com/@cssberlin" target="_blank" title="TikTok"
-                        style="color: white; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 8px; transition: background 0.3s;">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-                            <path
-                                d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
-                        </svg>
-                    </a>
-                    <a href="https://youtube.com/@cssberlin" target="_blank" title="YouTube"
-                        style="color: white; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 8px; transition: background 0.3s;">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-                            <path
-                                d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-                        </svg>
-                    </a>
-                </div>
-
-                <!-- Legal Links (Zorunlu Linkler) -->
-                <nav style="display: flex; gap: 24px; flex-wrap: wrap; align-items: center;">
-                    <a href="ueber-uns.html"
-                        style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;"
-                        data-i18n="footer.ueber_uns">Über uns</a>
-                    <a href="kontakt.html"
-                        style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;"
-                        data-i18n="footer.kontakt">Kontakt</a>
-                    <a href="agb.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;"
-                        data-i18n="footer.agb">AGB</a>
-                    <a href="datenschutz.html"
-                        style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;"
-                        data-i18n="footer.datenschutz">Datenschutz</a>
-                    <a href="widerrufsrecht.html"
-                        style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;"
-                        data-i18n="footer.widerrufsrecht">Widerrufsrecht</a>
-                    <a href="impressum.html"
-                        style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;"
-                        data-i18n="footer.impressum">Impressum</a>
-                </nav>
-
-                <!-- Copyright (Kleinunternehmer §19 UStG - kein GmbH) -->
-                <div style="color: rgba(255,255,255,0.8); font-size: 12px;" data-i18n="footer.copyright">
-                    © 2025 CSS Berlin
-                </div>
+            <div class="border-t border-white/10 pt-4 text-[10px] text-white/50">
+                <p>© 2025 CSS Berlin. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Mobile Bottom Navigation -->
-    <nav class="mobile-bottom-nav">
-        <div class="mobile-bottom-nav-container">
-            <a href="index.html" class="mobile-nav-item active">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                </svg>
-                <span>Home</span>
-            </a>
-            <a href="search.html" class="mobile-nav-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <path d="M21 21l-4.35-4.35"></path>
-                </svg>
-                <span>Suche</span>
-            </a>
-            <a href="inserieren.html" class="mobile-nav-item mobile-nav-add">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path d="M12 5v14M5 12h14"></path>
-                </svg>
-            </a>
-            <a href="wunschliste.html" class="mobile-nav-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path
-                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                    </path>
-                </svg>
-                <span>Favoriten</span>
-                <span class="nav-badge" id="mobileWishlistCount"></span>
-            </a>
-            <a href="profil.html" class="mobile-nav-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-                <span>Profil</span>
-            </a>
-        </div>
-    </nav>
+    <!-- ANIMATED AUTH MODAL (Replaces placeholder) -->
+    <div id="auth-modal"
+        class="hidden fixed inset-0 z-[100] flex items-center justify-center px-4 transition-opacity duration-300 opacity-0 pointer-events-none">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-brand-darkGreen/60 backdrop-blur-xl transition-opacity"
+            onclick="closeAuthModal()"></div>
 
-    <!-- Back to Top Button -->
-    <button class="back-to-top" id="backToTop" aria-label="Nach oben scrollen">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 19V5M5 12l7-7 7 7"></path>
-        </svg>
-    </button>
+        <!-- Modal Card -->
+        <div class="relative bg-white dark:bg-zinc-900 rounded-[32px] shadow-2xl w-full max-w-md h-[600px] overflow-hidden flex flex-col transform scale-95 transition-transform duration-300"
+            id="auth-modal-card">
 
-    <!-- Google Sign-In API -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+            <!-- Close Button -->
+            <button onclick="closeAuthModal()"
+                class="absolute top-4 right-4 p-2 bg-black/5 hover:bg-black/10 rounded-full text-gray-500 transition-colors z-50">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
 
-    <!-- EmailJS for Direct Email Sending -->
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+            <div class="relative z-10 flex flex-col h-full px-8 md:px-12 pt-10 pb-6">
 
-    <!-- API Configuration (MUST load first) -->
-    <script src="api-config.js"></script>
-    <script src="api-client.js"></script>
-    <script src="email-service.js"></script> <!-- Email service for magic links -->
-    <script src="auth-gate.js"></script> <!-- Login gate system -->
-    <script src="auth-guard.js"></script> <!-- Authorization guard -->
-    <script src="favorites.js"></script> <!-- Favorites system -->
-    <script src="financial-system.js"></script> <!-- 1€ Escrow, Offers, Anti-Bypass -->
-    <script src="success-animations.js"></script> <!-- El Sikisma + CO2 Yapraklar -->
+                <!-- HEADER: Dynamic Text -->
+                <div class="text-center mb-6">
+                    <h2 id="auth-title"
+                        class="text-3xl font-heading font-black tracking-tight mb-2 text-gray-900 animate-slide-up">
+                        Willkommen zurück
+                    </h2>
+                    <p id="auth-subtitle" class="text-sm text-gray-500 font-medium animate-fade-in">
+                        Bitte melde dich an, um fortzufahren.
+                    </p>
+                </div>
 
-    <script src="i18n.js"></script>
-    <script src="footer.js"></script>
-    <script src="toast.js"></script>
-    <script src="script.js"></script>
-    <script src="js/offer-modal.js"></script>
-    <script src="js/offer-notifications.js"></script>
-
-    <script>
-        // Initialize Google Sign-In for modal
-        window.addEventListener('load', function () {
-            if (typeof google !== 'undefined' && google.accounts) {
-                google.accounts.id.initialize({
-                    client_id: '929023339787-gc94hg7o1a993f6fj93von2jcr87nr6k.apps.googleusercontent.com',
-                    callback: handleGoogleSignInModal
-                });
-            }
-        });
-    </script>
-
-    <script>
-        // Update cart count on page load
-        function updateCartCount() {
-            const cart = JSON.parse(localStorage.getItem('cssberlin_cart') || '[]');
-            const cartCountElement = document.getElementById('cartCount');
-            if (cartCountElement) {
-                cartCountElement.textContent = cart.length;
-            }
-        }
-
-        // Update negotiation count on page load
-        function updateNegotiationCount() {
-            const negotiationCountElement = document.getElementById('negotiationCount');
-            if (negotiationCountElement) {
-                if (typeof window.getNegotiations === 'function') {
-                    const negotiations = window.getNegotiations();
-                    const activeNegotiations = negotiations.filter(n => n.status === 'active');
-                    negotiationCountElement.textContent = activeNegotiations.length;
-                } else {
-                    negotiationCountElement.textContent = '0';
-                }
-            }
-        }
-
-        // Initialize on page load
-        updateCartCount();
-        updateNegotiationCount();
-    </script>
-
-    <!-- Auth Gate & Favorites System -->
-    <script src="auth-gate.js"></script>
-    <script src="favorites.js"></script>
-
-    <script>
-        // Update header on page load - User Authentication State
-        document.addEventListener('DOMContentLoaded', async () => {
-            await authGate.checkAuthStatus();
-
-            // New auth structure: guestAuthButtons vs userMenuWrapper
-            const guestAuthButtons = document.getElementById('guestAuthButtons');
-            const userMenuWrapper = document.getElementById('userMenuWrapper');
-
-            if (authGate.isAuthenticated && authGate.currentUser) {
-                // Show user menu, hide guest buttons
-                if (guestAuthButtons) guestAuthButtons.style.display = 'none';
-                if (userMenuWrapper) userMenuWrapper.style.display = 'flex';
-
-                // Update user info in dropdown
-                const userName = authGate.currentUser.firstName ||
-                    authGate.currentUser.username ||
-                    authGate.currentUser.email.split('@')[0];
-
-                const userNameEl = document.getElementById('userName');
-                const dropdownUserName = document.getElementById('dropdownUserName');
-                const dropdownUserEmail = document.getElementById('dropdownUserEmail');
-                const dropdownAvatar = document.getElementById('dropdownAvatar');
-                const userAvatar = document.getElementById('userAvatar');
-
-                if (userNameEl) userNameEl.textContent = userName;
-                if (dropdownUserName) dropdownUserName.textContent = userName;
-                if (dropdownUserEmail) dropdownUserEmail.textContent = authGate.currentUser.email;
-
-                // Google Avatar: Eğer picture varsa resim göster, yoksa harf göster
-                if (authGate.currentUser.picture) {
-                    // Header avatar
-                    if (userAvatar) {
-                        userAvatar.innerHTML = `<img src="${authGate.currentUser.picture}" alt="${userName}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">`;
-                    }
-                    // Dropdown avatar
-                    if (dropdownAvatar) {
-                        dropdownAvatar.innerHTML = `<img src="${authGate.currentUser.picture}" alt="${userName}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
-                    }
-                } else {
-                    if (dropdownAvatar) dropdownAvatar.textContent = userName.charAt(0).toUpperCase();
-                }
-            } else {
-                // Show guest buttons, hide user menu
-                if (guestAuthButtons) guestAuthButtons.style.display = 'flex';
-                if (userMenuWrapper) userMenuWrapper.style.display = 'none';
-            }
-
-            // Also handle legacy auth buttons
-            const authButtons = document.querySelectorAll('.header-btn.auth-btn');
-            const headerActions = document.querySelector('.header-actions');
-
-            if (authGate.isAuthenticated && authGate.currentUser) {
-                // Hide login/register buttons
-                authButtons.forEach(btn => btn.style.display = 'none');
-
-                // Get user display name
-                const userName = authGate.currentUser.firstName ||
-                    authGate.currentUser.username ||
-                    authGate.currentUser.email.split('@')[0];
-
-                // Create user menu with dropdown
-                const userMenu = document.createElement('div');
-                userMenu.className = 'user-menu-container';
-                userMenu.style.cssText = 'position: relative; display: inline-block;';
-                userMenu.innerHTML = `
-                    <button class="user-menu-btn header-btn" onclick="toggleUserMenu()" style="padding: 10px 18px; background: #2D5016; color: white; border-radius: 8px; display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; border: none; cursor: pointer; transition: all 0.3s ease;">
-                        ${authGate.currentUser.picture ?
-                        `<img src="${authGate.currentUser.picture}" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover;">` :
-                        `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="12" cy="7" r="4"></circle>
-                            </svg>`
-                    }
-                        <span>${userName}</span>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
+                <!-- TOGGLE BUTTONS (EnergyButton Style) -->
+                <div class="grid grid-cols-2 gap-6 mb-8">
+                    <!-- Login Toggle -->
+                    <button id="btn-mode-login" onclick="switchAuthMode('login')"
+                        class="relative flex items-center justify-center gap-2 px-6 py-3 font-heading font-bold transition-all duration-300 rounded-xl bg-brand-orange text-white hover:bg-brand-rust shadow-md shadow-brand-orange/20 ring-2 ring-brand-orange ring-offset-2 ring-offset-white auth-btn-active">
+                        <i data-lucide="log-in" class="w-4 h-4"></i> Anmelden
                     </button>
-                    <div class="user-dropdown" id="userDropdown" style="display: none; position: absolute; top: 100%; right: 0; margin-top: 8px; background: white; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); min-width: 220px; z-index: 1000; overflow: hidden;">
-                        <div style="padding: 16px; border-bottom: 1px solid #eee;">
-                            <div style="font-weight: 600; color: #333;">${userName}</div>
-                            <div style="font-size: 13px; color: #666;">${authGate.currentUser.email}</div>
+
+                    <!-- Register Toggle -->
+                    <button id="btn-mode-register" onclick="switchAuthMode('register')"
+                        class="relative flex items-center justify-center gap-2 px-6 py-3 font-heading font-bold transition-all duration-300 rounded-xl bg-brand-green text-white hover:bg-brand-darkGreen shadow-md shadow-brand-green/20 auth-btn-inactive">
+                        <i data-lucide="user-plus" class="w-4 h-4"></i> Registrieren
+                    </button>
+                </div>
+
+                <!-- FORM -->
+                <div class="flex-1 max-w-sm mx-auto w-full">
+                    <form onsubmit="handleAuthSubmit(event)" class="space-y-5 animate-fade-in">
+
+                        <!-- Name Field (Only for Register) -->
+                        <div id="field-name-container" class="hidden-mode transition-all duration-300">
+                            <div class="relative group">
+                                <input type="text" id="auth-name"
+                                    class="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-brand-green focus:border-brand-green block p-4 outline-none transition-all placeholder-transparent peer"
+                                    placeholder="Name" />
+                                <label for="auth-name"
+                                    class="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-transparent px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-2">Dein
+                                    Name</label>
+                            </div>
                         </div>
-                        <a href="profil.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: #333; text-decoration: none; transition: background 0.2s;">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="12" cy="7" r="4"></circle>
-                            </svg>
-                            Mein Profil
-                        </a>
-                        <a href="meine-anzeigen.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: #333; text-decoration: none; transition: background 0.2s;">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                <line x1="3" y1="9" x2="21" y2="9"></line>
-                            </svg>
-                            Meine Anzeigen
-                        </a>
-                        <a href="bestellungen.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: #333; text-decoration: none; transition: background 0.2s;">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                                <line x1="3" y1="6" x2="21" y2="6"></line>
-                                <path d="M16 10a4 4 0 0 1-8 0"></path>
-                            </svg>
-                            Bestellungen
-                        </a>
-                        <a href="einstellungen.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: #333; text-decoration: none; transition: background 0.2s;">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="3"></circle>
-                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                            </svg>
-                            Einstellungen
-                        </a>
-                        <div style="border-top: 1px solid #eee; margin-top: 4px;">
-                            <button onclick="authGate.logout()" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: #dc2626; width: 100%; background: none; border: none; cursor: pointer; font-size: 14px; transition: background 0.2s; text-align: left;">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                                    <polyline points="16 17 21 12 16 7"></polyline>
-                                    <line x1="21" y1="12" x2="9" y2="12"></line>
-                                </svg>
-                                Abmelden
+
+                        <!-- Email Field -->
+                        <div class="relative group">
+                            <input type="email" id="auth-email" required
+                                class="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-brand-orange focus:border-brand-orange block p-4 outline-none transition-all placeholder-transparent peer"
+                                placeholder="Email" />
+                            <label for="auth-email"
+                                class="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-transparent px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-2">E-Mail
+                                Adresse</label>
+                        </div>
+
+                        <!-- Password Field -->
+                        <div class="relative group">
+                            <input type="password" id="auth-password" required
+                                class="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-brand-orange focus:border-brand-orange block p-4 outline-none transition-all placeholder-transparent peer"
+                                placeholder="Password" />
+                            <label for="auth-password"
+                                class="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-transparent px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-2">Passwort</label>
+                        </div>
+
+                        <!-- Forgot / Remember (Login Only) -->
+                        <div id="login-extras" class="flex items-center justify-between text-xs text-gray-500">
+                            <label
+                                class="flex items-center gap-2 cursor-pointer hover:text-brand-orange transition-colors">
+                                <input type="checkbox" class="rounded border-gray-300 text-brand-orange focus:ring-0">
+                                Merken
+                            </label>
+                            <a href="#" class="hover:text-brand-orange hover:underline">Vergessen?</a>
+                        </div>
+
+                        <!-- SUBMIT BUTTON -->
+                        <div class="pt-2">
+                            <button type="submit" id="auth-submit-btn"
+                                class="w-full py-4 rounded-xl font-heading font-bold text-white shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 bg-gradient-to-r from-brand-orange to-brand-rust">
+                                Jetzt Einloggen <i data-lucide="arrow-right" class="w-5 h-5"></i>
                             </button>
                         </div>
-                    </div>
-                `;
-
-                // Insert before inserieren button
-                const inserierenBtn = headerActions.querySelector('.inserieren-header-btn');
-                if (inserierenBtn) {
-                    headerActions.insertBefore(userMenu, inserierenBtn);
-                } else {
-                    headerActions.appendChild(userMenu);
-                }
-            }
-        });
-
-        // Toggle user dropdown menu (Click-based, not hover)
-        function toggleUserDropdown(event) {
-            event.stopPropagation();
-            const dropdown = document.getElementById('userDropdown');
-            if (dropdown) {
-                dropdown.classList.toggle('active');
-            }
-        }
-
-        // Legacy toggle for old menu structure
-        function toggleUserMenu() {
-            toggleUserDropdown({ stopPropagation: () => { } });
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function (e) {
-            const userMenuWrapper = document.getElementById('userMenuWrapper');
-            const userMenuContainer = document.querySelector('.user-menu-container');
-            const dropdown = document.getElementById('userDropdown');
-
-            // V2 dropdown close
-            if (userMenuWrapper && dropdown && !userMenuWrapper.contains(e.target)) {
-                dropdown.classList.remove('active');
-            }
-
-            // Legacy dropdown close
-            if (userMenuContainer && dropdown && !userMenuContainer.contains(e.target)) {
-                dropdown.style.display = 'none';
-            }
-        });
-
-        // ESC tusu ile kapat
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') {
-                const dropdown = document.getElementById('userDropdown');
-                if (dropdown) {
-                    dropdown.classList.remove('active');
-                    dropdown.style.display = 'none';
-                }
-            }
-        });
-    </script>
-
-    <!-- Cookie Consent Banner (Reddit/Vinted Style) -->
-    <div id="cookieConsent" class="cookie-consent" style="display: none;">
-        <div class="cookie-overlay"></div>
-        <div class="cookie-modal">
-            <div class="cookie-header">
-                <h2>🍪 Wir respektieren deine Privatsphäre</h2>
-                <p>Wir und unsere Partner verwenden Cookies und ähnliche Technologien, um dir ein optimales Erlebnis zu
-                    bieten.</p>
-            </div>
-            <div class="cookie-options">
-                <div class="cookie-option">
-                    <div class="cookie-option-header">
-                        <span class="cookie-option-title">Notwendige Cookies</span>
-                        <span class="cookie-badge required">Immer aktiv</span>
-                    </div>
-                    <p class="cookie-option-desc">Diese Cookies sind für die Grundfunktionen der Website erforderlich.
-                    </p>
+                    </form>
                 </div>
-                <div class="cookie-option">
-                    <div class="cookie-option-header">
-                        <span class="cookie-option-title">Analyse Cookies</span>
-                        <label class="cookie-toggle">
-                            <input type="checkbox" id="analyticsCookies" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
+
+                <!-- Footer Socials -->
+                <div class="mt-auto">
+                    <div class="relative flex py-2 items-center mb-4">
+                        <div class="flex-grow border-t border-gray-200"></div>
+                        <span
+                            class="flex-shrink-0 mx-4 text-gray-400 text-[10px] uppercase font-bold tracking-widest">Oder
+                            mit</span>
+                        <div class="flex-grow border-t border-gray-200"></div>
                     </div>
-                    <p class="cookie-option-desc">Helfen uns zu verstehen, wie Besucher mit der Website interagieren.
-                    </p>
-                </div>
-                <div class="cookie-option">
-                    <div class="cookie-option-header">
-                        <span class="cookie-option-title">Marketing Cookies</span>
-                        <label class="cookie-toggle">
-                            <input type="checkbox" id="marketingCookies">
-                            <span class="toggle-slider"></span>
-                        </label>
+                    <div class="flex justify-center gap-4">
+                        <button
+                            class="p-3 bg-gray-50 hover:bg-white rounded-xl border border-gray-200 transition-colors shadow-sm hover:shadow-md group"><i
+                                data-lucide="github"
+                                class="w-5 h-5 text-gray-500 group-hover:text-brand-orange"></i></button>
+                        <button
+                            class="p-3 bg-gray-50 hover:bg-white rounded-xl border border-gray-200 transition-colors shadow-sm hover:shadow-md group"><i
+                                data-lucide="twitter"
+                                class="w-5 h-5 text-gray-500 group-hover:text-brand-orange"></i></button>
+                        <button
+                            class="p-3 bg-gray-50 hover:bg-white rounded-xl border border-gray-200 transition-colors shadow-sm hover:shadow-md group"><i
+                                data-lucide="linkedin"
+                                class="w-5 h-5 text-gray-500 group-hover:text-brand-orange"></i></button>
                     </div>
-                    <p class="cookie-option-desc">Werden verwendet, um Werbung relevanter für dich zu machen.</p>
                 </div>
-            </div>
-            <div class="cookie-buttons">
-                <button onclick="acceptAllCookies()" class="cookie-btn accept-all">Alle akzeptieren</button>
-                <button onclick="acceptSelectedCookies()" class="cookie-btn accept-selected">Auswahl bestätigen</button>
-                <button onclick="rejectAllCookies()" class="cookie-btn reject-all">Nur notwendige</button>
-            </div>
-            <div class="cookie-footer">
-                <a href="datenschutz.html">Datenschutz</a>
-                <span>|</span>
-                <a href="impressum.html">Impressum</a>
+
             </div>
         </div>
     </div>
 
-    <style>
-        /* Cookie Consent Styles */
-        .cookie-consent {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 10000;
-        }
-
-        .cookie-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
-        }
-
-        .cookie-modal {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            border-radius: 20px 20px 0 0;
-            padding: 30px;
-            max-width: 600px;
-            margin: 0 auto;
-            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
-            animation: slideUp 0.4s ease;
-        }
-
-        @keyframes slideUp {
-            from {
-                transform: translateY(100%);
-            }
-
-            to {
-                transform: translateY(0);
-            }
-        }
-
-        .cookie-header h2 {
-            font-size: 22px;
-            color: #2D5016;
-            margin: 0 0 10px 0;
-        }
-
-        .cookie-header p {
-            font-size: 14px;
-            color: #666;
-            margin: 0 0 20px 0;
-            line-height: 1.5;
-        }
-
-        .cookie-options {
-            margin-bottom: 20px;
-        }
-
-        .cookie-option {
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            margin-bottom: 10px;
-        }
-
-        .cookie-option-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 5px;
-        }
-
-        .cookie-option-title {
-            font-weight: 600;
-            color: #333;
-        }
-
-        .cookie-badge {
-            font-size: 11px;
-            padding: 3px 8px;
-            border-radius: 12px;
-            background: #E8854C;
-            color: white;
-        }
-
-        .cookie-option-desc {
-            font-size: 13px;
-            color: #666;
-            margin: 0;
-        }
-
-        /* Toggle Switch */
-        .cookie-toggle {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 26px;
-        }
-
-        .cookie-toggle input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: 0.3s;
-            border-radius: 26px;
-        }
-
-        .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 20px;
-            width: 20px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: 0.3s;
-            border-radius: 50%;
-        }
-
-        .cookie-toggle input:checked+.toggle-slider {
-            background-color: #2D5016;
-        }
-
-        .cookie-toggle input:checked+.toggle-slider:before {
-            transform: translateX(24px);
-        }
-
-        /* Buttons */
-        .cookie-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .cookie-btn {
-            flex: 1;
-            min-width: 150px;
-            padding: 14px 20px;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .cookie-btn.accept-all {
-            background: #2D5016;
-            color: white;
-        }
-
-        .cookie-btn.accept-all:hover {
-            background: #3d6b1e;
-            transform: translateY(-2px);
-        }
-
-        .cookie-btn.accept-selected {
-            background: #E8854C;
-            color: white;
-        }
-
-        .cookie-btn.accept-selected:hover {
-            background: #d4743f;
-            transform: translateY(-2px);
-        }
-
-        .cookie-btn.reject-all {
-            background: #f0f0f0;
-            color: #333;
-        }
-
-        .cookie-btn.reject-all:hover {
-            background: #e0e0e0;
-            transform: translateY(-2px);
-        }
-
-        .cookie-footer {
-            margin-top: 15px;
-            text-align: center;
-            font-size: 12px;
-        }
-
-        .cookie-footer a {
-            color: #666;
-            text-decoration: none;
-        }
-
-        .cookie-footer a:hover {
-            color: #2D5016;
-            text-decoration: underline;
-        }
-
-        .cookie-footer span {
-            color: #ccc;
-            margin: 0 8px;
-        }
-
-        @media (max-width: 600px) {
-            .cookie-modal {
-                padding: 20px;
-            }
-
-            .cookie-buttons {
-                flex-direction: column;
-            }
-
-            .cookie-btn {
-                min-width: 100%;
-            }
-        }
-    </style>
-
+    <!-- JAVASCRIPT LOGIC -->
     <script>
-        // Cookie Consent Functions
-        function showCookieConsent() {
-            const consent = localStorage.getItem('cssberlin_cookie_consent');
-            if (!consent) {
-                document.getElementById('cookieConsent').style.display = 'block';
+        // 1. INITIALIZE ICONS
+        lucide.createIcons();
+
+        // 2. AUTH MODAL LOGIC
+        const modal = document.getElementById('auth-modal');
+        const modalContent = document.getElementById('auth-modal-card');
+        let currentAuthMode = 'login';
+
+        function openAuthModal() {
+            modal.classList.remove('hidden');
+            // Trigger animation
+            requestAnimationFrame(() => {
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                modal.classList.add('opacity-100', 'pointer-events-auto');
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            });
+            switchAuthMode('login'); // Reset to login
+        }
+
+        function closeAuthModal() {
+            modal.classList.remove('opacity-100', 'pointer-events-auto');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function switchAuthMode(mode) {
+            currentAuthMode = mode;
+            const title = document.getElementById('auth-title');
+            const subtitle = document.getElementById('auth-subtitle');
+            const btnLogin = document.getElementById('btn-mode-login');
+            const btnRegister = document.getElementById('btn-mode-register');
+            const nameField = document.getElementById('field-name-container');
+            const loginExtras = document.getElementById('login-extras');
+            const submitBtn = document.getElementById('auth-submit-btn');
+
+            if (mode === 'login') {
+                // UI Updates
+                title.innerText = 'Willkommen zurück';
+                subtitle.innerText = 'Bitte melde dich an, um fortzufahren.';
+
+                // Button Styles
+                btnLogin.classList.add('auth-btn-active', 'ring-2', 'ring-brand-orange', 'ring-offset-2');
+                btnLogin.classList.remove('auth-btn-inactive');
+                btnRegister.classList.add('auth-btn-inactive');
+                btnRegister.classList.remove('auth-btn-active', 'ring-2', 'ring-brand-green', 'ring-offset-2');
+
+                // Form Fields
+                nameField.classList.add('hidden-mode');
+                loginExtras.classList.remove('hidden-mode');
+
+                // Submit Button Gradient (Orange)
+                submitBtn.className = "w-full py-4 rounded-xl font-heading font-bold text-white shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 bg-gradient-to-r from-brand-orange to-brand-rust";
+                submitBtn.innerHTML = `Jetzt Einloggen <i data-lucide="arrow-right" class="w-5 h-5"></i>`;
+
+            } else {
+                // UI Updates
+                title.innerText = 'Mitglied werden';
+                subtitle.innerText = 'Werde Teil der nachhaltigen Bewegung.';
+
+                // Button Styles
+                btnRegister.classList.add('auth-btn-active', 'ring-2', 'ring-brand-green', 'ring-offset-2');
+                btnRegister.classList.remove('auth-btn-inactive');
+                btnLogin.classList.add('auth-btn-inactive');
+                btnLogin.classList.remove('auth-btn-active', 'ring-2', 'ring-brand-orange', 'ring-offset-2');
+
+                // Form Fields
+                nameField.classList.remove('hidden-mode');
+                loginExtras.classList.add('hidden-mode');
+
+                // Submit Button Gradient (Green)
+                submitBtn.className = "w-full py-4 rounded-xl font-heading font-bold text-white shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 bg-gradient-to-r from-brand-green to-brand-darkGreen";
+                submitBtn.innerHTML = `Konto erstellen <i data-lucide="arrow-right" class="w-5 h-5"></i>`;
             }
+            lucide.createIcons(); // Re-render new icons
         }
 
-        function acceptAllCookies() {
-            const consent = {
-                necessary: true,
-                analytics: true,
-                marketing: true,
-                timestamp: new Date().toISOString()
-            };
-            localStorage.setItem('cssberlin_cookie_consent', JSON.stringify(consent));
-            document.getElementById('cookieConsent').style.display = 'none';
+        function handleAuthSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('auth-submit-btn');
+            const originalText = btn.innerHTML;
+
+            // Loading State
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Verarbeite...`;
+            lucide.createIcons();
+
+            setTimeout(() => {
+                alert(currentAuthMode === 'login' ? "Erfolgreich eingeloggt!" : "Konto erstellt!");
+                closeAuthModal();
+                btn.innerHTML = originalText;
+            }, 1500);
         }
 
-        function acceptSelectedCookies() {
-            const consent = {
-                necessary: true,
-                analytics: document.getElementById('analyticsCookies').checked,
-                marketing: document.getElementById('marketingCookies').checked,
-                timestamp: new Date().toISOString()
-            };
-            localStorage.setItem('cssberlin_cookie_consent', JSON.stringify(consent));
-            document.getElementById('cookieConsent').style.display = 'none';
-        }
 
-        function rejectAllCookies() {
-            const consent = {
-                necessary: true,
-                analytics: false,
-                marketing: false,
-                timestamp: new Date().toISOString()
-            };
-            localStorage.setItem('cssberlin_cookie_consent', JSON.stringify(consent));
-            document.getElementById('cookieConsent').style.display = 'none';
-        }
-
-        // Show cookie consent on page load
-        document.addEventListener('DOMContentLoaded', function () {
-            setTimeout(showCookieConsent, 500);
+        // 3. POPULATE TICKER
+        const messages = [
+            { text: "KOSTENLOSER VERSAND AB 50€", icon: "truck" },
+            { text: "100% KLIMANEUTRAL", icon: "tree-pine" },
+            { text: "GEPRÜFTE QUALITÄT", icon: "star" },
+            { text: "EXPRESS LIEFERUNG IN BERLIN", icon: "zap" }
+        ];
+        const tickerContainer = document.getElementById('ticker-content');
+        // Duplicate messages for infinite loop
+        [...messages, ...messages, ...messages, ...messages].forEach(msg => {
+            const div = document.createElement('a');
+            div.className = "flex items-center gap-2 mx-6 md:mx-10 opacity-90 hover:opacity-100 transition-all cursor-pointer group";
+            div.innerHTML = `
+                <i data-lucide="${msg.icon}" class="w-3 h-3 md:w-4 md:h-4 text-white group-hover:scale-110 transition-transform"></i>
+                <span class="text-[10px] md:text-xs font-heading font-bold tracking-wider uppercase group-hover:text-white">${msg.text}</span>
+                <div class="w-1 h-1 rounded-full bg-white/20 ml-6 md:ml-10 group-hover:bg-white"></div>
+            `;
+            tickerContainer.appendChild(div);
         });
-    </script>
+        lucide.createIcons(); // Re-run for ticker icons
 
-    <!-- Mobile Bottom Navigation -->
-    <nav class="mobile-bottom-nav">
-        <div class="mobile-bottom-nav-items">
-            <a href="index.html" class="mobile-nav-item active">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                </svg>
-                <span data-i18n="nav.home">Home</span>
-            </a>
-            <a href="#" class="mobile-nav-item" onclick="document.querySelector('.search-input')?.focus()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-                <span data-i18n="nav.search">Suche</span>
-            </a>
-            <a href="inserieren.html" class="mobile-nav-item sell-btn">
-                <div class="nav-icon-wrapper">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
+        // 4. POPULATE PRODUCTS (Sample)
+        const products = [
+            { name: "Leica M6", price: "2499€", img: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=1000&auto=format&fit=crop" },
+            { name: "Eames Chair", price: "4500€", img: "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?q=80&w=1000&auto=format&fit=crop" },
+            { name: "iPhone 13 Pro", price: "680€", img: "https://images.unsplash.com/photo-1632661674596-df8be070a5c5?q=80&w=1000&auto=format&fit=crop" },
+            { name: "Burberry Coat", price: "350€", img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=1000&auto=format&fit=crop" },
+            { name: "Omega Watch", price: "4200€", img: "https://images.unsplash.com/photo-1623998021450-85c29c644e0d?q=80&w=1000&auto=format&fit=crop" }
+        ];
+
+        const productGrid = document.getElementById('product-grid');
+        products.forEach(p => {
+            const card = document.createElement('div');
+            card.className = "relative group rounded-3xl p-[2px] overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl";
+            card.innerHTML = `
+                <div class="absolute inset-0 bg-transparent group-hover:eco-gradient-border group-hover:animate-eco-flow opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="relative h-full w-full bg-white rounded-[22px] p-3 flex flex-col gap-3 cursor-pointer overflow-hidden">
+                    <div class="relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-gray-100">
+                        <img src="${p.img}" class="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
+                        <div class="absolute top-3 left-3 bg-black/50 backdrop-blur-md text-white text-[10px] font-medium px-2 py-1 rounded border border-white/10">Sehr gut</div>
+                    </div>
+                    <div class="px-1 flex flex-col gap-2">
+                         <div class="flex justify-between items-start">
+                            <span class="text-xl font-heading font-black text-brand-green">${p.price}</span>
+                         </div>
+                         <p class="text-sm font-medium text-gray-600 group-hover:text-brand-green transition-colors line-clamp-2">${p.name}</p>
+                    </div>
                 </div>
-                <span data-i18n="nav.sell">Verkaufen</span>
-            </a>
-            <a href="messages.html" class="mobile-nav-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                </svg>
-                <span data-i18n="nav.messages">Nachrichten</span>
-                <span class="nav-badge" style="display: none;">0</span>
-            </a>
-            <a href="mein-konto.html" class="mobile-nav-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-                <span data-i18n="nav.profile">Profil</span>
-            </a>
-        </div>
-    </nav>
+            `;
+            productGrid.appendChild(card);
+        });
 
-    <!-- Quick Offer Modal -->
-    <div class="quick-offer-modal" id="quickOfferModal">
-        <div class="quick-offer-content">
-            <div class="quick-offer-header">
-                <h3 data-i18n="offer.quick_title">Schnelles Angebot</h3>
-                <button class="quick-offer-close" onclick="closeQuickOfferModal()">&times;</button>
-            </div>
-            <div class="offer-product-info" id="offerProductInfo">
-                <!-- Product info will be inserted here -->
-            </div>
-            <div class="quick-offer-options">
-                <div class="quick-offer-option" data-percent="10" onclick="selectOfferPercent(10)">
-                    <div class="quick-offer-percent">-10%</div>
-                    <div class="quick-offer-price" id="price10">--</div>
-                </div>
-                <div class="quick-offer-option" data-percent="15" onclick="selectOfferPercent(15)">
-                    <div class="quick-offer-percent">-15%</div>
-                    <div class="quick-offer-price" id="price15">--</div>
-                </div>
-                <div class="quick-offer-option" data-percent="20" onclick="selectOfferPercent(20)">
-                    <div class="quick-offer-percent">-20%</div>
-                    <div class="quick-offer-price" id="price20">--</div>
-                </div>
-            </div>
-            <div class="quick-offer-custom">
-                <div class="quick-offer-custom-label" data-i18n="offer.custom_price">Oder eigenen Preis eingeben:</div>
-                <input type="number" class="quick-offer-custom-input" id="customOfferPrice" placeholder="€ 0,00"
-                    step="0.01">
-            </div>
-            <button class="quick-offer-submit" onclick="submitQuickOffer()" data-i18n="offer.submit">Angebot
-                senden</button>
-        </div>
-    </div>
+        // 5. ANTIGRAVITY SLIDER LOGIC (Vanilla JS Version)
+        const socialData = [
+            { title: "Instagram", img: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1974&auto=format&fit=crop", handle: "@css_berlin" },
+            { title: "LinkedIn", img: "https://images.unsplash.com/photo-1560179707-f14e90ef3dab?q=80&w=1974&auto=format&fit=crop", handle: "CSS Berlin" },
+            { title: "TikTok", img: "https://images.unsplash.com/photo-1520466809213-7b9a56adcd45?q=80&w=1887&auto=format&fit=crop", handle: "@css_watch" },
+            { title: "Twitter", img: "https://images.unsplash.com/photo-1611605698335-8b1569810432?q=80&w=1974&auto=format&fit=crop", handle: "@css_support" }
+        ];
 
-    <script>
-        // Quick Offer Modal Functions
-        let currentOfferProduct = null;
+        const agTrack = document.getElementById('antigravity-track');
+        const agContainer = document.getElementById('antigravity-container');
+        let scrollY = 0;
+        let targetScrollY = 0;
+        let isDragging = false;
+        let startY = 0;
+        let startScrollY = 0;
+        let itemHeight = 0;
 
-        function openQuickOfferModal(productId, productTitle, productPrice, productImage) {
-            currentOfferProduct = { id: productId, title: productTitle, price: productPrice, image: productImage };
-
-            // Update product info
-            document.getElementById('offerProductInfo').innerHTML = `
-                <img src="${productImage}" alt="${productTitle}" class="offer-product-image">
-                <div class="offer-product-details">
-                    <h3>${productTitle}</h3>
-                    <div class="offer-price-value">€ ${productPrice.toFixed(2)}</div>
+        // Render Items (Duplicated for infinity)
+        // Create 20 items to simulate infinite loop
+        const totalItems = 20;
+        for (let i = 0; i < totalItems; i++) {
+            const data = socialData[i % socialData.length];
+            const div = document.createElement('div');
+            div.className = "social-item cursor-pointer";
+            div.style.top = `${i * 100}%`; // Initial position logic needs JS calculation below
+            div.innerHTML = `
+                <img src="${data.img}" alt="${data.title}">
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-white z-10 p-6 text-center pointer-events-none">
+                     <span class="text-xs font-bold uppercase tracking-[0.2em] text-brand-orange mb-2">Social Hub</span>
+                     <h2 class="text-3xl md:text-5xl font-heading font-black mb-2">${data.title}</h2>
+                     <p class="text-sm font-medium opacity-80">${data.handle}</p>
+                     <button class="mt-6 px-4 py-2 border border-white/30 rounded-full text-xs hover:bg-white hover:text-black transition-colors pointer-events-auto">Folgen</button>
                 </div>
             `;
 
-            // Calculate discount prices
-            document.getElementById('price10').textContent = '€ ' + (productPrice * 0.90).toFixed(2);
-            document.getElementById('price15').textContent = '€ ' + (productPrice * 0.85).toFixed(2);
-            document.getElementById('price20').textContent = '€ ' + (productPrice * 0.80).toFixed(2);
-
-            // Clear custom input
-            document.getElementById('customOfferPrice').value = '';
-
-            // Clear previous selection
-            document.querySelectorAll('.quick-offer-option').forEach(opt => opt.classList.remove('selected'));
-
-            // Show modal
-            document.getElementById('quickOfferModal').classList.add('active');
+            // Interaction: Navigate to Social Hub
+            div.onclick = () => { if (!isDragging) { console.log("Navigate to", data.handle); window.location.hash = "#social-hub-profile"; } };
+            agTrack.appendChild(div);
         }
 
-        function closeQuickOfferModal() {
-            document.getElementById('quickOfferModal').classList.remove('active');
-            currentOfferProduct = null;
-        }
+        // Animation Loop
+        function updateSlider() {
+            if (!agContainer) return;
+            const containerHeight = agContainer.clientHeight;
+            itemHeight = containerHeight; // Each item takes full height
 
-        function selectOfferPercent(percent) {
-            document.querySelectorAll('.quick-offer-option').forEach(opt => opt.classList.remove('selected'));
-            document.querySelector(`.quick-offer-option[data-percent="${percent}"]`).classList.add('selected');
+            // Smooth Scroll
+            scrollY += (targetScrollY - scrollY) * 0.1;
 
-            if (currentOfferProduct) {
-                const price = currentOfferProduct.price * (1 - percent / 100);
-                document.getElementById('customOfferPrice').value = price.toFixed(2);
-            }
-        }
+            const items = document.querySelectorAll('.social-item');
+            items.forEach((item, index) => {
+                // Infinite Loop Logic
+                const totalHeight = items.length * itemHeight;
+                let yPos = index * itemHeight + scrollY;
 
-        function submitQuickOffer() {
-            const customPrice = parseFloat(document.getElementById('customOfferPrice').value);
-            if (!customPrice || customPrice <= 0) {
-                alert('Bitte geben Sie einen gültigen Preis ein.');
-                return;
-            }
+                // Wrap around
+                const buffer = itemHeight * 2;
+                if (yPos > totalHeight - buffer) yPos -= totalHeight;
+                if (yPos < -buffer) yPos += totalHeight;
 
-            // Check auth
-            if (!authGate.isAuthenticated) {
-                closeQuickOfferModal();
-                authGate.showLoginModal();
-                return;
-            }
+                // Parallax Effect
+                const normalizedY = yPos % totalHeight;
+                // Simple wrapping logic specifically for visual rendering
+                // Calculate modulo position to keep items in view
+                let displayY = (index * itemHeight + scrollY) % (items.length * itemHeight);
+                if (displayY < -itemHeight) displayY += items.length * itemHeight;
 
-            // Submit offer (placeholder - would connect to backend)
-            console.log('Offer submitted:', {
-                product: currentOfferProduct,
-                offerPrice: customPrice,
-                user: authGate.currentUser
+                item.style.transform = `translateY(${displayY}px)`;
             });
 
-            alert(`Angebot von € ${customPrice.toFixed(2)} wurde gesendet!`);
-            closeQuickOfferModal();
+            // Auto Scroll
+            if (!isDragging) {
+                targetScrollY -= 0.5; // Auto scroll speed
+            }
+
+            requestAnimationFrame(updateSlider);
         }
 
-        // Close modal on backdrop click
-        document.getElementById('quickOfferModal')?.addEventListener('click', function (e) {
-            if (e.target === this) closeQuickOfferModal();
+        // Event Listeners for Dragging
+        agContainer.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startY = e.clientY;
+            startScrollY = targetScrollY;
         });
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const delta = e.clientY - startY;
+            targetScrollY = startScrollY + delta * 1.5;
+        });
+        window.addEventListener('mouseup', () => { isDragging = false; });
+
+        // Wheel
+        agContainer.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            targetScrollY -= e.deltaY;
+        });
+
+        requestAnimationFrame(updateSlider);
+
     </script>
 </body>
 
