@@ -453,6 +453,10 @@
     background: #1877F2;
 }
 
+.social-btn-v2.e-mail:hover {
+    background: linear-gradient(135deg, #FF8C42 0%, #E8854C 100%);
+}
+
 .social-btn-icon-v2 {
     width: 28px;
     height: 28px;

@@ -566,6 +566,11 @@ img {
    HEADER STYLES - TURUNCU→YEŞİL PROFESYONEL GRADIENT
    Sticky Header - 2026 Eco-Tech Design
    ============================================ */
+/* Eski header'ı gizle - Sadece header-v3 aktif */
+.header:not(.header-v3) {
+    display: none !important;
+}
+
 .header {
     background: var(--gradient-header-smooth);
     border-bottom: none;

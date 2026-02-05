@@ -558,8 +558,10 @@ const sampleProducts = [
 // ============================================
 // GLOBAL STATE
 // ============================================
-// Pagination (2026 launch: 8x5 = 40 products on homepage)
-const PRODUCTS_PAGE_SIZE = 40;
+// Pagination (2026 launch: 5x4 = 20 products initial, 10 per load)
+const INITIAL_PRODUCTS = 20;    // Başlangıç: 5 sütun x 4 satır
+const LOAD_MORE_SIZE = 10;      // Her yüklemede: 5 sütun x 2 satır
+const PRODUCTS_PAGE_SIZE = INITIAL_PRODUCTS; // İlk yükleme için
 let currentOffset = 0;
 let activeCategoryFilter = null;
 let canLoadMore = true;
@@ -1350,7 +1352,7 @@ function initLoadMore() {
         `;
 
         try {
-            let apiUrl = `${API_BASE_URL}/api/products?skip=${currentOffset}&limit=${PRODUCTS_PAGE_SIZE}`;
+            let apiUrl = `${API_BASE_URL}/api/products?skip=${currentOffset}&limit=${LOAD_MORE_SIZE}`;
             if (activeCategoryFilter) {
                 apiUrl += `&category=${encodeURIComponent(activeCategoryFilter)}`;
             }
@@ -1388,7 +1390,7 @@ function initLoadMore() {
             });
 
             currentOffset += products.length;
-            canLoadMore = products.length === PRODUCTS_PAGE_SIZE;
+            canLoadMore = products.length === LOAD_MORE_SIZE;
             updateLoadMoreVisibility();
 
             attachProductEventListeners();
@@ -1396,7 +1398,7 @@ function initLoadMore() {
         } catch (e) {
             console.error('Load more failed:', e);
             // Fallback: paginate sample products
-            const fallbackMore = sampleProducts.slice(currentOffset, currentOffset + PRODUCTS_PAGE_SIZE);
+            const fallbackMore = sampleProducts.slice(currentOffset, currentOffset + LOAD_MORE_SIZE);
             if (fallbackMore.length === 0) {
                 canLoadMore = false;
                 updateLoadMoreVisibility();
