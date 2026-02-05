@@ -37,7 +37,8 @@ const sampleProducts = [
         carbonSaved: 18.5,
         tier: 'champion',
         image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=500',
-        sale: false
+        sale: false,
+        status: 'active'
     },
     {
         id: 2,
@@ -50,7 +51,8 @@ const sampleProducts = [
         carbonSaved: 12.3,
         tier: 'profi',
         image: 'https://images.unsplash.com/photo-1542272454315-7f6f36d69c8d?w=500',
-        sale: true
+        sale: true,
+        status: 'sold' // TEST: Satılmış ürün
     },
     {
         id: 3,
@@ -63,7 +65,8 @@ const sampleProducts = [
         carbonSaved: 15.7,
         tier: 'champion',
         image: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500',
-        sale: false
+        sale: false,
+        status: 'active' // TEST: Aktif ürün
     },
     {
         id: 4,
@@ -855,13 +858,13 @@ function createProductCard(product) {
                     </div>
 
                     <div class="product-card-v3-actions">
-                        <button class="btn-energy-brand negotiate-btn" data-product-id="${product.id}">
+                        <button class="btn-energy-brand negotiate-btn" data-product-id="${product.id}" ${isSold ? 'disabled' : ''}>
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                             </svg>
                             Chat
                         </button>
-                        <button class="btn-rainbow buy-btn" data-product-id="${product.id}">
+                        <button class="btn-rainbow buy-btn" data-product-id="${product.id}" ${isSold ? 'disabled' : ''}>
                             <span>
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                                     <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
@@ -1097,8 +1100,21 @@ function attachProductEventListeners() {
     document.querySelectorAll('.negotiate-btn').forEach(btn => {
         btn.addEventListener('click', function (e) {
             e.preventDefault();
+            e.stopPropagation(); // Kart tıklamasını engelle
             const productId = parseInt(this.dataset.productId);
-            handleNegotiateClick(productId);
+            // TODO: Implement handleNegotiateClick
+            console.log('Negotiate clicked for product:', productId);
+
+            // Eğer authModal varsa ve kullanıcı giriş yapmamışsa modalı aç
+            // Basit kontrol: localStorage'da user var mı?
+            const user = localStorage.getItem('cssberlin_user');
+            if (!user && window.authModal) {
+                authModal.open('login');
+                return;
+            }
+
+            // Giriş yapmışsa pazarlık sayfasına git
+            window.location.href = `meine-anzeigen.html?tab=negotiations&new=${productId}`;
         });
     });
 }
