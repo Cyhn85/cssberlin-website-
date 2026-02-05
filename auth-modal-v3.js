@@ -6,8 +6,15 @@
 (function () {
     'use strict';
 
-    // ALWAYS use localhost for development
-    const API_BASE = 'http://localhost:8000';
+    // Smart environment detection
+    const isLocalDevelopment = window.location.hostname === 'localhost'
+        || window.location.hostname === '127.0.0.1'
+        || window.location.hostname === ''
+        || window.location.protocol === 'file:';
+
+    const API_BASE = isLocalDevelopment
+        ? 'http://localhost:8000'  // Local development
+        : 'https://cssberlin-backend.up.railway.app';  // Production (Railway/Render)
 
     let currentMode = 'login';
 
