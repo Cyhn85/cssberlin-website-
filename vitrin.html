@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Berlin — Ürün Vitrini</title>
+    <link rel="stylesheet" href="styles.css?v=2031">
+    <link rel="stylesheet" href="header-v3.css">
+    <link rel="stylesheet" href="toast.css">
+    <script src="error-logger.js"></script>
+    <style>
+        /* ══════════════════════════════════════════════
+           VITRIN PAGE — Organize & Preview Layout
+           ══════════════════════════════════════════════ */
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body.vitrin-page {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #F4F6F5;
+            min-height: 100vh;
+            color: #2B2D2E;
+        }
+
+        /* ── TOP BAR ── */
+        .vitrin-topbar {
+            background: linear-gradient(135deg, #FF8C42 0%, #2D5016 100%);
+            padding: 14px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+        }
+
+        .vitrin-topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .vitrin-topbar-logo {
+            font-size: 22px;
+            font-weight: 900;
+            color: white;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        .vitrin-topbar-logo span { opacity: 0.75; }
+
+        .vitrin-topbar-badge {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 20px;
+            padding: 4px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .vitrin-topbar-right {
+            display: flex;
+            gap: 10px;
+        }
+
+        .vitrin-btn {
+            padding: 9px 20px;
+            border-radius: 8px;
+            border: none;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .vitrin-btn-outline {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.4);
+        }
+        .vitrin-btn-outline:hover { background: rgba(255,255,255,0.25); }
+
+        .vitrin-btn-primary {
+            background: white;
+            color: #2D5016;
+        }
+        .vitrin-btn-primary:hover { background: #f0f7f0; transform: translateY(-1px); }
+
+        /* ── STATS ROW ── */
+        .vitrin-stats {
+            display: flex;
+            gap: 16px;
+            padding: 20px 32px;
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        .vitrin-stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px 22px;
+            flex: 1;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border: 1px solid #E8ECE8;
+        }
+
+        .vitrin-stat-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #888;
+            margin-bottom: 6px;
+        }
+
+        .vitrin-stat-value {
+            font-size: 28px;
+            font-weight: 900;
+            color: #2B2D2E;
+            line-height: 1;
+        }
+
+        .vitrin-stat-value.green { color: #2D5016; }
+        .vitrin-stat-value.orange { color: #FF8C42; }
+
+        .vitrin-stat-sub {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        /* ── MAIN LAYOUT ── */
+        .vitrin-main {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 0 32px 40px;
+            display: flex;
+            gap: 24px;
+        }
+
+        /* ── LEFT SIDEBAR ── */
+        .vitrin-sidebar {
+            width: 240px;
+            flex-shrink: 0;
+        }
+
+        .vitrin-sidebar-card {
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border: 1px solid #E8ECE8;
+            margin-bottom: 16px;
+        }
+
+        .vitrin-sidebar-title {
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #888;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #F0F0F0;
+        }
+
+        .vitrin-kategori-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            font-weight: 600;
+            color: #2B2D2E;
+            text-decoration: none;
+        }
+
+        .vitrin-kategori-item:hover {
+            background: #F0F7F0;
+            color: #2D5016;
+        }
+
+        .vitrin-kategori-item.active {
+            background: linear-gradient(135deg, #FF8C42 0%, #2D5016 100%);
+            color: white;
+        }
+
+        .vitrin-kategori-item .count {
+            background: rgba(0,0,0,0.08);
+            border-radius: 12px;
+            padding: 2px 9px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .vitrin-kategori-item.active .count {
+            background: rgba(255,255,255,0.25);
+        }
+
+        /* ── MAIN CONTENT ── */
+        .vitrin-content {
+            flex: 1;
+        }
+
+        .vitrin-content-header {
+            background: white;
+            border-radius: 14px;
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border: 1px solid #E8ECE8;
+            margin-bottom: 16px;
+        }
+
+        .vitrin-content-header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .vitrin-content-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #2B2D2E;
+        }
+
+        .vitrin-content-count {
+            font-size: 13px;
+            color: #999;
+            font-weight: 600;
+        }
+
+        .vitrin-content-header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .vitrin-sort-select {
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px solid #DDD;
+            font-size: 13px;
+            font-weight: 600;
+            color: #2B2D2E;
+            background: white;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .vitrin-sort-select:focus { border-color: #2D5016; }
+
+        .vitrin-view-toggle {
+            display: flex;
+            gap: 4px;
+            background: #F0F0F0;
+            border-radius: 8px;
+            padding: 3px;
+        }
+
+        .vitrin-view-btn {
+            width: 34px;
+            height: 34px;
+            border: none;
+            background: transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            transition: all 0.2s;
+        }
+        .vitrin-view-btn:hover { background: white; color: #2D5016; }
+        .vitrin-view-btn.active { background: white; color: #2D5016; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+
+        /* ── GRID ── (reuse products-grid from styles.css) */
+        .vitrin-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+        }
+
+        @media (max-width: 1400px) { .vitrin-grid { grid-template-columns: repeat(4, 1fr); } }
+        @media (max-width: 1024px) { .vitrin-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 768px)  { .vitrin-grid { grid-template-columns: repeat(2, 1fr); } }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 1024px) {
+            .vitrin-main { flex-direction: column; }
+            .vitrin-sidebar { width: 100%; display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; }
+            .vitrin-sidebar-card { flex-shrink: 0; min-width: 180px; }
+        }
+
+        @media (max-width: 600px) {
+            .vitrin-stats { flex-wrap: wrap; padding: 12px 16px; }
+            .vitrin-main { padding: 0 16px 32px; }
+            .vitrin-topbar { padding: 12px 16px; }
+        }
+    </style>
+</head>
+<body class="vitrin-page">
+
+<!-- ── TOP BAR ── -->
+<div class="vitrin-topbar">
+    <div class="vitrin-topbar-left">
+        <a href="index.html" class="vitrin-topbar-logo">CSS<span>berlin</span></a>
+        <span class="vitrin-topbar-badge">🏪 Vitrin Manager</span>
+    </div>
+    <div class="vitrin-topbar-right">
+        <a href="index.html" class="vitrin-btn vitrin-btn-outline">← Ana Sayfa</a>
+        <button class="vitrin-btn vitrin-btn-primary" onclick="vitrinManager && alert('40 Produkt aktiv — API-ready ✅')">📊 Export</button>
+    </div>
+</div>
+
+<!-- ── STATS ROW ── -->
+<div class="vitrin-stats">
+    <div class="vitrin-stat-card">
+        <div class="vitrin-stat-label">Toplam Ürün</div>
+        <div class="vitrin-stat-value green" id="statToplam">40</div>
+        <div class="vitrin-stat-sub">Demo catalog aktif</div>
+    </div>
+    <div class="vitrin-stat-card">
+        <div class="vitrin-stat-label">Kategoriler</div>
+        <div class="vitrin-stat-value orange">5</div>
+        <div class="vitrin-stat-sub">Damen · Herren · Elektronik · Kinder · Sale</div>
+    </div>
+    <div class="vitrin-stat-card">
+        <div class="vitrin-stat-label">Toplam CO₂ Tasarruf</div>
+        <div class="vitrin-stat-value green" id="statCO2">–</div>
+        <div class="vitrin-stat-sub">kg CO₂ gespart</div>
+    </div>
+    <div class="vitrin-stat-card">
+        <div class="vitrin-stat-label">Ø Fiyat</div>
+        <div class="vitrin-stat-value" id="statAvgPrice">–</div>
+        <div class="vitrin-stat-sub">Ortalama satış fiyatı</div>
+    </div>
+</div>
+
+<!-- ── MAIN ── -->
+<div class="vitrin-main">
+
+    <!-- SIDEBAR -->
+    <aside class="vitrin-sidebar">
+        <div class="vitrin-sidebar-card">
+            <div class="vitrin-sidebar-title">Kategoriler</div>
+            <a class="vitrin-kategori-item active" data-kategori="alle" onclick="setKat(this,'alle')">
+                <span>🏷️ Alle</span><span class="count" id="countAlle">40</span>
+            </a>
+            <a class="vitrin-kategori-item" data-kategori="damen" onclick="setKat(this,'damen')">
+                <span>👗 Damen</span><span class="count" id="countDamen">10</span>
+            </a>
+            <a class="vitrin-kategori-item" data-kategori="herren" onclick="setKat(this,'herren')">
+                <span>👔 Herren</span><span class="count" id="countHerren">10</span>
+            </a>
+            <a class="vitrin-kategori-item" data-kategori="elektronik" onclick="setKat(this,'elektronik')">
+                <span>📱 Elektronik</span><span class="count" id="countElektronik">8</span>
+            </a>
+            <a class="vitrin-kategori-item" data-kategori="kinder" onclick="setKat(this,'kinder')">
+                <span>👶 Kinder</span><span class="count" id="countKinder">6</span>
+            </a>
+            <a class="vitrin-kategori-item" data-kategori="sale" onclick="setKat(this,'sale')">
+                <span>🔥 Sale</span><span class="count" id="countSale">6</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- CONTENT -->
+    <div class="vitrin-content">
+        <div class="vitrin-content-header">
+            <div class="vitrin-content-header-left">
+                <h2 class="vitrin-content-title" id="vitrinContentTitle">Alle Produkte</h2>
+                <span class="vitrin-content-count" id="vitrinContentCount">40 Produkte</span>
+            </div>
+            <div class="vitrin-content-header-right">
+                <select class="vitrin-sort-select" id="vitrinSiralama" onchange="sortChanged()">
+                    <option value="neu">Neu eingegangen</option>
+                    <option value="fiyat-asc">Preis: Niedrig → Hoch</option>
+                    <option value="fiyat-desc">Preis: Hoch → Niedrig</option>
+                    <option value="brand">Marke A–Z</option>
+                </select>
+                <div class="vitrin-view-toggle">
+                    <button class="vitrin-view-btn active" title="Grid"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg></button>
+                    <button class="vitrin-view-btn" title="Liste"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="2" width="14" height="3" rx="1"/><rect x="1" y="6.5" width="14" height="3" rx="1"/><rect x="1" y="11" width="14" height="3" rx="1"/></svg></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ÜRÜN GRID -->
+        <div class="vitrin-grid" id="vitrinGrid">
+            <!-- vitrin.js burada ürünleri render eder -->
+        </div>
+    </div>
+</div>
+
+<!-- ── SCRIPTS ── -->
+<script src="api-config.js"></script>
+<script src="api-client.js"></script>
+<script src="toast.js"></script>
+<script src="script.js"></script>       <!-- createProductCard + attachProductEventListeners -->
+<script src="vitrin.js"></script>        <!-- vitrinManager -->
+
+<script>
+// ── Kategori tıklama ──
+function setKat(el, kategori) {
+    document.querySelectorAll('.vitrin-kategori-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+
+    window.vitrinManager && window.vitrinManager.setKategori(kategori);
+
+    // Title güncelle
+    const titler = { alle:'Alle Produkte', damen:'Damen', herren:'Herren', elektronik:'Elektronik', kinder:'Kinder', sale:'Sale – Bis 70% Rabatt' };
+    document.getElementById('vitrinContentTitle').textContent = titler[kategori] || 'Produkte';
+
+    const filtered = window.vitrinManager ? window.vitrinManager.getFiltered() : [];
+    document.getElementById('vitrinContentCount').textContent = filtered.length + ' Produkte';
+}
+
+// ── Sıralama ──
+function sortChanged() {
+    const val = document.getElementById('vitrinSiralama').value;
+    window.vitrinManager && window.vitrinManager.setSiralama(val);
+}
+
+// ── Stats hesap ──
+function calcStats() {
+    const data = window.vitrinManager ? window.vitrinManager.getData() : [];
+    if (data.length === 0) return;
+
+    const totalCO2 = data.reduce((s, u) => s + (u.co2 || 0), 0);
+    const avgPrice = data.reduce((s, u) => s + (u.fiyat || 0), 0) / data.length;
+
+    document.getElementById('statCO2').textContent   = totalCO2.toFixed(1);
+    document.getElementById('statAvgPrice').textContent = avgPrice.toFixed(2) + ' €';
+    document.getElementById('statToplam').textContent = data.length;
+}
+
+// ── Init ──
+document.addEventListener('DOMContentLoaded', function () {
+    // vitrin.js yüklendikten sonra init
+    setTimeout(function () {
+        if (window.vitrinManager) {
+            window.vitrinManager.init('vitrinGrid');
+            calcStats();
+        }
+    }, 200);
+});
+</script>
+
+</body>
+</html>

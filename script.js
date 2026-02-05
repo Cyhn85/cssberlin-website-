@@ -683,10 +683,21 @@ document.addEventListener('DOMContentLoaded', function () {
     initMegaMenus();
     initSearch();
     hideMessageIconForGuests();
-    loadRecommendations();
-    loadFeaturedProducts();
     initHeroSlider();
     initSocialHub();
+
+    // ── Vitrin: 40 demo ürün yükleme (vitrin.js) ──
+    // vitrin.js script.js'den sonra yüklenir → setTimeout ile bekle
+    setTimeout(function () {
+        if (window.vitrinManager) {
+            window.vitrinManager.init('featuredProductsGrid');
+            console.log('[Vitrin] 40 demo ürün yüklendi ✅');
+        } else {
+            // Fallback: eskisi çalışsın
+            loadFeaturedProducts();
+            loadRecommendations();
+        }
+    }, 100);
 });
 
 
