@@ -6,9 +6,8 @@
 (function () {
     'use strict';
 
-    const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? 'http://localhost:8000'
-        : 'https://cssberlin-backend.up.railway.app';  // Production backend
+    // ALWAYS use localhost for development
+    const API_BASE = 'http://localhost:8000';
 
     let currentMode = 'login';
 

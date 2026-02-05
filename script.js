@@ -836,7 +836,7 @@ function createProductCard(product) {
                     <img src="${product.image}"
                          alt="${product.name}"
                          loading="lazy"
-                         onerror="this.src='https://via.placeholder.com/400x533?text=Bild+nicht+verfuegbar'">
+                         onerror="this.src='https://picsum.photos/400x533?text=Bild+nicht+verfuegbar'">
 
                     ${isSold ? '<div class="sold-badge">VERKAUFT</div>' : ''}
                     <div class="product-card-v3-badge ${badgeClass}">${product.condition}</div>
