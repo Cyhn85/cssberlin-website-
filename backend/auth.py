@@ -269,3 +269,195 @@ async def token_endpoint(
         "token_type": "bearer",
         "user_name": user.first_name,
     }
+
+
+# ─── Google OAuth Endpoint ──────────────────────────────
+import secrets
+
+class GoogleAuthRequest(BaseModel):
+    id_token: str
+    email: EmailStr
+    name: Optional[str] = None
+    picture: Optional[str] = None
+    given_name: Optional[str] = None
+    family_name: Optional[str] = None
+
+
+@router.post("/google", response_model=Token)
+async def google_auth(data: GoogleAuthRequest, db: AsyncSession = Depends(get_db)):
+    """
+    Google OAuth ile giriş/kayıt.
+    Frontend id_token gönderir, backend kullanıcıyı oluşturur veya login yapar.
+    """
+    # Kullanıcıyı bul veya oluştur
+    result = await db.execute(select(User).where(User.email == data.email))
+    user = result.scalar_one_or_none()
+
+    if not user:
+        # Yeni kullanıcı oluştur
+        user = User(
+            email=data.email,
+            hashed_password=get_password_hash(secrets.token_urlsafe(32)),  # Random şifre
+            first_name=data.given_name or data.name or "Google",
+            last_name=data.family_name or "Nutzer",
+            is_active=True,
+            is_verified=True,  # Google ile doğrulanmış
+            profile_picture=data.picture,
+        )
+        db.add(user)
+        await db.commit()
+        await db.refresh(user)
+
+    # Token üret
+    token = create_access_token(data={"sub": user.email})
+
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "user_name": user.first_name,
+    }
+
+
+# ─── Magic Link Endpoints ───────────────────────────────
+# In-memory token storage (production'da Redis kullanılmalı)
+magic_link_tokens: dict = {}
+
+class MagicLinkRequest(BaseModel):
+    email: EmailStr
+
+
+class MagicLinkVerify(BaseModel):
+    token: str
+
+
+@router.post("/magic-link/request")
+async def request_magic_link(data: MagicLinkRequest, db: AsyncSession = Depends(get_db)):
+    """
+    Magic Link talep et - email ile giriş linki gönderir.
+    """
+    # Kullanıcıyı bul
+    result = await db.execute(select(User).where(User.email == data.email))
+    user = result.scalar_one_or_none()
+
+    # Kullanıcı yoksa bile güvenlik için aynı yanıt
+    if not user:
+        return {"message": "Wenn diese E-Mail registriert ist, erhalten Sie einen Login-Link."}
+
+    # Token oluştur (15 dakika geçerli)
+    token = secrets.token_urlsafe(32)
+    expiry = datetime.utcnow() + timedelta(minutes=15)
+    magic_link_tokens[token] = {"email": data.email, "expires": expiry}
+
+    # TODO: Email gönderimi (EmailJS veya SMTP)
+    # Bu örnek için token'ı response'da döndürüyoruz (development only)
+    return {
+        "message": "Wenn diese E-Mail registriert ist, erhalten Sie einen Login-Link.",
+        "dev_token": token,  # Production'da kaldırılmalı!
+        "dev_link": f"https://cssberlin.de/magic-login.html?token={token}"
+    }
+
+
+@router.post("/magic-link/verify", response_model=Token)
+async def verify_magic_link(data: MagicLinkVerify, db: AsyncSession = Depends(get_db)):
+    """
+    Magic Link token'ını doğrula ve login yap.
+    """
+    token_data = magic_link_tokens.get(data.token)
+
+    if not token_data:
+        raise HTTPException(status_code=400, detail="Ungültiger oder abgelaufener Link")
+
+    if datetime.utcnow() > token_data["expires"]:
+        del magic_link_tokens[data.token]
+        raise HTTPException(status_code=400, detail="Der Link ist abgelaufen")
+
+    # Kullanıcıyı bul
+    result = await db.execute(select(User).where(User.email == token_data["email"]))
+    user = result.scalar_one_or_none()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="Benutzer nicht gefunden")
+
+    # Token'ı kullanıldı olarak işaretle
+    del magic_link_tokens[data.token]
+
+    # Kullanıcıyı verified yap
+    user.is_verified = True
+    await db.commit()
+
+    # Access token üret
+    access_token = create_access_token(data={"sub": user.email})
+
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "user_name": user.first_name,
+    }
+
+
+# ─── Password Reset Endpoints ───────────────────────────
+password_reset_tokens: dict = {}
+
+class PasswordResetRequest(BaseModel):
+    email: EmailStr
+
+
+class PasswordResetConfirm(BaseModel):
+    token: str
+    new_password: str
+
+
+@router.post("/password-reset/request")
+async def request_password_reset(data: PasswordResetRequest, db: AsyncSession = Depends(get_db)):
+    """
+    Şifre sıfırlama talebi - email ile reset linki gönderir.
+    """
+    result = await db.execute(select(User).where(User.email == data.email))
+    user = result.scalar_one_or_none()
+
+    # Kullanıcı yoksa bile güvenlik için aynı yanıt
+    if not user:
+        return {"message": "Wenn diese E-Mail registriert ist, erhalten Sie eine Nachricht zur Passwortzurücksetzung."}
+
+    # Token oluştur (1 saat geçerli)
+    token = secrets.token_urlsafe(32)
+    expiry = datetime.utcnow() + timedelta(hours=1)
+    password_reset_tokens[token] = {"email": data.email, "expires": expiry}
+
+    return {
+        "message": "Wenn diese E-Mail registriert ist, erhalten Sie eine Nachricht zur Passwortzurücksetzung.",
+        "dev_token": token,  # Production'da kaldırılmalı!
+        "dev_link": f"https://cssberlin.de/reset-password.html?token={token}"
+    }
+
+
+@router.post("/password-reset/confirm")
+async def confirm_password_reset(data: PasswordResetConfirm, db: AsyncSession = Depends(get_db)):
+    """
+    Şifre sıfırlama - yeni şifreyi ayarla.
+    """
+    token_data = password_reset_tokens.get(data.token)
+
+    if not token_data:
+        raise HTTPException(status_code=400, detail="Ungültiger oder abgelaufener Link")
+
+    if datetime.utcnow() > token_data["expires"]:
+        del password_reset_tokens[data.token]
+        raise HTTPException(status_code=400, detail="Der Link ist abgelaufen")
+
+    # Kullanıcıyı bul
+    result = await db.execute(select(User).where(User.email == token_data["email"]))
+    user = result.scalar_one_or_none()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="Benutzer nicht gefunden")
+
+    # Şifreyi güncelle
+    user.hashed_password = get_password_hash(data.new_password)
+    await db.commit()
+
+    # Token'ı kullanıldı olarak işaretle
+    del password_reset_tokens[data.token]
+
+    return {"message": "Passwort erfolgreich zurückgesetzt. Sie können sich jetzt anmelden."}
+
