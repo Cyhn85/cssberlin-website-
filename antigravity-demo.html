@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Berlin | Climate Smart Solutions</title>
+
+    <!-- FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- ICONS -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- TAILWIND CSS (Modern Styling Engine) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            orange: '#FF8C42',
+                            green: '#165B33',
+                            darkGreen: '#0B2E1A',
+                            rust: '#c4621b',
+                            panelBase: '#121816',
+                        },
+                    },
+                    animation: {
+                        marquee: 'marquee 120s linear infinite',
+                        "eco-flow": 'eco-flow 3s linear infinite',
+                    },
+                    keyframes: {
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-100%)' },
+                        },
+                        "eco-flow": {
+                            '0%': { backgroundPosition: '0% 50%' },
+                            '100%': { backgroundPosition: '200% 50%' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* --- GLOBAL STYLES --- */
+        body {
+            background-color: #f9fafb;
+            color: #111827;
+        }
+
+        .dark body {
+            background-color: #09090b;
+            color: #f3f4f6;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #165B33;
+            border-radius: 4px;
+        }
+
+        /* Eco Gradient Border Animation Class */
+        .eco-gradient-border {
+            background: linear-gradient(90deg, #FF8C42, #ffffff, #165B33, #FF8C42);
+            background-size: 300% 100%;
+        }
+
+        /* Antigravity Slider Styles */
+        .social-slider-container {
+            perspective: 1000px;
+            cursor: grab;
+        }
+
+        .social-slider-container:active {
+            cursor: grabbing;
+        }
+
+        .social-item {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            will-change: transform;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .social-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.6;
+            transition: opacity 0.5s ease;
+        }
+
+        .social-container:hover .social-item img {
+            opacity: 0.4;
+        }
+    </style>
+</head>
+
+<body class="font-sans antialiased transition-colors duration-300">
+
+    <!-- 1. TOP TICKER (Kayar Bant) -->
+    <div
+        class="relative w-full bg-gradient-to-r from-brand-orange to-brand-green text-white overflow-hidden h-10 flex items-center z-50 border-b border-brand-green/30">
+        <!-- Fading Edges -->
+        <div
+            class="absolute left-0 top-0 bottom-0 w-8 md:w-20 bg-gradient-to-r from-brand-orange to-transparent z-10 pointer-events-none">
+        </div>
+        <div
+            class="absolute right-0 top-0 bottom-0 w-8 md:w-20 bg-gradient-to-l from-brand-green to-transparent z-10 pointer-events-none">
+        </div>
+
+        <!-- Marquee Content -->
+        <div class="flex animate-marquee hover:[animation-play-state:paused] whitespace-nowrap items-center">
+            <!-- Items repeated for infinite loop illusion -->
+            <div class="flex items-center" id="ticker-content">
+                <!-- Javascript will populate this -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. HEADER -->
+    <header class="sticky top-0 z-40 w-full shadow-sm bg-white/95 backdrop-blur-md transition-colors duration-300">
+        <!-- Top Row: Logo & Actions -->
+        <div class="w-full max-w-[95%] mx-auto px-4 sm:px-6">
+            <div class="flex justify-between items-center h-20 md:h-24">
+
+                <!-- LOGO -->
+                <div class="flex-shrink-0 flex items-center cursor-pointer group">
+                    <span
+                        class="font-heading font-extrabold text-4xl md:text-5xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-brand-orange to-brand-green drop-shadow-sm group-hover:scale-105 transition-transform duration-300">
+                        CSSberlin
+                    </span>
+                </div>
+
+                <!-- ACTIONS -->
+                <div class="hidden md:flex items-center gap-4">
+                    <button
+                        class="w-12 h-12 rounded-full bg-gray-50 text-gray-500 hover:text-brand-orange hover:bg-brand-orange/10 flex items-center justify-center transition-all"><i
+                            data-lucide="heart" class="w-5 h-5"></i></button>
+                    <button
+                        class="w-12 h-12 rounded-full bg-gray-50 text-gray-500 hover:text-brand-green hover:bg-brand-green/10 flex items-center justify-center transition-all relative">
+                        <i data-lucide="gavel" class="w-5 h-5"></i>
+                        <span class="absolute top-2 right-2 flex h-2 w-2"><span
+                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-orange opacity-75"></span><span
+                                class="relative inline-flex rounded-full h-2 w-2 bg-brand-orange"></span></span>
+                    </button>
+                    <button
+                        class="w-12 h-12 rounded-full bg-gray-50 text-gray-500 hover:text-brand-orange hover:bg-brand-orange/10 flex items-center justify-center transition-all relative">
+                        <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                        <span
+                            class="absolute -top-1 -right-1 bg-brand-green text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white">2</span>
+                    </button>
+                    <div class="w-px h-8 bg-gray-200 mx-2"></div>
+                    <!-- ANMELDEN BUTTON: Orange -> Green Gradient -->
+                    <button onclick="document.getElementById('auth-modal').classList.remove('hidden')"
+                        class="bg-gradient-to-r from-brand-orange to-brand-green hover:from-brand-rust hover:to-brand-darkGreen text-white h-12 px-8 rounded-full font-heading font-bold text-sm transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-2">
+                        Anmelden
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Middle Row: Search & Filter -->
+        <div class="hidden md:flex items-center justify-center border-b border-gray-100 py-6 px-4 relative z-20">
+            <!-- Language (Standard Style) -->
+            <div class="absolute left-6 lg:left-12 flex items-center gap-3 z-30">
+                <button
+                    class="flex items-center gap-2 text-black bg-white border border-brand-green hover:bg-gray-50 transition-colors font-bold text-xs uppercase px-4 py-3 rounded-xl shadow-sm">
+                    <i data-lucide="globe" class="w-4 h-4 text-gray-500"></i>
+                    <span>DE</span>
+                </button>
+            </div>
+
+            <!-- Search Bar Complex -->
+            <div class="w-full max-w-5xl flex items-center gap-3 z-20 mx-auto">
+                <div
+                    class="flex-grow h-14 flex items-stretch shadow-sm hover:shadow-md transition-shadow duration-300 rounded-2xl group">
+                    <!-- Category Dropdown -->
+                    <button
+                        class="h-full pl-6 pr-4 flex items-center gap-2 bg-white border border-brand-green rounded-l-2xl text-sm font-bold text-black hover:bg-gray-50 transition-all min-w-[180px] justify-between">
+                        <span>Alle Kategorien</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </button>
+                    <!-- Input -->
+                    <div class="relative flex-grow">
+                        <input type="text"
+                            class="block w-full h-full pl-6 pr-24 bg-white rounded-r-2xl border-y border-r border-brand-green focus:outline-none font-heading font-bold tracking-wide text-black placeholder-gray-400"
+                            placeholder="CLIMATE SMART SOLUTIONS">
+                        <div class="absolute inset-y-0 right-2 flex items-center gap-1">
+                            <button class="p-2 text-gray-400 hover:text-brand-orange"><i data-lucide="mic"
+                                    class="w-5 h-5"></i></button>
+                            <div class="h-6 w-px bg-gray-200 mx-1"></div>
+                            <button class="p-2 text-gray-400 hover:text-brand-green"><i data-lucide="camera"
+                                    class="w-5 h-5"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter Button -->
+                <button
+                    class="h-full flex items-center gap-2 px-6 rounded-2xl text-sm font-bold transition-all shadow-sm bg-white text-black border border-brand-green hover:shadow-md">
+                    <i data-lucide="sliders-horizontal" class="w-4 h-4"></i> Filter
+                </button>
+
+                <!-- Search Button -->
+                <button
+                    class="h-14 rounded-2xl bg-white border border-brand-green px-8 flex items-center justify-center hover:shadow-md transition-all">
+                    <i data-lucide="search" class="w-5 h-5 text-black"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Bottom Row: Nav Links -->
+        <div class="hidden md:block bg-gradient-to-r from-brand-orange to-brand-green shadow-md">
+            <div class="max-w-7xl mx-auto flex justify-center space-x-12 py-0">
+                <a href="#"
+                    class="block py-4 font-heading font-bold text-sm uppercase tracking-widest text-white hover:text-white/90">Damen</a>
+                <a href="#"
+                    class="block py-4 font-heading font-bold text-sm uppercase tracking-widest text-white hover:text-white/90">Herren</a>
+                <a href="#"
+                    class="block py-4 font-heading font-bold text-sm uppercase tracking-widest text-white hover:text-white/90">Kinder</a>
+                <a href="#"
+                    class="block py-4 font-heading font-bold text-sm uppercase tracking-widest text-white hover:text-white/90">Elektronik</a>
+                <a href="#"
+                    class="block py-4 font-heading font-bold text-sm uppercase tracking-widest text-white hover:text-white/90"><span
+                        class="bg-red-500/20 px-2 py-0.5 rounded border border-white/20">Sale</span></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow pt-6">
+
+        <!-- HERO SECTION (Split Layout) -->
+        <section class="px-4 max-w-[95%] mx-auto mb-10">
+            <!-- REDUCED HEIGHT: h-[320px] md:h-[380px] -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[320px] md:h-[380px]">
+
+                <!-- 1. ANTIGRAVITY SLIDER (Social Hub) -->
+                <div class="h-full w-full rounded-[24px] overflow-hidden shadow-lg border border-gray-200 bg-black relative group cursor-pointer"
+                    id="antigravity-container">
+                    <!-- Javascript will render the infinite loop here -->
+                    <div id="antigravity-track" class="relative w-full h-full"></div>
+
+                    <!-- Label -->
+                    <div
+                        class="absolute top-4 left-4 z-20 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 pointer-events-none">
+                        <span class="text-[10px] font-bold text-white uppercase flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-brand-green animate-pulse"></span> Social Hub
+                        </span>
+                    </div>
+                </div>
+
+                <!-- 2. STANDARD HERO SLIDER (Campaigns) -->
+                <div class="h-full w-full relative overflow-hidden rounded-[24px] shadow-inner bg-gray-200 group">
+                    <!-- Slide 1 (Static Example for HTML) -->
+                    <div class="absolute inset-0 w-full h-full">
+                        <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070&auto=format&fit=crop"
+                            class="w-full h-full object-cover">
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90">
+                        </div>
+                        <div class="absolute bottom-8 left-8 z-10 max-w-lg">
+                            <span
+                                class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md border border-white/30 rounded-full text-[10px] font-bold text-white mb-3 uppercase tracking-wider">Featured
+                                Collection</span>
+                            <h3
+                                class="text-white font-heading font-bold text-2xl md:text-3xl drop-shadow-lg leading-tight mb-2">
+                                Willkommensgeschenk</h3>
+                            <p class="text-white/90 text-sm md:text-base">Melde dich jetzt an und erhalte 10% Rabatt.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Arrows -->
+                    <button
+                        class="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/20 text-white hover:bg-brand-orange transition-all opacity-0 group-hover:opacity-100"><i
+                            data-lucide="chevron-left"></i></button>
+                    <button
+                        class="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/20 text-white hover:bg-brand-orange transition-all opacity-0 group-hover:opacity-100"><i
+                            data-lucide="chevron-right"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRODUCT SHOWCASE -->
+        <section class="pb-24">
+            <div class="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
+                <div
+                    class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4 border-b border-gray-100 pb-6">
+                    <div>
+                        <span class="text-brand-orange font-bold text-xs tracking-widest uppercase mb-1 block">Aktuelle
+                            Kollektion</span>
+                        <h2 class="text-3xl font-heading font-bold text-gray-900">Frisch Eingetroffen</h2>
+                    </div>
+                </div>
+
+                <!-- Product Grid (Static Items) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-x-6 gap-y-10"
+                    id="product-grid">
+                    <!-- Products will be injected by JS or you can paste HTML here -->
+                </div>
+
+                <div class="mt-16 text-center">
+                    <button
+                        class="px-8 py-3 bg-gradient-to-r from-brand-orange to-brand-rust hover:from-brand-green hover:to-brand-darkGreen text-white font-bold rounded-full transition-all shadow-lg">
+                        Mehr Produkte laden
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-gradient-to-r from-brand-orange to-brand-green text-white pt-12 pb-6 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 relative z-10">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+                <div class="col-span-2 md:col-span-1">
+                    <span class="font-heading font-extrabold text-xl tracking-tighter text-white">CSS<span
+                            class="text-white/80">berlin</span></span>
+                    <p class="mt-2 text-xs text-white/70 leading-relaxed max-w-xs">Der Marktplatz für bewussten Konsum.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white text-sm mb-3">Stöbern</h4>
+                    <ul class="space-y-2 text-xs text-white/70">
+                        <li><a href="#" class="hover:text-white">Kleidung</a></li>
+                        <li><a href="#" class="hover:text-white">Elektronik</a></li>
+                    </ul>
+                </div>
+                <!-- ... other cols ... -->
+            </div>
+            <div class="border-t border-white/10 pt-4 text-[10px] text-white/50">
+                <p>© 2025 CSS Berlin. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AUTH MODAL (Hidden by default) -->
+    <div id="auth-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center px-4">
+        <div class="absolute inset-0 bg-brand-darkGreen/60 backdrop-blur-xl"
+            onclick="document.getElementById('auth-modal').classList.add('hidden')"></div>
+        <div
+            class="relative bg-white rounded-[32px] shadow-2xl w-full max-w-md h-[500px] flex items-center justify-center">
+            <h2 class="text-2xl font-bold">Anmeldeformular hier</h2>
+            <button onclick="document.getElementById('auth-modal').classList.add('hidden')"
+                class="absolute top-4 right-4 p-2"><i data-lucide="x"></i></button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // 1. INITIALIZE ICONS
+        lucide.createIcons();
+
+        // 2. POPULATE TICKER
+        const messages = [
+            { text: "KOSTENLOSER VERSAND AB 50€", icon: "truck" },
+            { text: "100% KLIMANEUTRAL", icon: "tree-pine" },
+            { text: "GEPRÜFTE QUALITÄT", icon: "star" },
+            { text: "EXPRESS LIEFERUNG IN BERLIN", icon: "zap" }
+        ];
+        const tickerContainer = document.getElementById('ticker-content');
+        // Duplicate messages for infinite loop
+        [...messages, ...messages, ...messages, ...messages].forEach(msg => {
+            const div = document.createElement('a');
+            div.className = "flex items-center gap-2 mx-6 md:mx-10 opacity-90 hover:opacity-100 transition-all cursor-pointer group";
+            div.innerHTML = `
+                <i data-lucide="${msg.icon}" class="w-3 h-3 md:w-4 md:h-4 text-white group-hover:scale-110 transition-transform"></i>
+                <span class="text-[10px] md:text-xs font-heading font-bold tracking-wider uppercase group-hover:text-white">${msg.text}</span>
+                <div class="w-1 h-1 rounded-full bg-white/20 ml-6 md:ml-10 group-hover:bg-white"></div>
+            `;
+            tickerContainer.appendChild(div);
+        });
+        lucide.createIcons(); // Re-run for ticker icons
+
+        // 3. POPULATE PRODUCTS (Sample)
+        const products = [
+            { name: "Leica M6", price: "2499€", img: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=1000&auto=format&fit=crop" },
+            { name: "Eames Chair", price: "4500€", img: "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?q=80&w=1000&auto=format&fit=crop" },
+            { name: "iPhone 13 Pro", price: "680€", img: "https://images.unsplash.com/photo-1632661674596-df8be070a5c5?q=80&w=1000&auto=format&fit=crop" },
+            { name: "Burberry Coat", price: "350€", img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=1000&auto=format&fit=crop" },
+            { name: "Omega Watch", price: "4200€", img: "https://images.unsplash.com/photo-1623998021450-85c29c644e0d?q=80&w=1000&auto=format&fit=crop" }
+        ];
+
+        const productGrid = document.getElementById('product-grid');
+        products.forEach(p => {
+            const card = document.createElement('div');
+            card.className = "relative group rounded-3xl p-[2px] overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl";
+            card.innerHTML = `
+                <div class="absolute inset-0 bg-transparent group-hover:eco-gradient-border group-hover:animate-eco-flow opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="relative h-full w-full bg-white rounded-[22px] p-3 flex flex-col gap-3 cursor-pointer overflow-hidden">
+                    <div class="relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-gray-100">
+                        <img src="${p.img}" class="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
+                        <div class="absolute top-3 left-3 bg-black/50 backdrop-blur-md text-white text-[10px] font-medium px-2 py-1 rounded border border-white/10">Sehr gut</div>
+                    </div>
+                    <div class="px-1 flex flex-col gap-2">
+                         <div class="flex justify-between items-start">
+                            <span class="text-xl font-heading font-black text-brand-green">${p.price}</span>
+                         </div>
+                         <p class="text-sm font-medium text-gray-600 group-hover:text-brand-green transition-colors line-clamp-2">${p.name}</p>
+                    </div>
+                </div>
+            `;
+            productGrid.appendChild(card);
+        });
+
+        // 4. ANTIGRAVITY SLIDER LOGIC (Vanilla JS Version)
+        const socialData = [
+            { title: "Instagram", img: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1974&auto=format&fit=crop", handle: "@css_berlin" },
+            { title: "LinkedIn", img: "https://images.unsplash.com/photo-1560179707-f14e90ef3dab?q=80&w=1974&auto=format&fit=crop", handle: "CSS Berlin" },
+            { title: "TikTok", img: "https://images.unsplash.com/photo-1520466809213-7b9a56adcd45?q=80&w=1887&auto=format&fit=crop", handle: "@css_watch" },
+            { title: "Twitter", img: "https://images.unsplash.com/photo-1611605698335-8b1569810432?q=80&w=1974&auto=format&fit=crop", handle: "@css_support" }
+        ];
+
+        const agTrack = document.getElementById('antigravity-track');
+        const agContainer = document.getElementById('antigravity-container');
+        let scrollY = 0;
+        let targetScrollY = 0;
+        let isDragging = false;
+        let startY = 0;
+        let startScrollY = 0;
+        let itemHeight = 0;
+
+        // Render Items (Duplicated for infinity)
+        // Create 20 items to simulate infinite loop
+        const totalItems = 20;
+        for (let i = 0; i < totalItems; i++) {
+            const data = socialData[i % socialData.length];
+            const div = document.createElement('div');
+            div.className = "social-item cursor-pointer";
+            div.style.top = `${i * 100}%`; // Initial position logic needs JS calculation below
+            div.innerHTML = `
+                <img src="${data.img}" alt="${data.title}">
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-white z-10 p-6 text-center pointer-events-none">
+                     <span class="text-xs font-bold uppercase tracking-[0.2em] text-brand-orange mb-2">Social Hub</span>
+                     <h2 class="text-3xl md:text-5xl font-heading font-black mb-2">${data.title}</h2>
+                     <p class="text-sm font-medium opacity-80">${data.handle}</p>
+                     <button class="mt-6 px-4 py-2 border border-white/30 rounded-full text-xs hover:bg-white hover:text-black transition-colors pointer-events-auto">Folgen</button>
+                </div>
+            `;
+
+            // Interaction: Navigate to Social Hub
+            div.onclick = () => { if (!isDragging) { console.log("Navigate to", data.handle); window.location.hash = "#social-hub-profile"; } };
+            agTrack.appendChild(div);
+        }
+
+        // Animation Loop
+        function updateSlider() {
+            if (!agContainer) return;
+            const containerHeight = agContainer.clientHeight;
+            itemHeight = containerHeight; // Each item takes full height
+
+            // Smooth Scroll
+            scrollY += (targetScrollY - scrollY) * 0.1;
+
+            const items = document.querySelectorAll('.social-item');
+            items.forEach((item, index) => {
+                // Infinite Loop Logic
+                const totalHeight = items.length * itemHeight;
+                let yPos = index * itemHeight + scrollY;
+
+                // Wrap around
+                const buffer = itemHeight * 2;
+                if (yPos > totalHeight - buffer) yPos -= totalHeight;
+                if (yPos < -buffer) yPos += totalHeight;
+
+                // Parallax Effect
+                const normalizedY = yPos % totalHeight;
+                // Simple wrapping logic specifically for visual rendering
+                // Calculate modulo position to keep items in view
+                let displayY = (index * itemHeight + scrollY) % (items.length * itemHeight);
+                if (displayY < -itemHeight) displayY += items.length * itemHeight;
+
+                item.style.transform = `translateY(${displayY}px)`;
+            });
+
+            // Auto Scroll
+            if (!isDragging) {
+                targetScrollY -= 0.5; // Auto scroll speed
+            }
+
+            requestAnimationFrame(updateSlider);
+        }
+
+        // Event Listeners for Dragging
+        agContainer.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startY = e.clientY;
+            startScrollY = targetScrollY;
+        });
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const delta = e.clientY - startY;
+            targetScrollY = startScrollY + delta * 1.5;
+        });
+        window.addEventListener('mouseup', () => { isDragging = false; });
+
+        // Wheel
+        agContainer.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            targetScrollY -= e.deltaY;
+        });
+
+        requestAnimationFrame(updateSlider);
+
+    </script>
+</body>
+
+</html>
