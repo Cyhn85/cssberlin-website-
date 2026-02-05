@@ -7,7 +7,7 @@
 // ============================================
 // GOOGLE OAUTH CONFIG
 // ============================================
-const GOOGLE_CLIENT_ID = '929023339787-i1qnd6b42hbcap42b1pjsbi1s2uslhe0.apps.googleusercontent.com';
+const GOOGLE_CLIENT_ID = '929023339787-a41l031f4i5tph481gnug7gejrmn76ue.apps.googleusercontent.com';
 
 // Production ve localhost için redirect URIs
 const REDIRECT_URI = window.location.hostname === 'localhost'
