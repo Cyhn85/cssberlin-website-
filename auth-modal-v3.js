@@ -287,8 +287,12 @@
             }
 
             showMessage('Erfolgreich angemeldet!', 'success');
-            localStorage.setItem('cssberlin_user', JSON.stringify(data.user || data));
-            localStorage.setItem('cssberlin_token', data.access_token);
+
+            // Use CSSAuth handler for token management
+            if (window.CSSAuth) {
+                window.CSSAuth.saveToken(data.access_token);
+                window.CSSAuth.saveUser(data.user || data);
+            }
 
             setTimeout(() => {
                 close();
@@ -349,8 +353,12 @@
             }
 
             showMessage('Registrierung erfolgreich!', 'success');
-            localStorage.setItem('cssberlin_user', JSON.stringify(data.user || data));
-            localStorage.setItem('cssberlin_token', data.access_token);
+
+            // Use CSSAuth handler for token management
+            if (window.CSSAuth) {
+                window.CSSAuth.saveToken(data.access_token);
+                window.CSSAuth.saveUser(data.user || data);
+            }
 
             setTimeout(() => {
                 close();
