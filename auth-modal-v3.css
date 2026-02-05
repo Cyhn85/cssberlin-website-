@@ -44,33 +44,6 @@
     }
 }
 
-/* Close Button */
-.auth-modal-v3-close {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: #f3f4f6;
-    border: none;
-    color: #6b7280;
-    font-size: 20px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    z-index: 10;
-    line-height: 1;
-}
-
-.auth-modal-v3-close:hover {
-    background: #e5e7eb;
-    color: #111827;
-    transform: rotate(90deg);
-}
-
 /* Header - MINIMAL */
 .auth-modal-v3-header {
     padding: 48px 32px 24px;
