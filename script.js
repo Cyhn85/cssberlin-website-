@@ -7,7 +7,7 @@
 // ENVIRONMENT CONFIGURATION
 // ============================================
 // Auto-detect backend API URL based on hostname
-const API_BASE_URL = (function() {
+const API_BASE_URL = (function () {
     const hostname = window.location.hostname;
 
     // Local development - direct backend connection
@@ -668,7 +668,7 @@ async function toggleFavoriteUI(productId, button, productData) {
 // ============================================
 // INITIALIZE APP
 // ============================================
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Check if page has a specific category filter
     const category = window.pageCategory || null;
     initProducts(category);
@@ -1028,7 +1028,7 @@ async function initProducts(category = null) {
 function attachProductEventListeners() {
     // Product card click - go to product detail
     document.querySelectorAll('.product-card, .product-card-v3').forEach(card => {
-        card.addEventListener('click', function(e) {
+        card.addEventListener('click', function (e) {
             // Don't navigate if clicking on buttons
             if (e.target.closest('.wishlist-btn, .buy-btn, .negotiate-btn, .quick-view-btn, .add-to-cart-btn')) {
                 return;
@@ -1040,7 +1040,7 @@ function attachProductEventListeners() {
 
     // Quick View buttons
     document.querySelectorAll('.quick-view-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
+        btn.addEventListener('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
             const productId = parseInt(this.dataset.productId);
@@ -1050,7 +1050,7 @@ function attachProductEventListeners() {
 
     // Wishlist buttons
     document.querySelectorAll('.wishlist-btn').forEach(btn => {
-        btn.addEventListener('click', async function(e) {
+        btn.addEventListener('click', async function (e) {
             e.preventDefault();
             e.stopPropagation();
             const productId = parseInt(this.dataset.productId);
@@ -1076,7 +1076,7 @@ function attachProductEventListeners() {
 
     // Add to Cart buttons
     document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
+        btn.addEventListener('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
             const productId = parseInt(this.dataset.productId);
@@ -1086,7 +1086,7 @@ function attachProductEventListeners() {
 
     // Buy buttons
     document.querySelectorAll('.buy-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
+        btn.addEventListener('click', function (e) {
             e.preventDefault();
             const productId = parseInt(this.dataset.productId);
             handleBuyClick(productId);
@@ -1095,7 +1095,7 @@ function attachProductEventListeners() {
 
     // Negotiate buttons
     document.querySelectorAll('.negotiate-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
+        btn.addEventListener('click', function (e) {
             e.preventDefault();
             const productId = parseInt(this.dataset.productId);
             handleNegotiateClick(productId);
@@ -1268,7 +1268,7 @@ function initNewsSlider() {
 
     // Add click handlers to all news items (original + clones)
     document.querySelectorAll('.news-item').forEach(item => {
-        item.addEventListener('click', function() {
+        item.addEventListener('click', function () {
             const link = this.dataset.link;
             if (link) {
                 window.location.href = link;
@@ -1293,7 +1293,7 @@ function initFooterNewsSlider() {
 
     // Add click handlers to all news items (original + clones)
     document.querySelectorAll('.footer-news-item').forEach(item => {
-        item.addEventListener('click', function() {
+        item.addEventListener('click', function () {
             const link = this.dataset.link;
             if (link) {
                 window.location.href = link;
@@ -1312,7 +1312,7 @@ function initLoadMore() {
     // Ensure correct initial visibility (after initProducts runs)
     updateLoadMoreVisibility();
 
-    loadMoreBtn.addEventListener('click', async function() {
+    loadMoreBtn.addEventListener('click', async function () {
         const productsGrid = document.getElementById('productsGrid');
         if (!productsGrid) return;
         if (!canLoadMore) {
@@ -1529,7 +1529,7 @@ function initMegaMenus() {
             const btn = item.querySelector('.category-btn');
             const megaMenu = item.querySelector('.mega-menu');
 
-            btn.addEventListener('click', function(e) {
+            btn.addEventListener('click', function (e) {
                 e.stopPropagation();
 
                 // Close all other mega menus
@@ -1545,7 +1545,7 @@ function initMegaMenus() {
         });
 
         // Close mega menu when clicking outside
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             if (!e.target.closest('.category-item')) {
                 categoryItems.forEach(item => {
                     item.classList.remove('active');
@@ -1565,7 +1565,7 @@ function initSearch() {
     if (!searchInput || !searchClearBtn) return;
 
     // Show/hide clear button
-    searchInput.addEventListener('input', function() {
+    searchInput.addEventListener('input', function () {
         if (this.value.length > 0) {
             searchClearBtn.style.display = 'flex';
         } else {
@@ -1577,7 +1577,7 @@ function initSearch() {
     });
 
     // Clear search
-    searchClearBtn.addEventListener('click', function() {
+    searchClearBtn.addEventListener('click', function () {
         searchInput.value = '';
         searchClearBtn.style.display = 'none';
         performSearch('');
@@ -1585,7 +1585,7 @@ function initSearch() {
     });
 
     // Search on Enter key
-    searchInput.addEventListener('keydown', function(e) {
+    searchInput.addEventListener('keydown', function (e) {
         if (e.key === 'Enter') {
             performSearch(this.value);
         }
@@ -1780,18 +1780,18 @@ function initHeroSlider() {
     }
 
     // Event listeners
-    document.getElementById('heroNextBtn').addEventListener('click', function(e) {
+    document.getElementById('heroNextBtn').addEventListener('click', function (e) {
         e.stopPropagation();
         next();
         startAutoplay(); // reset timer on manual click
     });
-    document.getElementById('heroPrevBtn').addEventListener('click', function(e) {
+    document.getElementById('heroPrevBtn').addEventListener('click', function (e) {
         e.stopPropagation();
         prev();
         startAutoplay();
     });
     dots.forEach(dot => {
-        dot.addEventListener('click', function(e) {
+        dot.addEventListener('click', function (e) {
             e.stopPropagation();
             goTo(parseInt(this.dataset.dot));
             startAutoplay();
@@ -1811,11 +1811,11 @@ function initSocialHub() {
     if (!container) return;
 
     var SOCIAL_DATA = [
-        { title: "Instagram",   image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1974&auto=format&fit=crop", category: "Visual Stories", handle: "@css_berlin" },
-        { title: "LinkedIn",    image: "https://images.unsplash.com/photo-1560179707-f14e90ef3dab?q=80&w=1974&auto=format&fit=crop", category: "Corporate",      handle: "CSS Berlin GmbH" },
-        { title: "TikTok",      image: "https://images.unsplash.com/photo-1520466809213-7b9a56adcd45?q=80&w=1887&auto=format&fit=crop", category: "Viral Trends",   handle: "@css_watch" },
-        { title: "Twitter / X", image: "https://images.unsplash.com/photo-1611605698335-8b1569810432?q=80&w=1974&auto=format&fit=crop", category: "Updates",        handle: "@css_support" },
-        { title: "Pinterest",   image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop", category: "Moodboards",     handle: "CSS_Official" }
+        { title: "Instagram", image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1974&auto=format&fit=crop", category: "Visual Stories", handle: "@css_berlin" },
+        { title: "LinkedIn", image: "https://images.unsplash.com/photo-1560179707-f14e90ef3dab?q=80&w=1974&auto=format&fit=crop", category: "Corporate", handle: "CSS Berlin GmbH" },
+        { title: "TikTok", image: "https://images.unsplash.com/photo-1520466809213-7b9a56adcd45?q=80&w=1887&auto=format&fit=crop", category: "Viral Trends", handle: "@css_watch" },
+        { title: "Twitter / X", image: "https://images.unsplash.com/photo-1611605698335-8b1569810432?q=80&w=1974&auto=format&fit=crop", category: "Updates", handle: "@css_support" },
+        { title: "Pinterest", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop", category: "Moodboards", handle: "CSS_Official" }
     ];
 
     var LERP = 0.08, BUFFER = 2, MAX_VEL = 100, SNAP_DUR = 700;
@@ -1856,10 +1856,10 @@ function initSocialHub() {
         el.innerHTML =
             '<img src="' + d.image + '" alt="' + d.title + '" loading="lazy" class="social-hub-slide-img">' +
             '<div class="social-hub-slide-content">' +
-              '<span class="social-hub-slide-cat">' + d.category + '</span>' +
-              '<h3 class="social-hub-slide-title">' + d.title + '</h3>' +
-              '<p class="social-hub-slide-handle">' + d.handle + '</p>' +
-              '<button class="social-hub-slide-follow">Folgen</button>' +
+            '<span class="social-hub-slide-cat">' + d.category + '</span>' +
+            '<h3 class="social-hub-slide-title">' + d.title + '</h3>' +
+            '<p class="social-hub-slide-handle">' + d.handle + '</p>' +
+            '<button class="social-hub-slide-follow">Folgen</button>' +
             '</div>';
         viewport.appendChild(el);
         pool[idx] = el;
@@ -1871,7 +1871,7 @@ function initSocialHub() {
         var ci = Math.round(-targetY / itemH);
         var min = ci - BUFFER, max = ci + BUFFER;
         // Remove out-of-range
-        Object.keys(pool).forEach(function(k) {
+        Object.keys(pool).forEach(function (k) {
             var i = parseInt(k);
             if (i < min || i > max) removeSlide(i);
         });
@@ -1894,7 +1894,7 @@ function initSocialHub() {
 
     // --- RAF loop ---
     function updatePositions() {
-        Object.keys(pool).forEach(function(k) {
+        Object.keys(pool).forEach(function (k) {
             var idx = parseInt(k);
             var el = pool[idx];
             var y = idx * itemH + currentY;
@@ -1950,10 +1950,10 @@ function initSocialHub() {
     function onTouchEnd() { isDragging = false; }
 
     // Bind events to container
-    container.addEventListener('wheel',      onWheel,      { passive: false });
+    container.addEventListener('wheel', onWheel, { passive: false });
     container.addEventListener('touchstart', onTouchStart, { passive: false });
-    container.addEventListener('touchmove',  onTouchMove,  { passive: false });
-    container.addEventListener('touchend',   onTouchEnd);
+    container.addEventListener('touchmove', onTouchMove, { passive: false });
+    container.addEventListener('touchend', onTouchEnd);
 
     function onResize() { itemH = container.clientHeight; }
     window.addEventListener('resize', onResize);
@@ -2015,7 +2015,7 @@ function initFeaturedCollection() {
 document.addEventListener('DOMContentLoaded', () => {
     initFeaturedCollection();
     initHeroSlider();
-    initSocialHub();
+    // initSocialHub(); -- Replaced by liquid-gradient.js (initSocialHubLiquid)
     initNewsSlider();
     initFooterNewsSlider();
 });

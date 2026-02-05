@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,9 @@
     <link rel="stylesheet" href="header-v2.css">
     <link rel="stylesheet" href="footer-kleinanzeigen.css">
     <link rel="stylesheet" href="toast.css">
+    <link rel="stylesheet" href="liquid-gradient.css">
+    <!-- Three.js for LiquidGradient animation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         /* ============================================
            2026 Kapsamlı Geliştirme Planı - Inline Stiller
@@ -161,358 +165,408 @@
             font-size: 12px;
         }
 
-/* ============================================
+        /* ============================================
    Features Grid Section Styling
    ============================================ */
-.features-grid {
-    background: var(--bg-secondary);
-    padding: var(--spacing-3xl) var(--spacing-xl);
-}
+        .features-grid {
+            background: var(--bg-secondary);
+            padding: var(--spacing-3xl) var(--spacing-xl);
+        }
 
-.features-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--spacing-xl);
-    max-width: 1400px;
-    margin: 0 auto;
-}
+        .features-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-xl);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
 
-.feature-item {
-    background: var(--bg-primary);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
-    padding: var(--spacing-xl);
-    text-align: center;
-    transition: all var(--transition-hover);
-}
+        .feature-item {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            text-align: center;
+            transition: all var(--transition-hover);
+        }
 
-.feature-item:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-lg);
-    border-color: var(--primary-green);
-}
+        .feature-item:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-green);
+        }
 
-.feature-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 64px;
-    height: 64px;
-    border-radius: var(--radius-full);
-    background: var(--accent-green);
-    color: var(--primary-green);
-    margin-bottom: var(--spacing-lg);
-    transition: all var(--transition-hover);
-}
+        .feature-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 64px;
+            height: 64px;
+            border-radius: var(--radius-full);
+            background: var(--accent-green);
+            color: var(--primary-green);
+            margin-bottom: var(--spacing-lg);
+            transition: all var(--transition-hover);
+        }
 
-.feature-item:hover .feature-icon {
-    background: var(--primary-green);
-    color: var(--text-white);
-    transform: scale(1.1) rotate(10deg);
-}
+        .feature-item:hover .feature-icon {
+            background: var(--primary-green);
+            color: var(--text-white);
+            transform: scale(1.1) rotate(10deg);
+        }
 
-.feature-icon svg {
-    width: 32px;
-    height: 32px;
-}
+        .feature-icon svg {
+            width: 32px;
+            height: 32px;
+        }
 
-.feature-title {
-    font-size: 20px;
-    font-weight: var(--font-weight-bold);
-    color: var(--text-primary);
-    margin-bottom: var(--spacing-sm);
-}
+        .feature-title {
+            font-size: 20px;
+            font-weight: var(--font-weight-bold);
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-sm);
+        }
 
-.feature-text {
-    font-size: 14px;
-    color: var(--text-secondary);
-    line-height: var(--line-height-normal);
-}
+        .feature-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: var(--line-height-normal);
+        }
     </style>
 </head>
+
 <body class="page-wrapper">
     <!-- Main Content Wrapper for Flex Layout -->
     <main class="page-main">
-    <!-- News Banner at Top -->
-    <div class="news-banner-v2">
-        <div class="news-slider" id="newsSlider">
-            <div class="news-item" data-link="co2-impact.html">
-                <span>🌍 248.5 Tonnen CO₂ gespart</span>
-            </div>
-            <div class="news-item" data-link="campaign.html">
-                <span>📦 2 kaufen = 3. Versand GRATIS</span>
-            </div>
-            <div class="news-item" data-link="co2-impact.html">
-                <span>🏆 CO₂ Top 100 Rangliste</span>
-            </div>
-            <div class="news-item" data-link="co2-impact.html">
-                <span>🌳 8,234 Bäume gepflanzt</span>
-            </div>
-            <div class="news-item" data-link="damen.html">
-                <span>🔥 780 neue Sale-Produkte</span>
+        <!-- News Banner at Top -->
+        <div class="news-banner-v2">
+            <div class="news-slider" id="newsSlider">
+                <div class="news-item" data-link="co2-impact.html">
+                    <span>🌍 248.5 Tonnen CO₂ gespart</span>
+                </div>
+                <div class="news-item" data-link="campaign.html">
+                    <span>📦 2 kaufen = 3. Versand GRATIS</span>
+                </div>
+                <div class="news-item" data-link="co2-impact.html">
+                    <span>🏆 CO₂ Top 100 Rangliste</span>
+                </div>
+                <div class="news-item" data-link="co2-impact.html">
+                    <span>🌳 8,234 Bäume gepflanzt</span>
+                </div>
+                <div class="news-item" data-link="damen.html">
+                    <span>🔥 780 neue Sale-Produkte</span>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Modern Header V2 - Vinted/Kleinanzeigen Style -->
-    <header class="header-v2">
-        <div class="header-container-v2">
-            <!-- Mobile Menu Button -->
-            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menü öffnen">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+        <!-- Modern Header V2 - Vinted/Kleinanzeigen Style -->
+        <header class="header-v2">
+            <div class="header-container-v2">
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menü öffnen">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
 
-            <!-- Logo -->
-            <a href="index.html" class="header-logo">
-                <span class="logo-text">CSS</span>
-                <span class="logo-subtext">Berlin</span>
-            </a>
+                <!-- Logo -->
+                <a href="index.html" class="header-logo">
+                    <span class="logo-text">CSS</span>
+                    <span class="logo-subtext">Berlin</span>
+                </a>
 
-            <!-- Search Bar - Center -->
-            <div class="header-search-v2">
-                <form action="search.html" method="GET" class="search-form-v2">
-                    <div class="search-input-wrapper">
-                        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <path d="M21 21l-4.35-4.35"></path>
-                        </svg>
-                        <input type="text" name="q" id="searchInput" placeholder="Suche nach Marken, Artikeln..." autocomplete="off">
-                        <button type="button" class="search-clear" id="searchClear">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M18 6L6 18M6 6l12 12"></path>
+                <!-- Search Bar - Center -->
+                <div class="header-search-v2">
+                    <form action="search.html" method="GET" class="search-form-v2">
+                        <div class="search-input-wrapper">
+                            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="M21 21l-4.35-4.35"></path>
                             </svg>
-                        </button>
-                    </div>
-                    <button type="submit" class="search-submit-btn">
-                        <span>Suchen</span>
-                    </button>
-                </form>
-                <!-- Search Suggestions Dropdown -->
-                <div class="search-suggestions" id="searchSuggestions">
-                    <div class="suggestions-section">
-                        <span class="suggestions-title">Beliebte Suchen</span>
-                        <a href="search.html?q=Nike" class="suggestion-item">Nike</a>
-                        <a href="search.html?q=Adidas" class="suggestion-item">Adidas</a>
-                        <a href="search.html?q=Zara" class="suggestion-item">Zara</a>
-                        <a href="search.html?q=H%26M" class="suggestion-item">H&M</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Mobile Search Toggle -->
-            <button class="mobile-search-btn" id="mobileSearchBtn" aria-label="Suche">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <path d="M21 21l-4.35-4.35"></path>
-                </svg>
-            </button>
-
-            <!-- Right Actions -->
-            <div class="header-actions-v2">
-                <!-- Inserieren Button -->
-                <a href="inserieren.html" class="btn-inserieren">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <path d="M12 5v14M5 12h14"></path>
-                    </svg>
-                    <span>Inserieren</span>
-                </a>
-
-                <!-- Favorites -->
-                <a href="wunschliste.html" class="header-icon-btn" title="Favoriten">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                    </svg>
-                    <span class="icon-badge" id="wishlistCount">0</span>
-                </a>
-
-                <!-- Messages -->
-                <a href="nachrichten.html" class="header-icon-btn" title="Nachrichten">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                    <span class="icon-badge" id="messageCount">0</span>
-                </a>
-
-                <!-- Cart -->
-                <a href="warenkorb.html" class="header-icon-btn" title="Warenkorb">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="9" cy="21" r="1"></circle>
-                        <circle cx="20" cy="21" r="1"></circle>
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                    </svg>
-                    <span class="icon-badge" id="cartCount">0</span>
-                </a>
-
-                <!-- Auth Buttons (Guest) -->
-                <div class="auth-buttons" id="guestAuthButtons">
-                    <a href="login.html" class="auth-btn auth-btn-login">Anmelden</a>
-                    <a href="registrieren.html" class="auth-btn auth-btn-register">Registrieren</a>
-                </div>
-
-                <!-- User Menu (Logged In) -->
-                <div class="user-menu-wrapper" id="userMenuWrapper" style="display: none;">
-                    <button class="user-menu-btn-v2" id="userMenuBtn" onclick="toggleUserDropdown(event)">
-                        <div class="user-avatar" id="userAvatar">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="12" cy="7" r="4"></circle>
-                            </svg>
-                        </div>
-                        <span class="user-name" id="userName">Profil</span>
-                        <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </button>
-                    <!-- User Dropdown -->
-                    <div class="user-dropdown-v2" id="userDropdown">
-                        <div class="dropdown-user" id="dropdownUser">
-                            <div class="dropdown-user-info">
-                                <div class="dropdown-avatar" id="dropdownAvatar">U</div>
-                                <div class="dropdown-user-details">
-                                    <span class="dropdown-user-name" id="dropdownUserName">User</span>
-                                    <span class="dropdown-user-email" id="dropdownUserEmail">user@email.com</span>
-                                </div>
-                            </div>
-                            <div class="dropdown-divider"></div>
-                            <a href="profil.html" class="dropdown-item">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                                Mein Profil
-                            </a>
-                            <a href="meine-anzeigen.html" class="dropdown-item">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line></svg>
-                                Meine Anzeigen
-                            </a>
-                            <a href="bestellungen.html" class="dropdown-item">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line></svg>
-                                Bestellungen
-                            </a>
-                            <a href="verkaeufe.html" class="dropdown-item">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                                Verkäufe
-                            </a>
-                            <a href="einstellungen.html" class="dropdown-item">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                                Einstellungen
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <button onclick="authGate.logout()" class="dropdown-item dropdown-logout">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                                Abmelden
+                            <input type="text" name="q" id="searchInput" placeholder="Suche nach Marken, Artikeln..."
+                                autocomplete="off">
+                            <button type="button" class="search-clear" id="searchClear">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M18 6L6 18M6 6l12 12"></path>
+                                </svg>
                             </button>
                         </div>
+                        <button type="submit" class="search-submit-btn">
+                            <span>Suchen</span>
+                        </button>
+                    </form>
+                    <!-- Search Suggestions Dropdown -->
+                    <div class="search-suggestions" id="searchSuggestions">
+                        <div class="suggestions-section">
+                            <span class="suggestions-title">Beliebte Suchen</span>
+                            <a href="search.html?q=Nike" class="suggestion-item">Nike</a>
+                            <a href="search.html?q=Adidas" class="suggestion-item">Adidas</a>
+                            <a href="search.html?q=Zara" class="suggestion-item">Zara</a>
+                            <a href="search.html?q=H%26M" class="suggestion-item">H&M</a>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Language Selector -->
-                <div class="lang-selector-v2">
-                    <button onclick="setLanguage('de')" id="lang-de" class="lang-btn-v2 active">DE</button>
-                    <button onclick="setLanguage('en')" id="lang-en" class="lang-btn-v2">EN</button>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Mobile Search Overlay -->
-    <div class="mobile-search-overlay" id="mobileSearchOverlay">
-        <div class="mobile-search-container">
-            <form action="search.html" method="GET" class="mobile-search-form">
-                <button type="button" class="mobile-search-back" id="mobileSearchBack">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M19 12H5M12 19l-7-7 7-7"></path>
-                    </svg>
-                </button>
-                <input type="text" name="q" placeholder="Suche..." autofocus>
-                <button type="submit" class="mobile-search-submit">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <!-- Mobile Search Toggle -->
+                <button class="mobile-search-btn" id="mobileSearchBtn" aria-label="Suche">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="11" cy="11" r="8"></circle>
                         <path d="M21 21l-4.35-4.35"></path>
                     </svg>
                 </button>
-            </form>
-        </div>
-    </div>
 
-    <!-- Mobile Menu Overlay -->
-    <div class="mobile-menu-overlay" id="mobileMenuOverlay">
-        <div class="mobile-menu-panel">
-            <div class="mobile-menu-header">
-                <span class="mobile-menu-title">Menü</span>
-                <button class="mobile-menu-close" id="mobileMenuClose">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M18 6L6 18M6 6l12 12"></path>
-                    </svg>
-                </button>
+                <!-- Right Actions -->
+                <div class="header-actions-v2">
+                    <!-- Inserieren Button -->
+                    <a href="inserieren.html" class="btn-inserieren">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5">
+                            <path d="M12 5v14M5 12h14"></path>
+                        </svg>
+                        <span>Inserieren</span>
+                    </a>
+
+                    <!-- Favorites -->
+                    <a href="wunschliste.html" class="header-icon-btn" title="Favoriten">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                            </path>
+                        </svg>
+                        <span class="icon-badge" id="wishlistCount">0</span>
+                    </a>
+
+                    <!-- Messages -->
+                    <a href="nachrichten.html" class="header-icon-btn" title="Nachrichten">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        <span class="icon-badge" id="messageCount">0</span>
+                    </a>
+
+                    <!-- Cart -->
+                    <a href="warenkorb.html" class="header-icon-btn" title="Warenkorb">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                        <span class="icon-badge" id="cartCount">0</span>
+                    </a>
+
+                    <!-- Auth Buttons (Guest) -->
+                    <div class="auth-buttons" id="guestAuthButtons">
+                        <a href="login.html" class="auth-btn auth-btn-login">Anmelden</a>
+                        <a href="registrieren.html" class="auth-btn auth-btn-register">Registrieren</a>
+                    </div>
+
+                    <!-- User Menu (Logged In) -->
+                    <div class="user-menu-wrapper" id="userMenuWrapper" style="display: none;">
+                        <button class="user-menu-btn-v2" id="userMenuBtn" onclick="toggleUserDropdown(event)">
+                            <div class="user-avatar" id="userAvatar">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                            </div>
+                            <span class="user-name" id="userName">Profil</span>
+                            <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <!-- User Dropdown -->
+                        <div class="user-dropdown-v2" id="userDropdown">
+                            <div class="dropdown-user" id="dropdownUser">
+                                <div class="dropdown-user-info">
+                                    <div class="dropdown-avatar" id="dropdownAvatar">U</div>
+                                    <div class="dropdown-user-details">
+                                        <span class="dropdown-user-name" id="dropdownUserName">User</span>
+                                        <span class="dropdown-user-email" id="dropdownUserEmail">user@email.com</span>
+                                    </div>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <a href="profil.html" class="dropdown-item">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="12" cy="7" r="4"></circle>
+                                    </svg>
+                                    Mein Profil
+                                </a>
+                                <a href="meine-anzeigen.html" class="dropdown-item">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="3" y1="9" x2="21" y2="9"></line>
+                                    </svg>
+                                    Meine Anzeigen
+                                </a>
+                                <a href="bestellungen.html" class="dropdown-item">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                                    </svg>
+                                    Bestellungen
+                                </a>
+                                <a href="verkaeufe.html" class="dropdown-item">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                    </svg>
+                                    Verkäufe
+                                </a>
+                                <a href="einstellungen.html" class="dropdown-item">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                        <path
+                                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z">
+                                        </path>
+                                    </svg>
+                                    Einstellungen
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <button onclick="authGate.logout()" class="dropdown-item dropdown-logout">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                        <polyline points="16 17 21 12 16 7"></polyline>
+                                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                                    </svg>
+                                    Abmelden
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Language Selector -->
+                    <div class="lang-selector-v2">
+                        <button onclick="setLanguage('de')" id="lang-de" class="lang-btn-v2 active">DE</button>
+                        <button onclick="setLanguage('en')" id="lang-en" class="lang-btn-v2">EN</button>
+                    </div>
+                </div>
             </div>
-            <nav class="mobile-menu-nav">
-                <a href="damen.html" class="mobile-menu-item">
-                    <span>👗</span> Damen
-                </a>
-                <a href="herren.html" class="mobile-menu-item">
-                    <span>👔</span> Herren
-                </a>
-                <a href="kinder.html" class="mobile-menu-item">
-                    <span>👶</span> Kinder
-                </a>
-                <div class="mobile-menu-divider"></div>
-                <a href="co2-impact.html" class="mobile-menu-item">
-                    <span>🌍</span> CO₂ Impact
-                </a>
-                <a href="ueber-uns.html" class="mobile-menu-item">
-                    <span>ℹ️</span> Über uns
-                </a>
-                <a href="hilfe.html" class="mobile-menu-item">
-                    <span>❓</span> Hilfe
-                </a>
-            </nav>
-        </div>
-    </div>
+        </header>
 
-    <!-- Split Hero: Social Hub (left) + Campaign Slider (right) -->
-    <section class="split-hero">
-        <!-- Left panel: Social Hub — populated by ArgentLoopInfiniteSlider -->
-        <div class="split-hero-left" id="socialHubContainer">
-            <div style="width:100%;height:100%;background:#111;display:flex;align-items:center;justify-content:center;position:relative;">
-                <span style="position:absolute;top:14px;left:16px;z-index:2;display:flex;align-items:center;gap:6px;background:rgba(0,0,0,0.5);backdrop-filter:blur(6px);padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,0.1);">
-                    <span style="width:8px;height:8px;border-radius:50%;background:#4CAF50;animation:pulse 1.8s infinite;"></span>
-                    <span style="font-size:9px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:0.15em;">Social Hub</span>
-                </span>
-                <span style="color:rgba(255,255,255,0.25);font-size:13px;font-weight:600;">Loading…</span>
+        <!-- Mobile Search Overlay -->
+        <div class="mobile-search-overlay" id="mobileSearchOverlay">
+            <div class="mobile-search-container">
+                <form action="search.html" method="GET" class="mobile-search-form">
+                    <button type="button" class="mobile-search-back" id="mobileSearchBack">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    <input type="text" name="q" placeholder="Suche..." autofocus>
+                    <button type="submit" class="mobile-search-submit">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="M21 21l-4.35-4.35"></path>
+                        </svg>
+                    </button>
+                </form>
             </div>
         </div>
-        <!-- Right panel: Campaign HeroSlider -->
-        <div class="split-hero-right" id="heroSliderContainer"></div>
-    </section>
 
-    <!-- Featured Products Section -->
-    <section class="products-section">
-        <div class="section-header" style="display:flex; justify-content:space-between; align-items:flex-end; border-bottom:1px solid #e5e7eb; padding-bottom:20px; margin-bottom:28px; gap:12px;">
-          <div>
-            <span style="display:block; font-size:11px; font-weight:800; color:#FF8C42; text-transform:uppercase; letter-spacing:0.15em; margin-bottom:4px;">Aktuelle Kollektion</span>
-            <h2 style="margin:0; font-size:28px; font-weight:800; color:#111;">Frisch Eingetroffen</h2>
-          </div>
-          <div style="display:flex; gap:8px;">
-            <button class="section-filter-pill">Alle Filter</button>
-            <button class="section-filter-pill">Sortieren</button>
-          </div>
+        <!-- Mobile Menu Overlay -->
+        <div class="mobile-menu-overlay" id="mobileMenuOverlay">
+            <div class="mobile-menu-panel">
+                <div class="mobile-menu-header">
+                    <span class="mobile-menu-title">Menü</span>
+                    <button class="mobile-menu-close" id="mobileMenuClose">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M18 6L6 18M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <nav class="mobile-menu-nav">
+                    <a href="damen.html" class="mobile-menu-item">
+                        <span>👗</span> Damen
+                    </a>
+                    <a href="herren.html" class="mobile-menu-item">
+                        <span>👔</span> Herren
+                    </a>
+                    <a href="kinder.html" class="mobile-menu-item">
+                        <span>👶</span> Kinder
+                    </a>
+                    <div class="mobile-menu-divider"></div>
+                    <a href="co2-impact.html" class="mobile-menu-item">
+                        <span>🌍</span> CO₂ Impact
+                    </a>
+                    <a href="ueber-uns.html" class="mobile-menu-item">
+                        <span>ℹ️</span> Über uns
+                    </a>
+                    <a href="hilfe.html" class="mobile-menu-item">
+                        <span>❓</span> Hilfe
+                    </a>
+                </nav>
+            </div>
         </div>
 
-        <div class="products-grid" id="featuredProductsGrid">
-            <!-- Featured products will be generated by JavaScript -->
-        </div>
-    </section>
+        <!-- Split Hero: Social Hub (left) + Campaign Slider (right) -->
+        <section class="split-hero">
+            <!-- Left panel: Social Hub — populated by ArgentLoopInfiniteSlider -->
+            <div class="split-hero-left" id="socialHubContainer">
+                <div
+                    style="width:100%;height:100%;background:#111;display:flex;align-items:center;justify-content:center;position:relative;">
+                    <span
+                        style="position:absolute;top:14px;left:16px;z-index:2;display:flex;align-items:center;gap:6px;background:rgba(0,0,0,0.5);backdrop-filter:blur(6px);padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,0.1);">
+                        <span
+                            style="width:8px;height:8px;border-radius:50%;background:#4CAF50;animation:pulse 1.8s infinite;"></span>
+                        <span
+                            style="font-size:9px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:0.15em;">Social
+                            Hub</span>
+                    </span>
+                    <span style="color:rgba(255,255,255,0.25);font-size:13px;font-weight:600;">Loading…</span>
+                </div>
+            </div>
+            <!-- Right panel: Campaign HeroSlider -->
+            <div class="split-hero-right" id="heroSliderContainer"></div>
+        </section>
 
-    <!-- Recommendations Section -->
-    <section class="products-section">
-        <div class="section-header">
-            <h2 data-i18n="products.recommendations">Für dich empfohlen</h2>
-        </div>
+        <!-- Featured Products Section -->
+        <section class="products-section">
+            <div class="section-header"
+                style="display:flex; justify-content:space-between; align-items:flex-end; border-bottom:1px solid #e5e7eb; padding-bottom:20px; margin-bottom:28px; gap:12px;">
+                <div>
+                    <span
+                        style="display:block; font-size:11px; font-weight:800; color:#FF8C42; text-transform:uppercase; letter-spacing:0.15em; margin-bottom:4px;">Aktuelle
+                        Kollektion</span>
+                    <h2 style="margin:0; font-size:28px; font-weight:800; color:#111;">Frisch Eingetroffen</h2>
+                </div>
+                <div style="display:flex; gap:8px;">
+                    <button class="section-filter-pill">Alle Filter</button>
+                    <button class="section-filter-pill">Sortieren</button>
+                </div>
+            </div>
 
-        <div class="products-grid" id="recommendationsGrid">
-            <!-- Recommendations will be generated by JavaScript -->
-        </div>
-    </section>
+            <div class="products-grid" id="featuredProductsGrid">
+                <!-- Featured products will be generated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Recommendations Section -->
+        <section class="products-section">
+            <div class="section-header">
+                <h2 data-i18n="products.recommendations">Für dich empfohlen</h2>
+            </div>
+
+            <div class="products-grid" id="recommendationsGrid">
+                <!-- Recommendations will be generated by JavaScript -->
+            </div>
+        </section>
     </main>
     <!-- End of Main Content -->
 
@@ -522,7 +576,8 @@
         <div class="footer-news-banner" style="background: #2D5016; padding: 12px 0;">
             <div class="footer-news-slider" id="footerNewsSlider">
                 <div class="footer-news-item" data-link="co2-impact.html">
-                    <span style="color: white;">🌍 248.5 Tonnen CO₂ gespart - Jeder Kauf zählt für unseren Planeten!</span>
+                    <span style="color: white;">🌍 248.5 Tonnen CO₂ gespart - Jeder Kauf zählt für unseren
+                        Planeten!</span>
                 </div>
                 <div class="footer-news-item" data-link="campaign.html">
                     <span style="color: white;">📦 2 Produkte kaufen, 3. Produkt Versand GRATIS!</span>
@@ -541,34 +596,52 @@
 
         <!-- Footer Content -->
         <div style="max-width: 1400px; margin: 0 auto; padding: 24px 32px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
                 <!-- Social Media Icons -->
                 <div style="display: flex; gap: 16px; align-items: center;">
-                    <a href="https://instagram.com/cssberlin" target="_blank" title="Instagram" style="color: white; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 8px; transition: background 0.3s;">
+                    <a href="https://instagram.com/cssberlin" target="_blank" title="Instagram"
+                        style="color: white; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 8px; transition: background 0.3s;">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            <path
+                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
                         </svg>
                     </a>
-                    <a href="https://tiktok.com/@cssberlin" target="_blank" title="TikTok" style="color: white; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 8px; transition: background 0.3s;">
+                    <a href="https://tiktok.com/@cssberlin" target="_blank" title="TikTok"
+                        style="color: white; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 8px; transition: background 0.3s;">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-                            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                            <path
+                                d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
                         </svg>
                     </a>
-                    <a href="https://youtube.com/@cssberlin" target="_blank" title="YouTube" style="color: white; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 8px; transition: background 0.3s;">
+                    <a href="https://youtube.com/@cssberlin" target="_blank" title="YouTube"
+                        style="color: white; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 8px; transition: background 0.3s;">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                            <path
+                                d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
                         </svg>
                     </a>
                 </div>
 
                 <!-- Legal Links (Zorunlu Linkler) -->
                 <nav style="display: flex; gap: 24px; flex-wrap: wrap; align-items: center;">
-                    <a href="ueber-uns.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;" data-i18n="footer.ueber_uns">Über uns</a>
-                    <a href="kontakt.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;" data-i18n="footer.kontakt">Kontakt</a>
-                    <a href="agb.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;" data-i18n="footer.agb">AGB</a>
-                    <a href="datenschutz.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;" data-i18n="footer.datenschutz">Datenschutz</a>
-                    <a href="widerrufsrecht.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;" data-i18n="footer.widerrufsrecht">Widerrufsrecht</a>
-                    <a href="impressum.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;" data-i18n="footer.impressum">Impressum</a>
+                    <a href="ueber-uns.html"
+                        style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;"
+                        data-i18n="footer.ueber_uns">Über uns</a>
+                    <a href="kontakt.html"
+                        style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;"
+                        data-i18n="footer.kontakt">Kontakt</a>
+                    <a href="agb.html" style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;"
+                        data-i18n="footer.agb">AGB</a>
+                    <a href="datenschutz.html"
+                        style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;"
+                        data-i18n="footer.datenschutz">Datenschutz</a>
+                    <a href="widerrufsrecht.html"
+                        style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;"
+                        data-i18n="footer.widerrufsrecht">Widerrufsrecht</a>
+                    <a href="impressum.html"
+                        style="color: white; text-decoration: none; font-size: 14px; font-weight: 500;"
+                        data-i18n="footer.impressum">Impressum</a>
                 </nav>
 
                 <!-- Copyright -->
@@ -603,7 +676,9 @@
             </a>
             <a href="wunschliste.html" class="mobile-nav-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    <path
+                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                    </path>
                 </svg>
                 <span>Favoriten</span>
                 <span class="nav-badge" id="mobileWishlistCount"></span>
@@ -634,12 +709,12 @@
     <!-- API Configuration (MUST load first) -->
     <script src="api-config.js"></script>
     <script src="api-client.js"></script>
-    <script src="email-service.js"></script>  <!-- Email service for magic links -->
-    <script src="auth-gate.js"></script>  <!-- Login gate system -->
-    <script src="auth-guard.js"></script>  <!-- Authorization guard -->
-    <script src="favorites.js"></script>  <!-- Favorites system -->
-    <script src="financial-system.js"></script>  <!-- 1€ Escrow, Offers, Anti-Bypass -->
-    <script src="success-animations.js"></script>  <!-- El Sikisma + CO2 Yapraklar -->
+    <script src="email-service.js"></script> <!-- Email service for magic links -->
+    <script src="auth-gate.js"></script> <!-- Login gate system -->
+    <script src="auth-guard.js"></script> <!-- Authorization guard -->
+    <script src="favorites.js"></script> <!-- Favorites system -->
+    <script src="financial-system.js"></script> <!-- 1€ Escrow, Offers, Anti-Bypass -->
+    <script src="success-animations.js"></script> <!-- El Sikisma + CO2 Yapraklar -->
 
     <script src="i18n.js"></script>
     <script src="footer.js"></script>
@@ -648,7 +723,7 @@
 
     <script>
         // Initialize Google Sign-In for modal
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             if (typeof google !== 'undefined' && google.accounts) {
                 google.accounts.id.initialize({
                     client_id: '929023339787-a41l031f4i5tph481gnug7gejrmn76ue.apps.googleusercontent.com',
@@ -707,8 +782,8 @@
 
                 // Update user info in dropdown
                 const userName = authGate.currentUser.firstName ||
-                                 authGate.currentUser.username ||
-                                 authGate.currentUser.email.split('@')[0];
+                    authGate.currentUser.username ||
+                    authGate.currentUser.email.split('@')[0];
 
                 const userNameEl = document.getElementById('userName');
                 const dropdownUserName = document.getElementById('dropdownUserName');
@@ -749,8 +824,8 @@
 
                 // Get user display name
                 const userName = authGate.currentUser.firstName ||
-                                 authGate.currentUser.username ||
-                                 authGate.currentUser.email.split('@')[0];
+                    authGate.currentUser.username ||
+                    authGate.currentUser.email.split('@')[0];
 
                 // Create user menu with dropdown
                 const userMenu = document.createElement('div');
@@ -759,12 +834,12 @@
                 userMenu.innerHTML = `
                     <button class="user-menu-btn header-btn" onclick="toggleUserMenu()" style="padding: 10px 18px; background: #2D5016; color: white; border-radius: 8px; display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; border: none; cursor: pointer; transition: all 0.3s ease;">
                         ${authGate.currentUser.picture ?
-                            `<img src="${authGate.currentUser.picture}" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover;">` :
-                            `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        `<img src="${authGate.currentUser.picture}" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover;">` :
+                        `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
                                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                 <circle cx="12" cy="7" r="4"></circle>
                             </svg>`
-                        }
+                    }
                         <span>${userName}</span>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
                             <polyline points="6 9 12 15 18 9"></polyline>
@@ -838,11 +913,11 @@
 
         // Legacy toggle for old menu structure
         function toggleUserMenu() {
-            toggleUserDropdown({ stopPropagation: () => {} });
+            toggleUserDropdown({ stopPropagation: () => { } });
         }
 
         // Close dropdown when clicking outside
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             const userMenuWrapper = document.getElementById('userMenuWrapper');
             const userMenuContainer = document.querySelector('.user-menu-container');
             const dropdown = document.getElementById('userDropdown');
@@ -859,7 +934,7 @@
         });
 
         // ESC tusu ile kapat
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
                 const dropdown = document.getElementById('userDropdown');
                 if (dropdown) {
@@ -876,7 +951,8 @@
         <div class="cookie-modal">
             <div class="cookie-header">
                 <h2>🍪 Wir respektieren deine Privatsphäre</h2>
-                <p>Wir und unsere Partner verwenden Cookies und ähnliche Technologien, um dir ein optimales Erlebnis zu bieten.</p>
+                <p>Wir und unsere Partner verwenden Cookies und ähnliche Technologien, um dir ein optimales Erlebnis zu
+                    bieten.</p>
             </div>
             <div class="cookie-options">
                 <div class="cookie-option">
@@ -884,7 +960,8 @@
                         <span class="cookie-option-title">Notwendige Cookies</span>
                         <span class="cookie-badge required">Immer aktiv</span>
                     </div>
-                    <p class="cookie-option-desc">Diese Cookies sind für die Grundfunktionen der Website erforderlich.</p>
+                    <p class="cookie-option-desc">Diese Cookies sind für die Grundfunktionen der Website erforderlich.
+                    </p>
                 </div>
                 <div class="cookie-option">
                     <div class="cookie-option-header">
@@ -894,7 +971,8 @@
                             <span class="toggle-slider"></span>
                         </label>
                     </div>
-                    <p class="cookie-option-desc">Helfen uns zu verstehen, wie Besucher mit der Website interagieren.</p>
+                    <p class="cookie-option-desc">Helfen uns zu verstehen, wie Besucher mit der Website interagieren.
+                    </p>
                 </div>
                 <div class="cookie-option">
                     <div class="cookie-option-header">
@@ -930,15 +1008,17 @@
             height: 100%;
             z-index: 10000;
         }
+
         .cookie-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(4px);
         }
+
         .cookie-modal {
             position: absolute;
             bottom: 0;
@@ -949,43 +1029,56 @@
             padding: 30px;
             max-width: 600px;
             margin: 0 auto;
-            box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
             animation: slideUp 0.4s ease;
         }
+
         @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
+            from {
+                transform: translateY(100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
         }
+
         .cookie-header h2 {
             font-size: 22px;
             color: #2D5016;
             margin: 0 0 10px 0;
         }
+
         .cookie-header p {
             font-size: 14px;
             color: #666;
             margin: 0 0 20px 0;
             line-height: 1.5;
         }
+
         .cookie-options {
             margin-bottom: 20px;
         }
+
         .cookie-option {
             padding: 15px;
             background: #f8f9fa;
             border-radius: 10px;
             margin-bottom: 10px;
         }
+
         .cookie-option-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 5px;
         }
+
         .cookie-option-title {
             font-weight: 600;
             color: #333;
         }
+
         .cookie-badge {
             font-size: 11px;
             padding: 3px 8px;
@@ -993,11 +1086,13 @@
             background: #E8854C;
             color: white;
         }
+
         .cookie-option-desc {
             font-size: 13px;
             color: #666;
             margin: 0;
         }
+
         /* Toggle Switch */
         .cookie-toggle {
             position: relative;
@@ -1005,11 +1100,13 @@
             width: 50px;
             height: 26px;
         }
+
         .cookie-toggle input {
             opacity: 0;
             width: 0;
             height: 0;
         }
+
         .toggle-slider {
             position: absolute;
             cursor: pointer;
@@ -1021,6 +1118,7 @@
             transition: 0.3s;
             border-radius: 26px;
         }
+
         .toggle-slider:before {
             position: absolute;
             content: "";
@@ -1032,18 +1130,22 @@
             transition: 0.3s;
             border-radius: 50%;
         }
-        .cookie-toggle input:checked + .toggle-slider {
+
+        .cookie-toggle input:checked+.toggle-slider {
             background-color: #2D5016;
         }
-        .cookie-toggle input:checked + .toggle-slider:before {
+
+        .cookie-toggle input:checked+.toggle-slider:before {
             transform: translateX(24px);
         }
+
         /* Buttons */
         .cookie-buttons {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
         }
+
         .cookie-btn {
             flex: 1;
             min-width: 150px;
@@ -1055,54 +1157,67 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
+
         .cookie-btn.accept-all {
             background: #2D5016;
             color: white;
         }
+
         .cookie-btn.accept-all:hover {
             background: #3d6b1e;
             transform: translateY(-2px);
         }
+
         .cookie-btn.accept-selected {
             background: #E8854C;
             color: white;
         }
+
         .cookie-btn.accept-selected:hover {
             background: #d4743f;
             transform: translateY(-2px);
         }
+
         .cookie-btn.reject-all {
             background: #f0f0f0;
             color: #333;
         }
+
         .cookie-btn.reject-all:hover {
             background: #e0e0e0;
             transform: translateY(-2px);
         }
+
         .cookie-footer {
             margin-top: 15px;
             text-align: center;
             font-size: 12px;
         }
+
         .cookie-footer a {
             color: #666;
             text-decoration: none;
         }
+
         .cookie-footer a:hover {
             color: #2D5016;
             text-decoration: underline;
         }
+
         .cookie-footer span {
             color: #ccc;
             margin: 0 8px;
         }
+
         @media (max-width: 600px) {
             .cookie-modal {
                 padding: 20px;
             }
+
             .cookie-buttons {
                 flex-direction: column;
             }
+
             .cookie-btn {
                 min-width: 100%;
             }
@@ -1152,7 +1267,7 @@
         }
 
         // Show cookie consent on page load
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             setTimeout(showCookieConsent, 500);
         });
     </script>
@@ -1226,9 +1341,11 @@
             </div>
             <div class="quick-offer-custom">
                 <div class="quick-offer-custom-label" data-i18n="offer.custom_price">Oder eigenen Preis eingeben:</div>
-                <input type="number" class="quick-offer-custom-input" id="customOfferPrice" placeholder="€ 0,00" step="0.01">
+                <input type="number" class="quick-offer-custom-input" id="customOfferPrice" placeholder="€ 0,00"
+                    step="0.01">
             </div>
-            <button class="quick-offer-submit" onclick="submitQuickOffer()" data-i18n="offer.submit">Angebot senden</button>
+            <button class="quick-offer-submit" onclick="submitQuickOffer()" data-i18n="offer.submit">Angebot
+                senden</button>
         </div>
     </div>
 
@@ -1274,7 +1391,7 @@
             document.querySelector(`.quick-offer-option[data-percent="${percent}"]`).classList.add('selected');
 
             if (currentOfferProduct) {
-                const price = currentOfferProduct.price * (1 - percent/100);
+                const price = currentOfferProduct.price * (1 - percent / 100);
                 document.getElementById('customOfferPrice').value = price.toFixed(2);
             }
         }
@@ -1350,9 +1467,12 @@
         }
 
         // Close modal on backdrop click
-        document.getElementById('quickOfferModal')?.addEventListener('click', function(e) {
+        document.getElementById('quickOfferModal')?.addEventListener('click', function (e) {
             if (e.target === this) closeQuickOfferModal();
         });
     </script>
+    <!-- LiquidGradient Social Slider -->
+    <script src="liquid-gradient.js"></script>
 </body>
+
 </html>

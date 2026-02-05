@@ -1,0 +1,267 @@
+/* ============================================
+   CSS Berlin - LiquidGradient Social Slider
+   Sol panel: Three.js animasyonu + Sosyal medya butonları
+   2026 Modern Design
+   ============================================ */
+
+.liquid-gradient-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+}
+
+.liquid-gradient-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* ============================================
+   Social Media Overlay
+   ============================================ */
+.social-media-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    pointer-events: none;
+}
+
+.social-hub-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.social-hub-title::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: #4CAF50;
+    border-radius: 50%;
+    animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(0.8);
+    }
+}
+
+.social-hub-headline {
+    font-size: 28px;
+    font-weight: 800;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 6px;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+    font-family: 'Montserrat', sans-serif;
+}
+
+.social-hub-subtext {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+/* ============================================
+   Social Media Buttons - 2026 Glassmorphism Design
+   ============================================ */
+.social-buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    width: 100%;
+    max-width: 280px;
+    pointer-events: auto;
+}
+
+.social-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 14px 8px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.social-btn:hover {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+.social-btn:active {
+    transform: translateY(-2px) scale(0.98);
+}
+
+.social-btn-icon {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.social-btn-icon svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+}
+
+.social-btn-name {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.9;
+}
+
+/* Platform-specific hover colors */
+.social-btn.instagram:hover {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    border-color: transparent;
+}
+
+.social-btn.tiktok:hover {
+    background: linear-gradient(135deg, #00f2ea 0%, #ff0050 100%);
+    border-color: transparent;
+}
+
+.social-btn.youtube:hover {
+    background: #FF0000;
+    border-color: transparent;
+}
+
+.social-btn.pinterest:hover {
+    background: #E60023;
+    border-color: transparent;
+}
+
+.social-btn.facebook:hover {
+    background: #1877F2;
+    border-color: transparent;
+}
+
+/* Follow CTA Button */
+.follow-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, #FF8C42 0%, #E8854C 100%);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(255, 140, 66, 0.4);
+}
+
+.follow-cta-btn:hover {
+    background: linear-gradient(135deg, #2D5016 0%, #3d6b1e 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(45, 80, 22, 0.5);
+}
+
+.follow-cta-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Mini Social Row (Alternative compact layout) */
+.social-mini-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    pointer-events: auto;
+}
+
+.social-mini-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.social-mini-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(1.15);
+}
+
+.social-mini-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .social-hub-headline {
+        font-size: 22px;
+    }
+
+    .social-buttons-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 8px;
+        max-width: 100%;
+    }
+
+    .social-btn {
+        padding: 10px 6px;
+    }
+
+    .social-btn-name {
+        display: none;
+    }
+}
