@@ -336,45 +336,91 @@ class LiquidGradientApp {
 }
 
 // ============================================
-// INITIALIZE SOCIAL HUB
+// INITIALIZE SOCIAL HUB - V2 REDESIGN
 // ============================================
 function initSocialHubLiquid() {
     const container = document.getElementById('socialHubContainer');
     if (!container) return;
 
-    // Create HTML structure
+    // Create HTML structure - V2 with intro screen and email
     container.innerHTML = `
         <div class="liquid-gradient-container">
             <div class="liquid-gradient-canvas" id="liquidGradientCanvas"></div>
-            <div class="social-media-overlay">
-                <span class="social-hub-title">Social Hub</span>
-                <h2 class="social-hub-headline">Folgen Sie uns</h2>
-                <p class="social-hub-subtext">Nachhaltige Mode entdecken</p>
+            
+            <!-- Intro Screen - Click to reveal social links -->
+            <div class="social-intro-screen" id="socialIntroScreen">
+                <div class="intro-content">
+                    <span class="intro-badge">Social Hub</span>
+                    <h2 class="intro-headline">Folgen Sie uns<br>in sozialen Medien</h2>
+                    <p class="intro-subtext">Entdecken Sie nachhaltige Mode-Inspiration</p>
+                    <button class="intro-cta-btn" id="showSocialLinks">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 5v14M5 12h14"/>
+                        </svg>
+                        Profile anzeigen
+                    </button>
+                </div>
+            </div>
+
+            <!-- Social Links Screen -->
+            <div class="social-media-overlay" id="socialLinksScreen" style="display:none;">
+                <button class="back-btn" id="backToIntro">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 18l-6-6 6-6"/>
+                    </svg>
+                </button>
                 
-                <div class="social-buttons-grid">
+                <span class="social-hub-title">Social Hub</span>
+                <h2 class="social-hub-headline">Unsere Profile</h2>
+                
+                <!-- Symmetric 2x3 Grid -->
+                <div class="social-buttons-grid-v2">
                     ${SOCIAL_LINKS.map(link => `
                         <a href="${link.url}" 
                            target="_blank" 
                            rel="noopener noreferrer" 
-                           class="social-btn ${link.name.toLowerCase()}"
+                           class="social-btn-v2 ${link.name.toLowerCase()}"
                            title="${link.name} folgen">
-                            <span class="social-btn-icon">${link.icon}</span>
-                            <span class="social-btn-name">${link.name}</span>
+                            <span class="social-btn-icon-v2">${link.icon}</span>
+                            <span class="social-btn-name-v2">${link.name}</span>
                         </a>
                     `).join('')}
                 </div>
                 
-                <button class="follow-cta-btn" onclick="window.open('https://www.instagram.com/cssberlin/', '_blank')">
+                <!-- Email Contact Button -->
+                <a href="mailto:info@cssberlin.de" class="email-contact-btn">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-                        <circle cx="9" cy="7" r="4"/>
-                        <path d="M19 8v6M22 11h-6"/>
+                        <rect x="2" y="4" width="20" height="16" rx="2"/>
+                        <path d="M22 6l-10 7L2 6"/>
                     </svg>
-                    Jetzt folgen
-                </button>
+                    <div class="email-info">
+                        <span class="email-label">Kontaktieren Sie uns</span>
+                        <span class="email-address">info@cssberlin.de</span>
+                    </div>
+                </a>
             </div>
         </div>
     `;
+
+    // Event Listeners for intro/links toggle
+    const introScreen = document.getElementById('socialIntroScreen');
+    const linksScreen = document.getElementById('socialLinksScreen');
+    const showBtn = document.getElementById('showSocialLinks');
+    const backBtn = document.getElementById('backToIntro');
+
+    if (showBtn) {
+        showBtn.addEventListener('click', () => {
+            introScreen.style.display = 'none';
+            linksScreen.style.display = 'flex';
+        });
+    }
+
+    if (backBtn) {
+        backBtn.addEventListener('click', () => {
+            linksScreen.style.display = 'none';
+            introScreen.style.display = 'flex';
+        });
+    }
 
     // Initialize Three.js if available
     const canvasContainer = document.getElementById('liquidGradientCanvas');
@@ -397,3 +443,4 @@ if (document.readyState === 'loading') {
 } else {
     initSocialHubLiquid();
 }
+

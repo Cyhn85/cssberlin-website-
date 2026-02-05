@@ -1,0 +1,319 @@
+/* ============================================
+   CSS Berlin - Seller Hover Card Styles
+   Animasyonlu satıcı künyesi
+   2026 Modern Design
+   ============================================ */
+
+/* Container */
+.seller-hover-card {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+/* Avatar Wrapper (Collapsed State) */
+.seller-avatar-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.seller-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: linear-gradient(135deg, #FF8C42 0%, #2D5016 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.seller-hover-card.expanded .seller-avatar {
+    transform: scale(1.1);
+}
+
+.seller-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.seller-avatar-fallback {
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+}
+
+/* Verified Badge */
+.seller-verified-badge {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #4CAF50;
+    color: white;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    box-shadow: 0 2px 6px rgba(76, 175, 80, 0.4);
+}
+
+.seller-verified-badge.large {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+}
+
+/* Tier Badge */
+.seller-tier-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    font-size: 14px;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-3px);
+    }
+}
+
+/* Expanded Card */
+.seller-expanded-card {
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    width: 280px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.15),
+        0 4px 20px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    z-index: 100;
+    overflow: hidden;
+
+    /* Hidden by default */
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.seller-expanded-card.visible {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    pointer-events: auto;
+}
+
+/* Glass Variant */
+.seller-hover-card[data-variant="glass"] .seller-expanded-card {
+    background: rgba(10, 14, 39, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.seller-hover-card[data-variant="glass"] .seller-name,
+.seller-hover-card[data-variant="glass"] .seller-description,
+.seller-hover-card[data-variant="glass"] .stat-value,
+.seller-hover-card[data-variant="glass"] .stat-label {
+    color: white;
+}
+
+.seller-hover-card[data-variant="glass"] .seller-username {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Card Header */
+.seller-card-header {
+    position: relative;
+    padding: 16px;
+    background: linear-gradient(135deg, #FF8C42 0%, #2D5016 100%);
+}
+
+.seller-card-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    animation: scaleIn 0.3s ease 0.1s both;
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.seller-card-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Card Content */
+.seller-card-content {
+    padding: 16px;
+}
+
+.seller-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 2px;
+    animation: slideInRight 0.3s ease 0.15s both;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.seller-username {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 12px;
+    animation: slideInRight 0.3s ease 0.2s both;
+}
+
+/* Stats */
+.seller-stats {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 12px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 10px;
+    animation: fadeIn 0.3s ease 0.25s both;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.seller-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.stat-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: #111;
+}
+
+.stat-label {
+    font-size: 10px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Description */
+.seller-description {
+    font-size: 13px;
+    color: #444;
+    line-height: 1.5;
+    margin-bottom: 16px;
+    animation: fadeIn 0.3s ease 0.3s both;
+}
+
+/* Buttons */
+.seller-card-buttons {
+    display: flex;
+    gap: 8px;
+    animation: fadeIn 0.3s ease 0.35s both;
+}
+
+.seller-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.seller-btn.primary {
+    background: linear-gradient(135deg, #FF8C42 0%, #e67e3c 100%);
+    color: white;
+}
+
+.seller-btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 140, 66, 0.4);
+}
+
+.seller-btn.secondary {
+    background: #f0f0f0;
+    color: #333;
+}
+
+.seller-btn.secondary:hover {
+    background: #e0e0e0;
+}
+
+.seller-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .seller-expanded-card {
+        width: 250px;
+    }
+
+    .seller-card-avatar {
+        width: 56px;
+        height: 56px;
+    }
+
+    .seller-stats {
+        gap: 8px;
+    }
+}
