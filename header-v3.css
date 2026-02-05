@@ -10,8 +10,8 @@
    TOP ANNOUNCEMENT BAR - Kayar Şerit
    ============================================ */
 .announcement-bar-v3 {
-    background: linear-gradient(90deg, #2D5016 0%, #3d6b1e 50%, #2D5016 100%);
-    color: white;
+    background: linear-gradient(90deg, #FF8C42 0%, #d4723a 30%, #2D5016 70%, #FF8C42 100%);
+    color: #2B2D2E;
     height: 36px;
     display: flex;
     align-items: center;
@@ -41,7 +41,8 @@
     gap: 8px;
     padding: 0 60px;
     font-size: 12px;
-    font-weight: 500;
+    font-weight: 800;
+    color: #2B2D2E;
     letter-spacing: 0.3px;
     cursor: pointer;
     transition: opacity 0.2s;
@@ -56,7 +57,7 @@
 }
 
 .announcement-separator {
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(43, 45, 46, 0.35);
     padding: 0 30px;
 }
 

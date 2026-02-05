@@ -1836,12 +1836,12 @@ header[class*="header"]:not(.header-v3) {
 
 /* Footer News Banner - Header ile birebir aynı */
 .footer-news-banner {
-    background: #2D5016 !important;
-    color: var(--text-white) !important;
+    background: linear-gradient(90deg, #FF8C42 0%, #d4723a 30%, #2D5016 70%, #FF8C42 100%) !important;
+    color: #2B2D2E !important;
     overflow: hidden !important;
     padding: 0 !important;
     margin: 0 !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(43, 45, 46, 0.12);
     height: 30px !important;
     min-height: 30px !important;
     max-height: 30px !important;
@@ -1874,7 +1874,8 @@ header[class*="header"]:not(.header-v3) {
     justify-content: center !important;
     gap: var(--spacing-sm) !important;
     font-size: 13px !important;
-    font-weight: var(--font-weight-medium) !important;
+    font-weight: 800 !important;
+    color: #2B2D2E !important;
     font-family: var(--font-primary) !important;
     letter-spacing: 0.02em !important;
     padding: 0 var(--spacing-xl) !important;
@@ -1888,8 +1889,8 @@ header[class*="header"]:not(.header-v3) {
 }
 
 .footer-news-item:hover {
-    color: white;
-    opacity: 0.8;
+    color: #2B2D2E;
+    opacity: 0.7;
 }
 
 /* ============================================
