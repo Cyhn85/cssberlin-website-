@@ -14,7 +14,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <!-- Auth Modal CSS -->
-    <link rel="stylesheet" href="auth-modal-v2.css?v=2">
+    <link rel="stylesheet" href="auth-modal-v3.css">
 
     <!-- Product Card CSS -->
     <link rel="stylesheet" href="product-card-glass.css?v=4">
@@ -216,21 +216,109 @@
         }
 
         /* ══════════════════════════════════════════════
+           DARK MODE TOGGLE
+           ══════════════════════════════════════════════ */
+        .dark-mode-toggle {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: #e5e7eb;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background 0.5s;
+            border: 2px solid #d1d5db;
+            display: flex;
+            align-items: center;
+            padding: 3px;
+        }
+
+        .dark-mode-toggle.active {
+            background: #1f2937;
+            border-color: #374151;
+        }
+
+        .dark-mode-toggle-circle {
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            left: 3px;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .dark-mode-toggle.active .dark-mode-toggle-circle {
+            left: 32px;
+            background: #fbbf24;
+        }
+
+        .dark-mode-toggle-icon {
+            width: 14px;
+            height: 14px;
+            transition: all 0.3s;
+        }
+
+        body.dark-mode {
+            background: #111827;
+            color: #f9fafb;
+        }
+
+        body.dark-mode .header {
+            background: rgba(31, 41, 55, 0.98);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.3);
+        }
+
+        body.dark-mode .header-search-row {
+            background: #1f2937;
+            border-top-color: #374151;
+        }
+
+        body.dark-mode .search-box,
+        body.dark-mode .category-select,
+        body.dark-mode .search-input {
+            background: #374151;
+            border-color: #4b5563;
+            color: #f9fafb;
+        }
+
+        body.dark-mode .search-input::placeholder {
+            color: #9ca3af;
+        }
+
+        body.dark-mode .lang-selector {
+            background: #374151;
+            border-color: #4b5563;
+            color: #f9fafb;
+        }
+
+        body.dark-mode .header-btn {
+            background: #374151;
+            color: #9ca3af;
+        }
+
+        body.dark-mode .header-btn:hover {
+            background: rgba(255, 140, 66, 0.2);
+            color: var(--brand-orange);
+        }
+
+        /* ══════════════════════════════════════════════
            SEARCH ROW
            ══════════════════════════════════════════════ */
         .header-search-row {
             display: flex;
             align-items: center;
-            justify-center;
+            gap: 16px;
             padding: 20px 32px;
             background: white;
             border-top: 1px solid #f3f4f6;
-            position: relative;
         }
 
         .lang-selector {
-            position: absolute;
-            left: 32px;
+            display: flex;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -255,6 +343,7 @@
             max-width: 1100px;
             width: 100%;
             gap: 12px;
+            margin: 0 auto;
         }
 
         .search-box {
@@ -516,12 +605,20 @@
                     <span class="count">2</span>
                 </button>
                 <div style="width: 1px; height: 32px; background: #e5e7eb; margin: 0 8px;"></div>
-                <button class="btn-anmelden" onclick="window.authModalV2.open('login')">Anmelden</button>
+                <button class="btn-anmelden" onclick="window.authModalV3.open('login')">Anmelden</button>
             </div>
         </div>
 
         <!-- Search Row -->
         <div class="header-search-row">
+            <!-- Dark Mode Toggle -->
+            <div class="dark-mode-toggle" id="darkModeToggle" onclick="toggleDarkMode()">
+                <div class="dark-mode-toggle-circle">
+                    <i data-lucide="sun" class="dark-mode-toggle-icon" style="color: #f59e0b;"></i>
+                </div>
+            </div>
+
+            <!-- Language Selector -->
             <button class="lang-selector" onclick="toggleLanguage()">
                 <i data-lucide="globe" style="width: 16px; height: 16px; color: #9ca3af;"></i>
                 <span id="langText">DE</span>
@@ -582,7 +679,7 @@
     </section>
 
     <!-- Auth Modal v2 Script -->
-    <script src="auth-modal-v2.js"></script>
+    <script src="auth-modal-v3.js"></script>
 
     <!-- Main Script -->
     <script src="script.js"></script>
@@ -615,6 +712,47 @@
             });
 
             lucide.createIcons();
+        }
+
+        // Dark Mode Toggle
+        function toggleDarkMode() {
+            const body = document.body;
+            const toggle = document.getElementById('darkModeToggle');
+            const icon = toggle.querySelector('.dark-mode-toggle-icon');
+
+            body.classList.toggle('dark-mode');
+            toggle.classList.toggle('active');
+
+            if (body.classList.contains('dark-mode')) {
+                icon.setAttribute('data-lucide', 'moon');
+                icon.style.color = '#fbbf24';
+                localStorage.setItem('cssberlin_theme', 'dark');
+            } else {
+                icon.setAttribute('data-lucide', 'sun');
+                icon.style.color = '#f59e0b';
+                localStorage.setItem('cssberlin_theme', 'light');
+            }
+
+            // Reinitialize Lucide icons
+            lucide.createIcons();
+        }
+
+        // Load saved theme on page load
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('cssberlin_theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.body.classList.add('dark-mode');
+                const toggle = document.getElementById('darkModeToggle');
+                toggle.classList.add('active');
+
+                const icon = toggle.querySelector('.dark-mode-toggle-icon');
+                icon.setAttribute('data-lucide', 'moon');
+                icon.style.color = '#fbbf24';
+
+                lucide.createIcons();
+            }
         }
 
         // Language Toggle
@@ -651,6 +789,7 @@
         // Initialize on load
         document.addEventListener('DOMContentLoaded', () => {
             initTicker();
+            loadTheme();
         });
     </script>
 </body>
