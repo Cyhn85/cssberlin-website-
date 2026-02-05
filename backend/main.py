@@ -44,8 +44,10 @@ app.add_middleware(
 from products import router as products_router
 from offers import router as offers_router
 from payments import router as payments_router
+from auth_oauth import router as auth_oauth_router
 
 app.include_router(auth_router)
+app.include_router(auth_oauth_router)  # OAuth & Magic Link
 app.include_router(products_router)
 app.include_router(offers_router)
 app.include_router(payments_router)
@@ -70,7 +72,7 @@ def health():
 async def startup():
     from auth import init_db
     await init_db()
-    print("✅ CSS Berlin DB tabloları hazır.")
+    print("[OK] CSS Berlin DB tables ready.")
 
 
 # ─── Çalıştırma ──────────────────────────────────────────
