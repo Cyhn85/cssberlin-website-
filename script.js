@@ -15,9 +15,9 @@ const API_BASE_URL = (function () {
         return 'http://localhost:8000';
     }
 
-    // Production - use Cloudflare Pages Function proxy (HTTPS)
-    // All /api/* requests are proxied to backend via functions/api/[[path]].js
-    return '';  // Empty string = relative URL (same origin)
+    // Production - point to Railway backend
+    // TODO: When Cloudflare Pages Function proxy is set up, change to ''
+    return 'https://cssberlin-backend.up.railway.app';
 })();
 
 console.log('[CONFIG] API Base URL:', API_BASE_URL);
@@ -710,6 +710,12 @@ async function loadFeaturedProducts() {
 
     try {
         const response = await fetch(`${API_BASE_URL}/api/products?is_featured=true`);
+
+        // Check if response is OK before parsing JSON
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
         const data = await response.json();
         const products = data.products.map(p => ({
             id: p.id,
@@ -764,6 +770,12 @@ async function loadRecommendations() {
 
     try {
         const response = await fetch(`${API_BASE_URL}/api/products/recommendations/user`);
+
+        // Check if response is OK before parsing JSON
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
         const data = await response.json();
         const products = data.recommendations.map(p => ({
             id: p.id,
@@ -1000,6 +1012,12 @@ async function initProducts(category = null) {
 
         // Fetch products from backend API
         const response = await fetch(apiUrl);
+
+        // Check if response is OK before parsing JSON
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
         const data = await response.json();
 
         // Transform backend data to frontend format
@@ -1389,6 +1407,12 @@ function initLoadMore() {
             }
 
             const response = await fetch(apiUrl);
+
+            // Check if response is OK before parsing JSON
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+
             const data = await response.json();
 
             const products = (data.products || []).map(p => ({
@@ -1660,6 +1684,12 @@ async function performSearch(query) {
     try {
         // Search using backend API (uses environment-aware API_BASE_URL)
         const response = await fetch(`${API_BASE_URL}/api/search?q=${encodeURIComponent(lowerQuery)}`);
+
+        // Check if response is OK before parsing JSON
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
         const data = await response.json();
 
         // Transform backend data to frontend format

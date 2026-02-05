@@ -18,6 +18,11 @@ class User(Base):
     last_name = Column(String(100), nullable=False)
     is_active = Column(Boolean, default=True)
     is_verified = Column(Boolean, default=False)
+    
+    # OAuth fields
+    oauth_provider = Column(String(50))  # google, apple, magic_link, None (regular)
+    profile_picture = Column(String(500))  # URL to profile picture
+    
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -36,6 +41,7 @@ class User(Base):
     received_messages = relationship("Message", foreign_keys="Message.receiver_id", back_populates="receiver")
     favorites = relationship("Favorite", back_populates="user")
     coupon_redemptions = relationship("CouponRedemption", back_populates="user")
+
 
 
 class Product(Base):

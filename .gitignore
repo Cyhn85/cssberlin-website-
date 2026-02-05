@@ -62,3 +62,8 @@ accounting_system/test_accounting.db
 
 # Deployment scripts with credentials
 **/deploy/*.ps1
+
+# Google OAuth credentials
+backend/client_secret.json
+client_secret*.json
+**/credentials.json

@@ -13,15 +13,13 @@ from authlib.integrations.starlette_client import OAuth
 from itsdangerous import URLSafeTimedSerializer
 import os
 import secrets
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 from datetime import datetime, timedelta
 from typing import Optional
 
 from database import get_db
 from models import User
 from auth import get_password_hash, create_access_token
+from email_service import send_magic_link_email, send_password_reset_email, send_welcome_email
 
 # ─── Environment Variables ──────────────────────────────────
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "")
@@ -167,9 +165,14 @@ async def send_magic_link(data: MagicLinkRequest, db: AsyncSession = Depends(get
     token = serializer.dumps(data.email, salt='magic-link')
     magic_link = f"{FRONTEND_URL}/magic-login?token={token}"
 
-    # Send email
+    # Send email via email_service.py (magic@cssberlin.de)
     try:
-        send_magic_link_email(data.email, magic_link)
+        user_name = user.first_name if user else None
+        send_magic_link_email(
+            to_email=data.email,
+            magic_link=magic_link,
+            user_name=user_name
+        )
         return {
             "success": True,
             "message": "Magic link sent! Check your email.",
@@ -223,70 +226,6 @@ async def verify_magic_link(token: str, db: AsyncSession = Depends(get_db)):
     # Redirect to frontend with token
     redirect_url = f"{FRONTEND_URL}/?auth_token={access_token}&user_name={user.first_name}"
     return RedirectResponse(url=redirect_url)
-
-
-# ─── Email Sending Function ─────────────────────────────────
-def send_magic_link_email(to_email: str, magic_link: str):
-    """Send magic link email via SMTP"""
-
-    # If SMTP not configured, just print to console (dev mode)
-    if not SMTP_USER or not SMTP_PASSWORD:
-        print(f"\n{'='*60}")
-        print(f"[DEV MODE] Magic Link Email")
-        print(f"To: {to_email}")
-        print(f"Link: {magic_link}")
-        print(f"{'='*60}\n")
-        return
-
-    # Create email
-    msg = MIMEMultipart('alternative')
-    msg['Subject'] = '🔐 Your CSS Berlin Magic Link'
-    msg['From'] = FROM_EMAIL
-    msg['To'] = to_email
-
-    # Email body (HTML)
-    html = f"""
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <style>
-            body {{ font-family: 'Inter', Arial, sans-serif; background: #f9fafb; padding: 40px 20px; }}
-            .container {{ max-width: 600px; margin: 0 auto; background: white; border-radius: 16px; padding: 40px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }}
-            .logo {{ font-size: 32px; font-weight: 900; margin-bottom: 20px; }}
-            .logo span {{ color: #2D5016; }}
-            h1 {{ color: #2D5016; font-size: 24px; margin-bottom: 16px; }}
-            p {{ color: #555; line-height: 1.6; margin-bottom: 24px; }}
-            .btn {{ display: inline-block; background: linear-gradient(135deg, #FF8C42, #2D5016); color: white; padding: 16px 32px; text-decoration: none; border-radius: 12px; font-weight: 700; }}
-            .footer {{ margin-top: 32px; padding-top: 24px; border-top: 1px solid #eee; color: #999; font-size: 13px; }}
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="logo">CSS<span>berlin</span></div>
-            <h1>🔐 Your Magic Link is Ready!</h1>
-            <p>Hi there! Click the button below to securely log in to CSS Berlin. This link expires in {MAGIC_LINK_EXPIRE_MINUTES} minutes.</p>
-            <a href="{magic_link}" class="btn">Log In to CSS Berlin</a>
-            <p style="margin-top: 24px; font-size: 13px; color: #777;">
-                Or copy this link: <br>
-                <code style="background: #f5f5f5; padding: 8px; border-radius: 6px; display: inline-block; margin-top: 8px; word-break: break-all;">{magic_link}</code>
-            </p>
-            <div class="footer">
-                <p>If you didn't request this, please ignore this email.</p>
-                <p>© 2026 CSS Berlin - Climate Smart Solutions</p>
-            </div>
-        </div>
-    </body>
-    </html>
-    """
-
-    part = MIMEText(html, 'html')
-    msg.attach(part)
-
-    # Send via SMTP
-    with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
-        server.starttls()
-        server.login(SMTP_USER, SMTP_PASSWORD)
-        server.send_message(msg)
 
 
 # ═══════════════════════════════════════════════════════════
@@ -363,72 +302,3 @@ async def reset_password(data: PasswordResetRequest, db: AsyncSession = Depends(
         "success": True,
         "message": "Password successfully reset! You can now log in.",
     }
-
-
-# ─── Email Sending Function for Password Reset ──────────────
-def send_password_reset_email(to_email: str, reset_link: str, user_name: str):
-    """Send password reset email via SMTP"""
-
-    # If SMTP not configured, just print to console (dev mode)
-    if not SMTP_USER or not SMTP_PASSWORD:
-        print(f"\n{'='*60}")
-        print(f"[DEV MODE] Password Reset Email")
-        print(f"To: {to_email}")
-        print(f"Link: {reset_link}")
-        print(f"{'='*60}\n")
-        return
-
-    # Create email
-    msg = MIMEMultipart('alternative')
-    msg['Subject'] = '🔒 Reset Your CSS Berlin Password'
-    msg['From'] = FROM_EMAIL
-    msg['To'] = to_email
-
-    # Email body (HTML)
-    html = f"""
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <style>
-            body {{ font-family: 'Inter', Arial, sans-serif; background: #f9fafb; padding: 40px 20px; }}
-            .container {{ max-width: 600px; margin: 0 auto; background: white; border-radius: 16px; padding: 40px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }}
-            .logo {{ font-size: 32px; font-weight: 900; margin-bottom: 20px; }}
-            .logo span {{ color: #2D5016; }}
-            h1 {{ color: #2D5016; font-size: 24px; margin-bottom: 16px; }}
-            p {{ color: #555; line-height: 1.6; margin-bottom: 24px; }}
-            .btn {{ display: inline-block; background: linear-gradient(135deg, #FF8C42, #2D5016); color: white; padding: 16px 32px; text-decoration: none; border-radius: 12px; font-weight: 700; }}
-            .footer {{ margin-top: 32px; padding-top: 24px; border-top: 1px solid #eee; color: #999; font-size: 13px; }}
-            .alert {{ background: #FFF3CD; border: 1px solid #FFE69C; color: #856404; padding: 16px; border-radius: 8px; margin: 20px 0; }}
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="logo">CSS<span>berlin</span></div>
-            <h1>🔒 Reset Your Password</h1>
-            <p>Hi {user_name}!</p>
-            <p>We received a request to reset your CSS Berlin password. Click the button below to create a new password. This link expires in 30 minutes.</p>
-            <a href="{reset_link}" class="btn">Reset Password</a>
-            <p style="margin-top: 24px; font-size: 13px; color: #777;">
-                Or copy this link: <br>
-                <code style="background: #f5f5f5; padding: 8px; border-radius: 6px; display: inline-block; margin-top: 8px; word-break: break-all;">{reset_link}</code>
-            </p>
-            <div class="alert">
-                ⚠️ If you didn't request this password reset, please ignore this email. Your password will remain unchanged.
-            </div>
-            <div class="footer">
-                <p>For security reasons, this link will expire in 30 minutes.</p>
-                <p>© 2026 CSS Berlin - Climate Smart Solutions</p>
-            </div>
-        </div>
-    </body>
-    </html>
-    """
-
-    part = MIMEText(html, 'html')
-    msg.attach(part)
-
-    # Send via SMTP
-    with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
-        server.starttls()
-        server.login(SMTP_USER, SMTP_PASSWORD)
-        server.send_message(msg)

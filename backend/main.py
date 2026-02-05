@@ -40,6 +40,27 @@ app.add_middleware(
     allow_headers=["Content-Type", "Authorization"],
 )
 
+# ─── Exception Handler (Debug) ───────────────────────────
+from fastapi import Request, status
+from fastapi.responses import JSONResponse
+import traceback
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    """Catch all exceptions and print detailed traceback"""
+    print("\n" + "="*80)
+    print("🚨 UNHANDLED EXCEPTION:")
+    print(f"Path: {request.method} {request.url.path}")
+    print(f"Exception: {type(exc).__name__}: {str(exc)}")
+    print("\nFull Traceback:")
+    traceback.print_exc()
+    print("="*80 + "\n")
+    
+    return JSONResponse(
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        content={"detail": f"{type(exc).__name__}: {str(exc)}"}
+    )
+
 # ─── Routers ─────────────────────────────────────────────
 from products import router as products_router
 from offers import router as offers_router

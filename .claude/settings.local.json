@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node:*)",
+      "Bash(ls:*)",
+      "Bash(curl:*)",
+      "Bash(git push:*)",
+      "WebFetch(domain:cssberlin.de)",
+      "Bash(gh api:*)",
+      "Bash(find:*)",
+      "Read(//c/Users/cyhnsrgc/Desktop/CSSberlin/**)",
+      "Bash(uvicorn main:app --host 0.0.0.0 --port 8001 --reload)"
+    ]
+  }
+}

@@ -33,12 +33,17 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 
 
+
 # ─── Pydantic Schemas ───────────────────────────────────
 class UserRegister(BaseModel):
     email: EmailStr
     password: str
-    first_name: str
-    last_name: str
+    # Support both camelCase (from frontend) and snake_case
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    firstName: Optional[str] = None
+    lastName: Optional[str] = None
+
 
 
 class UserLogin(BaseModel):
@@ -115,13 +120,20 @@ async def register(user: UserRegister, db: AsyncSession = Depends(get_db)):
     if result.scalar_one_or_none():
         raise HTTPException(status_code=400, detail="Bu email adresi zaten kayıtlı.")
 
-    # 2. Yeni kullanıcı oluştur
+    # 2. Handle both camelCase and snake_case field names
+    first_name = user.first_name or user.firstName or ""
+    last_name = user.last_name or user.lastName or ""
+    
+    if not first_name or not last_name:
+        raise HTTPException(status_code=400, detail="Vorname und Nachname sind erforderlich.")
+
+    # 3. Yeni kullanıcı oluştur
     hashed = get_password_hash(user.password)
     new_user = User(
         email=user.email,
         hashed_password=hashed,
-        first_name=user.first_name,
-        last_name=user.last_name,
+        first_name=first_name,
+        last_name=last_name,
         is_active=True,
         is_verified=False,
     )
@@ -129,7 +141,7 @@ async def register(user: UserRegister, db: AsyncSession = Depends(get_db)):
     await db.commit()
     await db.refresh(new_user)
 
-    # 3. Token üret
+    # 4. Token üret
     token = create_access_token(data={"sub": new_user.email})
 
     return {

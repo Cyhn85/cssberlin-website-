@@ -208,3 +208,75 @@ async def delete_product(
     product.is_active = False
     await db.commit()
     return {"message": "Ürün kaldırıldı", "product_id": product_id}
+
+
+# ─── Kategoriler ─────────────────────────────────────────
+@router.get("/categories")
+async def get_categories(db: AsyncSession = Depends(get_db)):
+    """
+    Tüm kategorileri ve ürün sayılarını döndür
+    """
+    # Database'den unique kategorileri ve ürün sayılarını al
+    query = select(
+        Product.category,
+        func.count(Product.id).label('count')
+    ).where(
+        Product.is_active == True
+    ).group_by(
+        Product.category
+    ).order_by(
+        func.count(Product.id).desc()
+    )
+
+    result = await db.execute(query)
+    categories_data = result.all()
+
+    # Kategori metadata (icon ve description)
+    category_meta = {
+        "Damen": {
+            "icon": "shirt",
+            "color": "#f97316",
+            "description": "Kleider, Blusen & mehr"
+        },
+        "Herren": {
+            "icon": "shirt",
+            "color": "#0891b2",
+            "description": "Hemden, Hosen & mehr"
+        },
+        "Kinder": {
+            "icon": "baby",
+            "color": "#ec4899",
+            "description": "Kindermode & Spielzeug"
+        },
+        "Elektronik": {
+            "icon": "smartphone",
+            "color": "#8b5cf6",
+            "description": "Smartphones, Tablets & Gadgets"
+        },
+        "Sale": {
+            "icon": "percent",
+            "color": "#ef4444",
+            "description": "Reduzierte Artikel"
+        }
+    }
+
+    # Format response
+    categories = []
+    for cat, count in categories_data:
+        meta = category_meta.get(cat, {
+            "icon": "tag",
+            "color": "#6b7280",
+            "description": ""
+        })
+        categories.append({
+            "name": cat,
+            "count": count,
+            "icon": meta.get("icon"),
+            "color": meta.get("color"),
+            "description": meta.get("description")
+        })
+
+    return {
+        "categories": categories,
+        "total": len(categories)
+    }

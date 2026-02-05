@@ -105,12 +105,13 @@
         }
 
         .header-top {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 20px 80px;
+            padding: 20px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 60px;
         }
 
         .logo {
@@ -358,15 +359,21 @@
            SEARCH ROW
            ══════════════════════════════════════════════ */
         .header-search-row {
-            display: flex;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
             align-items: center;
-            justify-content: center;
-            gap: 16px;
-            padding: 16px 80px;
+            gap: 20px;
+            padding: 16px 40px;
             background: white;
             border-top: 1px solid #f3f4f6;
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
+        }
+
+        .header-search-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         .lang-selector {
@@ -398,12 +405,13 @@
         }
 
         .search-box {
+            position: relative;
             flex: 1;
             display: flex;
             height: 56px;
             border: 2px solid #d1d5db;
             border-radius: 12px;
-            overflow: hidden;
+            overflow: visible;
             background: white;
             transition: all 0.3s;
         }
@@ -796,25 +804,90 @@
 
         <!-- Search Row -->
         <div class="header-search-row">
-            <!-- Dark Mode Toggle -->
-            <div class="dark-mode-toggle" id="darkModeToggle" onclick="toggleDarkMode()">
-                <div class="dark-mode-toggle-circle">
-                    <i data-lucide="sun" class="dark-mode-toggle-icon" style="color: #f59e0b;"></i>
+            <!-- Left: Dark Mode + Language -->
+            <div class="header-search-left">
+                <!-- Dark Mode Toggle -->
+                <div class="dark-mode-toggle" id="darkModeToggle" onclick="toggleDarkMode()">
+                    <div class="dark-mode-toggle-circle">
+                        <i data-lucide="sun" class="dark-mode-toggle-icon" style="color: #f59e0b;"></i>
+                    </div>
                 </div>
+
+                <!-- Language Selector -->
+                <button class="lang-selector" onclick="toggleLanguage()">
+                    <i data-lucide="globe" style="width: 16px; height: 16px; color: #9ca3af;"></i>
+                    <span id="langText">DE</span>
+                </button>
             </div>
 
-            <!-- Language Selector -->
-            <button class="lang-selector" onclick="toggleLanguage()">
-                <i data-lucide="globe" style="width: 16px; height: 16px; color: #9ca3af;"></i>
-                <span id="langText">DE</span>
-            </button>
-
+            <!-- Center: Search Container -->
             <div class="search-container">
                 <div class="search-box">
-                    <button class="category-select">
-                        <span>Alle Kategorien</span>
+                    <button class="category-select" onclick="toggleCategoryDropdown()">
+                        <span id="categoryText">Alle Kategorien</span>
                         <i data-lucide="chevron-down" style="width: 16px; height: 16px; opacity: 0.5;"></i>
                     </button>
+
+                    <!-- Category Dropdown Menu -->
+                    <div class="category-dropdown" id="categoryDropdown">
+                        <div class="category-group">
+                            <div class="category-group-title">Mode & Accessoires</div>
+                            <a href="damen.html" class="category-item">
+                                <div class="category-icon">
+                                    <i data-lucide="shirt" style="width: 18px; height: 18px; color: #f97316;"></i>
+                                </div>
+                                <div class="category-info">
+                                    <div class="category-name">Damen</div>
+                                    <div class="category-count">Kleider, Blusen & mehr</div>
+                                </div>
+                            </a>
+                            <a href="herren.html" class="category-item">
+                                <div class="category-icon">
+                                    <i data-lucide="shirt" style="width: 18px; height: 18px; color: #0891b2;"></i>
+                                </div>
+                                <div class="category-info">
+                                    <div class="category-name">Herren</div>
+                                    <div class="category-count">Hemden, Hosen & mehr</div>
+                                </div>
+                            </a>
+                            <a href="kinder.html" class="category-item">
+                                <div class="category-icon">
+                                    <i data-lucide="baby" style="width: 18px; height: 18px; color: #ec4899;"></i>
+                                </div>
+                                <div class="category-info">
+                                    <div class="category-name">Kinder</div>
+                                    <div class="category-count">Kindermode & Spielzeug</div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="category-group">
+                            <div class="category-group-title">Elektronik & Tech</div>
+                            <a href="#" class="category-item" onclick="filterByCategory('Elektronik')">
+                                <div class="category-icon">
+                                    <i data-lucide="smartphone" style="width: 18px; height: 18px; color: #8b5cf6;"></i>
+                                </div>
+                                <div class="category-info">
+                                    <div class="category-name">Elektronik</div>
+                                    <div class="category-count">Smartphones, Tablets & Gadgets</div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="category-group">
+                            <div class="category-group-title">Special</div>
+                            <a href="#" class="category-item" onclick="filterByCategory('Sale')">
+                                <div class="category-icon">
+                                    <i data-lucide="percent" style="width: 18px; height: 18px; color: #ef4444;"></i>
+                                </div>
+                                <div class="category-info">
+                                    <div class="category-name">Sale</div>
+                                    <div class="category-count">Reduzierte Artikel</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
                     <input type="text" class="search-input" placeholder="CLIMATE SMART SOLUTIONS" id="searchInput">
                     <div class="search-actions">
                         <button class="search-action-btn" title="Sprachsuche">
@@ -835,6 +908,11 @@
                 <button class="search-btn" onclick="performSearch()">
                     <i data-lucide="search" style="width: 20px; height: 20px;"></i>
                 </button>
+            </div>
+
+            <!-- Right: Empty placeholder for future features -->
+            <div class="header-search-right">
+                <!-- Could add: User menu, Quick links, etc. -->
             </div>
         </div>
 
@@ -974,10 +1052,155 @@
             }
         });
 
+        // Category Dropdown Toggle
+        function toggleCategoryDropdown() {
+            const dropdown = document.getElementById('categoryDropdown');
+            dropdown.classList.toggle('active');
+        }
+
+        // Filter by Category
+        function filterByCategory(category) {
+            const categoryText = document.getElementById('categoryText');
+            categoryText.textContent = category;
+
+            // Close dropdown
+            const dropdown = document.getElementById('categoryDropdown');
+            dropdown.classList.remove('active');
+
+            // Load products with category filter
+            if (window.loadProducts) {
+                window.loadProducts(category);
+            } else {
+                console.log('Filter by category:', category);
+                window.location.href = `vitrin.html?category=${encodeURIComponent(category)}`;
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('categoryDropdown');
+            const categoryBtn = document.querySelector('.category-select');
+
+            if (dropdown && !dropdown.contains(e.target) && !categoryBtn.contains(e.target)) {
+                dropdown.classList.remove('active');
+            }
+        });
+
+        // Load categories dynamically from backend
+        async function loadCategories() {
+            try {
+                const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                    ? 'http://localhost:8000'
+                    : 'https://cssberlin-backend.up.railway.app';
+
+                const response = await fetch(`${API_BASE}/api/products/categories`);
+                if (!response.ok) {
+                    console.warn('Failed to load categories from backend, using static list');
+                    return;
+                }
+
+                const data = await response.json();
+                const dropdown = document.getElementById('categoryDropdown');
+
+                if (!dropdown || !data.categories || data.categories.length === 0) {
+                    return;
+                }
+
+                // Build category dropdown HTML dynamically
+                let html = '';
+
+                // Group categories
+                const modeCategories = data.categories.filter(c =>
+                    ['Damen', 'Herren', 'Kinder'].includes(c.name)
+                );
+                const techCategories = data.categories.filter(c =>
+                    c.name === 'Elektronik'
+                );
+                const specialCategories = data.categories.filter(c =>
+                    c.name === 'Sale'
+                );
+
+                // Mode & Accessoires
+                if (modeCategories.length > 0) {
+                    html += '<div class="category-group">';
+                    html += '<div class="category-group-title">Mode & Accessoires</div>';
+                    modeCategories.forEach(cat => {
+                        const link = cat.name === 'Damen' ? 'damen.html' :
+                                   cat.name === 'Herren' ? 'herren.html' :
+                                   'kinder.html';
+                        html += `
+                            <a href="${link}" class="category-item">
+                                <div class="category-icon">
+                                    <i data-lucide="${cat.icon}" style="width: 18px; height: 18px; color: ${cat.color};"></i>
+                                </div>
+                                <div class="category-info">
+                                    <div class="category-name">${cat.name}</div>
+                                    <div class="category-count">${cat.description} (${cat.count})</div>
+                                </div>
+                            </a>
+                        `;
+                    });
+                    html += '</div>';
+                }
+
+                // Elektronik & Tech
+                if (techCategories.length > 0) {
+                    html += '<div class="category-group">';
+                    html += '<div class="category-group-title">Elektronik & Tech</div>';
+                    techCategories.forEach(cat => {
+                        html += `
+                            <a href="#" class="category-item" onclick="filterByCategory('${cat.name}'); return false;">
+                                <div class="category-icon">
+                                    <i data-lucide="${cat.icon}" style="width: 18px; height: 18px; color: ${cat.color};"></i>
+                                </div>
+                                <div class="category-info">
+                                    <div class="category-name">${cat.name}</div>
+                                    <div class="category-count">${cat.description} (${cat.count})</div>
+                                </div>
+                            </a>
+                        `;
+                    });
+                    html += '</div>';
+                }
+
+                // Special (Sale)
+                if (specialCategories.length > 0) {
+                    html += '<div class="category-group">';
+                    html += '<div class="category-group-title">Special</div>';
+                    specialCategories.forEach(cat => {
+                        html += `
+                            <a href="#" class="category-item" onclick="filterByCategory('${cat.name}'); return false;">
+                                <div class="category-icon">
+                                    <i data-lucide="${cat.icon}" style="width: 18px; height: 18px; color: ${cat.color};"></i>
+                                </div>
+                                <div class="category-info">
+                                    <div class="category-name">${cat.name}</div>
+                                    <div class="category-count">${cat.description} (${cat.count})</div>
+                                </div>
+                            </a>
+                        `;
+                    });
+                    html += '</div>';
+                }
+
+                dropdown.innerHTML = html;
+
+                // Re-initialize Lucide icons
+                if (window.lucide) {
+                    lucide.createIcons();
+                }
+
+                console.log('✅ Categories loaded from backend:', data.categories.length);
+            } catch (error) {
+                console.warn('Error loading categories:', error);
+            }
+        }
+
         // Initialize on load
         document.addEventListener('DOMContentLoaded', () => {
             initTicker();
             loadTheme();
+            loadCategories(); // Load categories from backend
         });
     </script>
 </body>
