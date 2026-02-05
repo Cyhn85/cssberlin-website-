@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anmelden - CSS Berlin</title>
-    <link rel="stylesheet" href="styles.css?v=2028">
-    <link rel="stylesheet" href="header-v2.css">
+    <link rel="stylesheet" href="styles.css?v=2030">
+    <!-- header-v2.css KALDIRILDI - Sadece V3 aktif -->
+    <link rel="stylesheet" href="header-v3.css">
+    <link rel="stylesheet" href="auth-modal.css">
     <link rel="stylesheet" href="footer-kleinanzeigen.css">
     <link rel="stylesheet" href="toast.css">
     <style>
         body {
             background: var(--bg-secondary);
         }
+
         .auth-page-wrapper {
             display: flex;
             justify-content: center;
@@ -19,6 +23,7 @@
             min-height: 100vh;
             padding: 40px 20px;
         }
+
         .auth-gate-content {
             background: white;
             border-radius: 20px;
@@ -33,6 +38,7 @@
                 opacity: 0;
                 transform: translateY(30px) scale(0.95);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0) scale(1);
@@ -54,11 +60,11 @@
             color: #333;
             font-weight: 700;
         }
-        
+
         .auth-gate-body {
             padding: 0 32px 32px;
         }
-        
+
         .auth-gate-oauth {
             display: flex;
             flex-direction: column;
@@ -88,7 +94,7 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
-        
+
         .oauth-divider {
             text-align: center;
             margin: 24px 0;
@@ -154,7 +160,7 @@
             align-items: center;
             margin-bottom: 20px;
         }
-        
+
         .checkbox-wrapper {
             display: flex;
             align-items: center;
@@ -163,7 +169,7 @@
             font-size: 13px;
             color: #666;
         }
-        
+
         .forgot-link {
             font-size: 13px;
             color: #E8854C;
@@ -187,13 +193,14 @@
             justify-content: center;
             gap: 8px;
         }
-        
+
         .auth-gate-footer {
             margin-top: 24px;
             padding-top: 20px;
             border-top: 1px solid #e8e8e8;
             text-align: center;
         }
+
         .auth-gate-footer p {
             margin: 0;
             font-size: 14px;
@@ -207,6 +214,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="auth-page-wrapper">
         <div class

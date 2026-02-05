@@ -730,7 +730,16 @@ async function loadFeaturedProducts() {
 
     } catch (error) {
         console.error('Error loading featured products:', error);
-        featuredGrid.innerHTML = '<p>Fehler beim Laden der hervorgehobenen Produkte.</p>';
+        // Fallback to sample products
+        featuredGrid.innerHTML = '';
+        const featuredSamples = sampleProducts.slice(0, 8);
+        featuredSamples.forEach(product => {
+            const productCard = createProductCard(product);
+            featuredGrid.innerHTML += productCard;
+        });
+        attachProductEventListeners();
+        updateCartButtonStates();
+        console.log('Loaded featured products from fallback samples');
     }
 }
 
@@ -775,7 +784,17 @@ async function loadRecommendations() {
 
     } catch (error) {
         console.error('Error loading recommendations:', error);
-        recommendationsGrid.innerHTML = '<p>Fehler beim Laden der Empfehlungen.</p>';
+        // Fallback to sample products (shuffled)
+        recommendationsGrid.innerHTML = '';
+        const shuffled = [...sampleProducts].sort(() => Math.random() - 0.5);
+        const recommendationSamples = shuffled.slice(0, 8);
+        recommendationSamples.forEach(product => {
+            const productCard = createProductCard(product);
+            recommendationsGrid.innerHTML += productCard;
+        });
+        attachProductEventListeners();
+        updateCartButtonStates();
+        console.log('Loaded recommendations from fallback samples');
     }
 }
 
