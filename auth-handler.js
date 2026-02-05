@@ -6,15 +6,11 @@
 (function () {
     'use strict';
 
-    // Smart environment detection
-    const isLocalDevelopment = window.location.hostname === 'localhost'
-        || window.location.hostname === '127.0.0.1'
-        || window.location.hostname === ''
-        || window.location.protocol === 'file:';
+    // TEMPORARY: Force localhost for development/testing
+    // TODO: Deploy backend to Railway and re-enable smart detection
+    const API_BASE = 'http://localhost:8000';
 
-    const API_BASE = isLocalDevelopment
-        ? 'http://localhost:8000'  // Local development
-        : 'https://cssberlin-backend.up.railway.app';  // Production (Railway/Render)
+    console.log('🔧 [Auth Handler] Using API:', API_BASE);
 
     // ─── Token Management ───────────────────────────────────────
     function saveToken(token) {

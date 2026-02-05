@@ -6,15 +6,25 @@
 (function () {
     'use strict';
 
-    // Smart environment detection
+    // ⚡ ENHANCED Environment Detection with DEBUG logging
     const isLocalDevelopment = window.location.hostname === 'localhost'
         || window.location.hostname === '127.0.0.1'
         || window.location.hostname === ''
-        || window.location.protocol === 'file:';
+        || window.location.protocol === 'file:'
+        || window.location.port === '5500'  // Live Server
+        || window.location.port === '3000'; // Dev server
 
-    const API_BASE = isLocalDevelopment
-        ? 'http://localhost:8000'  // Local development
-        : 'https://cssberlin-backend.up.railway.app';  // Production (Railway/Render)
+    // FORCE LOCALHOST for now (remove this line for production)
+    const API_BASE = 'http://localhost:8000';
+
+    // DEBUG: Log environment detection
+    console.log('[Auth Modal v3] Environment Detection:');
+    console.log('  - Hostname:', window.location.hostname);
+    console.log('  - Port:', window.location.port);
+    console.log('  - Protocol:', window.location.protocol);
+    console.log('  - isLocalDevelopment:', isLocalDevelopment);
+    console.log('  - API_BASE:', API_BASE);
+    console.log('  ✅ Using LOCALHOST backend for development');
 
     let currentMode = 'login';
 
