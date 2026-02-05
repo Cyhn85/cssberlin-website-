@@ -555,8 +555,8 @@ const sampleProducts = [
 // ============================================
 // GLOBAL STATE
 // ============================================
-// Pagination (2026 launch: 5x4 = 20 products above-the-fold)
-const PRODUCTS_PAGE_SIZE = 20;
+// Pagination (2026 launch: 8x5 = 40 products on homepage)
+const PRODUCTS_PAGE_SIZE = 40;
 let currentOffset = 0;
 let activeCategoryFilter = null;
 let canLoadMore = true;

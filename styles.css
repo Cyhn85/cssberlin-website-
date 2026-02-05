@@ -5926,7 +5926,7 @@ footer, .footer {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
-    height: 340px;
+    height: 280px;
 }
 @media (max-width: 900px) {
     .split-hero {
@@ -5935,7 +5935,7 @@ footer, .footer {
     }
     .split-hero-left,
     .split-hero-right {
-        height: 260px;
+        height: 220px;
     }
 }
 @media (max-width: 600px) {
@@ -5947,7 +5947,7 @@ footer, .footer {
     }
     .split-hero-left,
     .split-hero-right {
-        height: 220px;
+        height: 180px;
     }
 }
 
