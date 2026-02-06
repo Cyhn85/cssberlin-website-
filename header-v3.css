@@ -7,12 +7,12 @@
    ============================================ */
 
 /* ============================================
-   TOP ANNOUNCEMENT BAR - Kayar Şerit
+   TOP ANNOUNCEMENT BAR - Kayar Şerit (Compact)
    ============================================ */
 .announcement-bar-v3 {
-    background: linear-gradient(90deg, #FF8C42 0%, #d4723a 30%, #2D5016 70%, #FF8C42 100%);
-    color: #2B2D2E;
-    height: 36px;
+    background: #FF8C42;
+    color: #1a3409;
+    height: 32px;
     display: flex;
     align-items: center;
     overflow: hidden;
@@ -21,7 +21,7 @@
 
 .announcement-track {
     display: flex;
-    animation: scrollAnnouncements 40s linear infinite;
+    animation: scrollAnnouncements 35s linear infinite;
     white-space: nowrap;
 }
 
@@ -38,27 +38,30 @@
 .announcement-item {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 0 60px;
-    font-size: 12px;
-    font-weight: 800;
-    color: #2B2D2E;
-    letter-spacing: 0.3px;
+    gap: 6px;
+    padding: 0 40px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #1a3409;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
     cursor: pointer;
     transition: opacity 0.2s;
 }
 
 .announcement-item:hover {
-    opacity: 0.85;
+    opacity: 0.75;
+    color: #FFFFFF;
 }
 
 .announcement-icon {
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .announcement-separator {
-    color: rgba(43, 45, 46, 0.35);
-    padding: 0 30px;
+    color: rgba(26, 52, 9, 0.3);
+    padding: 0 20px;
+    font-size: 10px;
 }
 
 /* ============================================
@@ -362,11 +365,14 @@
 }
 
 /* ============================================
-   NAVIGATION BAR
+   NAVIGATION BAR (Compact - matches announcement bar)
    ============================================ */
 .nav-bar-v3 {
     background: #FF8C42;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    height: 36px;
+    display: flex;
+    align-items: center;
 }
 
 .nav-container-v3 {
@@ -375,20 +381,21 @@
     padding: 0 24px;
     display: flex;
     justify-content: center;
-    gap: 8px;
+    gap: 4px;
+    width: 100%;
 }
 
 .nav-link-v3 {
-    padding: 14px 24px;
+    padding: 8px 16px;
     color: #1a3409;
     text-decoration: none;
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.4px;
     transition: all 0.2s;
     position: relative;
-    border-radius: 6px;
+    border-radius: 4px;
 }
 
 .nav-link-v3:hover {
@@ -405,24 +412,22 @@
     display: none;
 }
 
-/* Sale Link Special */
-/* Sale Link Special - Green on Orange */
+/* Sale Link Special - Compact */
 .nav-link-v3.sale {
     background: #2D5016;
-    border: 2px solid #1a3409;
-    border-radius: 6px;
+    border: 1px solid #1a3409;
+    border-radius: 4px;
     color: #FFFFFF;
-    margin: 8px 0;
-    padding: 8px 20px;
+    margin: 0;
+    padding: 6px 14px;
     font-weight: 800;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
 }
 
 .nav-link-v3.sale:hover {
     background: #1a3409;
-    color: #FF8C42;
-    box-shadow: 0 4px 12px rgba(45, 80, 22, 0.5);
-    transform: translateY(-1px);
+    color: #FFFFFF;
+    box-shadow: 0 2px 6px rgba(45, 80, 22, 0.4);
 }
 
 /* ============================================
