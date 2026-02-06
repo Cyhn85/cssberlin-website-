@@ -1,0 +1,115 @@
+/* ============================================
+   CSS Berlin Footer V3 - Orange Rich Design
+   Matches Header V3 Aesthetic
+   ============================================ */
+
+.footer-v3 {
+    background: linear-gradient(135deg, #FF8C42 0%, #ff9f5e 100%);
+    color: #1a3409;
+    /* Dark Green Text for contrast on Orange */
+    padding: 60px 0 24px;
+    margin-top: 60px;
+    border-top: 4px solid #2D5016;
+    /* Green border top */
+    font-family: 'Montserrat', 'Inter', sans-serif;
+}
+
+.footer-v3-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 40px;
+}
+
+/* Columns */
+.footer-col h3 {
+    font-size: 18px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    color: #1a3409;
+    border-bottom: 2px solid rgba(26, 52, 9, 0.1);
+    padding-bottom: 8px;
+    display: inline-block;
+}
+
+.footer-col p {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 12px;
+    color: rgba(26, 52, 9, 0.9);
+    font-weight: 500;
+}
+
+.footer-col address {
+    font-style: normal;
+    font-size: 14px;
+    line-height: 1.8;
+    color: rgba(26, 52, 9, 0.9);
+}
+
+.footer-col a {
+    color: #1a3409;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.footer-col a:hover {
+    color: white;
+    /* White on hover for visibility */
+    transform: translateX(4px);
+}
+
+/* Brand Column Special */
+.footer-brand .logo-text {
+    font-size: 28px;
+    font-weight: 900;
+    color: white;
+    /* Logo White on Orange */
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.footer-brand .tagline {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(26, 52, 9, 0.7);
+    margin-bottom: 24px;
+}
+
+/* Bottom Bar */
+.footer-bottom-v3 {
+    border-top: 1px solid rgba(26, 52, 9, 0.1);
+    margin-top: 40px;
+    padding-top: 24px;
+    text-align: center;
+    font-size: 12px;
+    color: rgba(26, 52, 9, 0.6);
+    font-weight: 600;
+}
+
+.footer-bottom-v3 p {
+    margin: 0;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    .footer-v3 {
+        padding: 40px 0 20px;
+    }
+
+    .footer-v3-container {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+}

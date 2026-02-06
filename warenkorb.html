@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="auth-modal-v3.css">
     <link rel="stylesheet" href="auth-modal.css">
     <link rel="stylesheet" href="product-card-glass.css">
+    <link rel="stylesheet" href="footer-v3.css">
 
     <style>
         * {
@@ -363,7 +364,46 @@
     <script src="script.js"></script>
     <script>
         lucide.createIcons();
+    </script>
 
+    <footer class="footer-v3">
+        <div class="footer-v3-container">
+            <!-- Col 1: Brand -->
+            <div class="footer-col footer-brand">
+                <span class="logo-text">CSS Berlin</span>
+                <div class="tagline">Climate Smart Solutions</div>
+                <p>Ihr Premium-Marktplatz für nachhaltige Mode in Berlin.</p>
+            </div>
+
+            <!-- Col 2: Kontakt & Address -->
+            <div class="footer-col">
+                <h3>Kontakt</h3>
+                <address>
+                    <strong>CSS Berlin</strong><br>
+                    Am Omnibushof 12<br>
+                    13593 Berlin<br><br>
+                    <strong>Tel:</strong> <a href="tel:+491632634020" style="display:inline; font-weight:normal;">+49
+                        163 263 40 20</a><br>
+                    <strong>E-Mail:</strong> <a href="mailto:info@cssberlin.de"
+                        style="display:inline; font-weight:normal;">info@cssberlin.de</a>
+                </address>
+            </div>
+
+            <!-- Col 3: Rechtliches -->
+            <div class="footer-col">
+                <h3>Rechtliches</h3>
+                <a href="impressum.html">Impressum</a>
+                <a href="datenschutz.html">Datenschutz</a>
+                <a href="agb.html">AGB</a>
+                <a href="widerrufsrecht.html">Widerrufsrecht</a>
+                <a href="kontakt.html">Kontakt</a>
+            </div>
+        </div>
+        <div class="footer-v3-container footer-bottom-v3">
+            <p>&copy; 2026 CSS Berlin - Climate Smart Solutions. Alle Rechte vorbehalten.</p>
+        </div>
+    </footer>
+    <script>
         // Simple Cart Logic ported from previous file
         function loadCart() {
             const cart = JSON.parse(localStorage.getItem('cssberlin_cart') || '[]');
