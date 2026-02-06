@@ -852,26 +852,6 @@ function createProductCard(product) {
 
                     ${isSold ? '<div class="sold-badge">VERKAUFT</div>' : ''}
                     <div class="product-card-v3-badge ${badgeClass}">${product.condition}</div>
-
-                    <!-- PHASE G: Independent Cart button (bottom-left) -->
-                    <button class="product-card-v3-btn-cart add-to-cart-btn"
-                            data-product-id="${product.id}"
-                            title="In den Warenkorb">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="9" cy="21" r="1"></circle>
-                            <circle cx="20" cy="21" r="1"></circle>
-                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                        </svg>
-                    </button>
-
-                    <!-- PHASE G: Independent Heart button (bottom-right) -->
-                    <button class="product-card-v3-btn-heart wishlist-btn ${inWishlist ? 'active' : ''}"
-                            data-product-id="${product.id}"
-                            title="${inWishlist ? 'Von Wunschliste entfernen' : 'Zur Wunschliste hinzufuegen'}">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="${inWishlist ? '#F44336' : 'none'}" stroke="${inWishlist ? '#F44336' : 'currentColor'}" stroke-width="2">
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                        </svg>
-                    </button>
                 </div>
 
                 <div class="product-card-v3-body">
@@ -885,42 +865,30 @@ function createProductCard(product) {
 
                     <h3 class="product-card-v3-name">${product.name}</h3>
 
-                    <div class="product-meta" style="font-size:11px;color:#888;margin-bottom:8px;">
-                        <span>Größe ${product.size}</span><span style="margin:0 4px;">|</span><span>${product.condition}</span>
+                    <div class="product-meta" style="font-size:10px;color:#888;margin-bottom:6px;">
+                        <span>Gr. ${product.size}</span> · <span>${product.condition}</span>
                     </div>
 
-                    <div class="product-card-v3-seller">
-                        <div class="product-card-v3-seller-avatar" style="background:${seller.avatarColor || '#FF8C42'};">${seller.initials}</div>
-                        <div class="product-card-v3-seller-info">
-                            <strong>${seller.name}</strong>${seller.verified ? ' ✓' : ''}${seller.badge ? ` <span class="seller-badge seller-badge-${seller.badge}">${getBadgeIcon(seller.badge)}</span>` : ''}
-                            <br>⭐ ${seller.rating} · 📍 ${location} · 🕐 ${uploadedAgo}
-                        </div>
-                    </div>
-
-                    <!-- PHASE G: CO2 badge moved to body (below seller) -->
-                    <div class="product-card-v3-co2">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M17,8C8,10,5.9,16.17,3.82,21.34L5.71,22L6.66,19.7C7.14,19.87,7.64,20,8,20C19,20,22,3,22,3C21,5,14,5.25,9,6.25C4,7.25,2,11.5,2,13.5C2,15.5,3.75,17.25,3.75,17.25C7,8,17,8,17,8Z"></path>
-                        </svg>
-                        <span>-${product.carbonSaved}kg CO₂</span>
+                    <div class="product-card-v3-seller" style="margin-bottom:8px;">
+                        <div class="product-card-v3-seller-avatar" style="background:${seller.avatarColor || '#FF8C42'};width:18px;height:18px;font-size:8px;">${seller.initials}</div>
+                        <span style="font-size:10px;color:#666;">${seller.name}${seller.verified ? ' ✓' : ''}</span>
                     </div>
 
                     <div class="product-card-v3-actions">
                         <button class="btn-energy-brand negotiate-btn" data-product-id="${product.id}" ${isSold ? 'disabled' : ''}>
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                                <line x1="7" y1="7" x2="7.01" y2="7"></line>
                             </svg>
-                            Chat
+                            Preisvorschlag
                         </button>
                         <button class="btn-rainbow buy-btn" data-product-id="${product.id}" ${isSold ? 'disabled' : ''}>
-                            <span>
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                                    <path d="M16 10a4 4 0 0 1-8 0"></path>
-                                </svg>
-                                Kaufen
-                            </span>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="20" cy="21" r="1"></circle>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            </svg>
+                            Kaufen
                         </button>
                     </div>
                 </div>

@@ -5787,8 +5787,8 @@ footer,
 .product-card-v3-img-wrap {
     position: relative;
     width: 100%;
-    padding-top: 125%;
-    /* 4:5 aspect ratio */
+    padding-top: 110%;
+    /* Compact: slightly taller than square */
     overflow: hidden;
     background: #f0f0f0;
 }
@@ -5915,7 +5915,7 @@ footer,
 
 /* --- Card body (info section) --- */
 .product-card-v3-body {
-    padding: 14px 14px 16px;
+    padding: 10px 12px 12px;
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -5989,19 +5989,9 @@ footer,
     font-weight: 600;
 }
 
-/* PHASE G: CO2 badge in body (below seller) */
+/* PHASE G: CO2 badge - hidden for compact design */
 .product-card-v3-co2 {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 4px 10px;
-    background: linear-gradient(135deg, rgba(22, 91, 51, 0.1) 0%, rgba(107, 175, 61, 0.15) 100%);
-    border: 1px solid rgba(22, 91, 51, 0.2);
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 600;
-    color: #165B33;
-    margin-bottom: 10px;
+    display: none;
 }
 
 .product-card-v3-co2 svg {
@@ -6010,24 +6000,25 @@ footer,
     fill: #165B33;
 }
 
-/* 2-button row: Chat (outline brand) + Kaufen (rainbow) */
+/* 2-button row: Preisvorschlag + Kaufen - Compact design */
 .product-card-v3-actions {
     display: flex;
-    gap: 8px;
+    gap: 6px;
+    margin-top: auto;
 }
 
 .product-card-v3-actions button {
     flex: 1;
-    height: 36px;
-    border-radius: 10px;
-    font-size: 12px;
+    height: 32px;
+    border-radius: 8px;
+    font-size: 11px;
     font-weight: 700;
     cursor: pointer;
     transition: transform 0.15s ease, box-shadow 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 4px;
+    gap: 3px;
 }
 
 .product-card-v3-actions button:active {

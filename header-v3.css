@@ -380,7 +380,7 @@
 
 .nav-link-v3 {
     padding: 14px 24px;
-    color: #FFEB3B;
+    color: #1a3409;
     text-decoration: none;
     font-size: 13px;
     font-weight: 700;
@@ -388,46 +388,40 @@
     letter-spacing: 0.5px;
     transition: all 0.2s;
     position: relative;
+    border-radius: 6px;
 }
 
 .nav-link-v3:hover {
     color: #FFFFFF;
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(45, 80, 22, 0.85);
 }
 
 .nav-link-v3.active {
     color: #FFFFFF;
+    background: #2D5016;
 }
 
 .nav-link-v3.active::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60%;
-    height: 3px;
-    background: #FF8C42;
-    border-radius: 3px 3px 0 0;
+    display: none;
 }
 
 /* Sale Link Special */
-/* Sale Link Special - White/Yellow on Orange */
+/* Sale Link Special - Green on Orange */
 .nav-link-v3.sale {
-    background: #FFFFFF;
-    border: 2px solid #FFEB3B;
+    background: #2D5016;
+    border: 2px solid #1a3409;
     border-radius: 6px;
-    color: #FF8C42;
+    color: #FFFFFF;
     margin: 8px 0;
     padding: 8px 20px;
     font-weight: 800;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .nav-link-v3.sale:hover {
-    background: #FFEB3B;
+    background: #1a3409;
     color: #FF8C42;
-    box-shadow: 0 4px 12px rgba(255, 140, 66, 0.4);
+    box-shadow: 0 4px 12px rgba(45, 80, 22, 0.5);
     transform: translateY(-1px);
 }
 

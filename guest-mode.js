@@ -314,72 +314,57 @@
     };
 
     // ═══════════════════════════════════════════════════════════════════════
-    // PRODUCT BUTTON HANDLERS
+    // PRODUCT BUTTON HANDLERS (Event Delegation)
     // ═══════════════════════════════════════════════════════════════════════
     const ProductActions = {
         init() {
-            window.guestAction = (type, id) => this.handleGuestAction(type, id);
+            // Use event delegation for product card buttons
+            document.addEventListener('click', (e) => {
+                // Handle Preisvorschlag/Negotiate button
+                const negotiateBtn = e.target.closest('.negotiate-btn');
+                if (negotiateBtn) {
+                    e.preventDefault();
+                    const productId = negotiateBtn.dataset.productId;
+                    this.handleOffer(productId);
+                    return;
+                }
 
-            this.injectButtons();
-            this.observeMutations();
-        },
-
-        injectButtons() {
-            const cards = document.querySelectorAll('.product-card, .product-card-v3');
-            cards.forEach(card => {
-                if (card.querySelector('.action-buttons-row')) return;
-
-                let productId = card.dataset.id || "1";
-
-                const btnRow = document.createElement('div');
-                btnRow.className = 'action-buttons-row';
-                btnRow.style.cssText = "display: flex; gap: 8px; margin-top: 12px; justify-content: space-between; z-index: 20; position: relative;";
-
-                btnRow.innerHTML = `
-                    <button onclick="guestAction('offer', ${productId})" style="flex:1; padding:8px; border:1px solid #d97706; background:white; color:#d97706; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; transition:all 0.2s; font-family:'Inter', sans-serif;">
-                       <span>🔨</span> Preisvorschlag
-                    </button>
-                    <button onclick="guestAction('buy', ${productId})" style="flex:1; padding:8px; border:none; background:linear-gradient(135deg, #FF8C42, #2D5016); color:white; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; box-shadow: 0 4px 10px rgba(45, 80, 22, 0.2); transition:all 0.2s; font-family:'Inter', sans-serif;">
-                       <span>🛒</span> Kaufen
-                    </button>
-                `;
-
-                const targetContainer = card.querySelector('.product-info') || card;
-                targetContainer.appendChild(btnRow);
+                // Handle Kaufen/Buy button
+                const buyBtn = e.target.closest('.buy-btn');
+                if (buyBtn) {
+                    e.preventDefault();
+                    const productId = buyBtn.dataset.productId;
+                    this.handleBuy(productId);
+                    return;
+                }
             });
+
+            console.log('[ProductActions] Event delegation initialized');
         },
 
-        handleGuestAction(type, id) {
-            const product = (window.loadedProducts || []).find(p => p.id == id) || {
-                id: id,
-                name: "Demo Produkt",
+        handleOffer(productId) {
+            if (!Auth.isLoggedIn()) {
+                Toast.warning('Bitte melde dich an, um einen Preisvorschlag zu senden.');
+                setTimeout(() => Auth.showLoginModal('login'), 800);
+            } else {
+                // Open offer modal or redirect to offer page
+                Toast.info('Preisvorschlag wird vorbereitet...');
+                // TODO: Integrate with offer modal
+                setTimeout(() => {
+                    window.location.href = `produkt.html?id=${productId}&action=offer`;
+                }, 500);
+            }
+        },
+
+        handleBuy(productId) {
+            const product = (window.loadedProducts || []).find(p => p.id == productId) || {
+                id: productId,
+                name: "Produkt",
                 price: "99.00",
                 image: "images/placeholder.jpg"
             };
 
-            if (type === 'buy') {
-                GuestCart.add(product);
-            } else if (type === 'offer') {
-                if (!Auth.isLoggedIn()) {
-                    Toast.warning('Bitte melde dich an, um einen Preisvorschlag zu senden.');
-                    setTimeout(() => Auth.showLoginModal('login'), 800);
-                } else {
-                    Toast.info('Verhandlungs-Funktion wird geladen...');
-                }
-            }
-        },
-
-        observeMutations() {
-            const observer = new MutationObserver((mutations) => {
-                let shouldInject = false;
-                for (const mutation of mutations) {
-                    if (mutation.addedNodes.length > 0) shouldInject = true;
-                }
-                if (shouldInject) this.injectButtons();
-            });
-
-            const grid = document.getElementById('productsGrid');
-            if (grid) observer.observe(grid, { childList: true, subtree: true });
+            GuestCart.add(product);
         }
     };
 
