@@ -79,12 +79,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. THEME TOGGLE
     const themeBtn = document.getElementById('themeToggle');
     if (themeBtn) {
-        // Check system preference
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.body.classList.add('dark-mode');
-            document.querySelector('.login-container').classList.add('dark');
-            updateThemeIcon(true);
-        }
+        // Force Dark Mode by default for Magic Effect
+        document.body.classList.add('dark-mode');
+        const container = document.querySelector('.login-container');
+        if (container) container.classList.add('dark');
+        updateThemeIcon(true);
 
         themeBtn.addEventListener('click', () => {
             document.body.classList.toggle('dark-mode');
