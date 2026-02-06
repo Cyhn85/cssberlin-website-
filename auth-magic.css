@@ -1,0 +1,329 @@
+/* ============================================
+   Magic Auth CSS - Glassmorphism & Animations
+   ============================================ */
+
+:root {
+    --bg-light: #f0f2f5;
+    --bg-dark: #111827;
+    /* Dark space blue/black */
+    --card-light: rgba(255, 255, 255, 0.8);
+    --card-dark: rgba(30, 41, 59, 0.7);
+    --text-light: #1f2937;
+    --text-dark: #f9fafb;
+    --primary: #4f46e5;
+    /* Indigoish */
+    --input-bg-light: #ffffff;
+    --input-bg-dark: #374151;
+}
+
+body.magic-auth-body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+    /* Prevent scroll on full screen auth */
+}
+
+/* Container */
+.login-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--bg-light);
+    transition: background 0.3s ease;
+}
+
+.login-container.dark {
+    background: var(--bg-dark);
+}
+
+/* Canvas Particles */
+.particles-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* Theme Toggle */
+.theme-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 10px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+    transition: all 0.2s;
+    color: var(--text-light);
+}
+
+.login-container.dark .theme-toggle {
+    color: var(--text-dark);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Glass Card */
+.login-card {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 420px;
+    background: var(--card-light);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 2px;
+    /* Gradient border space */
+    animation: floatCard 6s ease-in-out infinite;
+}
+
+.login-container.dark .login-card {
+    background: var(--card-dark);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@keyframes floatCard {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.login-card-inner {
+    background: transparent;
+    padding: 40px;
+    border-radius: 18px;
+}
+
+/* Header */
+.login-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-header h1 {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text-light);
+    margin: 0 0 8px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.login-container.dark .login-header h1 {
+    color: var(--text-dark);
+}
+
+.login-header p {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 0;
+}
+
+.login-container.dark .login-header p {
+    color: #9ca3af;
+}
+
+/* Form Fields */
+.form-field {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.form-field input {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    background: var(--input-bg-light);
+    color: var(--text-light);
+    font-size: 15px;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.login-container.dark .form-field input {
+    background: var(--input-bg-dark);
+    border-color: #4b5563;
+    color: var(--text-dark);
+}
+
+.form-field input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+
+.form-field label {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6b7280;
+    pointer-events: none;
+    transition: all 0.2s;
+    font-size: 15px;
+    background: transparent;
+    padding: 0 4px;
+}
+
+.form-field.active label {
+    top: 0;
+    transform: translateY(-50%) scale(0.85);
+    background: var(--card-light);
+    color: var(--primary);
+}
+
+.login-container.dark .form-field.active label {
+    background: var(--card-dark);
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #6b7280;
+    cursor: pointer;
+}
+
+/* Options */
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    font-size: 13px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: #6b7280;
+}
+
+.login-container.dark .remember-me {
+    color: #9ca3af;
+}
+
+.forgot-password {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* Button */
+.login-button {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #FF8C42 0%, #E8854C 100%);
+    /* CSS Berlin Orange */
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(232, 133, 76, 0.3);
+}
+
+.login-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(232, 133, 76, 0.4);
+}
+
+/* Social */
+.separator {
+    display: flex;
+    align-items: center;
+    margin: 24px 0;
+    color: #6b7280;
+    font-size: 12px;
+}
+
+.separator::before,
+.separator::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #e5e7eb;
+}
+
+.login-container.dark .separator::before,
+.login-container.dark .separator::after {
+    background: #374151;
+}
+
+.separator span {
+    padding: 0 10px;
+}
+
+.social-login {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.social-button {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #1f2937;
+}
+
+.login-container.dark .social-button {
+    background: #1f2937;
+    border-color: #374151;
+    color: white;
+}
+
+.social-button:hover {
+    background: #f9fafb;
+    transform: translateY(-2px);
+}
+
+.login-container.dark .social-button:hover {
+    background: #374151;
+}
+
+.signup-prompt {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.signup-prompt a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+}

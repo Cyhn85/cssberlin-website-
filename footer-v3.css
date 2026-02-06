@@ -1,32 +1,38 @@
 /* ============================================
-   CSS Berlin Footer V3 - COMPACT MODE
-   User Requested: "Shrink massive footer", "Remove Contact block"
-   Modified to be horizontal and sleek.
+   CSS Berlin Footer V3 - MIRROR MODE
+   Design: Mirrors the Header's dimensions and style.
+   Height: Compact/Fixed.
+   Content: Links only. Address hidden (moved to Kontakt).
    ============================================ */
 
 .footer-v3 {
-    background: linear-gradient(90deg, #FF8C42 0%, #ff9f5e 100%);
+    background: #FF8C42;
+    /* Matches Header Main Color */
     color: #1a3409;
-    padding: 16px 0;
-    /* Massively reduced from 60px */
+    padding: 0;
+    /* Zero padding, layout handled by container height */
     margin-top: 60px;
     border-top: 4px solid #2D5016;
+    /* Matches Header Top Border preference */
     font-family: 'Montserrat', 'Inter', sans-serif;
+    height: 70px;
+    /* Explicit height matching a header row */
+    display: flex;
+    align-items: center;
 }
 
 .footer-v3-container {
     max-width: 1400px;
+    width: 100%;
     margin: 0 auto;
     padding: 0 24px;
     display: flex;
-    /* Changed from Grid to Flex */
     align-items: center;
     justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 20px;
+    height: 100%;
 }
 
-/* 1. BRAND COLUMN - COMPACT */
+/* BRAND - Left Side (Mirrors Logo) */
 .footer-brand {
     display: flex;
     align-items: center;
@@ -35,89 +41,72 @@
 
 .footer-brand .logo-text {
     font-size: 20px;
-    /* Reduced from 28px */
     font-weight: 900;
     color: white;
+    /* Logo style */
+    text-transform: uppercase;
     letter-spacing: -0.5px;
     margin: 0;
 }
 
-/* Hide Tagline & Description for Compact Mode */
 .footer-brand .tagline,
 .footer-brand p {
     display: none;
+    /* Hidden as requested */
 }
 
-/* 2. CONTACT/ADDRESS COLUMN - HIDDEN */
-/* User requested to move contact to a "tab" (link) and shrink footer */
+/* CENTER - Hidden Address */
 .footer-col:nth-of-type(2) {
     display: none;
+    /* Address completely removed from view */
 }
 
-/* 3. LINKS COLUMN - HORIZONTAL */
+/* LINKS - Right Side (Mirrors Navigation/Actions) */
 .footer-col:last-child {
     display: flex;
+    gap: 20px;
     align-items: center;
-    gap: 24px;
 }
 
-/* Hide "Rechtliches" Header */
 .footer-col:last-child h3 {
     display: none;
+    /* Hide headers */
 }
 
 .footer-col a {
     color: #1a3409;
     text-decoration: none;
     font-size: 13px;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
-    transition: all 0.2s;
-    margin: 0;
-    /* Reset margins */
+    transition: opacity 0.2s;
 }
 
 .footer-col a:hover {
-    color: white;
-    transform: translateY(-1px);
+    opacity: 0.7;
 }
 
-/* 4. BOTTOM BAR - MERGED */
-/* Hide the separate bottom bar container, merge copyright into layout if possible */
+/* Bottom Copyright Bar - Integrated or Hidden */
 .footer-bottom-v3 {
-    border: none;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    text-align: center;
-    font-size: 11px;
-    opacity: 0.6;
-    margin-top: -10px;
-    /* Pull it up closer */
     display: none;
-    /* Hiding separate line to merge into main flow? */
+    /* Merge copyright into the main bar if needed, or hide to keep "Header" look */
 }
 
-/* Re-display copyright nicely if needed, or keeping it hidden for ultra-compact?
-   Let's keep it visible but very subtle at the very bottom or integrated */
-.footer-bottom-v3 {
-    display: block;
-    margin-top: 0;
-    padding-top: 10px;
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
+/* If copyright is legally needed, add it small */
+.footer-copyright-small {
+    font-size: 10px;
+    color: rgba(26, 52, 9, 0.6);
+    margin-left: 20px;
 }
 
-/* Mobile Adjustments */
 @media (max-width: 768px) {
-    .footer-v3-container {
-        flex-direction: column;
-        gap: 16px;
-        text-align: center;
+    .footer-v3 {
+        height: auto;
+        padding: 16px 0;
     }
 
-    .footer-col:last-child {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 16px;
+    .footer-v3-container {
+        flex-direction: column;
+        gap: 12px;
     }
 }

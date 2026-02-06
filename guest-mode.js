@@ -124,19 +124,9 @@
         },
 
         showLoginModal(tab = 'login') {
-            if (window.authModalV3 && typeof window.authModalV3.open === 'function') {
-                window.authModalV3.open(tab);
-                return true;
-            }
-            if (window.authModal && typeof window.authModal.open === 'function') {
-                window.authModal.open(tab);
-                return true;
-            }
-            Toast.warning('Bitte melde dich an, um fortzufahren.');
-            setTimeout(() => {
-                window.location.href = 'login.html';
-            }, 1500);
-            return false;
+            // Direct redirect to new Magic Login Page
+            window.location.href = 'anmelden.html';
+            return true;
         }
     };
 
