@@ -11,9 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let particles = [];
 
         // Settings
-        const particleCount = 60;
+        const particleCount = 100;
         const particleColorLight = 'rgba(0, 0, 100, 0.15)';
-        const particleColorDark = 'rgba(255, 255, 255, 0.15)';
+        const particleColorDark = 'rgba(255, 255, 255, 0.4)';
 
         function resize() {
             width = window.innerWidth;
