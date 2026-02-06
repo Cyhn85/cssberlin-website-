@@ -1,7 +1,6 @@
 /* ============================================
-   PRODUCT CARD V4 - ERGONOMIC / GLASS / COMPACT
-   Inspired by Vinted/Modern Clean Aesthetic
-   Standardized for CSS Berlin (Green/Orange)
+   PRODUCT CARD V5 - SYMMETRICAL & BOLD
+   CSS Berlin Standard
    ============================================ */
 
 .product-card-v3 {
@@ -10,7 +9,6 @@
     background: transparent;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     height: 100%;
-    /* Keep aspect ratio manageable */
     display: flex;
     flex-direction: column;
 }
@@ -18,19 +16,19 @@
 .product-card-v3-inner {
     position: relative;
     background: white;
-    border: 1px solid rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.06);
     border-radius: 12px;
     overflow: hidden;
     height: 100%;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
     transition: all 0.3s ease;
 }
 
 .product-card-v3:hover .product-card-v3-inner {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(45, 80, 22, 0.15);
+    transform: translateY(-5px);
+    box-shadow: 0 14px 28px rgba(45, 80, 22, 0.15);
     /* Greenish shadow */
     border-color: rgba(45, 80, 22, 0.2);
 }
@@ -43,7 +41,7 @@
     padding-top: 133%;
     /* 4:3 Portrait Ratio */
     overflow: hidden;
-    background: #f0f0f0;
+    background: #f4f4f4;
 }
 
 .product-card-v3-img-wrap img {
@@ -58,223 +56,214 @@
 
 .product-card-v3:hover .product-card-v3-img-wrap img {
     transform: scale(1.05);
+    /* Zoom effect */
 }
 
 /* Badges */
-.product-card-v3-badge {
+.product-card-v3-condition-badge {
     position: absolute;
-    top: 8px;
+    bottom: 8px;
     left: 8px;
-    background: rgba(45, 80, 22, 0.9);
-    /* Dark Green */
-    color: white;
-    font-size: 10px;
+    background: rgba(255, 255, 255, 0.95);
+    color: #333;
+    font-size: 11px;
     font-weight: 700;
     padding: 4px 10px;
-    border-radius: 99px;
+    border-radius: 6px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    backdrop-filter: blur(4px);
-    z-index: 2;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.product-card-v3-badge.neu {
-    background: rgba(255, 140, 66, 0.95);
-    /* Orange */
+.product-card-v3-condition-badge.neu {
+    background: #FF8C42;
+    /* Orange for New */
+    color: white;
 }
 
-/* Sold Mock */
 .sold-badge {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) rotate(-12deg);
-    background: rgba(200, 0, 0, 0.85);
+    background: rgba(220, 20, 60, 0.9);
     color: white;
     padding: 8px 24px;
-    font-weight: 800;
+    font-weight: 900;
     text-transform: uppercase;
     font-size: 14px;
-    border: 2px solid white;
+    border: 3px solid white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     z-index: 10;
 }
 
 /* ============================================
-   BODY SECTION - COMPACT & ERGONOMIC
+   BODY SECTION - SYMMETRICAL & BOLD
    ============================================ */
 .product-card-v3-body {
-    padding: 10px 12px;
+    padding: 14px;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
     background: white;
+    gap: 8px;
 }
 
-/* Top Row: Price & Brand */
-.product-card-v3-price-row {
+/* ROW 1: Brand & Price */
+.product-card-v3-top-row {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 2px;
-}
-
-.product-card-v3-price {
-    font-size: 17px;
-    font-weight: 800;
-    color: #1a1a1a;
-    letter-spacing: -0.3px;
+    align-items: center;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 8px;
+    margin-bottom: 4px;
 }
 
 .product-card-v3-brand {
     font-size: 11px;
-    font-weight: 600;
-    color: #2D5016;
-    /* Brand Green */
+    font-weight: 700;
+    color: #666;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-/* Title */
+.product-card-v3-price-block {
+    text-align: right;
+}
+
+.product-card-v3-price {
+    font-size: 18px;
+    font-weight: 800;
+    color: #2D5016;
+    /* Green Price */
+}
+
+.product-card-v3-old-price {
+    font-size: 12px;
+    color: #999;
+    text-decoration: line-through;
+    margin-left: 4px;
+}
+
+/* ROW 2: Main Row (Name & Size) - SYMMETRICAL */
+.product-card-v3-main-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+
 .product-card-v3-name {
-    font-size: 13px;
-    font-weight: 500;
-    color: #333;
+    font-size: 15px;
+    font-weight: 700;
+    color: #111;
+    margin: 0;
     line-height: 1.3;
-    margin: 0 0 4px 0;
     display: -webkit-box;
-    -webkit-line-clamp: 1;
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    text-align: left;
+    flex: 1;
+    /* Take available space */
 }
 
-/* Meta Info (Size, Condition) */
-.product-meta {
-    font-size: 11px;
-    color: #888;
-    margin-bottom: 8px;
-    display: flex;
-    gap: 6px;
-    align-items: center;
-}
-
-.product-meta span {
+.product-card-v3-size-tag {
     background: #f5f5f5;
-    padding: 2px 6px;
+    color: #333;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 8px;
     border-radius: 4px;
+    white-space: nowrap;
+    border: 1px solid #eee;
 }
 
-/* Seller (Small) */
-.product-card-v3-seller {
+/* ROW 3: Seller */
+.product-card-v3-seller-row {
     display: flex;
     align-items: center;
     gap: 6px;
     margin-top: auto;
-    /* Push to bottom of flex area if space permits */
-    padding-top: 6px;
-    border-top: 1px solid rgba(0, 0, 0, 0.03);
+    /* Push to bottom near buttons */
+    padding-top: 4px;
 }
 
 .product-card-v3-seller-avatar {
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     color: white;
+    font-size: 9px;
+    font-weight: 700;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700;
 }
 
-/* ============================================
-   ACTIONS / BUTTONS
-   Aligned with "Button Rules": Green & Rainbow
-   But clearer & smaller interaction
-   ============================================ */
+.product-card-v3-seller-name {
+    font-size: 11px;
+    color: #777;
+    font-weight: 500;
+}
+
+/* ROW 4: Buttons (Always Visible) */
 .product-card-v3-actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
-    margin-top: 10px;
+    margin-top: 12px;
 }
 
 .product-card-v3-actions button {
-    height: 32px;
-    /* Compact height */
-    font-size: 12px;
+    height: 36px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
-    border-radius: 6px;
-    cursor: pointer;
     transition: all 0.2s;
-    font-weight: 600;
     border: none;
 }
 
-/* Negotiate (Outline/White with Green) */
-.negotiate-btn {
+/* Button Variants */
+.btn-action-outline {
     background: white;
-    border: 1px solid #e0e0e0 !important;
+    border: 1px solid #ddd !important;
     color: #555;
 }
 
-.negotiate-btn:hover {
-    background: #f9f9f9;
-    border-color: #ccc !important;
-    color: #333;
+.btn-action-outline:hover {
+    background: #f8f8f8;
+    border-color: #bbb !important;
+    color: #111;
 }
 
-/* Buy (Green Gradient - CSS Berlin Standard) */
-.buy-btn {
+.btn-action-solid {
     background: linear-gradient(135deg, #4A7C2C 0%, #2D5016 100%);
     color: white;
-    box-shadow: 0 2px 6px rgba(45, 80, 22, 0.2);
+    box-shadow: 0 4px 10px rgba(45, 80, 22, 0.2);
 }
 
-.buy-btn:hover {
+.btn-action-solid:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(45, 80, 22, 0.3);
+    box-shadow: 0 6px 14px rgba(45, 80, 22, 0.3);
 }
 
-/* Hide SVG icons on very small buttons if needed, or keep for clarity */
-.product-card-v3-actions svg {
-    width: 14px;
-    height: 14px;
-}
-
-/* ============================================
-   RESPONSIVE
-   ============================================ */
 @media (max-width: 768px) {
     .product-card-v3-body {
-        padding: 8px 10px;
+        padding: 10px;
     }
 
-    .product-card-v3-price {
-        font-size: 15px;
-    }
-
-    .product-card-v3-actions {
-        display: none;
-        /* Hide actions on mobile overview for cleaner look? Or Keep? */
-        /* Re-enabling because functional parity is requested */
-        display: flex;
-        gap: 6px;
+    .product-card-v3-name {
+        font-size: 14px;
     }
 
     .product-card-v3-actions button {
-        flex: 1;
-        padding: 0;
-        font-size: 0;
-        /* Hide text on mobile */
-    }
-
-    .product-card-v3-actions button svg {
-        margin: 0;
-        width: 16px;
-        height: 16px;
-    }
-
-    .product-card-v3-actions button::after {
-        content: attr(data-label);
-        /* If we had labels */
+        font-size: 12px;
+        /* Smaller text on mobile */
+        padding: 0 4px;
     }
 }

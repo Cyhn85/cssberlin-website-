@@ -841,59 +841,53 @@ function createProductCard(product) {
     // Check if product is sold
     const isSold = product.status === 'sold';
 
-    return `
-        <div class="product-card-v3 ${isSold ? 'sold' : ''}" data-product-id="${product.id}" data-status="${product.status || 'active'}">
-            <div class="product-card-v3-inner">
-                <div class="product-card-v3-img-wrap">
-                    <img src="${product.image}"
-                         alt="${product.name}"
-                         loading="lazy"
-                         onerror="this.src='https://picsum.photos/400x533?text=Bild+nicht+verfuegbar'">
+    <div class="product-card-v3 ${isSold ? 'sold' : ''}" data-product-id="${product.id}" data-status="${product.status || 'active'}">
+        <div class="product-card-v3-inner">
+            <div class="product-card-v3-img-wrap">
+                <img src="${product.image}"
+                    alt="${product.name}"
+                    loading="lazy"
+                    onerror="this.src='https://picsum.photos/400x533?text=Bild+nicht+verfuegbar'">
 
                     ${isSold ? '<div class="sold-badge">VERKAUFT</div>' : ''}
-                    <div class="product-card-v3-badge ${badgeClass}">${product.condition}</div>
+                    <div class="product-card-v3-condition-badge ${badgeClass}">${product.condition}</div>
+            </div>
+
+            <div class="product-card-v3-body">
+                <!-- Row 1: Brand & Price -->
+                <div class="product-card-v3-top-row">
+                    <span class="product-card-v3-brand">${product.brand}</span>
+                    <div class="product-card-v3-price-block">
+                        <span class="product-card-v3-price">${product.price.toFixed(0)}€</span>
+                        ${product.newPrice ? `<span class="product-card-v3-old-price">${product.newPrice.toFixed(0)}€</span>` : ''}
+                    </div>
                 </div>
 
-                <div class="product-card-v3-body">
-                    <div class="product-card-v3-price-row">
-                        <div>
-                            <span class="product-card-v3-price">${product.price.toFixed(0)}€</span>
-                            <span style="font-size:10px;color:#999;margin-left:6px;text-decoration:line-through;">Neu: ${product.newPrice.toFixed(0)}€</span>
-                        </div>
-                        <span class="product-card-v3-brand">${product.brand}</span>
-                    </div>
-
+                <!-- Row 2: Name & Size (Symmetrical) -->
+                <div class="product-card-v3-main-row">
                     <h3 class="product-card-v3-name">${product.name}</h3>
+                    <span class="product-card-v3-size-tag">${product.size}</span>
+                </div>
 
-                    <div class="product-meta" style="font-size:10px;color:#888;margin-bottom:6px;">
-                        <span>Gr. ${product.size}</span> · <span>${product.condition}</span>
-                    </div>
+                <!-- Row 3: Seller/Extra -->
+                <div class="product-card-v3-seller-row">
+                    <div class="product-card-v3-seller-avatar" style="background:${seller.avatarColor || '#FF8C42'};">${seller.initials}</div>
+                    <span class="product-card-v3-seller-name">${seller.name}${seller.verified ? ' ✓' : ''}</span>
+                </div>
 
-                    <div class="product-card-v3-seller" style="margin-bottom:8px;">
-                        <div class="product-card-v3-seller-avatar" style="background:${seller.avatarColor || '#FF8C42'};width:18px;height:18px;font-size:8px;">${seller.initials}</div>
-                        <span style="font-size:10px;color:#666;">${seller.name}${seller.verified ? ' ✓' : ''}</span>
-                    </div>
-
-                    <div class="product-card-v3-actions">
-                        <button class="btn-energy-brand negotiate-btn" data-product-id="${product.id}" ${isSold ? 'disabled' : ''}>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
-                                <line x1="7" y1="7" x2="7.01" y2="7"></line>
-                            </svg>
-                            Preisvorschlag
-                        </button>
-                        <button class="btn-rainbow buy-btn" data-product-id="${product.id}" ${isSold ? 'disabled' : ''}>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                <circle cx="9" cy="21" r="1"></circle>
-                                <circle cx="20" cy="21" r="1"></circle>
-                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                            </svg>
-                            Kaufen
-                        </button>
-                    </div>
+                <!-- Row 4: Action Buttons (MANDATORY) -->
+                <div class="product-card-v3-actions">
+                    <button class="btn-action-outline negotiate-btn" data-product-id="${product.id}" ${isSold ? 'disabled' : ''}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path></svg>
+                        Gebot
+                    </button>
+                    <button class="btn-action-solid buy-btn" data-product-id="${product.id}" ${isSold ? 'disabled' : ''}>
+                        Kaufen
+                    </button>
                 </div>
             </div>
         </div>
+    </div>
     `;
 }
 
@@ -909,8 +903,8 @@ function generateMockSeller() {
 
     const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
     const lastInitial = lastInitials[Math.floor(Math.random() * lastInitials.length)];
-    const name = `${firstName} ${lastInitial}.`;
-    const initials = `${firstName.charAt(0)}${lastInitial}`;
+    const name = `${ firstName } ${ lastInitial }.`;
+    const initials = `${ firstName.charAt(0) }${ lastInitial } `;
 
     return {
         name: name,
@@ -968,9 +962,9 @@ async function initProducts(category = null) {
 
     try {
         // Build API URL with optional category filter
-        let apiUrl = `${API_BASE_URL}/api/products?skip=${currentOffset}&limit=${PRODUCTS_PAGE_SIZE}`;
+        let apiUrl = `${ API_BASE_URL } /api/products ? skip = ${ currentOffset }& limit=${ PRODUCTS_PAGE_SIZE } `;
         if (category) {
-            apiUrl += `&category=${encodeURIComponent(category)}`;
+            apiUrl += `& category=${ encodeURIComponent(category) } `;
         }
 
         console.log('[API] Fetching products from:', apiUrl);
@@ -983,7 +977,7 @@ async function initProducts(category = null) {
 
         // Check if response is OK before parsing JSON
         if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            throw new Error(`HTTP ${ response.status }: ${ response.statusText } `);
         }
 
         const data = await response.json();
@@ -1025,8 +1019,8 @@ async function initProducts(category = null) {
         // Update cart button states
         updateCartButtonStates();
 
-        const categoryInfo = category ? ` (category: ${category})` : '';
-        console.log(`Loaded ${products.length} products from backend${categoryInfo}`);
+        const categoryInfo = category ? ` (category: ${ category })` : '';
+        console.log(`Loaded ${ products.length } products from backend${ categoryInfo } `);
     } catch (error) {
         console.error('Error loading products:', error);
         // Fallback to sample products if API fails
@@ -1059,7 +1053,7 @@ function attachProductEventListeners() {
                 return;
             }
             const productId = this.dataset.productId;
-            window.location.href = `product-detail.html?id=${productId}`;
+            window.location.href = `product - detail.html ? id = ${ productId } `;
         });
         card.style.cursor = 'pointer';
     });
@@ -1137,7 +1131,7 @@ function attachProductEventListeners() {
             }
 
             // Giriş yapmışsa pazarlık sayfasına git
-            window.location.href = `meine-anzeigen.html?tab=negotiations&new=${productId}`;
+            window.location.href = `meine - anzeigen.html ? tab = negotiations & new=${ productId } `;
         });
     });
 }
@@ -1362,23 +1356,23 @@ function initLoadMore() {
         // Change button state
         this.disabled = true;
         this.innerHTML = `
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="loading-spinner">
-                <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-            Lädt...
-        `;
+        < svg width = "20" height = "20" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" class="loading-spinner" >
+            <polyline points="6 9 12 15 18 9"></polyline>
+            </svg >
+        Lädt...
+    `;
 
         try {
-            let apiUrl = `${API_BASE_URL}/api/products?skip=${currentOffset}&limit=${LOAD_MORE_SIZE}`;
+            let apiUrl = `${ API_BASE_URL } /api/products ? skip = ${ currentOffset }& limit=${ LOAD_MORE_SIZE } `;
             if (activeCategoryFilter) {
-                apiUrl += `&category=${encodeURIComponent(activeCategoryFilter)}`;
+                apiUrl += `& category=${ encodeURIComponent(activeCategoryFilter) } `;
             }
 
             const response = await fetch(apiUrl);
 
             // Check if response is OK before parsing JSON
             if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                throw new Error(`HTTP ${ response.status }: ${ response.statusText } `);
             }
 
             const data = await response.json();
@@ -1445,10 +1439,10 @@ function initLoadMore() {
             // Reset button
             this.disabled = false;
             this.innerHTML = `
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-                Mehr Produkte laden
+        < svg width = "20" height = "20" viewBox = "0 0 24 24" fill = "none" stroke = "currentColor" >
+            <polyline points="6 9 12 15 18 9"></polyline>
+                </svg >
+        Mehr Produkte laden
             `;
         }
     });
@@ -1483,7 +1477,7 @@ function hideMessageIconForGuests() {
         }
     });
 
-    console.log(`Message icon ${loggedIn ? 'visible' : 'hidden'} for ${loggedIn ? 'logged-in' : 'guest'} users`);
+    console.log(`Message icon ${ loggedIn ? 'visible' : 'hidden' } for ${ loggedIn? 'logged-in': 'guest' } users`);
 }
 
 // ============================================
@@ -1492,21 +1486,21 @@ function hideMessageIconForGuests() {
 function showNotification(message, type = 'info') {
     // Create notification element
     const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
+    notification.className = `notification notification - ${ type } `;
     notification.style.cssText = `
-        position: fixed;
-        top: 80px;
-        right: 20px;
-        background: ${type === 'success' ? '#2D5016' : type === 'error' ? '#F44336' : type === 'warning' ? '#FF8C42' : '#FF8C42'};
-        color: white;
-        padding: 16px 24px;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        z-index: 10000;
-        font-size: 14px;
-        font-weight: 500;
-        max-width: 300px;
-        animation: slideIn 0.3s ease;
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    background: ${ type === 'success' ? '#2D5016' : type === 'error' ? '#F44336' : type === 'warning' ? '#FF8C42' : '#FF8C42' };
+    color: white;
+    padding: 16px 24px;
+    border - radius: 8px;
+    box - shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z - index: 10000;
+    font - size: 14px;
+    font - weight: 500;
+    max - width: 300px;
+    animation: slideIn 0.3s ease;
     `;
 
     notification.textContent = message;
@@ -1546,7 +1540,7 @@ style.textContent = `
         }
     }
 
-    .loading-spinner {
+    .loading - spinner {
         animation: spin 1s linear infinite;
     }
 
@@ -1558,7 +1552,7 @@ style.textContent = `
             transform: rotate(360deg);
         }
     }
-`;
+    `;
 document.head.appendChild(style);
 
 // ============================================
@@ -1651,11 +1645,11 @@ async function performSearch(query) {
 
     try {
         // Search using backend API (uses environment-aware API_BASE_URL)
-        const response = await fetch(`${API_BASE_URL}/api/search?q=${encodeURIComponent(lowerQuery)}`);
+        const response = await fetch(`${ API_BASE_URL } /api/search ? q = ${ encodeURIComponent(lowerQuery) } `);
 
         // Check if response is OK before parsing JSON
         if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            throw new Error(`HTTP ${ response.status }: ${ response.statusText } `);
         }
 
         const data = await response.json();
@@ -1695,7 +1689,7 @@ async function performSearch(query) {
         attachProductEventListeners();
         updateCartButtonStates();
 
-        console.log(`Search "${lowerQuery}": ${products.length} results`);
+        console.log(`Search "${lowerQuery}": ${ products.length } results`);
     } catch (error) {
         console.error('Error searching products:', error);
         // Fallback to client-side filtering on existing cards
@@ -1723,7 +1717,7 @@ function handleQuickView(productId) {
 
     // For now, just redirect to product detail page
     // TODO: Implement modal quick view in future
-    window.location.href = `product-detail.html?id=${productId}`;
+    window.location.href = `product - detail.html ? id = ${ productId } `;
 }
 
 // ============================================
@@ -1731,8 +1725,8 @@ function handleQuickView(productId) {
 // ============================================
 console.log('%cCSS Berlin V4', 'color: #2D5016; font-size: 24px; font-weight: bold;');
 console.log('%cClimate Smart Solutions - With Seller Info', 'color: #757575; font-size: 14px;');
-console.log(`Loaded ${sampleProducts.length} products`);
-console.log(`Favorites loaded: ${favoriteIds.size}`);
+console.log(`Loaded ${ sampleProducts.length } products`);
+console.log(`Favorites loaded: ${ favoriteIds.size } `);
 
 // PHASE E — HeroSlider (auto-play campaign carousel)
 // ============================================
@@ -1765,8 +1759,8 @@ function initHeroSlider() {
     let slidesHTML = '';
     HERO_SLIDES.forEach((slide, i) => {
         slidesHTML += `
-            <div class="hero-slide ${i === 0 ? 'active' : ''}" data-slide="${i}">
-                <img src="${slide.imageUrl}" alt="${slide.title}" loading="lazy">
+        < div class="hero-slide ${i === 0 ? 'active' : ''}" data - slide="${i}" >
+            <img src="${slide.imageUrl}" alt="${slide.title}" loading="lazy">
                 <div class="hero-slide-overlay"></div>
                 <div class="hero-slide-caption">
                     <span class="hero-tag">Featured Collection</span>
@@ -1779,21 +1773,21 @@ function initHeroSlider() {
     // Render indicators
     let dotsHTML = '<div class="hero-indicators">';
     HERO_SLIDES.forEach((_, i) => {
-        dotsHTML += `<button class="hero-dot ${i === 0 ? 'active' : ''}" data-dot="${i}"></button>`;
+        dotsHTML += `< button class="hero-dot ${i === 0 ? 'active' : ''}" data - dot="${i}" ></button > `;
     });
     dotsHTML += '</div>';
 
     container.innerHTML = `
-        <div class="hero-slider">
-            ${slidesHTML}
+        < div class="hero-slider" >
+            ${ slidesHTML }
             <button class="hero-nav-btn prev" id="heroPrevBtn">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"></path></svg>
             </button>
             <button class="hero-nav-btn next" id="heroNextBtn">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"></path></svg>
             </button>
-            ${dotsHTML}
-        </div>`;
+            ${ dotsHTML }
+        </div > `;
 
     // State
     let current = 0;
@@ -2049,7 +2043,7 @@ function initFeaturedCollection() {
     ];
 
     container.innerHTML = featured.map(item => `
-        <a href="${item.link}" class="featured-card" style="text-decoration:none;">
+        < a href = "${item.link}" class="featured-card" style = "text-decoration:none;" >
             <div style="width:100%;height:100%;min-height:280px;background:${item.bg};display:flex;align-items:center;justify-content:center;">
                 <span style="font-size:64px;opacity:0.25;">${item.icon}</span>
             </div>
@@ -2058,8 +2052,8 @@ function initFeaturedCollection() {
                 <h3 class="featured-card-title">${item.title}</h3>
                 <p class="featured-card-desc">${item.desc}</p>
             </div>
-        </a>
-    `).join('');
+        </a >
+        `).join('');
 }
 
 // Auto-init on DOM ready
