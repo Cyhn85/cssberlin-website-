@@ -1,16 +1,16 @@
 /* ============================================
-   CSS Berlin Footer V3 - Orange Rich Design
-   Matches Header V3 Aesthetic
+   CSS Berlin Footer V3 - COMPACT MODE
+   User Requested: "Shrink massive footer", "Remove Contact block"
+   Modified to be horizontal and sleek.
    ============================================ */
 
 .footer-v3 {
-    background: linear-gradient(135deg, #FF8C42 0%, #ff9f5e 100%);
+    background: linear-gradient(90deg, #FF8C42 0%, #ff9f5e 100%);
     color: #1a3409;
-    /* Dark Green Text for contrast on Orange */
-    padding: 60px 0 24px;
+    padding: 16px 0;
+    /* Massively reduced from 60px */
     margin-top: 60px;
     border-top: 4px solid #2D5016;
-    /* Green border top */
     font-family: 'Montserrat', 'Inter', sans-serif;
 }
 
@@ -18,98 +18,106 @@
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 24px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 40px;
+    display: flex;
+    /* Changed from Grid to Flex */
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
-/* Columns */
-.footer-col h3 {
-    font-size: 18px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 20px;
-    color: #1a3409;
-    border-bottom: 2px solid rgba(26, 52, 9, 0.1);
-    padding-bottom: 8px;
-    display: inline-block;
+/* 1. BRAND COLUMN - COMPACT */
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-.footer-col p {
-    font-size: 14px;
-    line-height: 1.6;
-    margin-bottom: 12px;
-    color: rgba(26, 52, 9, 0.9);
-    font-weight: 500;
+.footer-brand .logo-text {
+    font-size: 20px;
+    /* Reduced from 28px */
+    font-weight: 900;
+    color: white;
+    letter-spacing: -0.5px;
+    margin: 0;
 }
 
-.footer-col address {
-    font-style: normal;
-    font-size: 14px;
-    line-height: 1.8;
-    color: rgba(26, 52, 9, 0.9);
+/* Hide Tagline & Description for Compact Mode */
+.footer-brand .tagline,
+.footer-brand p {
+    display: none;
+}
+
+/* 2. CONTACT/ADDRESS COLUMN - HIDDEN */
+/* User requested to move contact to a "tab" (link) and shrink footer */
+.footer-col:nth-of-type(2) {
+    display: none;
+}
+
+/* 3. LINKS COLUMN - HORIZONTAL */
+.footer-col:last-child {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+/* Hide "Rechtliches" Header */
+.footer-col:last-child h3 {
+    display: none;
 }
 
 .footer-col a {
     color: #1a3409;
     text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
     transition: all 0.2s;
-    display: block;
-    margin-bottom: 10px;
+    margin: 0;
+    /* Reset margins */
 }
 
 .footer-col a:hover {
     color: white;
-    /* White on hover for visibility */
-    transform: translateX(4px);
+    transform: translateY(-1px);
 }
 
-/* Brand Column Special */
-.footer-brand .logo-text {
-    font-size: 28px;
-    font-weight: 900;
-    color: white;
-    /* Logo White on Orange */
-    letter-spacing: -1px;
-    margin-bottom: 8px;
-    display: block;
-}
-
-.footer-brand .tagline {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: rgba(26, 52, 9, 0.7);
-    margin-bottom: 24px;
-}
-
-/* Bottom Bar */
+/* 4. BOTTOM BAR - MERGED */
+/* Hide the separate bottom bar container, merge copyright into layout if possible */
 .footer-bottom-v3 {
-    border-top: 1px solid rgba(26, 52, 9, 0.1);
-    margin-top: 40px;
-    padding-top: 24px;
+    border: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
     text-align: center;
-    font-size: 12px;
-    color: rgba(26, 52, 9, 0.6);
-    font-weight: 600;
+    font-size: 11px;
+    opacity: 0.6;
+    margin-top: -10px;
+    /* Pull it up closer */
+    display: none;
+    /* Hiding separate line to merge into main flow? */
 }
 
-.footer-bottom-v3 p {
-    margin: 0;
+/* Re-display copyright nicely if needed, or keeping it hidden for ultra-compact?
+   Let's keep it visible but very subtle at the very bottom or integrated */
+.footer-bottom-v3 {
+    display: block;
+    margin-top: 0;
+    padding-top: 10px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 /* Mobile Adjustments */
 @media (max-width: 768px) {
-    .footer-v3 {
-        padding: 40px 0 20px;
+    .footer-v3-container {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
     }
 
-    .footer-v3-container {
-        grid-template-columns: 1fr;
-        gap: 32px;
+    .footer-col:last-child {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 16px;
     }
 }
