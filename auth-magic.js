@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Settings
         const particleCount = 100;
         const particleColorLight = 'rgba(0, 0, 100, 0.15)';
-        const particleColorDark = 'rgba(255, 255, 255, 0.4)';
+        const particleColorDark = 'rgba(255, 140, 66, 0.5)'; /* Orange Sparkles */
 
         function resize() {
             width = window.innerWidth;
@@ -228,6 +228,34 @@ document.addEventListener('DOMContentLoaded', () => {
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = isRegisterMode ? "Registrieren" : "Anmelden";
+            }
+        });
+    }
+
+    // 6. MAGIC LINK HANDLER
+    const magicBtn = document.getElementById('magicLinkBtn');
+    if (magicBtn) {
+        magicBtn.addEventListener('click', async () => {
+            const email = document.getElementById('email').value;
+            if (!email) {
+                alert("Bitte geben Sie zuerst Ihre E-Mail Adresse ein.");
+                return;
+            }
+
+            magicBtn.disabled = true;
+            magicBtn.innerHTML = 'Sende Link...';
+
+            try {
+                // Mock API Call or Real if supported
+                // await api.sendMagicLink(email);
+                await new Promise(r => setTimeout(r, 1500)); // Simulating network
+
+                alert(`Ein magischer Link wurde an ${email} gesendet! \n(Bitte prüfen Sie Ihren Posteingang)`);
+            } catch (e) {
+                alert("Fehler beim Senden des Magic Links.");
+            } finally {
+                magicBtn.disabled = false;
+                magicBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 10l-4 4l6 6l4-16l-18 7l4 2l2 6l3-4"></path></svg> Mit Magic Link anmelden`;
             }
         });
     }
