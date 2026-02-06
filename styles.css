@@ -1388,6 +1388,8 @@ header[class*="header"]:not(.header-v3) {
     grid-template-columns: repeat(5, 1fr);
     gap: var(--spacing-lg);
     margin-bottom: var(--spacing-xl);
+    /* CLS Fix: Reserve space for products to prevent footer shift */
+    min-height: 800px;
 }
 
 /* ============================================
@@ -2148,6 +2150,7 @@ header[class*="header"]:not(.header-v3) {
     .products-grid {
         /* Keep density high on small desktops */
         grid-template-columns: repeat(4, 1fr);
+        min-height: 700px; /* CLS Fix */
     }
 }
 
@@ -2184,6 +2187,7 @@ header[class*="header"]:not(.header-v3) {
     .products-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: var(--spacing-md);
+        min-height: 400px; /* CLS Fix */
     }
 
     .main-nav {

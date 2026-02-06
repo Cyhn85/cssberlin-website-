@@ -365,8 +365,8 @@
    NAVIGATION BAR
    ============================================ */
 .nav-bar-v3 {
-    background: #1a3409;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background: #FF8C42;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .nav-container-v3 {
@@ -380,10 +380,10 @@
 
 .nav-link-v3 {
     padding: 14px 24px;
-    color: rgba(255, 255, 255, 0.9);
+    color: #FFEB3B;
     text-decoration: none;
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     transition: all 0.2s;
@@ -391,12 +391,12 @@
 }
 
 .nav-link-v3:hover {
-    color: white;
-    background: rgba(255, 255, 255, 0.1);
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .nav-link-v3.active {
-    color: white;
+    color: #FFFFFF;
 }
 
 .nav-link-v3.active::after {
@@ -412,20 +412,22 @@
 }
 
 /* Sale Link Special */
-/* Sale Link Special - Green Gradient */
+/* Sale Link Special - White/Yellow on Orange */
 .nav-link-v3.sale {
-    background: linear-gradient(135deg, #4A7C2C 0%, #2D5016 100%);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: #FFFFFF;
+    border: 2px solid #FFEB3B;
     border-radius: 6px;
-    color: white;
+    color: #FF8C42;
     margin: 8px 0;
     padding: 8px 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    font-weight: 800;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .nav-link-v3.sale:hover {
-    background: linear-gradient(135deg, #5a8d3b 0%, #3d6b1e 100%);
-    box-shadow: 0 4px 12px rgba(45, 80, 22, 0.4);
+    background: #FFEB3B;
+    color: #FF8C42;
+    box-shadow: 0 4px 12px rgba(255, 140, 66, 0.4);
     transform: translateY(-1px);
 }
 
