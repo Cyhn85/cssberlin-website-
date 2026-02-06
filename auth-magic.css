@@ -1,18 +1,19 @@
 /* ============================================
-   Magic Auth CSS - COMPACT & ERGONOMIC MODE
+   Magic Auth CSS - ULTRA COMPACT & VISIBLE MODE
    ============================================ */
 
 :root {
     --bg-light: #f0f2f5;
     --bg-dark: #0f172a;
-    --card-light: rgba(255, 255, 255, 0.8);
-    --card-dark: rgba(30, 41, 59, 0.6);
-    --text-light: #1f2937;
+    --card-light: rgba(255, 255, 255, 0.95);
+    /* Opaque for readability */
+    --card-dark: rgba(30, 41, 59, 0.7);
+    --text-light: #111827;
+    /* Darker black */
     --text-dark: #f9fafb;
     --primary: #FF8C42;
-    /* Orange Primary */
-    --accent: #2D5016;
-    /* Green Accent */
+    --accent: #39ff14;
+    /* Neon Green */
     --input-bg-light: #ffffff;
     --input-bg-dark: #374151;
 }
@@ -39,7 +40,6 @@ body.magic-auth-body {
 /* DARK MODE - NATURE/ORANGE EFFECT */
 .login-container.dark {
     background-color: #0f172a;
-    /* Rich Animated Gradient: Dark -> Green -> Orange */
     background: linear-gradient(-45deg, #0f172a, #1a3409, #2D5016, #FF8C42, #b45309);
     background-size: 400% 400%;
     animation: gradientBG 15s ease infinite;
@@ -85,7 +85,8 @@ body.magic-auth-body {
     justify-content: center;
     backdrop-filter: blur(5px);
     transition: all 0.2s;
-    color: var(--text-light);
+    color: #111;
+    /* Dark icon in light mode */
 }
 
 .login-container.dark .theme-toggle {
@@ -93,25 +94,26 @@ body.magic-auth-body {
     background: rgba(255, 255, 255, 0.1);
 }
 
-/* Glass Card - COMPACT MODE */
+/* Glass Card - ULTRA COMPACT */
 .login-card {
     position: relative;
     z-index: 5;
     width: 90%;
-    max-width: 380px;
-    /* Reduced width */
+    max-width: 350px;
+    /* Reduced width further */
     padding: 1px;
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--card-light);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     border-radius: 16px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    /* Light border */
     animation: floatCard 6s ease-in-out infinite;
 }
 
 .login-container.dark .login-card {
-    background: rgba(15, 23, 42, 0.6);
+    background: var(--card-dark);
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
 }
@@ -129,22 +131,22 @@ body.magic-auth-body {
 }
 
 .login-card-inner {
-    padding: 24px 28px;
-    /* Reduced padding */
+    padding: 24px 24px;
+    /* Tight padding */
 }
 
 /* Header */
 .login-header {
     text-align: center;
     margin-bottom: 20px;
-    /* Reduced margin */
 }
 
 .login-header h1 {
-    font-size: 24px;
-    /* Reduced font */
+    font-size: 22px;
+    /* Smaller */
     font-weight: 800;
     color: var(--text-light);
+    /* Dark in light mode */
     margin: 0 0 6px;
     font-family: 'Montserrat', sans-serif;
     letter-spacing: -0.5px;
@@ -164,29 +166,28 @@ body.magic-auth-body {
     color: #94a3b8;
 }
 
-/* Form Fields - COMPACT */
+/* Form Fields - ULTRA COMPACT */
 .form-field {
     position: relative;
-    margin-bottom: 16px;
-    /* Reduced space */
+    margin-bottom: 14px;
 }
 
 .form-field input {
     width: 100%;
-    padding: 12px;
-    /* Smaller padding */
-    border-radius: 10px;
-    border: 1px solid #e2e8f0;
-    background: rgba(255, 255, 255, 0.8);
-    color: #1e293b;
-    font-size: 14px;
+    padding: 10px;
+    border-radius: 8px;
+    /* Sharper corners */
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    color: #111827;
+    font-size: 13px;
     outline: none;
     transition: all 0.2s;
-    /* Adjusted internal padding for label space */
-    padding-top: 18px;
+    /* Label spacing */
+    padding-top: 16px;
     padding-bottom: 6px;
-    height: 48px;
-    /* Reduced height */
+    height: 42px;
+    /* Very compact */
 }
 
 .login-container.dark .form-field input {
@@ -197,8 +198,7 @@ body.magic-auth-body {
 
 .form-field input:focus {
     border-color: var(--primary);
-    box-shadow: 0 0 0 2px rgba(255, 140, 66, 0.2);
-    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 0 0 2px rgba(255, 140, 66, 0.15);
 }
 
 .login-container.dark .form-field input:focus {
@@ -207,13 +207,13 @@ body.magic-auth-body {
 
 .form-field label {
     position: absolute;
-    left: 12px;
+    left: 10px;
     top: 50%;
     transform: translateY(-50%);
-    color: #64748b;
+    color: #6b7280;
     pointer-events: none;
     transition: all 0.2s ease;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
 }
 
@@ -221,21 +221,17 @@ body.magic-auth-body {
 .form-field.active label,
 .form-field input:focus+label,
 .form-field input:not(:placeholder-shown)+label {
-    top: 10px;
-    /* Adjusted for smaller input */
-    transform: translateY(-50%) scale(0.85);
+    top: 8px;
+    /* Very tight top */
+    transform: translateY(-50%) scale(0.8);
     transform-origin: left center;
     color: var(--primary);
-    font-weight: 600;
-}
-
-.login-container.dark .form-field.active label {
-    color: var(--primary);
+    font-weight: 700;
 }
 
 .toggle-password {
     position: absolute;
-    right: 12px;
+    right: 10px;
     top: 50%;
     transform: translateY(-50%);
     background: none;
@@ -254,8 +250,8 @@ body.magic-auth-body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-    font-size: 13px;
+    margin-bottom: 16px;
+    font-size: 12px;
 }
 
 .remember-me {
@@ -263,7 +259,8 @@ body.magic-auth-body {
     align-items: center;
     gap: 6px;
     cursor: pointer;
-    color: #64748b;
+    color: #4b5563;
+    /* Visible in light */
 }
 
 .login-container.dark .remember-me {
@@ -274,45 +271,43 @@ body.magic-auth-body {
     color: var(--primary);
     text-decoration: none;
     font-weight: 600;
-    transition: color 0.2s;
 }
 
-.forgot-password:hover {
-    color: #E8854C;
-}
-
-/* Buttons - COMPACT */
+/* Buttons */
 .login-button {
     width: 100%;
-    padding: 12px;
-    /* Smaller padding */
+    padding: 10px;
     background: linear-gradient(135deg, #FF8C42 0%, #E8854C 50%, #d97706 100%);
     color: white;
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     font-size: 14px;
     font-weight: 700;
-    letter-spacing: 0.5px;
     cursor: pointer;
     transition: all 0.3s;
-    box-shadow: 0 4px 12px rgba(255, 140, 66, 0.3);
+    box-shadow: 0 4px 10px rgba(255, 140, 66, 0.2);
     margin-bottom: 10px;
 }
 
 .login-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(255, 140, 66, 0.5);
-    filter: brightness(1.1);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(255, 140, 66, 0.4);
+    /* Neon Green Text on Hover */
+    color: var(--accent);
+    text-shadow: 0 0 5px rgba(57, 255, 20, 0.5);
 }
 
+/* MAGIC LINK BUTTON - VISIBILITY FIX */
 .magic-link-button {
     width: 100%;
-    padding: 12px;
+    padding: 10px;
     background: transparent;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    color: white;
-    border-radius: 10px;
-    font-size: 14px;
+    border: 1px solid #cbd5e1;
+    /* Visible border light mode */
+    color: #334155;
+    /* Dark text light mode */
+    border-radius: 8px;
+    font-size: 13px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
@@ -322,20 +317,33 @@ body.magic-auth-body {
     gap: 8px;
 }
 
+/* Dark Mode Override for Magic Button */
+.login-container.dark .magic-link-button {
+    border-color: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
 .magic-link-button:hover {
-    background: rgba(255, 255, 255, 0.1);
     border-color: var(--primary);
     color: var(--primary);
+    background: rgba(255, 140, 66, 0.05);
+}
+
+.login-container.dark .magic-link-button:hover {
+    background: rgba(255, 255, 255, 0.05);
+    /* Neon Green Text on Hover */
+    color: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 0 10px rgba(57, 255, 20, 0.2);
 }
 
 /* Social */
 .separator {
     display: flex;
     align-items: center;
-    margin: 20px 0;
-    color: #94a3b8;
+    margin: 16px 0;
+    color: #64748b;
     font-size: 12px;
-    font-weight: 500;
 }
 
 .separator::before,
@@ -343,7 +351,12 @@ body.magic-auth-body {
     content: "";
     flex: 1;
     height: 1px;
-    background: rgba(255, 255, 255, 0.2);
+    background: #e2e8f0;
+}
+
+.login-container.dark .separator::before,
+.login-container.dark .separator::after {
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .separator span {
@@ -352,35 +365,44 @@ body.magic-auth-body {
 
 .social-login {
     display: flex;
-    gap: 12px;
+    gap: 10px;
     justify-content: center;
 }
 
 .social-button {
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    background: rgba(255, 255, 255, 0.05);
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: white;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s;
+    color: #475569;
+}
+
+.login-container.dark .social-button {
+    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
     color: #e2e8f0;
 }
 
 .social-button:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
-    color: white;
     border-color: var(--primary);
+    color: var(--primary);
+    transform: translateY(-2px);
 }
 
 .signup-prompt {
     text-align: center;
-    margin-top: 20px;
-    font-size: 13px;
+    margin-top: 16px;
+    font-size: 12px;
+    color: #64748b;
+}
+
+.login-container.dark .signup-prompt {
     color: #94a3b8;
 }
 
@@ -388,8 +410,4 @@ body.magic-auth-body {
     color: var(--primary);
     text-decoration: none;
     font-weight: 700;
-}
-
-.signup-prompt a:hover {
-    text-decoration: underline;
 }
