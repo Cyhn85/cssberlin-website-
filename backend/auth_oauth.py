@@ -165,13 +165,11 @@ async def send_magic_link(data: MagicLinkRequest, db: AsyncSession = Depends(get
     token = serializer.dumps(data.email, salt='magic-link')
     magic_link = f"{FRONTEND_URL}/magic-login?token={token}"
 
-    # Send email via email_service.py (magic@cssberlin.de)
+    # Send email via email_service.py
     try:
-        user_name = user.first_name if user else None
         send_magic_link_email(
             to_email=data.email,
-            magic_link=magic_link,
-            user_name=user_name
+            magic_link=magic_link
         )
         return {
             "success": True,
@@ -254,7 +252,7 @@ async def forgot_password(data: MagicLinkRequest, db: AsyncSession = Depends(get
 
     # Send email
     try:
-        send_password_reset_email(data.email, reset_link, user.first_name)
+        send_password_reset_email(data.email, reset_link)
         return {
             "success": True,
             "message": "Password reset link sent! Check your email.",

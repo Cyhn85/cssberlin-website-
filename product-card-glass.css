@@ -16,10 +16,16 @@
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04),
         0 0 0 1px rgba(255, 140, 66, 0.06);
+    /* 20% SMALLER: Scale down to 80% */
+    transform: scale(0.8);
+    transform-origin: center;
+    margin: -10%;
+    /* Compensate for scale to maintain grid spacing */
 }
 
 .product-card-v3:hover {
-    transform: translateY(-6px) scale(1.01);
+    transform: translateY(-6px) scale(0.82);
+    /* Maintain 80% scale on hover */
     background: linear-gradient(145deg,
             rgba(255, 140, 66, 0.25) 0%,
             rgba(255, 255, 255, 0.08) 40%,
@@ -70,23 +76,22 @@
     transform: scale(1.08) rotate(0.5deg);
 }
 
-/* Condition badge â€” glassmorphism pill */
+/* CO2 Badge â€” MINIMAL PILL (Top Left) */
 .product-card-v3-badge {
     position: absolute;
-    top: 12px;
-    left: 12px;
+    top: 8px;
+    left: 8px;
     z-index: 2;
-    background: rgba(0, 0, 0, 0.45);
-    backdrop-filter: blur(10px) saturate(150%);
+    background: rgba(45, 80, 22, 0.85);
+    backdrop-filter: blur(8px);
     color: #fff;
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 5px 12px;
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    letter-spacing: 0.05em;
+    padding: 3px 8px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .product-card-v3-badge.neu {
@@ -94,14 +99,14 @@
     border-color: rgba(255, 255, 255, 0.3);
 }
 
-/* Overlay buttons: glass morphism */
+/* Overlay Icon Buttons: HEART (Bottom Right) & CART (Bottom Left) */
 .product-card-v3-btn-cart,
 .product-card-v3-btn-heart {
     position: absolute;
     z-index: 3;
-    width: 42px;
-    height: 42px;
-    border-radius: 14px;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.4);
     background: rgba(255, 255, 255, 0.75);
     backdrop-filter: blur(10px) saturate(180%);
@@ -114,14 +119,16 @@
     opacity: 0;
 }
 
+/* CART: Bottom Left */
 .product-card-v3-btn-cart {
-    bottom: 12px;
-    left: 12px;
+    bottom: 10px;
+    left: 10px;
 }
 
+/* HEART: Bottom Right */
 .product-card-v3-btn-heart {
-    bottom: 12px;
-    right: 12px;
+    bottom: 10px;
+    right: 10px;
 }
 
 .product-card-v3:hover .product-card-v3-btn-cart,
@@ -129,13 +136,19 @@
     opacity: 1;
 }
 
+/* CART Hover: Green */
 .product-card-v3-btn-cart:hover {
-    background: rgba(255, 140, 66, 0.95);
-    border-color: rgba(255, 140, 66, 0.6);
+    background: rgba(76, 175, 80, 0.95);
+    border-color: rgba(76, 175, 80, 0.6);
     transform: scale(1.12) translateY(-2px);
-    box-shadow: 0 6px 20px rgba(255, 140, 66, 0.3);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
 }
 
+.product-card-v3-btn-cart:hover svg {
+    stroke: #fff;
+}
+
+/* HEART Hover: Red */
 .product-card-v3-btn-heart:hover {
     background: rgba(244, 67, 54, 0.95);
     border-color: rgba(244, 67, 54, 0.5);
@@ -143,31 +156,42 @@
     box-shadow: 0 6px 20px rgba(244, 67, 54, 0.25);
 }
 
-.product-card-v3-btn-cart svg,
-.product-card-v3-btn-heart svg {
-    width: 19px;
-    height: 19px;
-    stroke: #2B2D2E;
-    fill: none;
-    stroke-width: 2.2;
-    transition: stroke 0.2s;
-}
-
-.product-card-v3-btn-cart:hover svg,
 .product-card-v3-btn-heart:hover svg {
     stroke: #fff;
 }
 
-/* Heart active state */
+.product-card-v3-btn-cart svg,
+.product-card-v3-btn-heart svg {
+    width: 18px;
+    height: 18px;
+    stroke: #666;
+    fill: none;
+    stroke-width: 2.2;
+    transition: all 0.2s;
+}
+
+/* HEART Active State: Red Fill */
 .product-card-v3-btn-heart.active {
-    background: rgba(255, 220, 220, 0.9);
-    border-color: rgba(244, 67, 54, 0.4);
+    background: rgba(244, 67, 54, 0.95);
+    border-color: rgba(244, 67, 54, 0.6);
     opacity: 1;
 }
 
 .product-card-v3-btn-heart.active svg {
-    fill: #F44336;
-    stroke: #F44336;
+    fill: #fff;
+    stroke: #fff;
+}
+
+/* CART Active State: Green Fill */
+.product-card-v3-btn-cart.active {
+    background: rgba(76, 175, 80, 0.95);
+    border-color: rgba(76, 175, 80, 0.6);
+    opacity: 1;
+}
+
+.product-card-v3-btn-cart.active svg {
+    fill: #fff;
+    stroke: #fff;
 }
 
 /* Card body â€” refined typography */
@@ -257,7 +281,7 @@
     font-weight: 700;
 }
 
-/* CO2 badge â€” glass pill */
+/* CO2 badge â€” glass pill (if needed in body) */
 .product-card-v3-co2 {
     display: inline-flex;
     align-items: center;
@@ -281,16 +305,16 @@
     fill: #2D5016;
 }
 
-/* Action buttons row */
+/* Action buttons row: 2 BUTTONS (Preisvorschlag + Kaufen) */
 .product-card-v3-actions {
-    display: flex;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
 }
 
 .product-card-v3-actions button {
-    flex: 1;
-    height: 38px;
-    border-radius: 12px;
+    height: 36px;
+    border-radius: 10px;
     font-size: 12px;
     font-weight: 700;
     cursor: pointer;
@@ -306,23 +330,21 @@
     transform: scale(0.96);
 }
 
-/* Chat button â€” glass outline */
+/* Preisvorschlag button â€” OUTLINE STYLE */
 .btn-energy-brand {
-    background: rgba(255, 140, 66, 0.08) !important;
-    border: 2px solid rgba(255, 140, 66, 0.4) !important;
+    background: transparent !important;
+    border: 2px solid #FF8C42 !important;
     color: #FF8C42 !important;
-    backdrop-filter: blur(4px);
 }
 
 .btn-energy-brand:hover {
-    background: rgba(255, 140, 66, 0.95) !important;
+    background: rgba(255, 140, 66, 0.1) !important;
     border-color: #FF8C42 !important;
-    color: white !important;
-    box-shadow: 0 4px 16px rgba(255, 140, 66, 0.25);
+    color: #FF8C42 !important;
     transform: translateY(-1px);
 }
 
-/* Kaufen button â€” gradient glass */
+/* Kaufen button â€” SOLID/PRIMARY STYLE */
 .btn-rainbow {
     background: linear-gradient(135deg, #FF8C42 0%, #2D5016 100%) !important;
     color: white !important;
@@ -356,7 +378,7 @@
 }
 
 .product-card-v3.sold:hover {
-    transform: translateY(-2px);
+    transform: translateY(-2px) scale(0.8);
 }
 
 /* Sold badge */
@@ -383,6 +405,9 @@
 @media (max-width: 768px) {
     .product-card-v3 {
         border-radius: 16px;
+        transform: scale(0.9);
+        /* Less aggressive scaling on mobile */
+        margin: -5%;
     }
 
     .product-card-v3-inner {
@@ -407,5 +432,27 @@
 
     .product-card-v3-name {
         font-size: 13px;
+    }
+}
+/* ---------------------------------------------------------------
+   ?? PRODUCT CARD 20% KÜÇÜLTME - MANUEL OVERRIDE (ADMIN REQUEST)
+   Kartlar artik %20 daha küçük görünecek.
+   --------------------------------------------------------------- */
+
+.product-card-v3 {
+    transform: scale(0.8) !important;
+    transform-origin: center !important;
+    margin: -10% !important;
+}
+
+.product-card-v3:hover {
+    transform: translateY(-6px) scale(0.82) !important;
+}
+
+/* Mobile'da daha az agresif */
+@media (max-width: 768px) {
+    .product-card-v3 {
+        transform: scale(0.9) !important;
+        margin: -5% !important;
     }
 }

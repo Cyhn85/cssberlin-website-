@@ -62,18 +62,18 @@
 }
 
 /* ============================================
-   MAIN HEADER - Gradient Background
+   MAIN HEADER - Gradient Background (COMPACT & STATIC)
    ============================================ */
 .header-v3 {
     background: linear-gradient(135deg, #3d6b1e 0%, #2D5016 40%, #1a3409 100%);
-    position: sticky;
-    top: 0;
+    /* REMOVED: position: sticky; top: 0; - Header now scrolls with page */
     z-index: 1000;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 .header-row-logo {
-    padding: 16px 24px 12px;
+    padding: 10px 24px 8px;
+    /* REDUCED from 16px 24px 12px */
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -90,7 +90,8 @@
 }
 
 .logo-v3 .logo-css {
-    font-size: 36px;
+    font-size: 32px;
+    /* REDUCED from 36px */
     font-weight: 800;
     color: #FF8C42;
     letter-spacing: -1px;
@@ -98,7 +99,8 @@
 }
 
 .logo-v3 .logo-berlin {
-    font-size: 36px;
+    font-size: 32px;
+    /* REDUCED from 36px */
     font-weight: 800;
     color: white;
     letter-spacing: -1px;
@@ -109,7 +111,8 @@
 .header-right-v3 {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
+    /* REDUCED from 16px */
 }
 
 /* Icon Buttons */
@@ -118,8 +121,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    /* REDUCED from 40px */
+    height: 36px;
+    /* REDUCED from 40px */
     color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
     transition: all 0.2s;
@@ -157,7 +162,8 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 24px;
+    padding: 8px 20px;
+    /* REDUCED from 10px 24px */
     background: #FF8C42;
     color: white;
     border: none;
@@ -177,10 +183,11 @@
 }
 
 /* ============================================
-   SEARCH ROW
+   SEARCH ROW (COMPACT)
    ============================================ */
 .header-row-search {
-    padding: 0 24px 16px;
+    padding: 0 24px 12px;
+    /* REDUCED from 0 24px 16px */
     max-width: 1400px;
     margin: 0 auto;
     display: flex;
@@ -252,7 +259,8 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 12px 16px;
+    padding: 10px 14px;
+    /* REDUCED from 12px 16px */
     background: white;
     border: 2px solid #2D5016;
     border-radius: 8px 0 0 8px;
@@ -287,7 +295,8 @@
 
 .search-input-v3 input {
     flex: 1;
-    padding: 12px 16px;
+    padding: 10px 14px;
+    /* REDUCED from 12px 16px */
     border: none;
     outline: none;
     font-size: 14px;
@@ -299,22 +308,10 @@
     color: #888;
 }
 
-/* Search Icon Buttons */
+/* Search Icon Buttons - HIDE MICROPHONE & CAMERA */
 .search-btn-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    background: transparent;
-    border: none;
-    color: #666;
-    cursor: pointer;
-    transition: color 0.2s;
-}
-
-.search-btn-icon:hover {
-    color: #333;
+    display: none;
+    /* HIDDEN until backend ready */
 }
 
 /* Filter Button */
@@ -322,7 +319,8 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 12px 20px;
+    padding: 10px 18px;
+    /* REDUCED from 12px 20px */
     background: white;
     border: 2px solid #2D5016;
     border-left: none;
@@ -342,8 +340,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 50px;
-    height: 50px;
+    width: 46px;
+    /* REDUCED from 50px */
+    height: 46px;
+    /* REDUCED from 50px */
     background: #2D5016;
     border: none;
     border-radius: 0 8px 8px 0;
@@ -412,17 +412,21 @@
 }
 
 /* Sale Link Special */
+/* Sale Link Special - Green Gradient */
 .nav-link-v3.sale {
-    background: rgba(255, 140, 66, 0.2);
-    border: 1px solid rgba(255, 140, 66, 0.4);
+    background: linear-gradient(135deg, #4A7C2C 0%, #2D5016 100%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 6px;
-    color: #FF8C42;
+    color: white;
     margin: 8px 0;
     padding: 8px 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .nav-link-v3.sale:hover {
-    background: rgba(255, 140, 66, 0.3);
+    background: linear-gradient(135deg, #5a8d3b 0%, #3d6b1e 100%);
+    box-shadow: 0 4px 12px rgba(45, 80, 22, 0.4);
+    transform: translateY(-1px);
 }
 
 /* ============================================
@@ -491,4 +495,33 @@
         width: 36px;
         height: 36px;
     }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   🔧 HEADER STICKY İPTAL - MANUEL OVERRIDE (ADMIN REQUEST)
+   Header artık ASLA sticky/fixed olmayacak. Sayfa ile birlikte kayacak.
+   ═══════════════════════════════════════════════════════════════ */
+
+.header-v3,
+.announcement-bar-v3,
+header,
+.header,
+.main-header {
+    position: static !important;
+    position: relative !important;
+    top: auto !important;
+    position: -webkit-static !important;
+}
+
+/* Tüm sticky/fixed pozisyonları iptal et */
+*[class*="header"],
+*[class*="Header"],
+*[class*="nav"] {
+    position: static !important;
+}
+
+/* Eğer başka bir yerde sticky varsa onu da iptal et */
+.sticky,
+.fixed {
+    position: static !important;
 }

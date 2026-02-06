@@ -1,0 +1,22 @@
+/* ═══════════════════════════════════════════════════════════════
+   🔧 PRODUCT CARD 20% KÜÇÜLTME - MANUEL OVERRIDE (ADMIN REQUEST)
+   Kartlar artık %20 daha küçük görünecek.
+   ═══════════════════════════════════════════════════════════════ */
+
+.product-card-v3 {
+    transform: scale(0.8) !important;
+    transform-origin: center !important;
+    margin: -10% !important;
+}
+
+.product-card-v3:hover {
+    transform: translateY(-6px) scale(0.82) !important;
+}
+
+/* Mobile'da daha az agresif */
+@media (max-width: 768px) {
+    .product-card-v3 {
+        transform: scale(0.9) !important;
+        margin: -5% !important;
+    }
+}

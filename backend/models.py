@@ -110,20 +110,63 @@ class Message(Base):
 
 
 class Order(Base):
+    """
+    Production-grade Order model for CSS Berlin E-Commerce
+    Handles: Direct purchases, Negotiated offers, Stripe payments
+    """
     __tablename__ = "orders"
 
     id = Column(Integer, primary_key=True, index=True)
+    order_number = Column(String(50), unique=True, nullable=False, index=True)  # ORD_XXXXXX
+    
+    # Parties
     buyer_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    seller_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     product_id = Column(Integer, ForeignKey("products.id"), nullable=False)
     offer_id = Column(Integer, ForeignKey("offers.id"))  # If purchased via negotiation
-    total_amount = Column(Float, nullable=False)
-    shipping_address = Column(JSON)
-    status = Column(String(50), default="pending")  # pending, paid, shipped, delivered, cancelled
-    payment_intent_id = Column(String(255))  # Stripe payment ID
-    created_at = Column(DateTime, default=datetime.utcnow)
+    
+    # Pricing
+    product_price = Column(Float, nullable=False)  # Original or negotiated price
+    platform_fee = Column(Float, default=1.00)  # CSS Berlin commission (1€ or %)
+    shipping_cost = Column(Float, default=0.00)
+    total_amount = Column(Float, nullable=False)  # product_price + platform_fee + shipping
+    
+    # Shipping
+    shipping_address = Column(JSON)  # {name, street, city, plz, country, phone}
+    shipping_method = Column(String(50))  # standard, express, pickup
+    
+    # Payment (Stripe)
+    payment_status = Column(String(30), default="pending")  # pending, processing, paid, failed, refunded
+    payment_method = Column(String(50))  # card, paypal, klarna, giropay
+    stripe_checkout_session_id = Column(String(255), unique=True, index=True)
+    stripe_payment_intent_id = Column(String(255), unique=True, index=True)
+    stripe_customer_id = Column(String(255))
+    paid_at = Column(DateTime)
+    
+    # Order Status
+    status = Column(String(50), default="pending_payment", index=True)
+    # pending_payment, paid, processing, shipped, in_transit, delivered, completed, cancelled, refunded
+    
+    # Fulfillment tracking
+    shipped_at = Column(DateTime)
+    delivered_at = Column(DateTime)
+    completed_at = Column(DateTime)  # When buyer confirms or auto-complete after 14 days
+    cancelled_at = Column(DateTime)
+    cancel_reason = Column(Text)
+    
+    # Buyer/Seller notes
+    buyer_notes = Column(Text)
+    seller_notes = Column(Text)
+    
+    # Metadata
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # Relationships
+    buyer = relationship("User", foreign_keys=[buyer_id])
+    seller = relationship("User", foreign_keys=[seller_id])
+    product = relationship("Product")
+    offer = relationship("Offer")
     shipment = relationship("Shipment", back_populates="order", uselist=False)
 
 

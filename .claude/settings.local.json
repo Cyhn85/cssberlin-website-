@@ -9,7 +9,13 @@
       "Bash(gh api:*)",
       "Bash(find:*)",
       "Read(//c/Users/cyhnsrgc/Desktop/CSSberlin/**)",
-      "Bash(uvicorn main:app --host 0.0.0.0 --port 8001 --reload)"
+      "Bash(uvicorn main:app --host 0.0.0.0 --port 8001 --reload)",
+      "Bash(findstr:*)",
+      "Bash(copy:*)",
+      "Bash(pip install:*)",
+      "Bash(python -m uvicorn:*)",
+      "Bash(python:*)",
+      "Bash(netstat:*)"
     ]
   }
 }

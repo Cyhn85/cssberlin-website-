@@ -1,100 +1,115 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wunschliste - CSS Berlin</title>
-    <link rel="stylesheet" href="styles.css">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Standard Styles -->
+    <link rel="stylesheet" href="header-v3.css">
+    <link rel="stylesheet" href="auth-modal-v3.css">
+    <link rel="stylesheet" href="auth-modal.css">
+    <link rel="stylesheet" href="product-card-glass.css">
+
     <style>
-        /* Compact Wishlist Styles */
-        .wishlist-header {
-            background: linear-gradient(135deg, #2D5016, #4A7C2C);
-            color: white;
-            padding: 32px 0;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .wishlist-header-content {
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f5f5;
+            color: #111827;
+            min-height: 100vh;
+        }
+
+        /* Wishlist specific styles */
+        .wishlist-page-container {
             max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 var(--spacing-xl);
+            margin: 40px auto;
+            padding: 0 20px;
         }
 
-        .wishlist-header h1 {
+        .page-header {
+            margin-bottom: 30px;
+            /* Optional: Match cart-header style if desired, or keep simple title */
+        }
+
+        .page-title {
+            font-family: 'Montserrat', sans-serif;
             font-size: 32px;
-            font-weight: 700;
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .wishlist-header p {
-            font-size: 16px;
-            opacity: 0.9;
-        }
-
-        .wishlist-container {
-            max-width: 1200px;
-            margin: var(--spacing-2xl) auto;
-            padding: 0 var(--spacing-xl);
+            font-weight: 800;
+            color: #111827;
         }
 
         .wishlist-controls {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: var(--spacing-xl);
-            padding-bottom: var(--spacing-md);
-            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e5e7eb;
         }
 
         .wishlist-count {
-            font-size: 20px;
             font-weight: 600;
-            color: var(--text-primary);
+            color: #111827;
         }
 
         .clear-all-btn {
-            padding: 10px 20px;
-            background: transparent;
-            border: 2px solid var(--error);
-            color: var(--error);
-            border-radius: var(--radius-md);
-            font-weight: 600;
+            color: #ef4444;
+            background: none;
+            border: none;
+            font-weight: 500;
             cursor: pointer;
-            transition: all var(--transition-base);
         }
 
         .clear-all-btn:hover {
-            background: var(--error);
-            color: white;
+            text-decoration: underline;
         }
 
-        /* Compact List View */
         .wishlist-list {
             display: flex;
             flex-direction: column;
-            gap: var(--spacing-md);
+            gap: 16px;
         }
 
         .wishlist-item {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
             display: grid;
             grid-template-columns: 80px 1fr auto;
-            gap: var(--spacing-md);
-            padding: var(--spacing-md);
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            transition: all var(--transition-base);
+            gap: 20px;
+            align-items: center;
+            transition: all 0.2s;
         }
 
         .wishlist-item:hover {
-            box-shadow: var(--shadow-md);
-            border-color: var(--primary-green);
+            border-color: #2D5016;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
         .wishlist-item-image {
             width: 80px;
             height: 80px;
-            border-radius: var(--radius-sm);
+            border-radius: 8px;
             overflow: hidden;
+            background: #f3f4f6;
         }
 
         .wishlist-item-image img {
@@ -103,411 +118,276 @@
             object-fit: cover;
         }
 
-        .wishlist-item-info {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: var(--spacing-xs);
-        }
-
         .wishlist-item-name {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
             font-size: 16px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: var(--spacing-xs);
+            color: #111827;
+            margin-bottom: 4px;
         }
 
-        .wishlist-item-details {
+        .wishlist-item-meta {
+            font-size: 13px;
+            color: #6b7280;
             display: flex;
-            gap: var(--spacing-md);
-            font-size: 14px;
-            color: var(--text-secondary);
+            gap: 10px;
         }
 
         .wishlist-item-price {
-            font-size: 18px;
+            font-family: 'Montserrat', sans-serif;
             font-weight: 700;
-            color: var(--primary-green);
+            font-size: 18px;
+            color: #2D5016;
         }
 
         .wishlist-item-actions {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: var(--spacing-sm);
-        }
-
-        .wishlist-action-btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: var(--radius-sm);
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all var(--transition-base);
-            white-space: nowrap;
+            gap: 10px;
         }
 
         .btn-view {
-            background: var(--primary-green);
+            padding: 8px 16px;
+            background: #2D5016;
             color: white;
-        }
-
-        .btn-view:hover {
-            background: var(--primary-green-hover);
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
         }
 
         .btn-remove {
-            background: transparent;
-            border: 1px solid var(--error);
-            color: var(--error);
+            padding: 8px 16px;
+            background: white;
+            color: #ef4444;
+            border: 1px solid #ef4444;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
         }
 
         .btn-remove:hover {
-            background: var(--error);
-            color: white;
+            background: #fee2e2;
         }
 
+        /* Empty State */
         .wishlist-empty {
             text-align: center;
-            padding: var(--spacing-3xl) var(--spacing-xl);
-        }
-
-        .wishlist-empty-icon {
-            width: 100px;
-            height: 100px;
-            margin: 0 auto var(--spacing-lg);
-            color: var(--text-light);
-        }
-
-        .wishlist-empty h2 {
-            font-size: 24px;
-            margin-bottom: var(--spacing-md);
-            color: var(--text-primary);
-        }
-
-        .wishlist-empty p {
-            font-size: 16px;
-            color: var(--text-secondary);
-            margin-bottom: var(--spacing-xl);
-        }
-
-        .btn-shop-now {
-            display: inline-block;
-            padding: 14px 32px;
-            background: var(--primary-green);
-            color: white;
-            border-radius: var(--radius-lg);
-            text-decoration: none;
-            font-weight: 600;
-            transition: all var(--transition-base);
-        }
-
-        .btn-shop-now:hover {
-            background: var(--primary-green-hover);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .wishlist-item {
-                grid-template-columns: 60px 1fr;
-                gap: var(--spacing-sm);
-            }
-
-            .wishlist-item-image {
-                width: 60px;
-                height: 60px;
-            }
-
-            .wishlist-item-actions {
-                grid-column: 1 / -1;
-                flex-direction: row;
-                justify-content: flex-end;
-                margin-top: var(--spacing-sm);
-            }
-
-            .wishlist-item-name {
-                font-size: 14px;
-            }
-
-            .wishlist-item-price {
-                font-size: 16px;
-            }
+            padding: 60px 20px;
+            background: white;
+            border-radius: 12px;
+            border: 1px dashed #e5e7eb;
         }
     </style>
-    <!-- API Configuration (MUST load first) -->
-    <script src="api-config.js"></script>
-    <script src="api-client.js"></script>
-
 </head>
+
 <body>
-    <!-- News Banner at Top -->
-    <div class="news-banner" style="position: sticky; top: 0; z-index: 999;">
-        <div class="news-slider" id="newsSlider">
-            <div class="news-item" data-link="co2-impact.html">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
-                </svg>
-                <span>🌍 248.5 Tonnen CO₂ gespart - Jeder Kauf zählt für unseren Planeten!</span>
-            </div>
-            <div class="news-item" data-link="/campaign/3for2-shipping">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
-                </svg>
-                <span>📦 2 Produkte kaufen, 3. Produkt Versand GRATIS!</span>
-            </div>
-            <div class="news-item" data-link="/leaderboard">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
-                </svg>
-                <span>🏆 CO₂ Rangliste - Wer spart am meisten? Klick für die Top 100!</span>
-            </div>
-            <div class="news-item" data-link="/trees">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2v20M5 9l7-7 7 7M12 22l-3-3h6l-3 3z"></path>
-                </svg>
-                <span>🌳 8,234 Bäume gepflanzt - Dein Beitrag macht den Unterschied!</span>
-            </div>
-            <div class="news-item" data-link="/sale">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <path d="M12 6v6l4 2" stroke="white" fill="none"></path>
-                </svg>
-                <span>🔥 Sale: 780 neue Produkte - Bis zu 70% Rabatt diese Woche!</span>
-            </div>
+    <!-- HEADER V3 (Standard) -->
+    <div class="announcement-bar-v3">
+        <div class="announcement-track">
+            <span class="announcement-item"><span class="announcement-icon">🌟</span> PREISVORSCHLAG SENDEN &
+                SPAREN</span>
+            <span class="announcement-separator">•</span>
+            <span class="announcement-item"><span class="announcement-icon">🚚</span> KOSTENLOSER VERSAND AB 50€</span>
+            <span class="announcement-separator">•</span>
+            <span class="announcement-item"><span class="announcement-icon">♻️</span> 100% KLIMANEUTRAL</span>
         </div>
     </div>
 
-    <!-- Header - Sadeleştirilmiş -->
-    <header class="header" style="position: sticky; top: 40px; z-index: 998;">
-        <div class="header-container">
-            <!-- Left Side: Logo -->
-            <a href="index.html" style="text-decoration: none; display: flex; flex-direction: column; align-items: stretch; gap: 0; width: 200px;">
-                <div style="font-size: 36px; font-weight: 800; color: white; letter-spacing: 2px; text-align: center;">CSS Berlin</div>
-                <div style="font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.9); letter-spacing: 1px; text-transform: uppercase; text-align: center;">Climate Smart Solutions</div>
+    <header class="header-v3">
+        <div class="header-row-logo">
+            <a href="index.html" class="logo-v3">
+                <span class="logo-css">CSS</span><span class="logo-berlin">berlin</span>
             </a>
-
-            <!-- Right Actions - Sadece Auth Butonları -->
-            <div class="header-actions" style="gap: 12px; margin-left: auto; display: flex; align-items: center;">
-                <button onclick="authGate.showLoginModal(null, null, 'login')" class="header-btn auth-btn" style="padding: 10px 18px; background: #E8854C; color: white; border-radius: 8px; display: flex; align-items: center; gap: 8px; font-weight: 600; text-decoration: none; font-size: 14px; transition: all 0.3s ease; border: none; cursor: pointer;">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
+            <div class="header-right-v3">
+                <a href="wunschliste.html" class="header-icon-v3" title="Favoriten">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                        </path>
                     </svg>
-                    Anmelden
-                </button>
-
-                <button onclick="authGate.showLoginModal(null, null, 'register')" class="header-btn auth-btn" style="padding: 10px 18px; background: #E8854C; color: white; border-radius: 8px; display: flex; align-items: center; gap: 8px; font-weight: 600; text-decoration: none; font-size: 14px; transition: all 0.3s ease; border: none; cursor: pointer;">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="8.5" cy="7" r="4"></circle>
-                        <line x1="20" y1="8" x2="20" y2="14"></line>
-                        <line x1="23" y1="11" x2="17" y2="11"></line>
-                    </svg>
-                    Registrieren
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- User Dashboard Bar - İkonlar, Inserieren ve Dil Seçici -->
-    <div class="user-dashboard-bar">
-        <div class="user-dashboard-container">
-            <!-- Sol - Kullanıcı Aksiyonları -->
-            <div class="dashboard-actions">
-                <!-- Bildirimler -->
-                <button class="dashboard-icon-btn" title="Benachrichtigungen">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                    </svg>
-                    <span class="label">Benachrichtigungen</span>
-                    <span class="badge">2</span>
-                </button>
-
-                <!-- Verhandlungen / Pazarlıklar -->
-                <a href="pazarlik.html" class="dashboard-icon-btn" title="Verhandlungen">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                    <span class="label">Verhandlungen</span>
-                    <span class="badge" id="negotiationCount">0</span>
+                    <span class="icon-badge-v3 wishlist-count" id="headerWishlistCount" style="display:none">0</span>
                 </a>
-
-                <!-- Wunschliste -->
-                <a href="wunschliste.html" class="dashboard-icon-btn" id="wishlistBtn" title="Wunschliste">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                <a href="meine-anzeigen.html?tab=negotiations" class="header-icon-v3" title="Verhandlungen">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 10H3"></path>
+                        <path d="M21 6H3"></path>
+                        <path d="M21 14H3"></path>
+                        <path d="M17 18H3"></path>
                     </svg>
-                    <span class="label">Wunschliste</span>
-                    <span class="badge" id="wishlistCount">0</span>
                 </a>
-
-                <!-- Warenkorb -->
-                <a href="warenkorb.html" class="dashboard-icon-btn" title="Warenkorb">
-                    <svg viewBox="0 0 24 24">
+                <a href="inserieren.html" class="header-icon-v3" title="Inserieren">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                </a>
+                <a href="warenkorb.html" class="header-icon-v3" title="Warenkorb">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="9" cy="21" r="1"></circle>
                         <circle cx="20" cy="21" r="1"></circle>
                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                     </svg>
-                    <span class="label">Warenkorb</span>
-                    <span class="badge" id="cartCount">0</span>
+                    <span class="icon-badge-v3 cart-count" style="display:none">0</span>
                 </a>
-            </div>
-
-            <!-- Sağ - Inserieren ve Dil -->
-            <div class="dashboard-right">
-                <!-- Inserieren Butonu -->
-                <a href="inserieren.html" class="dashboard-inserieren-btn">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 5v14M5 12h14"></path>
-                    </svg>
-                    <span>Inserieren</span>
-                </a>
-
-                <div class="dashboard-divider"></div>
-
-                <!-- Dil Seçici -->
-                <div class="dashboard-lang-selector">
-                    <button onclick="setLanguage('de')" id="lang-de" class="dashboard-lang-btn active">DE</button>
-                    <button onclick="setLanguage('en')" id="lang-en" class="dashboard-lang-btn">EN</button>
-                </div>
+                <button type="button" class="btn-anmelden-v3"
+                    onclick="if(window.authModalV3) window.authModalV3.open('login')">Anmelden</button>
             </div>
         </div>
-    </div>
 
-    <!-- Page Header -->
-    <div class="wishlist-header">
-        <div class="wishlist-header-content">
-            <h1>Meine Wunschliste</h1>
-            <p>Hier findest du alle deine gespeicherten Favoriten</p>
+        <div class="header-row-search">
+            <button class="dark-mode-toggle-v3"></button>
+            <button class="lang-selector-v3">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <path
+                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                    </path>
+                </svg>
+                <span>DE</span>
+            </button>
+            <div class="search-input-v3" style="flex:1;">
+                <input type="text" placeholder="Suche..." style="width:100%;">
+            </div>
         </div>
-    </div>
 
-    <!-- Wishlist Content -->
-    <div class="wishlist-container">
-        <!-- Empty State -->
-        <div class="wishlist-empty" id="wishlistEmpty" style="display: none;">
-            <svg class="wishlist-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-            </svg>
-            <h2>Deine Wunschliste ist leer</h2>
-            <p>Speichere Artikel, die dir gefallen, indem du auf das Herz-Symbol klickst</p>
-            <a href="index.html" class="btn-shop-now">Jetzt Shoppen</a>
+        <nav class="nav-bar-v3">
+            <div class="nav-container-v3">
+                <a href="damen.html" class="nav-link-v3">DAMEN</a>
+                <a href="herren.html" class="nav-link-v3">HERREN</a>
+                <a href="kinder.html" class="nav-link-v3">KINDER</a>
+                <a href="elektronik.html" class="nav-link-v3">ELEKTRONIK</a>
+                <a href="sale.html" class="nav-link-v3 sale">SALE</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="wishlist-page-container">
+        <div class="page-header">
+            <h1 class="page-title">Meine Wunschliste</h1>
+            <p style="color:#6b7280; margin-top:8px;">Gespeicherte Favoriten</p>
         </div>
 
         <!-- Wishlist Content -->
-        <div id="wishlistContent" style="display: none;">
-            <div class="wishlist-controls">
-                <div class="wishlist-count">
-                    <span id="wishlistItemCount">0</span> Artikel
-                </div>
-                <button class="clear-all-btn" id="clearAllBtn">Alle entfernen</button>
-            </div>
+        <div id="wishlistContainer">
+            <!-- Loading or list -->
+        </div>
 
-            <div class="wishlist-list" id="wishlistList">
-                <!-- Items will be loaded here by JavaScript -->
-            </div>
+        <!-- Empty State (Hidden by default) -->
+        <div class="wishlist-empty" id="wishlistEmpty" style="display:none;">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" stroke-width="1.5"
+                style="margin-bottom:16px;">
+                <path
+                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                </path>
+            </svg>
+            <h2>Deine Wunschliste ist leer</h2>
+            <p style="color:#666; margin-bottom:20px;">Speichere Artikel, die dir gefallen.</p>
+            <a href="index.html" class="btn-view" style="padding:12px 24px; font-size:15px; background:#E8854C;">Jetzt
+                Stöbern</a>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-bottom">
-                <p>&copy; 2025 CSS Berlin. Alle Rechte vorbehalten.</p>
-                <div class="footer-links-bottom">
-                    <a href="impressum.html">Impressum</a>
-                    <a href="datenschutz.html">Datenschutz</a>
-                    <a href="agb.html">AGB</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <script src="auth.js"></script>
-    <script src="auth-gate.js"></script>
-    <script src="auth-guard.js"></script>
+    <script src="auth-modal-v3.js"></script>
+    <script src="script.js"></script>
+    <script src="guest-mode.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            loadWishlist();
+        lucide.createIcons();
 
-            // Clear all button
-            document.getElementById('clearAllBtn')?.addEventListener('click', function() {
-                if (confirm('Möchtest du wirklich alle Artikel entfernen?')) {
-                    clearWishlist();
-                }
-            });
+        // Wishlist Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            loadWishlist();
         });
 
         function loadWishlist() {
-            const wishlist = window.getWishlist ? window.getWishlist() : [];
+            // Check guest wishlist first (from guest-mode.js or localStorage)
+            // Or use existing window.getWishlist logic if auth.js is present
+            // For standardization, we'll read from localStorage 'cssberlin_guest_wishlist' for now as a fallback
+
+            const wishlist = JSON.parse(localStorage.getItem('cssberlin_guest_wishlist') || '[]');
+            const container = document.getElementById('wishlistContainer');
             const emptyState = document.getElementById('wishlistEmpty');
-            const content = document.getElementById('wishlistContent');
-            const listContainer = document.getElementById('wishlistList');
-            const countElement = document.getElementById('wishlistItemCount');
+            const headerCount = document.getElementById('headerWishlistCount');
+
+            if (headerCount) {
+                headerCount.style.display = wishlist.length > 0 ? 'flex' : 'none';
+                headerCount.textContent = wishlist.length;
+            }
 
             if (wishlist.length === 0) {
+                container.style.display = 'none';
                 emptyState.style.display = 'block';
-                content.style.display = 'none';
-            } else {
-                emptyState.style.display = 'none';
-                content.style.display = 'block';
-                countElement.textContent = wishlist.length;
+                return;
+            }
 
-                // Render items
-                listContainer.innerHTML = wishlist.map(item => `
-                    <div class="wishlist-item" data-product-id="${item.productId}">
-                        <div class="wishlist-item-image">
-                            <img src="${item.image || 'https://via.placeholder.com/80'}" alt="${item.name}">
-                        </div>
-                        <div class="wishlist-item-info">
-                            <div class="wishlist-item-name">${item.name}</div>
-                            <div class="wishlist-item-details">
-                                ${item.category ? `<span>${item.category}</span>` : ''}
-                                ${item.size ? `<span>Größe: ${item.size}</span>` : ''}
-                                ${item.condition ? `<span>${item.condition}</span>` : ''}
-                            </div>
-                            <div class="wishlist-item-price">${item.price}</div>
-                        </div>
-                        <div class="wishlist-item-actions">
-                            <button class="wishlist-action-btn btn-view" onclick="viewProduct('${item.productId}')">
-                                Ansehen
-                            </button>
-                            <button class="wishlist-action-btn btn-remove" onclick="removeItem('${item.productId}')">
-                                Entfernen
-                            </button>
+            container.style.display = 'block';
+            emptyState.style.display = 'none';
+
+            let html = `
+                <div class="wishlist-controls">
+                    <span class="wishlist-count">${wishlist.length} Artikel</span>
+                    <button class="clear-all-btn" onclick="clearWishlist()">Alle entfernen</button>
+                </div>
+                <div class="wishlist-list">
+            `;
+
+            html += wishlist.map(id => {
+                // In a real app we would fetch product details by ID. 
+                // For this demo/guest mode, we might store partial details in standard Wishlist. 
+                // Using a placeholder if we only have ID.
+                return `
+                <div class="wishlist-item">
+                    <div class="wishlist-item-image">
+                        <!-- Placeholder image -->
+                        <img src="https://via.placeholder.com/80" alt="Produkt">
+                    </div>
+                    <div>
+                        <div class="wishlist-item-name">Produkt ID: ${id}</div>
+                        <div class="wishlist-item-meta">
+                            <span>Kategorie</span>
                         </div>
                     </div>
-                `).join('');
-            }
+                    <div class="wishlist-item-price">-</div>
+                    <div class="wishlist-item-actions">
+                        <a href="product-detail.html?id=${id}" class="btn-view">Ansehen</a>
+                        <button class="btn-remove" onclick="removeFromWishlist('${id}')">Entfernen</button>
+                    </div>
+                </div>`;
+            }).join('');
+
+            html += `</div>`;
+            container.innerHTML = html;
         }
 
-        function removeItem(productId) {
-            if (window.removeFromWishlist) {
-                window.removeFromWishlist(productId);
+        function removeFromWishlist(id) {
+            // Use GuestWishlist if available
+            if (window.GuestWishlist) {
+                window.GuestWishlist.toggle({ id: id });
+                loadWishlist();
+            } else {
+                // Fallback
+                const list = JSON.parse(localStorage.getItem('cssberlin_guest_wishlist') || '[]');
+                const newList = list.filter(item => item !== id);
+                localStorage.setItem('cssberlin_guest_wishlist', JSON.stringify(newList));
                 loadWishlist();
             }
         }
 
         function clearWishlist() {
-            const wishlist = window.getWishlist ? window.getWishlist() : [];
-            wishlist.forEach(item => {
-                if (window.removeFromWishlist) {
-                    window.removeFromWishlist(item.productId);
+            if (confirm('Wunschliste leeren?')) {
+                if (window.GuestWishlist) {
+                    window.GuestWishlist.clear();
+                } else {
+                    localStorage.removeItem('cssberlin_guest_wishlist');
                 }
-            });
-            loadWishlist();
-        }
-
-        function viewProduct(productId) {
-            // Navigate to product detail page
-            window.location.href = `product-detail.html?id=${productId}`;
+                loadWishlist();
+            }
         }
     </script>
 </body>
-</html>
 
+</html>

@@ -1,0 +1,54 @@
+All routes:
+  {'HEAD', 'GET'} /openapi.json
+  {'HEAD', 'GET'} /docs
+  {'HEAD', 'GET'} /docs/oauth2-redirect
+  {'HEAD', 'GET'} /redoc
+  {'POST'} /api/auth/register
+  {'POST'} /api/auth/login
+  {'GET'} /api/auth/me
+  {'GET'} /api/auth/me-token
+  {'POST'} /api/auth/token
+  {'POST'} /api/auth/google
+  {'POST'} /api/auth/magic-link/request
+  {'POST'} /api/auth/magic-link/verify
+  {'POST'} /api/auth/password-reset/request
+  {'POST'} /api/auth/password-reset/confirm
+  {'GET'} /api/auth/google
+  {'GET'} /api/auth/google/callback
+  {'GET'} /api/auth/apple
+  {'POST'} /api/auth/magic-link
+  {'GET'} /api/auth/magic-link/verify
+  {'POST'} /api/auth/forgot-password
+  {'POST'} /api/auth/reset-password
+  {'GET'} /api/products/
+  {'GET'} /api/products/{product_id}
+  {'POST'} /api/products/
+  {'PUT'} /api/products/{product_id}
+  {'DELETE'} /api/products/{product_id}
+  {'GET'} /api/products/categories
+  {'POST'} /api/offers/
+  {'GET'} /api/offers/
+  {'PUT'} /api/offers/{offer_id}/accept
+  {'PUT'} /api/offers/{offer_id}/decline
+  {'PUT'} /api/offers/{offer_id}/counter
+  {'GET'} /api/payment/config
+  {'POST'} /api/payment/card/intent
+  {'POST'} /api/payment/stripe/create-checkout
+  {'POST'} /api/payment/paypal/create-order
+  {'POST'} /api/payment/klarna/create-session
+  {'POST'} /api/payment/confirm
+  {'POST'} /api/checkout/create-session
+  {'GET'} /api/checkout/verify/{order_id}
+  {'POST'} /api/checkout/webhook
+  {'GET'} /api/checkout/orders/buying
+  {'GET'} /api/checkout/orders/selling
+  {'GET'} /api/checkout/orders/{order_id}
+  {'POST'} /api/checkout/negotiate/offer
+  {'POST'} /api/checkout/negotiate/{offer_id}/respond
+  {'GET'} /api/checkout/negotiate/offers/received
+  {'GET'} /api/checkout/negotiate/offers/sent
+  {'POST'} /api/errors/report
+  {'GET'} /api/errors/stats
+  {'GET'} /api/errors/recent
+  {'GET'} /
+  {'GET'} /health

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="de" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,16 +9,20 @@
     <!-- Fonts: Montserrat + Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800;900&display=swap"
+        rel="stylesheet">
 
     <!-- Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- Auth Modal CSS -->
+    <!-- Standardized Styles -->
+    <link rel="stylesheet" href="header-v3.css">
     <link rel="stylesheet" href="auth-modal-v3.css">
-
-    <!-- Product Card CSS -->
+    <link rel="stylesheet" href="auth-modal.css">
+    <link rel="stylesheet" href="cookie-consent.css">
     <link rel="stylesheet" href="product-card-glass.css?v=4">
+    <link rel="stylesheet" href="product-card-override.css">
 
     <style>
         * {
@@ -26,1182 +31,262 @@
             box-sizing: border-box;
         }
 
-        :root {
-            --brand-orange: #FF8C42;
-            --brand-green: #2D5016;
-            --brand-dark-green: #0B2E1A;
-            --brand-rust: #c4621b;
-        }
-
         body {
             font-family: 'Inter', sans-serif;
-            background: #f9fafb;
+            background: #f5f5f5;
+            /* Standard Background from Inserieren */
             color: #111827;
             overflow-x: hidden;
         }
 
-        .font-heading {
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        /* ══════════════════════════════════════════════
-           TOP TICKER
-           ══════════════════════════════════════════════ */
-        .ticker {
-            position: relative;
-            width: 100%;
-            background: linear-gradient(90deg, var(--brand-orange) 0%, var(--brand-green) 100%);
-            color: white;
-            overflow: hidden;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .ticker-content {
-            display: flex;
-            animation: marquee 120s linear infinite;
-            white-space: nowrap;
-        }
-
-        .ticker-content:hover {
-            animation-play-state: paused;
-        }
-
-        .ticker-item {
-            padding: 0 60px;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 800;
-            font-size: 12px;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            opacity: 0.95;
-            transition: opacity 0.2s;
-            cursor: pointer;
-        }
-
-        .ticker-item:hover {
-            opacity: 1;
-        }
-
-        @keyframes marquee {
-            0% { transform: translateX(0%); }
-            100% { transform: translateX(-100%); }
-        }
-
-        /* ══════════════════════════════════════════════
-           HEADER
-           ══════════════════════════════════════════════ */
-        .header {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(12px);
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-        }
-
-        .header-top {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 60px;
-        }
-
-        .logo {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 900;
-            font-size: 40px;
-            letter-spacing: -0.02em;
-            background: linear-gradient(90deg, var(--brand-orange), var(--brand-green));
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .header-btn {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            border: 1px solid transparent;
-            background: #f3f4f6;
-            color: #6b7280;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-            position: relative;
-        }
-
-        .header-btn:hover {
-            background: rgba(255, 140, 66, 0.1);
-            border-color: rgba(255, 140, 66, 0.2);
-            color: var(--brand-orange);
-            transform: translateY(-2px);
-        }
-
-        .header-btn .badge {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            width: 8px;
-            height: 8px;
-            background: var(--brand-orange);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        .header-btn .count {
-            position: absolute;
-            top: -4px;
-            right: -4px;
-            background: var(--brand-green);
-            color: white;
-            font-size: 10px;
-            font-weight: 700;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid white;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
-        }
-
-        .btn-anmelden {
-            padding: 14px 32px;
-            border-radius: 24px;
-            border: none;
-            background: linear-gradient(135deg, var(--brand-orange) 0%, var(--brand-green) 100%);
-            color: white;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 800;
-            font-size: 14px;
-            letter-spacing: 0.05em;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(255, 140, 66, 0.3);
-        }
-
-        .btn-anmelden:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 140, 66, 0.4);
-        }
-
-        .btn-anmelden:active {
-            transform: translateY(0);
-        }
-
-        /* ══════════════════════════════════════════════
-           DARK MODE TOGGLE
-           ══════════════════════════════════════════════ */
-        .dark-mode-toggle {
-            position: relative;
-            width: 60px;
-            height: 30px;
-            background: #e5e7eb;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: background 0.5s;
-            border: 2px solid #d1d5db;
-            display: flex;
-            align-items: center;
-            padding: 3px;
-        }
-
-        .dark-mode-toggle.active {
-            background: #1f2937;
-            border-color: #374151;
-        }
-
-        .dark-mode-toggle-circle {
-            width: 22px;
-            height: 22px;
-            background: white;
-            border-radius: 50%;
-            position: absolute;
-            left: 3px;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-        }
-
-        .dark-mode-toggle.active .dark-mode-toggle-circle {
-            left: 32px;
-            background: #fbbf24;
-        }
-
-        .dark-mode-toggle-icon {
-            width: 14px;
-            height: 14px;
-            transition: all 0.3s;
-        }
-
-        body.dark-mode {
-            background: #111827;
-            color: #f9fafb;
-        }
-
-        body.dark-mode .header {
-            background: rgba(31, 41, 55, 0.98);
-            box-shadow: 0 2px 15px rgba(0,0,0,0.3);
-        }
-
-        body.dark-mode .header-search-row {
-            background: #1f2937;
-            border-top-color: #374151;
-        }
-
-        body.dark-mode .search-box {
-            background: #374151;
-            border-color: #4b5563;
-        }
-
-        body.dark-mode .search-box:hover {
-            border-color: #6b7280;
-        }
-
-        body.dark-mode .search-box:focus-within {
-            border-color: var(--brand-orange);
-            box-shadow: 0 0 0 3px rgba(255, 140, 66, 0.2);
-        }
-
-        body.dark-mode .category-select {
-            background: #374151;
-            border-right-color: #4b5563;
-            color: #f9fafb;
-        }
-
-        body.dark-mode .search-input {
-            background: transparent;
-            color: #f9fafb;
-        }
-
-        body.dark-mode .search-input::placeholder {
-            color: #9ca3af;
-        }
-
-        body.dark-mode .search-actions {
-            background: #374151;
-            border-left-color: #4b5563;
-        }
-
-        body.dark-mode .search-action-btn {
-            color: #9ca3af;
-        }
-
-        body.dark-mode .search-action-btn:hover {
-            background: #4b5563;
-            color: #f9fafb;
-        }
-
-        body.dark-mode .filter-btn,
-        body.dark-mode .search-btn {
-            background: #374151;
-            border-color: #4b5563;
-            color: #f9fafb;
-        }
-
-        body.dark-mode .filter-btn:hover,
-        body.dark-mode .search-btn:hover {
-            background: #4b5563;
-            border-color: #6b7280;
-        }
-
-        body.dark-mode .search-btn:active {
-            background: var(--brand-orange);
-            border-color: var(--brand-orange);
-        }
-
-        body.dark-mode .lang-selector {
-            background: #374151;
-            border-color: #4b5563;
-            color: #f9fafb;
-        }
-
-        body.dark-mode .header-btn {
-            background: #374151;
-            color: #9ca3af;
-        }
-
-        body.dark-mode .header-btn:hover {
-            background: rgba(255, 140, 66, 0.2);
-            color: var(--brand-orange);
-        }
-
-        /* ══════════════════════════════════════════════
-           SEARCH ROW
-           ══════════════════════════════════════════════ */
-        .header-search-row {
-            display: grid;
-            grid-template-columns: auto 1fr auto;
-            align-items: center;
-            gap: 20px;
-            padding: 16px 40px;
-            background: white;
-            border-top: 1px solid #f3f4f6;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .header-search-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .lang-selector {
-            display: flex;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 16px;
-            background: white;
-            border: 2px solid rgba(45, 80, 22, 0.2);
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .lang-selector:hover {
-            border-color: var(--brand-green);
-            background: #f9fafb;
-        }
-
-        .search-container {
-            display: flex;
-            align-items: center;
-            max-width: 900px;
-            flex: 1;
-            gap: 12px;
-        }
-
-        .search-box {
-            position: relative;
-            flex: 1;
-            display: flex;
-            height: 56px;
-            border: 2px solid #d1d5db;
-            border-radius: 12px;
-            overflow: visible;
-            background: white;
-            transition: all 0.3s;
-        }
-
-        .search-box:hover {
-            border-color: #9ca3af;
-        }
-
-        .search-box:focus-within {
-            border-color: var(--brand-orange);
-            box-shadow: 0 0 0 3px rgba(255, 140, 66, 0.1);
-        }
-
-        .category-select {
-            padding: 0 20px;
-            background: white;
-            border: none;
-            border-right: 1px solid #e5e7eb;
-            font-weight: 600;
-            font-size: 14px;
-            color: #111827;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            min-width: 180px;
-            transition: all 0.2s;
-            position: relative;
-        }
-
-        .category-select:hover {
-            background: #f9fafb;
-        }
-
-        /* Kategori Dropdown Menü */
-        .category-dropdown {
-            position: absolute;
-            top: calc(100% + 8px);
-            left: -2px;
-            background: white;
-            border: 2px solid #d1d5db;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-            min-width: 280px;
-            max-height: 400px;
-            overflow-y: auto;
-            z-index: 1000;
-            display: none;
-            animation: dropdownSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .category-dropdown.active {
-            display: block;
-        }
-
-        @keyframes dropdownSlide {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .category-group {
-            padding: 12px 0;
-            border-bottom: 1px solid #f3f4f6;
-        }
-
-        .category-group:last-child {
-            border-bottom: none;
-        }
-
-        .category-group-title {
-            padding: 8px 20px;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 800;
-            font-size: 11px;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: #6b7280;
-        }
-
-        .category-item {
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: #374151;
-            text-decoration: none;
-        }
-
-        .category-item:hover {
-            background: linear-gradient(90deg, rgba(255, 140, 66, 0.08), rgba(45, 80, 22, 0.08));
-            color: var(--brand-orange);
-            padding-left: 24px;
-        }
-
-        .category-icon {
-            width: 32px;
-            height: 32px;
-            background: #f3f4f6;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-        }
-
-        .category-item:hover .category-icon {
-            background: rgba(255, 140, 66, 0.15);
-        }
-
-        .category-info {
-            flex: 1;
-        }
-
-        .category-name {
-            font-weight: 600;
-            font-size: 14px;
-            margin-bottom: 2px;
-        }
-
-        .category-count {
-            font-size: 12px;
-            color: #9ca3af;
-        }
-
-        .search-input {
-            flex: 1;
-            padding: 0 20px;
-            border: none;
-            background: transparent;
-            font-family: 'Inter', sans-serif;
-            font-weight: 400;
-            font-size: 15px;
-            color: #9ca3af;
-            letter-spacing: 0.02em;
-            outline: none;
-        }
-
-        .search-input::placeholder {
-            color: #9ca3af;
-            font-weight: 400;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .search-actions {
-            display: flex;
-            align-items: center;
-            gap: 0;
-            padding-right: 8px;
-            background: white;
-            border-left: 1px solid #e5e7eb;
-        }
-
-        .search-action-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            border: none;
-            background: transparent;
-            color: #6b7280;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-        }
-
-        .search-action-btn:hover {
-            background: #f3f4f6;
-            color: #111827;
-        }
-
-        .filter-btn {
-            height: 56px;
-            padding: 0 20px;
-            border-radius: 12px;
-            border: 2px solid #d1d5db;
-            background: white;
-            font-weight: 600;
-            font-size: 14px;
-            color: #111827;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s;
-            white-space: nowrap;
-        }
-
-        .filter-btn:hover {
-            background: #f9fafb;
-            border-color: #9ca3af;
-        }
-
-        .search-btn {
-            height: 56px;
-            width: 56px;
-            min-width: 56px;
-            border-radius: 12px;
-            border: 2px solid #d1d5db;
-            background: white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-        }
-
-        .search-btn:hover {
-            background: #f9fafb;
-            border-color: #9ca3af;
-        }
-
-        .search-btn:active {
-            background: var(--brand-orange);
-            border-color: var(--brand-orange);
-            color: white;
-        }
-
-        /* ══════════════════════════════════════════════
-           NAVIGATION
-           ══════════════════════════════════════════════ */
-        .nav {
-            background: linear-gradient(135deg, var(--brand-orange) 0%, var(--brand-green) 100%);
-            box-shadow: 0 4px 12px rgba(45, 80, 22, 0.2);
-        }
-
-        .nav-links {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: center;
-            gap: 48px;
-        }
-
-        .nav-link {
-            padding: 16px 0;
-            color: white;
-            text-decoration: none;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 800;
-            font-size: 13px;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            transition: all 0.3s;
-            position: relative;
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: 12px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: white;
-            transform: scaleX(0);
-            transition: transform 0.3s;
-        }
-
-        .nav-link:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-
-        .nav-link:hover::after {
-            transform: scaleX(1);
-        }
-
-        /* ══════════════════════════════════════════════
-           PRODUCTS SECTION
-           ══════════════════════════════════════════════ */
         .products {
             max-width: 1400px;
-            margin: 64px auto;
-            padding: 0 32px;
-        }
-
-        .products-header {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-
-        .products-subtitle {
-            color: var(--brand-orange);
-            font-family: 'Montserrat', sans-serif;
-            font-size: 12px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            margin-bottom: 12px;
-        }
-
-        .products-title {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 42px;
-            font-weight: 900;
-            color: #111827;
-            letter-spacing: -0.02em;
+            margin: 40px auto;
+            padding: 0 20px;
         }
 
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 32px;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
         }
 
-        /* ══════════════════════════════════════════════
-           RESPONSIVE
-           ══════════════════════════════════════════════ */
-        @media (max-width: 1024px) {
-            .header-search-row {
-                flex-direction: column;
-                gap: 16px;
-            }
-
-            .lang-selector {
-                position: static;
-            }
+        /* FOOTER - Keeping existing structure but standardized */
+        .footer {
+            background: #111827;
+            color: white;
+            padding: 40px 0;
+            margin-top: 80px;
         }
 
-        @media (max-width: 768px) {
-            .logo {
-                font-size: 32px;
-            }
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
 
-            .header-actions {
-                gap: 8px;
-            }
+        .footer-links-compact {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
 
-            .header-btn {
-                width: 44px;
-                height: 44px;
-            }
+        .footer-links-compact a {
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 13px;
+        }
 
-            .btn-anmelden {
-                padding: 12px 24px;
-                font-size: 13px;
-            }
+        .footer-bottom-compact p {
+            color: #6b7280;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
 
-            .nav-links {
-                gap: 24px;
-                flex-wrap: wrap;
-            }
-
-            .products-grid {
-                grid-template-columns: 1fr;
-            }
+        /* Button Colors to match Inserieren style if mostly green/orange */
+        :root {
+            --brand-orange: #FF8C42;
+            --brand-green: #2D5016;
         }
     </style>
 </head>
 
 <body>
-    <!-- TOP TICKER -->
-    <div class="ticker">
-        <div class="ticker-content" id="tickerContent">
-            <!-- JS ile doldurulacak -->
+    <!-- ANNOUNCEMENT BAR (From header-v3.css) -->
+    <div class="announcement-bar-v3">
+        <div class="announcement-track">
+            <span class="announcement-item"><span class="announcement-icon">🌟</span> PREISVORSCHLAG SENDEN &
+                SPAREN</span>
+            <span class="announcement-separator">•</span>
+            <span class="announcement-item"><span class="announcement-icon">🚚</span> KOSTENLOSER VERSAND AB 50€</span>
+            <span class="announcement-separator">•</span>
+            <span class="announcement-item"><span class="announcement-icon">♻️</span> 100% KLIMANEUTRAL</span>
+            <span class="announcement-separator">•</span>
+            <span class="announcement-item"><span class="announcement-icon">🔒</span> SICHER BEZAHLEN MIT
+                KÄUFERSCHUTZ</span>
+            <span class="announcement-separator">•</span>
+            <span class="announcement-item"><span class="announcement-icon">🌟</span> PREISVORSCHLAG SENDEN &
+                SPAREN</span>
+            <span class="announcement-separator">•</span>
+            <span class="announcement-item"><span class="announcement-icon">🚚</span> KOSTENLOSER VERSAND AB 50€</span>
         </div>
     </div>
 
-    <!-- HEADER -->
-    <header class="header">
-        <!-- Top Row -->
-        <div class="header-top">
-            <div class="logo">CSSberlin</div>
-            <div class="header-actions">
-                <button class="header-btn" title="Favoriten" onclick="window.location.href='wunschliste.html'">
-                    <i data-lucide="heart" style="width: 20px; height: 20px;"></i>
-                </button>
-                <button class="header-btn" title="Verhandeln" onclick="window.location.href='meine-anzeigen.html?tab=negotiations'">
-                    <i data-lucide="gavel" style="width: 20px; height: 20px;"></i>
-                    <span class="badge"></span>
-                </button>
-                <button class="header-btn" title="Warenkorb" onclick="window.location.href='warenkorb.html'">
-                    <i data-lucide="shopping-cart" style="width: 20px; height: 20px;"></i>
-                    <span class="count">2</span>
-                </button>
-                <div style="width: 1px; height: 32px; background: #e5e7eb; margin: 0 8px;"></div>
-                <button class="btn-anmelden" onclick="window.authModalV3.open('login')">Anmelden</button>
+    <!-- STANDARD HEADER V3 (From Inserieren) -->
+    <header class="header-v3">
+        <!-- Logo Row -->
+        <div class="header-row-logo">
+            <!-- Logo -->
+            <a href="index.html" class="logo-v3">
+                <span class="logo-css">CSS</span><span class="logo-berlin">berlin</span>
+            </a>
+
+            <!-- Right Actions -->
+            <div class="header-right-v3">
+                <!-- Favorites -->
+                <a href="wunschliste.html" class="header-icon-v3" title="Favoriten">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                        </path>
+                    </svg>
+                    <span class="icon-badge-v3 wishlist-count" style="display:none">0</span>
+                </a>
+
+                <!-- Negotiations -->
+                <a href="meine-anzeigen.html?tab=negotiations" class="header-icon-v3" title="Verhandlungen">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 10H3"></path>
+                        <path d="M21 6H3"></path>
+                        <path d="M21 14H3"></path>
+                        <path d="M17 18H3"></path>
+                    </svg>
+                </a>
+
+                <!-- Edit/Pen Icon -->
+                <a href="inserieren.html" class="header-icon-v3" title="Inserieren">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                </a>
+
+                <!-- Cart -->
+                <a href="warenkorb.html" class="header-icon-v3" title="Warenkorb">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="icon-badge-v3 cart-count" style="display:none">0</span>
+                </a>
+
+                <!-- Anmelden Button -->
+                <button type="button" class="btn-anmelden-v3" id="btnAnmeldenV3"
+                    onclick="if(window.authModalV3) window.authModalV3.open('login'); else if(window.authModal) window.authModal.open('login');">Anmelden</button>
             </div>
         </div>
 
         <!-- Search Row -->
-        <div class="header-search-row">
-            <!-- Left: Dark Mode + Language -->
-            <div class="header-search-left">
-                <!-- Dark Mode Toggle -->
-                <div class="dark-mode-toggle" id="darkModeToggle" onclick="toggleDarkMode()">
-                    <div class="dark-mode-toggle-circle">
-                        <i data-lucide="sun" class="dark-mode-toggle-icon" style="color: #f59e0b;"></i>
-                    </div>
-                </div>
+        <div class="header-row-search">
+            <!-- Dark Mode Toggle -->
+            <button class="dark-mode-toggle-v3" id="darkModeToggle" title="Modus wechseln"></button>
 
-                <!-- Language Selector -->
-                <button class="lang-selector" onclick="toggleLanguage()">
-                    <i data-lucide="globe" style="width: 16px; height: 16px; color: #9ca3af;"></i>
-                    <span id="langText">DE</span>
+            <!-- Language Selector -->
+            <button class="lang-selector-v3" onclick="toggleLanguageDropdown()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <path
+                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                    </path>
+                </svg>
+                <span>DE</span>
+            </button>
+
+            <!-- Category Dropdown -->
+            <button class="category-dropdown-v3">
+                <span>Alle Kategorien</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button>
+
+            <!-- Search Input -->
+            <div class="search-input-v3">
+                <input type="text" placeholder="CLIMATE SMART SOLUTIONS" id="searchInputV3">
+                <button class="search-btn-icon" title="Sprachsuche">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                        <line x1="12" y1="19" x2="12" y2="23"></line>
+                        <line x1="8" y1="23" x2="16" y2="23"></line>
+                    </svg>
+                </button>
+                <button class="search-btn-icon" title="Bildsuche">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z">
+                        </path>
+                        <circle cx="12" cy="13" r="4"></circle>
+                    </svg>
                 </button>
             </div>
 
-            <!-- Center: Search Container -->
-            <div class="search-container">
-                <div class="search-box">
-                    <button class="category-select" onclick="toggleCategoryDropdown()">
-                        <span id="categoryText">Alle Kategorien</span>
-                        <i data-lucide="chevron-down" style="width: 16px; height: 16px; opacity: 0.5;"></i>
-                    </button>
+            <!-- Filter Button -->
+            <button class="filter-btn-v3">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="4" y1="21" x2="4" y2="14"></line>
+                    <line x1="4" y1="10" x2="4" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12" y2="3"></line>
+                    <line x1="20" y1="21" x2="20" y2="16"></line>
+                    <line x1="20" y1="12" x2="20" y2="3"></line>
+                    <line x1="1" y1="14" x2="7" y2="14"></line>
+                    <line x1="9" y1="8" x2="15" y2="8"></line>
+                    <line x1="17" y1="16" x2="23" y2="16"></line>
+                </svg>
+                Filter
+            </button>
 
-                    <!-- Category Dropdown Menu -->
-                    <div class="category-dropdown" id="categoryDropdown">
-                        <div class="category-group">
-                            <div class="category-group-title">Mode & Accessoires</div>
-                            <a href="damen.html" class="category-item">
-                                <div class="category-icon">
-                                    <i data-lucide="shirt" style="width: 18px; height: 18px; color: #f97316;"></i>
-                                </div>
-                                <div class="category-info">
-                                    <div class="category-name">Damen</div>
-                                    <div class="category-count">Kleider, Blusen & mehr</div>
-                                </div>
-                            </a>
-                            <a href="herren.html" class="category-item">
-                                <div class="category-icon">
-                                    <i data-lucide="shirt" style="width: 18px; height: 18px; color: #0891b2;"></i>
-                                </div>
-                                <div class="category-info">
-                                    <div class="category-name">Herren</div>
-                                    <div class="category-count">Hemden, Hosen & mehr</div>
-                                </div>
-                            </a>
-                            <a href="kinder.html" class="category-item">
-                                <div class="category-icon">
-                                    <i data-lucide="baby" style="width: 18px; height: 18px; color: #ec4899;"></i>
-                                </div>
-                                <div class="category-info">
-                                    <div class="category-name">Kinder</div>
-                                    <div class="category-count">Kindermode & Spielzeug</div>
-                                </div>
-                            </a>
-                        </div>
-
-                        <div class="category-group">
-                            <div class="category-group-title">Elektronik & Tech</div>
-                            <a href="#" class="category-item" onclick="filterByCategory('Elektronik')">
-                                <div class="category-icon">
-                                    <i data-lucide="smartphone" style="width: 18px; height: 18px; color: #8b5cf6;"></i>
-                                </div>
-                                <div class="category-info">
-                                    <div class="category-name">Elektronik</div>
-                                    <div class="category-count">Smartphones, Tablets & Gadgets</div>
-                                </div>
-                            </a>
-                        </div>
-
-                        <div class="category-group">
-                            <div class="category-group-title">Special</div>
-                            <a href="#" class="category-item" onclick="filterByCategory('Sale')">
-                                <div class="category-icon">
-                                    <i data-lucide="percent" style="width: 18px; height: 18px; color: #ef4444;"></i>
-                                </div>
-                                <div class="category-info">
-                                    <div class="category-name">Sale</div>
-                                    <div class="category-count">Reduzierte Artikel</div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-
-                    <input type="text" class="search-input" placeholder="CLIMATE SMART SOLUTIONS" id="searchInput">
-                    <div class="search-actions">
-                        <button class="search-action-btn" title="Sprachsuche">
-                            <i data-lucide="mic" style="width: 18px; height: 18px;"></i>
-                        </button>
-                        <div style="width: 1px; height: 24px; background: #e5e7eb;"></div>
-                        <button class="search-action-btn" title="Bildsuche">
-                            <i data-lucide="camera" style="width: 18px; height: 18px;"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <button class="filter-btn">
-                    <i data-lucide="sliders-horizontal" style="width: 16px; height: 16px;"></i>
-                    <span>Filter</span>
-                </button>
-
-                <button class="search-btn" onclick="performSearch()">
-                    <i data-lucide="search" style="width: 20px; height: 20px;"></i>
-                </button>
-            </div>
-
-            <!-- Right: Empty placeholder for future features -->
-            <div class="header-search-right">
-                <!-- Could add: User menu, Quick links, etc. -->
-            </div>
+            <!-- Search Submit -->
+            <button class="search-submit-v3">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="M21 21l-4.35-4.35"></path>
+                </svg>
+            </button>
         </div>
 
-        <!-- Navigation -->
-        <nav class="nav">
-            <div class="nav-links">
-                <a href="damen.html" class="nav-link">Damen</a>
-                <a href="herren.html" class="nav-link">Herren</a>
-                <a href="kinder.html" class="nav-link">Kinder</a>
-                <a href="#" class="nav-link">Elektronik</a>
-                <a href="#" class="nav-link">
-                    <span style="background: rgba(244,67,54,0.2); padding: 4px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2);">Sale</span>
-                </a>
+        <!-- Navigation Bar -->
+        <nav class="nav-bar-v3">
+            <div class="nav-container-v3">
+                <a href="damen.html" class="nav-link-v3">DAMEN</a>
+                <a href="herren.html" class="nav-link-v3">HERREN</a>
+                <a href="kinder.html" class="nav-link-v3">KINDER</a>
+                <a href="elektronik.html" class="nav-link-v3">ELEKTRONIK</a>
+                <a href="sale.html" class="nav-link-v3 sale">SALE</a>
+                <a href="wie-funktioniert.html" class="nav-link-v3">WIE FUNKTIONIERT'S</a>
             </div>
         </nav>
     </header>
 
-    <!-- PRODUCTS SECTION -->
     <section class="products">
-        <div class="products-header">
-            <div class="products-subtitle">Aktuelle Kollektion</div>
-            <h2 class="products-title">Frisch Eingetroffen</h2>
+        <div style="text-align:center; margin-bottom:30px;">
+            <div
+                style="color:var(--brand-orange); font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase;">
+                Aktuelle Kollektion</div>
+            <h2 style="font-family:'Montserrat'; font-size:32px; font-weight:900;">Frisch Eingetroffen</h2>
         </div>
         <div class="products-grid" id="productsGrid">
-            <!-- Products will be loaded here via script.js -->
+            <!-- Products will be injected here -->
         </div>
     </section>
 
-    <!-- Auth Handler (JWT & LocalStorage) -->
     <script src="auth-handler.js"></script>
-
-    <!-- Auth Modal v3 Script -->
     <script src="auth-modal-v3.js"></script>
-
-    <!-- Main Script -->
     <script src="script.js"></script>
+    <script src="guest-mode.js"></script>
 
     <script>
-        // Initialize Lucide icons
         lucide.createIcons();
-
-        // Ticker Content
-        const tickerMessages = [
-            { text: "KOSTENLOSER VERSAND AB 50€", icon: "truck" },
-            { text: "100% KLIMANEUTRALER VERSAND", icon: "tree-pine" },
-            { text: "GEPRÜFTE QUALITÄT AUS BERLIN", icon: "star" },
-            { text: "EXPRESS LIEFERUNG VERFÜGBAR", icon: "zap" }
-        ];
-
-        function initTicker() {
-            const container = document.getElementById('tickerContent');
-            const items = [...tickerMessages, ...tickerMessages, ...tickerMessages, ...tickerMessages];
-
-            items.forEach(msg => {
-                const div = document.createElement('div');
-                div.className = 'ticker-item';
-                div.innerHTML = `
-                    <i data-lucide="${msg.icon}" style="width: 16px; height: 16px;"></i>
-                    <span>${msg.text}</span>
-                    <div style="width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.3); margin-left: 40px;"></div>
-                `;
-                container.appendChild(div);
-            });
-
-            lucide.createIcons();
-        }
-
-        // Dark Mode Toggle
-        function toggleDarkMode() {
-            const body = document.body;
-            const toggle = document.getElementById('darkModeToggle');
-            const icon = toggle.querySelector('.dark-mode-toggle-icon');
-
-            body.classList.toggle('dark-mode');
-            toggle.classList.toggle('active');
-
-            if (body.classList.contains('dark-mode')) {
-                icon.setAttribute('data-lucide', 'moon');
-                icon.style.color = '#fbbf24';
-                localStorage.setItem('cssberlin_theme', 'dark');
-            } else {
-                icon.setAttribute('data-lucide', 'sun');
-                icon.style.color = '#f59e0b';
-                localStorage.setItem('cssberlin_theme', 'light');
-            }
-
-            // Reinitialize Lucide icons
-            lucide.createIcons();
-        }
-
-        // Load saved theme on page load
-        function loadTheme() {
-            const savedTheme = localStorage.getItem('cssberlin_theme');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-                document.body.classList.add('dark-mode');
-                const toggle = document.getElementById('darkModeToggle');
-                toggle.classList.add('active');
-
-                const icon = toggle.querySelector('.dark-mode-toggle-icon');
-                icon.setAttribute('data-lucide', 'moon');
-                icon.style.color = '#fbbf24';
-
-                lucide.createIcons();
-            }
-        }
-
-        // Language Toggle
-        function toggleLanguage() {
-            const langText = document.getElementById('langText');
-            if (window.I18n) {
-                const newLang = I18n.currentLanguage === 'de' ? 'en' : 'de';
-                I18n.setLanguage(newLang);
-                langText.textContent = newLang.toUpperCase();
-            } else {
-                langText.textContent = langText.textContent === 'DE' ? 'EN' : 'DE';
-            }
-        }
-
-        // Search Function
-        function performSearch() {
-            const query = document.getElementById('searchInput').value;
-            if (query && window.performSearch) {
-                window.performSearch(query);
-            } else if (query) {
-                console.log('Search:', query);
-                // Fallback search logic
-                window.location.href = `vitrin.html?search=${encodeURIComponent(query)}`;
-            }
-        }
-
-        // Enter key support
-        document.getElementById('searchInput')?.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                performSearch();
-            }
-        });
-
-        // Category Dropdown Toggle
-        function toggleCategoryDropdown() {
-            const dropdown = document.getElementById('categoryDropdown');
-            dropdown.classList.toggle('active');
-        }
-
-        // Filter by Category
-        function filterByCategory(category) {
-            const categoryText = document.getElementById('categoryText');
-            categoryText.textContent = category;
-
-            // Close dropdown
-            const dropdown = document.getElementById('categoryDropdown');
-            dropdown.classList.remove('active');
-
-            // Load products with category filter
-            if (window.loadProducts) {
-                window.loadProducts(category);
-            } else {
-                console.log('Filter by category:', category);
-                window.location.href = `vitrin.html?category=${encodeURIComponent(category)}`;
-            }
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            const dropdown = document.getElementById('categoryDropdown');
-            const categoryBtn = document.querySelector('.category-select');
-
-            if (dropdown && !dropdown.contains(e.target) && !categoryBtn.contains(e.target)) {
-                dropdown.classList.remove('active');
-            }
-        });
-
-        // Load categories dynamically from backend
-        async function loadCategories() {
-            try {
-                const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-                    ? 'http://localhost:8000'
-                    : 'https://cssberlin-backend.up.railway.app';
-
-                const response = await fetch(`${API_BASE}/api/products/categories`);
-                if (!response.ok) {
-                    console.warn('Failed to load categories from backend, using static list');
-                    return;
-                }
-
-                const data = await response.json();
-                const dropdown = document.getElementById('categoryDropdown');
-
-                if (!dropdown || !data.categories || data.categories.length === 0) {
-                    return;
-                }
-
-                // Build category dropdown HTML dynamically
-                let html = '';
-
-                // Group categories
-                const modeCategories = data.categories.filter(c =>
-                    ['Damen', 'Herren', 'Kinder'].includes(c.name)
-                );
-                const techCategories = data.categories.filter(c =>
-                    c.name === 'Elektronik'
-                );
-                const specialCategories = data.categories.filter(c =>
-                    c.name === 'Sale'
-                );
-
-                // Mode & Accessoires
-                if (modeCategories.length > 0) {
-                    html += '<div class="category-group">';
-                    html += '<div class="category-group-title">Mode & Accessoires</div>';
-                    modeCategories.forEach(cat => {
-                        const link = cat.name === 'Damen' ? 'damen.html' :
-                                   cat.name === 'Herren' ? 'herren.html' :
-                                   'kinder.html';
-                        html += `
-                            <a href="${link}" class="category-item">
-                                <div class="category-icon">
-                                    <i data-lucide="${cat.icon}" style="width: 18px; height: 18px; color: ${cat.color};"></i>
-                                </div>
-                                <div class="category-info">
-                                    <div class="category-name">${cat.name}</div>
-                                    <div class="category-count">${cat.description} (${cat.count})</div>
-                                </div>
-                            </a>
-                        `;
-                    });
-                    html += '</div>';
-                }
-
-                // Elektronik & Tech
-                if (techCategories.length > 0) {
-                    html += '<div class="category-group">';
-                    html += '<div class="category-group-title">Elektronik & Tech</div>';
-                    techCategories.forEach(cat => {
-                        html += `
-                            <a href="#" class="category-item" onclick="filterByCategory('${cat.name}'); return false;">
-                                <div class="category-icon">
-                                    <i data-lucide="${cat.icon}" style="width: 18px; height: 18px; color: ${cat.color};"></i>
-                                </div>
-                                <div class="category-info">
-                                    <div class="category-name">${cat.name}</div>
-                                    <div class="category-count">${cat.description} (${cat.count})</div>
-                                </div>
-                            </a>
-                        `;
-                    });
-                    html += '</div>';
-                }
-
-                // Special (Sale)
-                if (specialCategories.length > 0) {
-                    html += '<div class="category-group">';
-                    html += '<div class="category-group-title">Special</div>';
-                    specialCategories.forEach(cat => {
-                        html += `
-                            <a href="#" class="category-item" onclick="filterByCategory('${cat.name}'); return false;">
-                                <div class="category-icon">
-                                    <i data-lucide="${cat.icon}" style="width: 18px; height: 18px; color: ${cat.color};"></i>
-                                </div>
-                                <div class="category-info">
-                                    <div class="category-name">${cat.name}</div>
-                                    <div class="category-count">${cat.description} (${cat.count})</div>
-                                </div>
-                            </a>
-                        `;
-                    });
-                    html += '</div>';
-                }
-
-                dropdown.innerHTML = html;
-
-                // Re-initialize Lucide icons
-                if (window.lucide) {
-                    lucide.createIcons();
-                }
-
-                console.log('✅ Categories loaded from backend:', data.categories.length);
-            } catch (error) {
-                console.warn('Error loading categories:', error);
-            }
-        }
-
-        // Initialize on load
-        document.addEventListener('DOMContentLoaded', () => {
-            initTicker();
-            loadTheme();
-            loadCategories(); // Load categories from backend
-        });
     </script>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-links-compact">
+                <a href="impressum.html">Impressum</a> •
+                <a href="datenschutz.html">Datenschutz</a> •
+                <a href="kontakt.html">Kontakt</a>
+            </div>
+            <div class="footer-bottom-compact">
+                <p>&copy; 2026 CSS Berlin - Climate Smart Solutions</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="cookie-consent.js"></script>
 </body>
+
 </html>

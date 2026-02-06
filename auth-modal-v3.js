@@ -290,30 +290,44 @@
         submitBtn.classList.add('loading');
 
         try {
-            const response = await fetch(`${API_BASE}/api/auth/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
-            });
+            // Use production CSSAuth handler if available
+            if (window.CSSAuth && typeof window.CSSAuth.login === 'function') {
+                const result = await window.CSSAuth.login(email, password);
 
-            const data = await response.json();
+                if (result.success) {
+                    showMessage('Erfolgreich angemeldet!', 'success');
+                    setTimeout(() => {
+                        close();
+                        window.location.reload();
+                    }, 1500);
+                } else {
+                    throw new Error(result.error || 'Login fehlgeschlagen');
+                }
+            } else {
+                // Fallback: Direct API call
+                const response = await fetch(`${API_BASE}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
 
-            if (!response.ok) {
-                throw new Error(data.detail || 'Fehler bei der Anmeldung');
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.detail || 'Fehler bei der Anmeldung');
+                }
+
+                showMessage('Erfolgreich angemeldet!', 'success');
+
+                // Save token manually
+                localStorage.setItem('cssberlin_auth_token', data.access_token);
+                localStorage.setItem('cssberlin_user', JSON.stringify({ user_name: data.user_name }));
+
+                setTimeout(() => {
+                    close();
+                    window.location.reload();
+                }, 1500);
             }
-
-            showMessage('Erfolgreich angemeldet!', 'success');
-
-            // Use CSSAuth handler for token management
-            if (window.CSSAuth) {
-                window.CSSAuth.saveToken(data.access_token);
-                window.CSSAuth.saveUser(data.user || data);
-            }
-
-            setTimeout(() => {
-                close();
-                window.location.reload();
-            }, 1500);
 
         } catch (error) {
             showMessage(error.message, 'error');
