@@ -14,9 +14,9 @@
     // Configure API endpoints
     const config = {
         // Base URL for REST API
-        // NOTE: Production is HTTP-only (No SSL). Browsers will block this on HTTPS sites (Mixed Content).
-        // User must allow "Insecure Content" or Setup SSL on Backend.
-        BASE_URL: isLocal ? 'http://localhost:8000' : 'http://195.201.146.224:8000',
+        // Using relative path '/api' to avoid Mixed Content errors on HTTPS sites.
+        // Nginx or Cloudflare must be configured to proxy /api to the backend.
+        BASE_URL: isLocal ? 'http://localhost:8000' : '',
 
         // WebSocket protocol
         WS_PROTOCOL: isLocal ? 'ws' : 'wss',

@@ -22,6 +22,10 @@ const API_BASE_URL = (function () {
 
 console.log('[CONFIG] API Base URL:', API_BASE_URL);
 
+// Standard pagination size
+const PRODUCTS_PAGE_SIZE = 12;
+const LOAD_MORE_SIZE = 12;
+
 // ============================================
 // SAMPLE PRODUCTS DATA
 // ============================================
@@ -625,9 +629,7 @@ const sampleProducts = [
 // GLOBAL STATE
 // ============================================
 // Pagination (2026 launch: 5x4 = 20 products initial, 10 per load)
-const INITIAL_PRODUCTS = 20;    // Başlangıç: 5 sütun x 4 satır
-const LOAD_MORE_SIZE = 10;      // Her yüklemede: 5 sütun x 2 satır
-const PRODUCTS_PAGE_SIZE = INITIAL_PRODUCTS; // İlk yükleme için
+// Pagination settings moved to top of file
 let currentOffset = 0;
 let activeCategoryFilter = null;
 let canLoadMore = true;
@@ -1587,8 +1589,8 @@ function showNotification(message, type = 'info') {
 }
 
 // Add animation styles
-const style = document.createElement('style');
-style.textContent = `
+const notificationStyle = document.createElement('style');
+notificationStyle.textContent = `
     @keyframes slideIn {
         from {
             transform: translateX(400px);
@@ -1624,7 +1626,7 @@ style.textContent = `
         }
     }
     `;
-document.head.appendChild(style);
+document.head.appendChild(notificationStyle);
 
 // ============================================
 // MEGA MENU INTERACTIONS
@@ -2134,5 +2136,58 @@ document.addEventListener('DOMContentLoaded', () => {
     // initSocialHub(); -- Replaced by liquid-gradient.js (initSocialHubLiquid)
     initNewsSlider();
     initFooterNewsSlider();
+
+    // Initialize Products (Restored)
+    initProducts();
 });
+
+// ============================================
+// EXTERNAL FILTER INTERFACE (For Smart Filters)
+// ============================================
+window.filterProducts = function (category, subCategory) {
+    console.log(`[SmartFilter] Filtering by ${category} > ${subCategory}`);
+
+    const productsGrid = document.getElementById('productsGrid');
+    if (!productsGrid) return;
+
+    // Show spinner
+    productsGrid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;"><div class="loading-spinner"></div></div>';
+
+    // Simulate network delay
+    setTimeout(() => {
+        // Use loaded products or fallback samples
+        // Ensure sampleProducts is defined
+        let sourceData = [];
+        if (typeof window.loadedProducts !== 'undefined') sourceData = window.loadedProducts;
+        else if (typeof sampleProducts !== 'undefined') sourceData = sampleProducts;
+
+        let filtered = sourceData.filter(p => {
+            // Simple text match for demo purposes
+            const text = ((p.name || '') + ' ' + (p.brand || '') + ' ' + (p.category || '')).toLowerCase();
+            const term = (subCategory || '').toLowerCase();
+            return text.includes(term);
+        });
+
+        // If empty, show random selection so user sees content
+        if (filtered.length === 0) {
+            console.log('[SmartFilter] No exact match, showing suggestions');
+            // Show 4 random items
+            filtered = sourceData.sort(() => 0.5 - Math.random()).slice(0, 4);
+        }
+
+        productsGrid.innerHTML = '';
+        filtered.forEach(p => {
+            // Ensure createProductCard is available
+            if (typeof createProductCard === 'function') {
+                productsGrid.innerHTML += createProductCard(p);
+            }
+        });
+
+        // Update UI
+        if (typeof canLoadMore !== 'undefined') canLoadMore = false;
+        if (typeof updateLoadMoreVisibility === 'function') updateLoadMoreVisibility();
+        if (typeof attachProductEventListeners === 'function') attachProductEventListeners();
+
+    }, 400);
+};
 

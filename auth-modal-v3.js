@@ -14,17 +14,19 @@
         || window.location.port === '5500'  // Live Server
         || window.location.port === '3000'; // Dev server
 
-    // FORCE LOCALHOST for now (remove this line for production)
-    const API_BASE = 'http://localhost:8000';
+    // Use centralized API BASE from api-config.js
+    const API_BASE = window.API_BASE || 'http://localhost:8000';
 
     // DEBUG: Log environment detection
     console.log('[Auth Modal v3] Environment Detection:');
     console.log('  - Hostname:', window.location.hostname);
-    console.log('  - Port:', window.location.port);
-    console.log('  - Protocol:', window.location.protocol);
     console.log('  - isLocalDevelopment:', isLocalDevelopment);
     console.log('  - API_BASE:', API_BASE);
-    console.log('  ✅ Using LOCALHOST backend for development');
+    if (API_BASE.includes('localhost')) {
+        console.log('  ✅ Using LOCALHOST backend');
+    } else {
+        console.log('  🌐 Using PRODUCTION backend');
+    }
 
     let currentMode = 'login';
 

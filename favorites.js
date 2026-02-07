@@ -420,8 +420,8 @@ function isInWishlist(productId) {
 }
 
 // Add CSS for animations
-const style = document.createElement('style');
-style.textContent = `
+const favoritesStyle = document.createElement('style');
+favoritesStyle.textContent = `
     @keyframes fadeOut {
         from {
             opacity: 1;
@@ -499,4 +499,4 @@ style.textContent = `
         font-size: 18px;
     }
 `;
-document.head.appendChild(style);
+document.head.appendChild(favoritesStyle);

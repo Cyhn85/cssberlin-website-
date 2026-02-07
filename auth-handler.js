@@ -232,6 +232,21 @@
         console.log('[Auth Handler] Initialized', isLoggedIn() ? '✅ Logged In' : '❌ Not Logged In');
     }
 
+    // ─── Legacy Bridge ──────────────────────────────────────────
+    // Bridge for components expecting window.authGate (v2 compatibility)
+    window.authGate = {
+        get isAuthenticated() { return isLoggedIn(); },
+        get currentUser() { return getUser(); },
+        showLoginModal: function (mode = 'login') {
+            if (window.authModalV3) {
+                window.authModalV3.open(mode);
+            } else {
+                console.warn('[Auth Bridge] authModalV3 not found');
+            }
+        },
+        logout: logout
+    };
+
     // ─── Public API ─────────────────────────────────────────────
     window.CSSAuth = {
         saveToken,

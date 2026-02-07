@@ -44,14 +44,14 @@ const AuthGuard = {
      * Check if user is logged in
      */
     isLoggedIn() {
-        return authGate.isAuthenticated;
+        return window.CSSAuth ? window.CSSAuth.isLoggedIn() : false;
     },
 
     /**
      * Get current user
      */
     getCurrentUser() {
-        return authGate.currentUser;
+        return window.CSSAuth ? window.CSSAuth.getUser() : null;
     },
 
     /**
@@ -68,7 +68,7 @@ const AuthGuard = {
         if (user.loginMethod === 'magic_link') return true;
 
         // Check explicit verification status
-        return user.emailVerified === true;
+        return user.email_verified === true || user.emailVerified === true;
     },
 
     /**
@@ -451,21 +451,26 @@ const AuthGuard = {
      * Update UI based on auth status
      */
     updateUIBasedOnAuth() {
-        const isLoggedIn = this.isLoggedIn();
+        const loggedIn = this.isLoggedIn();
         const user = this.getCurrentUser();
 
         // Update header button
-        const authBtns = document.querySelectorAll('.header-action-btn.auth-btn, .combined-auth-btn, [onclick*="showLoginModal"]');
+        const authBtns = document.querySelectorAll('.header-action-btn.auth-btn, .combined-auth-btn, .btn-anmelden-v3, [onclick*="showLoginModal"]');
         authBtns.forEach(btn => {
-            if (isLoggedIn && user) {
+            if (loggedIn && user) {
                 btn.innerHTML = `
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
                     </svg>
-                    <span>${user.firstName || 'Mein Konto'}</span>
+                    <span>${user.firstName || user.first_name || 'Mein Konto'}</span>
                 `;
-                btn.onclick = () => window.location.href = 'mein-konto.html';
+                btn.onclick = (e) => {
+                    e.preventDefault();
+                    window.location.href = 'mein-konto.html';
+                };
+                // Remove potential onclick from HTML to avoid conflicts
+                btn.removeAttribute('onclick');
             }
         });
 

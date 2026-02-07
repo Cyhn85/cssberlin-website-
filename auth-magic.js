@@ -250,7 +250,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 // Use global API_BASE from api-config.js
-                const baseUrl = window.API_BASE || 'http://localhost:8000';
+                // Handle empty string correctly (production relative path)
+                const baseUrl = (window.CSS_BERLIN_API && window.CSS_BERLIN_API.BASE_URL !== undefined)
+                    ? window.CSS_BERLIN_API.BASE_URL
+                    : (window.API_BASE !== undefined ? window.API_BASE : 'http://localhost:8000');
 
                 const response = await fetch(`${baseUrl}/api/auth/magic-link`, {
                     method: 'POST',

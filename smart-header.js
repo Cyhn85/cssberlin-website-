@@ -496,5 +496,5 @@ document.addEventListener('DOMContentLoaded', () => {
             cursor: pointer;
         }
     `;
-    document.head.appendChild(style);
+    document.head.appendChild(headerStyle);
 });
