@@ -17,8 +17,9 @@
         ENVIRONMENT: isLocal ? 'development' : 'production',
 
         // Base URL for REST API
-        // For Production: Use full HTTPS URL to avoid any ambiguity
-        BASE_URL: isLocal ? 'http://localhost:8000' : 'https://cssberlin.de',
+        // For Production: Use API proxy via Nginx (/api) to avoid CORS issues completely.
+        // This ensures cookies and auth headers work correctly across www and non-www.
+        BASE_URL: isLocal ? 'http://localhost:8000' : window.location.origin,
 
         // WebSocket protocol
         WS_PROTOCOL: isLocal ? 'ws' : 'wss',
