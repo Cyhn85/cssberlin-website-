@@ -261,6 +261,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await response.json();
 
                 if (!response.ok) {
+                    if (response.status === 404) {
+                        throw new Error("SUNUCU HATASI: Backend güncel değil. Magic Link özelliği sunucuda bulunamadı (404). Lütfen sunucuyu güncelleyin (git pull).");
+                    }
                     throw new Error(data.detail || "Fehler beim Senden");
                 }
 
