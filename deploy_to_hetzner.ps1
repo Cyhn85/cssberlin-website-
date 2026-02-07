@@ -73,7 +73,7 @@ else
 fi
 
 echo "🎉 DEPLOYMENT COMPLETE!"
-"@
+"@.Replace("`r`n", "`n")
 
 # Execute via SSH (User will be prompted for password if not key-based)
 ssh $User@$HostName $RemoteScript
