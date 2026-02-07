@@ -15,7 +15,7 @@ Write-Host "Connecting to $User@$HostName..."
 # Note: We use ssh directly. You might need to type the password if keys are not set up.
 # We attempt to find the directory and pull.
 
-$RemoteScript = @"
+$RemoteScript = @'
 echo "Testing directory access..."
 TARGET_DIR=""
 
@@ -73,7 +73,7 @@ else
 fi
 
 echo "🎉 DEPLOYMENT COMPLETE!"
-"@.Replace("`r`n", "`n")
+'@.Replace("`r`n", "`n")
 
 # Execute via SSH (User will be prompted for password if not key-based)
 ssh $User@$HostName $RemoteScript
