@@ -233,29 +233,49 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 6. MAGIC LINK HANDLER
-    const magicBtn = document.getElementById('magicLinkBtn');
-    if (magicBtn) {
-        magicBtn.addEventListener('click', async () => {
-            const email = document.getElementById('email').value;
-            if (!email) {
-                alert("Bitte geben Sie zuerst Ihre E-Mail Adresse ein.");
+    const sendMagicBtn = document.getElementById('sendMagicLink');
+    if (sendMagicBtn) {
+        sendMagicBtn.addEventListener('click', async () => {
+            const emailInput = document.getElementById('magicEmail');
+            const email = emailInput ? emailInput.value : '';
+
+            if (!email || !email.includes('@')) {
+                alert("Bitte geben Sie eine gültige E-Mail Adresse ein.");
                 return;
             }
 
-            magicBtn.disabled = true;
-            magicBtn.innerHTML = 'Sende Link...';
+            const originalText = sendMagicBtn.textContent;
+            sendMagicBtn.disabled = true;
+            sendMagicBtn.textContent = 'Sende...';
 
             try {
-                // Mock API Call or Real if supported
-                // await api.sendMagicLink(email);
-                await new Promise(r => setTimeout(r, 1500)); // Simulating network
+                // Use global API_BASE from api-config.js
+                const baseUrl = window.API_BASE || 'http://localhost:8000';
 
-                alert(`Ein magischer Link wurde an ${email} gesendet! \n(Bitte prüfen Sie Ihren Posteingang)`);
+                const response = await fetch(`${baseUrl}/api/auth/magic-link/request`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.detail || "Fehler beim Senden");
+                }
+
+                alert(`Ein magischer Link wurde an ${email} gesendet!\nBitte prüfen Sie Ihren Posteingang.`);
+
+                // Hide area
+                const area = document.getElementById('magicLinkArea');
+                if (area) area.style.display = 'none';
+
             } catch (e) {
-                alert("Fehler beim Senden des Magic Links.");
+                console.error("Magic Link Error:", e);
+                alert("Fehler: " + e.message);
             } finally {
-                magicBtn.disabled = false;
-                magicBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 10l-4 4l6 6l4-16l-18 7l4 2l2 6l3-4"></path></svg> Mit Magic Link anmelden`;
+                sendMagicBtn.disabled = false;
+                sendMagicBtn.textContent = originalText;
             }
         });
     }
