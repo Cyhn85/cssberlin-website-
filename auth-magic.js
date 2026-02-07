@@ -279,17 +279,33 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (e) {
                 console.error("Magic Link Error:", e);
 
-                // Detailed Error Handling for Mixed Content
+                // Detailed Error Handling
+                const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                const isHttps = window.location.protocol === 'https:';
+
                 if (e.message.includes("Failed to fetch") || e.name === "TypeError") {
-                    alert(
-                        "⚠️ Bağlantı Hatası (Mixed Content Block)\n\n" +
-                        "Tarayıcınız güvenlik gereği HTTP (Backend) isteğini engelledi.\n" +
-                        "Lütfen çözmek için:\n" +
-                        "1. Adres çubuğundaki kilit/ünlem simgesine tıklayın.\n" +
-                        "2. 'Site Ayarları'na gidin.\n" +
-                        "3. 'Güvenli Olmayan İçerik' (Insecure Content) -> 'İzin Ver' seçeneğini işaretleyin.\n" +
-                        "4. Sayfayı yenileyip tekrar deneyin."
-                    );
+                    if (isHttps && !isLocal) {
+                        // Real Mixed Content Issue (Production)
+                        alert(
+                            "⚠️ Bağlantı Hatası (Mixed Content Block)\n\n" +
+                            "Tarayıcınız güvenlik gereği HTTP (Backend) isteğini engelledi.\n" +
+                            "Lütfen çözmek için:\n" +
+                            "1. Adres çubuğundaki kilit simgesine tıklayın.\n" +
+                            "2. 'Site Ayarları'na gidin.\n" +
+                            "3. 'Güvenli Olmayan İçerik' -> 'İzin Ver' seçeneğini işaretleyin."
+                        );
+                    } else {
+                        // Local Dev or Server Down (CORS/Connection Refused)
+                        alert(
+                            "⚠️ Sunucu Bağlantı Hatası\n\n" +
+                            "Backend sunucusuna ulaşılamıyor.\n\n" +
+                            "Olası sebepler:\n" +
+                            "1. Backend (Port 8000) çalışmıyor olabilir.\n" +
+                            "2. CORS hatası (Localhost Origins).\n" +
+                            "3. İnternet bağlantınız kesik.\n\n" +
+                            "Lütfen terminalden backend'in çalıştığını kontrol edin."
+                        );
+                    }
                 } else {
                     alert("Hata oluştu: " + e.message);
                 }
