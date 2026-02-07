@@ -206,26 +206,27 @@
     font-weight: 500;
 }
 
-/* ROW 4: Buttons (Always Visible) */
+/* ROW 4: Buttons (Always Visible and Symmetrical) */
 .product-card-v3-actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
-    margin-top: 12px;
+    margin-top: auto;
+    /* Push to bottom */
+    padding-top: 10px;
 }
 
 .product-card-v3-actions button {
-    height: 36px;
-    border-radius: 6px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
+    /* Reset default button styles to allow Gradient Button to work */
+    width: 100%;
+    min-height: 40px;
+    /* Ensure height */
+    margin: 0;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    transition: all 0.2s;
-    border: none;
+    /* Do NOT override border or background if using gradient class */
 }
 
 /* Button Variants */

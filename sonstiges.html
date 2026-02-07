@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wie funktioniert es? - CSS Berlin | Climate Smart Solutions</title>
+    <title>Sonstiges - CSS Berlin</title>
     <link rel="stylesheet" href="styles.css">
-
+    <link rel="stylesheet" href="toast.css">
     <!-- Standardized Styles -->
     <link rel="stylesheet" href="header-v3.css">
     <link rel="stylesheet" href="auth-modal-v3.css">
@@ -16,18 +16,9 @@
     <link rel="stylesheet" href="product-card-override.css">
     <link rel="stylesheet" href="footer-v3.css">
     <link rel="stylesheet" href="gradient-button.css">
-
-    <!-- Magic UI Styles -->
-    <link rel="stylesheet" href="magic-ui.css">
-
-    <!-- API Configuration (MUST load first) -->
-    <script src="api-config.js"></script>
-    <script src="api-client.js"></script>
-
 </head>
 
 <body>
-
     <!-- ANNOUNCEMENT BAR (From header-v3.css) -->
     <div class="announcement-bar-v3">
         <div class="announcement-track">
@@ -37,18 +28,29 @@
             <span class="announcement-item"><span class="announcement-icon">🚚</span> KOSTENLOSER VERSAND AB 50€</span>
             <span class="announcement-separator">•</span>
             <span class="announcement-item"><span class="announcement-icon">♻️</span> 100% KLIMANEUTRAL</span>
+            <span class="announcement-separator">•</span>
+            <span class="announcement-item"><span class="announcement-icon">🔒</span> SICHER BEZAHLEN MIT
+                KÄUFERSCHUTZ</span>
+            <span class="announcement-separator">•</span>
+            <span class="announcement-item"><span class="announcement-icon">🌟</span> PREISVORSCHLAG SENDEN &
+                SPAREN</span>
+            <span class="announcement-separator">•</span>
+            <span class="announcement-item"><span class="announcement-icon">🚚</span> KOSTENLOSER VERSAND AB 50€</span>
         </div>
     </div>
 
-    <!-- STANDARD HEADER V3 -->
+    <!-- STANDARD HEADER V3 (From Inserieren) -->
     <header class="header-v3">
         <!-- Logo Row -->
         <div class="header-row-logo">
+            <!-- Logo -->
             <a href="index.html" class="logo-v3">
                 <span class="logo-css">CSS</span><span class="logo-berlin">berlin</span>
             </a>
 
+            <!-- Right Actions -->
             <div class="header-right-v3">
+                <!-- Favorites -->
                 <a href="wunschliste.html" class="header-icon-v3" title="Favoriten">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path
@@ -57,6 +59,8 @@
                     </svg>
                     <span class="icon-badge-v3 wishlist-count" style="display:none">0</span>
                 </a>
+
+                <!-- Tekliflerim (My Offers) -->
                 <a href="tekliflerim.html" class="header-icon-v3" title="Meine Angebote">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
@@ -64,6 +68,9 @@
                     </svg>
                     <span class="icon-badge-v3 offers-count" style="display:none">0</span>
                 </a>
+
+
+                <!-- Negotiations -->
                 <a href="meine-anzeigen.html?tab=negotiations" class="header-icon-v3" title="Verhandlungen">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M17 10H3"></path>
@@ -72,12 +79,16 @@
                         <path d="M17 18H3"></path>
                     </svg>
                 </a>
+
+                <!-- Edit/Pen Icon -->
                 <a href="inserieren.html" class="header-icon-v3" title="Inserieren">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                         <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                     </svg>
                 </a>
+
+                <!-- Cart -->
                 <a href="warenkorb.html" class="header-icon-v3" title="Warenkorb">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="9" cy="21" r="1"></circle>
@@ -86,6 +97,8 @@
                     </svg>
                     <span class="icon-badge-v3 cart-count" style="display:none">0</span>
                 </a>
+
+                <!-- Anmelden Button -->
                 <button type="button" class="btn-anmelden-v3"
                     onclick="window.location.href='anmelden.html'">Anmelden</button>
             </div>
@@ -93,7 +106,10 @@
 
         <!-- Search Row -->
         <div class="header-row-search">
-            <button class="dark-mode-toggle-v3" id="darkModeToggle"></button>
+            <!-- Dark Mode Toggle -->
+            <button class="dark-mode-toggle-v3" id="darkModeToggle" title="Modus wechseln"></button>
+
+            <!-- Language Selector -->
             <button class="lang-selector-v3" onclick="toggleLanguageDropdown()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="12" cy="12" r="10"></circle>
@@ -104,123 +120,125 @@
                 </svg>
                 <span>DE</span>
             </button>
+
+            <!-- Category Dropdown -->
             <button class="category-dropdown-v3">
                 <span>Alle Kategorien</span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
             </button>
+
+            <!-- Search Input -->
             <div class="search-input-v3">
                 <input type="text" placeholder="CLIMATE SMART SOLUTIONS" id="searchInputV3">
-                <button class="search-btn-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg></button>
+                <button class="search-btn-icon" title="Sprachsuche">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                        <line x1="12" y1="19" x2="12" y2="23"></line>
+                        <line x1="8" y1="23" x2="16" y2="23"></line>
+                    </svg>
+                </button>
+                <button class="search-btn-icon" title="Bildsuche">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z">
+                        </path>
+                        <circle cx="12" cy="13" r="4"></circle>
+                    </svg>
+                </button>
             </div>
+
+            <!-- Filter Button -->
+            <button class="filter-btn-v3">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="4" y1="21" x2="4" y2="14"></line>
+                    <line x1="4" y1="10" x2="4" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12" y2="3"></line>
+                    <line x1="20" y1="21" x2="20" y2="16"></line>
+                    <line x1="20" y1="12" x2="20" y2="3"></line>
+                    <line x1="1" y1="14" x2="7" y2="14"></line>
+                    <line x1="9" y1="8" x2="15" y2="8"></line>
+                    <line x1="17" y1="16" x2="23" y2="16"></line>
+                </svg>
+                Filter
+            </button>
+
+            <!-- Search Submit -->
+            <button class="search-submit-v3">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="M21 21l-4.35-4.35"></path>
+                </svg>
+            </button>
         </div>
 
+        <!-- Navigation Bar -->
         <nav class="nav-bar-v3">
             <div class="nav-container-v3">
                 <a href="damen.html" class="nav-link-v3">DAMEN</a>
                 <a href="herren.html" class="nav-link-v3">HERREN</a>
                 <a href="kinder.html" class="nav-link-v3">KINDER</a>
                 <a href="elektronik.html" class="nav-link-v3">ELEKTRONIK</a>
-                <a href="sonstiges.html" class="nav-link-v3">SONSTIGES</a>
+                <a href="sonstiges.html" class="nav-link-v3 active">SONSTIGES</a>
                 <a href="sale.html" class="nav-link-v3 sale">SALE</a>
                 <a href="wie-funktioniert-es.html" class="nav-link-v3">WIE FUNKTIONIERT'S</a>
             </div>
         </nav>
     </header>
 
-    <!-- GEOMETRIC HERO SECTION (Replaces Standard Content) -->
-    <div class="geometric-hero-container">
-        <!-- Animated Background -->
-        <div class="geo-bg-gradient"></div>
-
-        <!-- Floating Shapes -->
-        <div class="elegant-shape shape-1">
-            <div class="elegant-shape-inner"></div>
-        </div>
-        <div class="elegant-shape shape-2">
-            <div class="elegant-shape-inner"></div>
-        </div>
-        <div class="elegant-shape shape-3">
-            <div class="elegant-shape-inner"></div>
-        </div>
-        <div class="elegant-shape shape-4">
-            <div class="elegant-shape-inner"></div>
-        </div>
-        <div class="elegant-shape shape-5">
-            <div class="elegant-shape-inner"></div>
-        </div>
-
-        <!-- Content -->
-        <div class="geo-content">
-            <span class="geo-badge">CSS Berlin</span>
-            <h1 class="geo-title">
-                <span>So funktioniert</span><br>
-                <span>Nachhaltigkeit</span>
-            </h1>
-            <p class="geo-desc anim-fade-up-1">
-                Kaufen und verkaufen Sie hochwertige, geprüfte Second-Hand-Mode.
-                Gemeinsam verlängern wir den Lebenszyklus von Kleidung und schützen unser Klima.
-            </p>
-        </div>
-
-        <!-- Bottom Fade to merge with rest of page if needed, or simply act as full screen cover -->
-        <div class="geo-bottom-fade"></div>
+    <!-- Category Header V3 -->
+    <div style="max-width: 1400px; margin: 40px auto 20px; padding: 0 24px;">
+        <h1
+            style="font-family: 'Montserrat', sans-serif; font-size: 32px; font-weight: 800; color: #111; margin-bottom: 8px;">
+            Sonstiges</h1>
+        <p style="font-family: 'Inter', sans-serif; font-size: 16px; color: #666; max-width: 600px;">
+            Alles weitere für einen nachhaltigen Lebensstil.
+            Vielfalt entdecken.
+        </p>
     </div>
 
-    <!-- Steps Section (Standard White Background) -->
-    <section style="padding: 80px 20px; background: white; text-align: center;">
-        <h2 style="font-size: 36px; font-weight: 800; color: #111827; margin-bottom: 60px;">In 3 Schritten zum Ziel</h2>
-
-        <div
-            style="display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; max-width: 1200px; margin: 0 auto;">
-            <!-- Step 1 -->
-            <div
-                style="flex: 1; min-width: 300px; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: transform 0.3s ease;">
-                <div
-                    style="width: 80px; height: 80px; background: #e0e7ff; color: #4338ca; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 800; margin: 0 auto 24px;">
-                    1</div>
-                <h3 style="font-size: 24px; font-weight: 700; margin-bottom: 16px;">Kostenlos registrieren</h3>
-                <p style="color: #6b7280; line-height: 1.6;">Erstellen Sie Ihr Konto in wenigen Sekunden. Keine
-                    versteckten Gebühren, keine monatlichen Kosten.</p>
+    <!-- Products Section -->
+    <section class="products-section">
+        <div class="section-header">
+            <h2>Sonstige Produkte</h2>
+            <div class="filter-controls">
+                <select class="sort-dropdown">
+                    <option>Sortieren</option>
+                    <option>Preis aufsteigend</option>
+                    <option>Preis absteigend</option>
+                    <option>Neu zuerst</option>
+                    <option>Meiste CO₂ Einsparung</option>
+                </select>
             </div>
+        </div>
 
-            <!-- Step 2 -->
-            <div
-                style="flex: 1; min-width: 300px; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: transform 0.3s ease;">
-                <div
-                    style="width: 80px; height: 80px; background: #fce7f3; color: #be185d; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 800; margin: 0 auto 24px;">
-                    2</div>
-                <h3 style="font-size: 24px; font-weight: 700; margin-bottom: 16px;">Artikel hochladen</h3>
-                <p style="color: #6b7280; line-height: 1.6;">Machen Sie Fotos, fügen Sie eine Beschreibung hinzu und
-                    legen Sie Ihren Preis fest. Wir helfen bei der Kategorisierung.</p>
-            </div>
+        <div class="products-grid" id="productsGrid">
+            <!-- Products will be generated by JavaScript -->
+        </div>
 
-            <!-- Step 3 -->
-            <div
-                style="flex: 1; min-width: 300px; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: transform 0.3s ease;">
-                <div
-                    style="width: 80px; height: 80px; background: #dcfce7; color: #15803d; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 800; margin: 0 auto 24px;">
-                    3</div>
-                <h3 style="font-size: 24px; font-weight: 700; margin-bottom: 16px;">Sicher verkaufen</h3>
-                <p style="color: #6b7280; line-height: 1.6;">Sobald ein Artikel verkauft ist, erhalten Sie ein
-                    Versandetikett. Das Geld wird sicher ausgezahlt.</p>
-            </div>
+        <div class="load-more-container">
+            <button class="load-more-btn" id="loadMoreBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                Mehr Produkte laden
+            </button>
         </div>
     </section>
 
-    <!-- FOOTER V3 -->
+    <!-- Footer V3 -->
     <footer class="footer-v3">
         <div class="footer-v3-container">
+            <!-- Col 1: Brand -->
             <div class="footer-col footer-brand">
                 <span class="logo-text">CSS Berlin</span>
                 <div class="tagline">Climate Smart Solutions</div>
                 <p>Ihr Premium-Marktplatz für nachhaltige Mode in Berlin.</p>
             </div>
+
+            <!-- Col 2: Kontakt & Address -->
             <div class="footer-col">
                 <h3>Kontakt</h3>
                 <address>
@@ -233,6 +251,8 @@
                         style="display:inline; font-weight:normal;">info@cssberlin.de</a>
                 </address>
             </div>
+
+            <!-- Col 3: Rechtliches -->
             <div class="footer-col">
                 <h3>Rechtliches</h3>
                 <a href="impressum.html">Impressum</a>
@@ -247,11 +267,34 @@
         </div>
     </footer>
 
+    <!-- Google Sign-In API -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <script src="toast.js"></script>
     <script src="auth.js"></script>
-    <script src="auth-handler.js"></script>
+    <script src="auth-modal.js"></script>
     <script src="auth-modal-v3.js"></script>
-    <script src="cookie-consent.js"></script>
+
+    <script>
+        // Set category filter for this page
+        window.pageCategory = 'SONSTIGES';
+
+        // Initialize Google Sign-In for modal (if needed)
+        window.addEventListener('load', function () {
+            if (typeof google !== 'undefined' && google.accounts) {
+                google.accounts.id.initialize({
+                    client_id: '929023339787-gc94hg7o1a993f6fj93von2jcr87nr6k.apps.googleusercontent.com',
+                    callback: handleGoogleSignInModal
+                });
+            }
+        });
+    </script>
+    <script src="api-config.js"></script>
+    <script src="api-client.js"></script>
+    <script src="auth-gate.js"></script> <!-- Login gate system -->
+    <script src="favorites.js"></script> <!-- Favorites system -->
     <script src="script.js"></script>
+    <script src="cookie-consent.js"></script>
 </body>
 
 </html>

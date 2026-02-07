@@ -8,10 +8,12 @@
     --card-light: rgba(255, 255, 255, 0.95);
     /* Opaque for readability */
     --card-dark: rgba(30, 41, 59, 0.7);
-    --text-light: #111827;
+    --text-light: #2D5016;
+    /* Hell Mode Green */
     /* Darker black */
     --text-dark: #f9fafb;
     --primary: #FF8C42;
+    --primary-green: #2D5016;
     --accent: #39ff14;
     /* Neon Green */
     --input-bg-light: #ffffff;
@@ -179,7 +181,7 @@ body.magic-auth-body {
     /* Sharper corners */
     border: 1px solid #cbd5e1;
     background: #ffffff;
-    color: #111827;
+    color: var(--text-light);
     font-size: 13px;
     outline: none;
     transition: all 0.2s;
@@ -304,11 +306,18 @@ body.magic-auth-body {
     background: transparent;
     border: 1px solid #cbd5e1;
     /* Visible border light mode */
-    color: #334155;
+
+    /* Green-Orange Gradient Text */
+    background: linear-gradient(90deg, #2D5016 0%, #FF8C42 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+
     /* Dark text light mode */
     border-radius: 8px;
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.3s;
     display: flex;
@@ -317,22 +326,40 @@ body.magic-auth-body {
     gap: 8px;
 }
 
+.magic-link-button svg {
+    stroke: #2D5016;
+    /* Solid Green for Icon */
+}
+
 /* Dark Mode Override for Magic Button */
 .login-container.dark .magic-link-button {
     border-color: rgba(255, 255, 255, 0.2);
-    color: white;
+    /* Green-Orange Gradient Text in Dark Mode */
+    background: linear-gradient(90deg, #2D5016 0%, #FF8C42 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
 }
 
 .magic-link-button:hover {
     border-color: var(--primary);
-    color: var(--primary);
-    background: rgba(255, 140, 66, 0.05);
+    /* Ensure gradient stays/shifts on hover */
+    background: linear-gradient(90deg, #FF8C42 0%, #2D5016 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    box-shadow: 0 0 10px rgba(45, 80, 22, 0.1);
 }
 
 .login-container.dark .magic-link-button:hover {
-    background: rgba(255, 255, 255, 0.05);
-    /* Neon Green Text on Hover */
-    color: var(--accent);
+    /* Brighter gradient in dark mode hover */
+    background: linear-gradient(90deg, #39ff14 0%, #FF8C42 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
     border-color: var(--accent);
     box-shadow: 0 0 10px rgba(57, 255, 20, 0.2);
 }

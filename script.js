@@ -552,6 +552,72 @@ const sampleProducts = [
         tier: 'champion',
         image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500',
         sale: true
+    },
+    // === ELEKTRONIK (41-45) ===
+    {
+        id: 41,
+        brand: 'Apple',
+        name: 'iPhone 12 Mini',
+        size: '64GB',
+        condition: 'Gut',
+        price: 320.00,
+        newPrice: 699.00,
+        carbonSaved: 55.4,
+        tier: 'champion',
+        image: 'https://images.unsplash.com/photo-1616348436168-de43ad0db179?w=500',
+        sale: false
+    },
+    {
+        id: 42,
+        brand: 'Sony',
+        name: 'WH-1000XM4 Kopfhörer',
+        size: 'OneSize',
+        condition: 'Neuwertig',
+        price: 180.00,
+        newPrice: 379.00,
+        carbonSaved: 12.8,
+        tier: 'profi',
+        image: 'https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?w=500',
+        sale: true
+    },
+    {
+        id: 43,
+        brand: 'Samsung',
+        name: 'Galaxy Watch 4',
+        size: '44mm',
+        condition: 'Sehr gut',
+        price: 110.00,
+        newPrice: 269.00,
+        carbonSaved: 9.5,
+        tier: 'fortgeschritten',
+        image: 'https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=500',
+        sale: false
+    },
+    {
+        id: 44,
+        brand: 'Nintendo',
+        name: 'Switch Lite Gelb',
+        size: 'Standard',
+        condition: 'Gut',
+        price: 140.00,
+        newPrice: 219.00,
+        carbonSaved: 25.1,
+        tier: 'champion',
+        image: 'https://images.unsplash.com/photo-1578303512597-81e6cc155b3e?w=500',
+        sale: false
+    },
+    {
+        id: 45,
+        brand: 'Canon',
+        name: 'EOS 2000D Kamera',
+        size: 'Kit',
+        condition: 'Neuwertig',
+        price: 290.00,
+        newPrice: 499.00,
+        carbonSaved: 45.2,
+        tier: 'profi',
+        image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500',
+        sale: true
     }
 ];
 
@@ -690,7 +756,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // vitrin.js script.js'den sonra yüklenir → setTimeout ile bekle
     setTimeout(function () {
         if (window.vitrinManager) {
-            window.vitrinManager.init('featuredProductsGrid');
+            // Target the main products grid on homepage
+            window.vitrinManager.init('productsGrid');
             console.log('[Vitrin] 40 demo ürün yüklendi ✅');
         } else {
             // Fallback: eskisi çalışsın
@@ -732,8 +799,8 @@ async function loadFeaturedProducts() {
         }));
 
         if (products.length === 0) {
-            featuredGrid.innerHTML = '<p>Keine hervorgehobenen Produkte gefunden.</p>';
-            return;
+            // Force fallback if no featured products
+            throw new Error('No featured products returned');
         }
 
         featuredGrid.innerHTML = '';
@@ -841,6 +908,7 @@ function createProductCard(product) {
     // Check if product is sold
     const isSold = product.status === 'sold';
 
+    return `
     <div class="product-card-v3 ${isSold ? 'sold' : ''}" data-product-id="${product.id}" data-status="${product.status || 'active'}">
         <div class="product-card-v3-inner">
             <div class="product-card-v3-img-wrap">
@@ -877,11 +945,11 @@ function createProductCard(product) {
 
                 <!-- Row 4: Action Buttons (MANDATORY) -->
                 <div class="product-card-v3-actions">
-                    <button class="btn-action-outline negotiate-btn" data-product-id="${product.id}" ${isSold ? 'disabled' : ''}>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path></svg>
+                    <button class="gradient-button gradient-button-variant negotiate-btn" data-product-id="${product.id}" ${isSold ? 'disabled' : ''}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px;"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path></svg>
                         Gebot
                     </button>
-                    <button class="btn-action-solid buy-btn" data-product-id="${product.id}" ${isSold ? 'disabled' : ''}>
+                    <button class="gradient-button buy-btn" data-product-id="${product.id}" ${isSold ? 'disabled' : ''}>
                         Kaufen
                     </button>
                 </div>
@@ -903,8 +971,8 @@ function generateMockSeller() {
 
     const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
     const lastInitial = lastInitials[Math.floor(Math.random() * lastInitials.length)];
-    const name = `${ firstName } ${ lastInitial }.`;
-    const initials = `${ firstName.charAt(0) }${ lastInitial } `;
+    const name = `${firstName} ${lastInitial}.`;
+    const initials = `${firstName.charAt(0)}${lastInitial} `;
 
     return {
         name: name,
@@ -962,9 +1030,9 @@ async function initProducts(category = null) {
 
     try {
         // Build API URL with optional category filter
-        let apiUrl = `${ API_BASE_URL } /api/products ? skip = ${ currentOffset }& limit=${ PRODUCTS_PAGE_SIZE } `;
+        let apiUrl = `${API_BASE_URL} /api/products ? skip = ${currentOffset}& limit=${PRODUCTS_PAGE_SIZE} `;
         if (category) {
-            apiUrl += `& category=${ encodeURIComponent(category) } `;
+            apiUrl += `& category=${encodeURIComponent(category)} `;
         }
 
         console.log('[API] Fetching products from:', apiUrl);
@@ -977,10 +1045,15 @@ async function initProducts(category = null) {
 
         // Check if response is OK before parsing JSON
         if (!response.ok) {
-            throw new Error(`HTTP ${ response.status }: ${ response.statusText } `);
+            throw new Error(`HTTP ${response.status}: ${response.statusText} `);
         }
 
         const data = await response.json();
+
+        // Check if empty to trigger fallback
+        if (!data.products || data.products.length === 0) {
+            throw new Error('No products returned from API');
+        }
 
         // Transform backend data to frontend format
         // NOTE: Backend schema uses `name` (not `title`).
@@ -1019,8 +1092,8 @@ async function initProducts(category = null) {
         // Update cart button states
         updateCartButtonStates();
 
-        const categoryInfo = category ? ` (category: ${ category })` : '';
-        console.log(`Loaded ${ products.length } products from backend${ categoryInfo } `);
+        const categoryInfo = category ? ` (category: ${category})` : '';
+        console.log(`Loaded ${products.length} products from backend${categoryInfo} `);
     } catch (error) {
         console.error('Error loading products:', error);
         // Fallback to sample products if API fails
@@ -1053,7 +1126,7 @@ function attachProductEventListeners() {
                 return;
             }
             const productId = this.dataset.productId;
-            window.location.href = `product - detail.html ? id = ${ productId } `;
+            window.location.href = `product-detail.html?id=${productId}`;
         });
         card.style.cursor = 'pointer';
     });
@@ -1131,7 +1204,7 @@ function attachProductEventListeners() {
             }
 
             // Giriş yapmışsa pazarlık sayfasına git
-            window.location.href = `meine - anzeigen.html ? tab = negotiations & new=${ productId } `;
+            window.location.href = `meine - anzeigen.html ? tab = negotiations & new=${productId} `;
         });
     });
 }
@@ -1363,16 +1436,16 @@ function initLoadMore() {
     `;
 
         try {
-            let apiUrl = `${ API_BASE_URL } /api/products ? skip = ${ currentOffset }& limit=${ LOAD_MORE_SIZE } `;
+            let apiUrl = `${API_BASE_URL} /api/products ? skip = ${currentOffset}& limit=${LOAD_MORE_SIZE} `;
             if (activeCategoryFilter) {
-                apiUrl += `& category=${ encodeURIComponent(activeCategoryFilter) } `;
+                apiUrl += `& category=${encodeURIComponent(activeCategoryFilter)} `;
             }
 
             const response = await fetch(apiUrl);
 
             // Check if response is OK before parsing JSON
             if (!response.ok) {
-                throw new Error(`HTTP ${ response.status }: ${ response.statusText } `);
+                throw new Error(`HTTP ${response.status}: ${response.statusText} `);
             }
 
             const data = await response.json();
@@ -1477,7 +1550,7 @@ function hideMessageIconForGuests() {
         }
     });
 
-    console.log(`Message icon ${ loggedIn ? 'visible' : 'hidden' } for ${ loggedIn? 'logged-in': 'guest' } users`);
+    console.log(`Message icon ${loggedIn ? 'visible' : 'hidden'} for ${loggedIn ? 'logged-in' : 'guest'} users`);
 }
 
 // ============================================
@@ -1486,12 +1559,12 @@ function hideMessageIconForGuests() {
 function showNotification(message, type = 'info') {
     // Create notification element
     const notification = document.createElement('div');
-    notification.className = `notification notification - ${ type } `;
+    notification.className = `notification notification - ${type} `;
     notification.style.cssText = `
     position: fixed;
     top: 80px;
     right: 20px;
-    background: ${ type === 'success' ? '#2D5016' : type === 'error' ? '#F44336' : type === 'warning' ? '#FF8C42' : '#FF8C42' };
+    background: ${type === 'success' ? '#2D5016' : type === 'error' ? '#F44336' : type === 'warning' ? '#FF8C42' : '#FF8C42'};
     color: white;
     padding: 16px 24px;
     border - radius: 8px;
@@ -1645,11 +1718,11 @@ async function performSearch(query) {
 
     try {
         // Search using backend API (uses environment-aware API_BASE_URL)
-        const response = await fetch(`${ API_BASE_URL } /api/search ? q = ${ encodeURIComponent(lowerQuery) } `);
+        const response = await fetch(`${API_BASE_URL} /api/search ? q = ${encodeURIComponent(lowerQuery)} `);
 
         // Check if response is OK before parsing JSON
         if (!response.ok) {
-            throw new Error(`HTTP ${ response.status }: ${ response.statusText } `);
+            throw new Error(`HTTP ${response.status}: ${response.statusText} `);
         }
 
         const data = await response.json();
@@ -1689,7 +1762,7 @@ async function performSearch(query) {
         attachProductEventListeners();
         updateCartButtonStates();
 
-        console.log(`Search "${lowerQuery}": ${ products.length } results`);
+        console.log(`Search "${lowerQuery}": ${products.length} results`);
     } catch (error) {
         console.error('Error searching products:', error);
         // Fallback to client-side filtering on existing cards
@@ -1717,7 +1790,7 @@ function handleQuickView(productId) {
 
     // For now, just redirect to product detail page
     // TODO: Implement modal quick view in future
-    window.location.href = `product - detail.html ? id = ${ productId } `;
+    window.location.href = `product - detail.html ? id = ${productId} `;
 }
 
 // ============================================
@@ -1725,8 +1798,8 @@ function handleQuickView(productId) {
 // ============================================
 console.log('%cCSS Berlin V4', 'color: #2D5016; font-size: 24px; font-weight: bold;');
 console.log('%cClimate Smart Solutions - With Seller Info', 'color: #757575; font-size: 14px;');
-console.log(`Loaded ${ sampleProducts.length } products`);
-console.log(`Favorites loaded: ${ favoriteIds.size } `);
+console.log(`Loaded ${sampleProducts.length} products`);
+console.log(`Favorites loaded: ${favoriteIds.size} `);
 
 // PHASE E — HeroSlider (auto-play campaign carousel)
 // ============================================
@@ -1779,14 +1852,14 @@ function initHeroSlider() {
 
     container.innerHTML = `
         < div class="hero-slider" >
-            ${ slidesHTML }
+            ${slidesHTML}
             <button class="hero-nav-btn prev" id="heroPrevBtn">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"></path></svg>
             </button>
             <button class="hero-nav-btn next" id="heroNextBtn">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"></path></svg>
             </button>
-            ${ dotsHTML }
+            ${dotsHTML}
         </div > `;
 
     // State

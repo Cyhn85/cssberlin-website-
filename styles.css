@@ -155,7 +155,7 @@ h3 {
     /* Dark gray for headings */
 }
 
-... .product-card {
+.product-card {
     background: var(--bg-primary);
     /* White background */
     border: 1px solid var(--border-color);
@@ -168,7 +168,30 @@ h3 {
     flex-direction: column;
     will-change: transform;
     box-shadow: var(--shadow-md);
-    /* Add box-shadow */
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 20px;
+}
+
+@media (max-width: 1200px) {
+    .products-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+
+@media (max-width: 900px) {
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .products-grid {
+        grid-template-columns: 1fr !important;
+    }
 }
 
 a {
@@ -2150,7 +2173,8 @@ header[class*="header"]:not(.header-v3) {
     .products-grid {
         /* Keep density high on small desktops */
         grid-template-columns: repeat(4, 1fr);
-        min-height: 700px; /* CLS Fix */
+        min-height: 700px;
+        /* CLS Fix */
     }
 }
 
@@ -2187,7 +2211,8 @@ header[class*="header"]:not(.header-v3) {
     .products-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: var(--spacing-md);
-        min-height: 400px; /* CLS Fix */
+        min-height: 400px;
+        /* CLS Fix */
     }
 
     .main-nav {

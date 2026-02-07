@@ -40,6 +40,7 @@
         opacity: 0;
         transform: translateY(40px) scale(0.95);
     }
+
     to {
         opacity: 1;
         transform: translateY(0) scale(1);
@@ -196,8 +197,10 @@
 }
 
 .auth-modal-v3-social-btn {
-    width: 56px;
-    height: 56px;
+    width: 64px;
+    /* Increased from 56px */
+    height: 64px;
+    /* Increased from 56px */
     border-radius: 14px;
     border: 2px solid #e5e7eb;
     background: white;
@@ -211,8 +214,10 @@
 }
 
 .auth-modal-v3-social-btn svg {
-    width: 26px;
-    height: 26px;
+    width: 32px;
+    /* Increased from 26px */
+    height: 32px;
+    /* Increased from 26px */
 }
 
 .auth-modal-v3-social-btn:hover {
@@ -297,7 +302,9 @@
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* Footer Link */

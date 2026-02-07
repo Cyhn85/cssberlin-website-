@@ -116,7 +116,7 @@
                                     <input type="email" class="auth-modal-v3-input" id="magicLinkEmail" placeholder="E-Mail Adresse" required>
                                 </div>
 
-                                <button type="submit" class="auth-modal-v3-submit">
+                                <button type="submit" class="auth-modal-v3-submit rainbow-border">
                                     <span>Magic Link Senden</span>
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                                         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>

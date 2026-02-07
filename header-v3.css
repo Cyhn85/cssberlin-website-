@@ -93,8 +93,8 @@
 }
 
 .logo-v3 .logo-css {
-    font-size: 32px;
-    /* REDUCED from 36px */
+    font-size: 34px;
+    /* INCREASED from 32px */
     font-weight: 800;
     color: #FF8C42;
     letter-spacing: -1px;
@@ -102,8 +102,8 @@
 }
 
 .logo-v3 .logo-berlin {
-    font-size: 32px;
-    /* REDUCED from 36px */
+    font-size: 34px;
+    /* INCREASED from 32px */
     font-weight: 800;
     color: white;
     letter-spacing: -1px;
@@ -114,8 +114,8 @@
 .header-right-v3 {
     display: flex;
     align-items: center;
-    gap: 14px;
-    /* REDUCED from 16px */
+    gap: 10px;
+    /* REDUCED from 14px */
 }
 
 /* Icon Buttons */
@@ -124,14 +124,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    /* REDUCED from 40px */
-    height: 36px;
-    /* REDUCED from 40px */
+    width: 32px;
+    /* REDUCED from 36px */
+    height: 32px;
+    /* REDUCED from 36px */
     color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
     transition: all 0.2s;
-    border-radius: 8px;
+    border-radius: 6px;
 }
 
 .header-icon-v3:hover {
@@ -141,20 +141,23 @@
 
 .header-icon-v3 svg {
     stroke: currentColor;
+    width: 20px;
+    height: 20px;
+    /* Explicitly sizing icons down */
 }
 
 .header-icon-v3 .icon-badge-v3 {
     position: absolute;
-    top: 2px;
-    right: 2px;
-    min-width: 18px;
-    height: 18px;
-    padding: 0 5px;
+    top: 0;
+    right: 0;
+    min-width: 14px;
+    height: 14px;
+    padding: 0 3px;
     background: #FF8C42;
     color: white;
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 700;
-    border-radius: 9px;
+    border-radius: 7px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -164,19 +167,20 @@
 .btn-anmelden-v3 {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 20px;
-    /* REDUCED from 10px 24px */
+    gap: 6px;
+    padding: 6px 14px;
+    /* REDUCED from 8px 20px */
     background: #FF8C42;
     color: white;
     border: none;
-    border-radius: 25px;
-    font-size: 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    /* REDUCED from 14px */
     font-weight: 600;
     text-decoration: none;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 10px rgba(255, 140, 66, 0.3);
+    box-shadow: 0 2px 8px rgba(255, 140, 66, 0.3);
 }
 
 .btn-anmelden-v3:hover {
@@ -189,12 +193,14 @@
    SEARCH ROW (COMPACT)
    ============================================ */
 .header-row-search {
-    padding: 0 24px 12px;
-    /* REDUCED from 0 24px 16px */
+    padding: 10px 24px 8px;
+    /* Standardize with Logo Row */
     max-width: 1400px;
     margin: 0 auto;
     display: flex;
     align-items: center;
+    justify-content: center;
+    /* Center the entire row content */
     gap: 12px;
 }
 
@@ -223,8 +229,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 9px;
+    font-size: 10px;
+    /* Slight increase */
+    line-height: 1;
     transition: all 0.3s;
+    z-index: 2;
+    /* Ensure visible */
+    color: #333;
+    /* Ensure icon color */
 }
 
 .dark-mode-toggle-v3.active::after {
@@ -278,6 +290,8 @@
     background: #f5f5f5;
 }
 
+
+
 .category-dropdown-v3 svg {
     margin-left: auto;
     width: 16px;
@@ -287,7 +301,9 @@
 
 /* Search Input */
 .search-input-v3 {
-    flex: 1;
+    width: 420px;
+    /* Reduced width */
+    flex: none;
     display: flex;
     align-items: center;
     background: white;

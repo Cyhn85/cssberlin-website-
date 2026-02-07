@@ -78,13 +78,7 @@
                         Anmelden
                     </button>
 
-                    <button type="button" class="magic-link-button" id="magicLinkBtn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M15 10l-4 4l6 6l4-16l-18 7l4 2l2 6l3-4"></path>
-                        </svg>
-                        Mit Magic Link anmelden
-                    </button>
+
                 </form>
 
                 <div class="separator">
@@ -92,30 +86,64 @@
                 </div>
 
                 <div class="social-login">
-                    <button class="social-button github" title="Google">
-                        <!-- Google Icon -->
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <button class="social-button github" title="Google" style="width:60px; height:60px;">
+                        <!-- Google Icon (Larger) -->
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
                             <path
                                 d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .533 5.333.533 12S5.867 24 12.48 24c3.44 0 6.013-1.133 8.053-3.24 2.107-2.107 2.773-5.227 2.773-7.813 0-.787-.067-1.48-.187-2.027H12.48z" />
                         </svg>
                     </button>
-                    <button class="social-button twitter" title="Apple">
-                        <!-- Apple Icon -->
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <button class="social-button twitter" title="Apple" style="width:60px; height:60px;">
+                        <!-- Apple Icon (Larger) -->
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
                             <path
                                 d="M17.05 20.28c-.98.95-2.05.88-3.08.38-1.07-.52-2.07-.53-3.2 0-1.44.71-2.63.44-4.04-.96-2.58-2.61-3.6-6.62-1.54-10.27 1.25-2.19 3.32-2.64 5.3-2.13 1.25.32 2.76 1.49 4.26 1.49 1.17 0 3.01-1.38 5.75-.48 1.12.38 2.38 1.33 3.1 2.29-2.77 1.57-3.03 5.92-.16 7.68zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
                         </svg>
                     </button>
-                    <button class="social-button linkedin" title="Magic Link">
-                        <!-- Mail Icon -->
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
-                            </path>
-                            <polyline points="22,6 12,13 2,6"></polyline>
-                        </svg>
-                    </button>
                 </div>
+
+                <!-- Magic Link Trigger -->
+                <button type="button" class="magic-link-trigger" id="magicLinkTrigger" style="
+                    background: transparent; border: 1px solid #e5e7eb; color: #374151; padding: 12px;
+                    width: 100%; border-radius: 8px; margin-top: 20px; font-weight: 600;
+                    display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;
+                    transition: all 0.2s;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                        <path d="M22 6l-10 7L2 6"></path>
+                    </svg>
+                    Mit Magic Link anmelden
+                </button>
+
+                <!-- Hidden Magic Link Input (Smart Design) -->
+                <div id="magicLinkArea" style="display: none; margin-top: 15px; animation: fadeIn 0.3s ease;">
+                    <p style="font-size: 13px; color: #6b7280; margin-bottom: 8px; text-align: center;">
+                        Wir senden Ihnen einen Link zum Anmelden.
+                    </p>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="email" id="magicEmail" placeholder="ihre@email.de" style="
+                            flex: 1; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 8px;
+                            font-size: 14px; outline: none;">
+                        <button id="sendMagicLink" style="
+                            background: #2D5016; color: white; border: none; padding: 0 16px;
+                            border-radius: 8px; font-weight: 600; cursor: pointer;">
+                            Senden
+                        </button>
+                    </div>
+                </div>
+
+                <script>
+                    document.getElementById('magicLinkTrigger').addEventListener('click', function () {
+                        const area = document.getElementById('magicLinkArea');
+                        const isHidden = area.style.display === 'none';
+                        area.style.display = isHidden ? 'block' : 'none';
+                        // Populate email if present in main form
+                        if (isHidden) {
+                            const mainEmail = document.getElementById('email').value;
+                            if (mainEmail) document.getElementById('magicEmail').value = mainEmail;
+                        }
+                    });
+                </script>
 
                 <p class="signup-prompt" id="switchToRegister">
                     Noch kein Konto? <a href="#">Registrieren</a>
