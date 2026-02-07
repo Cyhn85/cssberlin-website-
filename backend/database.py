@@ -8,7 +8,10 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 import os
 
 # Database URL
-_raw_database_url = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./cssberlin.db")
+# Use absolute path to ensure consistency regardless of execution directory
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, "cssberlin.db")
+_raw_database_url = os.getenv("DATABASE_URL", f"sqlite+aiosqlite:///{DB_PATH}")
 
 # Allow DATABASE_URL to be provided as postgresql://... and normalize to asyncpg driver.
 if _raw_database_url.startswith("postgresql://"):

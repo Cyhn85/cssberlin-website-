@@ -39,8 +39,10 @@ echo "🔄 Resetting Database (for schema update)..."
 rm -f backend/cssberlin.db
 
 echo "🌱 Seeding Showcase Products..."
-# Use python from venv context
-python -m backend.seed_vitrin
+# Run from backend directory to resolve local imports
+cd backend
+python seed_vitrin.py
+cd ..
 
 echo "🔄 Restarting Backend..."
 # Update service file to point to venv python if needed
