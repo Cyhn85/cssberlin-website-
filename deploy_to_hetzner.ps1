@@ -75,7 +75,7 @@ fi
 
 echo "🎉 DEPLOYMENT COMPLETE!"
 '@
- 
+
 # Create temporary local script with LF line endings
 $RemoteScriptLF = $RemoteScript -replace "`r`n", "`n"
 [System.IO.File]::WriteAllText("deploy_temp.sh", $RemoteScriptLF)
