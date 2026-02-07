@@ -20,6 +20,16 @@ app = FastAPI(
     version="3.1.0",
 )
 
+# ─── MIDDLEWARE: STRIP /API PREFIX ───────────────────────
+# Critical Fix for Nginx Proxy: Since Nginx passes '/api/...' to backend
+# but backend expects '/...', we strip the prefix here.
+@app.middleware("http")
+async def strip_api_prefix(request, call_next):
+    if request.url.path.startswith("/api/"):
+        request.scope["path"] = request.url.path[4:]
+    response = await call_next(request)
+    return response
+
 # ─── CORS AYARLARI (LOCAL FIX) ─────────────────────────────
 # Geliştirme modu için tüm engelleri kaldırıp herkese izin veriyoruz.
 # Prodüksiyonda bu ayar 'allow_origins' listesine dönmelidir.
