@@ -1,26 +1,144 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Produktdetails - CSS Berlin</title>
-    <link rel="stylesheet" href="styles.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800;900&display=swap"
+        rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
 
     <!-- V3 Standards -->
     <link rel="stylesheet" href="header-v3.css">
-    <link rel="stylesheet" href="footer-v3.css">
-    <link rel="stylesheet" href="auth-modal.css">
     <link rel="stylesheet" href="auth-modal-v3.css">
+    <!-- <link rel="stylesheet" href="auth-modal.css"> -->
+    <link rel="stylesheet" href="cookie-consent.css">
+    <link rel="stylesheet" href="product-card-glass.css?v=4">
+    <link rel="stylesheet" href="product-card-override.css">
+    <link rel="stylesheet" href="footer-v3.css">
+    <link rel="stylesheet" href="filter-modal.css">
     <link rel="stylesheet" href="gradient-button.css">
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- CLERK AUTHENTICATION (CDN) -->
+    <script async crossorigin="anonymous"
+        data-clerk-publishable-key="pk_test_c3VwZXItd2FzcC04NS5jbGVyay5hY2NvdW50cy5kZXYk"
+        src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" type="text/javascript">
+        </script>
+
+    <script src="api-config.js"></script>
+    <script src="auth-modal-v3.js"></script>
 
     <style>
         /* Product Detail V3 Custom Styles */
         body {
             background: #f9f9f9;
+            /* Match global bg */
             font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
         }
 
+        :root {
+            --brand-dark-green: #2D5016;
+            --brand-green-light: #3d6b1e;
+            --brand-orange: #FF8C42;
+            --brand-orange-hover: #e07b3a;
+            --text-dark: #111827;
+            --bg-light: #f5f5f5;
+        }
+
+        /* Smart Filter Bar Styles (Hidden by default but required for JS compatibility) */
+        .smart-filter-container {
+            background: #fff;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 12px 24px;
+            display: none;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            position: sticky;
+            top: 0px;
+            z-index: 900;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .smart-filter-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .filter-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 16px;
+            background-color: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+            text-decoration: none;
+        }
+
+        .filter-chip:hover {
+            background-color: #e5e7eb;
+            border-color: #d1d5db;
+            transform: translateY(-1px);
+        }
+
+        .filter-chip.active {
+            background-color: var(--brand-dark-green);
+            color: white;
+            border-color: var(--brand-dark-green);
+            box-shadow: 0 2px 4px rgba(45, 80, 22, 0.3);
+        }
+
+        .filter-chip svg {
+            width: 16px;
+            height: 16px;
+            margin-right: 6px;
+        }
+
+        .clear-filters-btn {
+            margin-left: auto;
+            font-size: 13px;
+            color: #ef4444;
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-decoration: underline;
+            display: none;
+            font-weight: 500;
+        }
+
+        .smart-filter-container::-webkit-scrollbar {
+            height: 0px;
+            background: transparent;
+        }
+
+        .nav-link-v3.active-cat {
+            color: var(--brand-orange) !important;
+            border-bottom: 2px solid var(--brand-orange);
+        }
+
+        /* User Button Container */
+        #user-button-container {
+            margin-left: 10px;
+        }
+
+        /* PRODUCT DETAIL SPECIFIC STYLES */
         .pd-container {
             max-width: 1200px;
             margin: 40px auto;
@@ -313,28 +431,97 @@
 
 <body>
 
-    <!-- HEADER -->
+    <div class="announcement-bar-v3">
+        <div class="announcement-track">
+            <span class="announcement-item"><span class="announcement-icon">🌟</span> PREISVORSCHLAG SENDEN &
+                SPAREN</span>
+            <span class="announcement-separator">•</span>
+            <span class="announcement-item"><span class="announcement-icon">🚚</span> KOSTENLOSER VERSAND AB 50€</span>
+            <span class="announcement-separator">•</span>
+            <span class="announcement-item"><span class="announcement-icon">🔒</span> SICHER BEZAHLEN MIT
+                KÄUFERSCHUTZ</span>
+        </div>
+    </div>
+
     <header class="header-v3">
         <div class="header-row-logo">
-            <a href="index.html" class="logo-v3"><span class="logo-css">CSS</span><span
-                    class="logo-berlin">berlin</span></a>
+            <a href="index.html" class="logo-v3">
+                <span class="logo-css">CSS</span><span class="logo-berlin">berlin</span>
+            </a>
+
             <div class="header-right-v3">
-                <a href="wunschliste.html" class="header-icon-v3"><svg width="22" height="22" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2">
+                <a href="wunschliste.html" class="header-icon-v3" title="Favoriten">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path
                             d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
                         </path>
-                    </svg></a>
-                <a href="warenkorb.html" class="header-icon-v3"><svg width="22" height="22" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2">
+                    </svg>
+                </a>
+
+                <a href="inserieren.html" class="header-icon-v3" title="Inserieren">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                </a>
+
+                <a href="warenkorb.html" class="header-icon-v3" title="Warenkorb">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="9" cy="21" r="1"></circle>
                         <circle cx="20" cy="21" r="1"></circle>
                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                    </svg></a>
-                <button onclick="window.location.href='anmelden.html'" class="btn-anmelden-v3">Anmelden</button>
+                    </svg>
+                </a>
+
+                <button type="button" class="btn-anmelden-v3" id="header-login-btn">Anmelden</button>
+
+                <div id="user-button-container"></div>
             </div>
         </div>
+
+        <div class="header-row-search">
+            <button class="dark-mode-toggle-v3" id="darkModeToggle" title="Modus wechseln"></button>
+            <button class="lang-selector-v3" onclick="toggleLanguageDropdown()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <path
+                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                    </path>
+                </svg>
+                <span>DE</span>
+            </button>
+            <div class="search-input-v3">
+                <input type="text" placeholder="CLIMATE SMART SOLUTIONS" id="searchInputV3">
+                <button class="search-btn-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="M21 21l-4.35-4.35"></path>
+                    </svg></button>
+            </div>
+        </div>
+
+        <script src="smart-header.js"></script>
+
+        <nav class="nav-bar-v3">
+            <div class="nav-container-v3">
+                <a href="index.html?category=damen" class="nav-link-v3">DAMEN</a>
+                <a href="index.html?category=herren" class="nav-link-v3">HERREN</a>
+                <a href="index.html?category=kinder" class="nav-link-v3">KINDER</a>
+                <a href="index.html?category=elektronik" class="nav-link-v3">ELEKTRONIK</a>
+                <a href="sonstiges.html" class="nav-link-v3">SONSTIGES</a>
+                <a href="sale.html" class="nav-link-v3 sale">SALE</a>
+            </div>
+        </nav>
     </header>
+
+    <div class="smart-filter-container" id="smartFilterBar">
+        <div class="smart-filter-wrapper">
+            <div style="display:flex; gap:10px; align-items:center;" id="smartFilterWrapper"></div>
+            <button class="clear-filters-btn" id="clearFiltersBtn" onclick="window.location.href='index.html'">✕ Filter
+                löschen</button>
+        </div>
+    </div>
 
     <!-- CONTENT -->
     <div class="pd-container">
@@ -490,18 +677,22 @@
                 <a href="agb.html">AGB</a>
                 <a href="widerrufsrecht.html">Widerrufsrecht</a>
             </div>
-            <div class="footer-legal-text">
+            <div class="footer-legal-text" style="color:rgba(255,255,255,0.5); margin-top:10px;">
                 CSS Berlin | Ceyhun Sabahattin Sorguc | Am Omnibushof 12, 13593 Berlin<br>
                 USt-IdNr.: DE459278750 | St.-Nr.: 19/538/01452 | Kleinunternehmer i.S.d. § 19 UStG
             </div>
-            <p style="margin-top: 10px;">&copy; 2026 CSS Berlin - Climate Smart Solutions. Alle Rechte vorbehalten.</p>
+            <p style="margin-top: 10px; color:var(--brand-orange);">&copy; 2026 CSS Berlin - Climate Smart Solutions.
+                Alle Rechte vorbehalten.</p>
         </div>
     </footer>
 
     <!-- SCRIPTS -->
+    <script src="auth-gate.js"></script>
+    <script src="favorites.js"></script>
     <script src="vitrin.js"></script>
     <script src="script.js"></script>
     <script src="product-detail.js"></script>
+    <script src="guest-mode.js"></script>
 
 </body>
 
