@@ -28,12 +28,16 @@
 }
 
 .footer-col {
-    flex: 0 1 auto;
+    flex: 1;
+    /* Allow columns to grow and fill space */
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 14px;
+    align-items: flex-start;
+    /* Left align items for readability */
+    text-align: left;
+    /* Left align text */
+    gap: 10px;
+    /* Spacing between links */
     min-width: 200px;
 }
 
@@ -43,7 +47,7 @@
     font-weight: 800;
     color: #FF8C42;
     /* Orange Headers */
-    margin-bottom: 8px;
+    margin-bottom: 12px;
     letter-spacing: 0.5px;
     text-transform: uppercase;
 }
@@ -59,6 +63,8 @@
     font-weight: 500;
     font-style: normal;
     line-height: 1.6;
+    display: block;
+    /* Ensure links take full width for easier clicking */
 }
 
 .footer-col a:hover {
@@ -91,7 +97,7 @@
 /* Bottom Bar */
 .footer-bottom-v3 {
     max-width: 1000px;
-    margin: 60px auto 0;
+    margin: 40px auto 0;
     padding-top: 24px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
@@ -110,18 +116,20 @@
 
 .footer-legal-links a {
     font-size: 13px;
-    color: rgba(255, 255, 255, 0.6);
+    color: #FF8C42;
+    /* Orange for legal links as requested */
     text-decoration: none;
     transition: color 0.2s;
+    font-weight: 600;
 }
 
 .footer-legal-links a:hover {
-    color: #FF8C42;
+    color: #FFFFFF;
 }
 
 .footer-legal-text {
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(255, 255, 255, 0.6);
     line-height: 1.5;
 }
 
@@ -134,11 +142,32 @@
 @media (max-width: 768px) {
     .footer-v3-container {
         flex-direction: column;
-        align-items: center;
+        align-items: flex-start;
+        /* Maintain left alignment on mobile */
         gap: 40px;
+        padding-bottom: 40px;
+        /* Add bottom padding for better spacing */
+    }
+
+    .footer-col {
+        width: 100%;
+        /* Full width columns on mobile */
+        align-items: flex-start;
+        /* Left align items */
+        text-align: left;
+    }
+
+    .footer-col h4 {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        /* Separator line on mobile */
+        width: 100%;
+        padding-bottom: 8px;
+        margin-bottom: 16px;
     }
 
     .footer-legal-links {
-        gap: 20px;
+        gap: 16px;
+        flex-direction: column;
+        /* Stack legal links */
     }
 }
