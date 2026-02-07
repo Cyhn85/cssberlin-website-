@@ -1,4 +1,6 @@
-// CSS BERLIN - CLERK AUTHENTICATION (V3.8 - FINAL)
+// CSS BERLIN - CLERK AUTHENTICATION (V3.9 - GERMAN EDITION)
+// Almanca Dil Desteği ve Geliştirilmiş Yönlendirme Ayarları
+
 window.addEventListener("load", async function () {
 
     // Clerk kütüphanesinin yüklenmesini bekle
@@ -7,9 +9,52 @@ window.addEventListener("load", async function () {
         return;
     }
 
+    // ALMANCA ÇEVİRİ PAKETİ (Manuel Tanımlama)
+    // Clerk CDN ile kullanıldığı için paketi elle ekliyoruz.
+    const localizationDE = {
+        socialButtonsBlockButton: "Weiter mit {{provider|titleize}}",
+        signIn: {
+            start: {
+                title: "Anmelden",
+                subtitle: "Willkommen zurück bei CSS Berlin",
+                actionText: "Haben Sie kein Konto?",
+                actionLink: "Registrieren"
+            },
+            password: {
+                title: "Passwort eingeben",
+                subtitle: "zum Anmelden bei CSS Berlin"
+            }
+        },
+        signUp: {
+            start: {
+                title: "Registrieren",
+                subtitle: "Erstellen Sie ein neues Konto",
+                actionText: "Haben Sie bereits ein Konto?",
+                actionLink: "Anmelden"
+            }
+        },
+        formFieldLabel__emailAddress: "E-Mail-Adresse",
+        formFieldLabel__password: "Passwort",
+        formFieldLabel__firstName: "Vorname",
+        formFieldLabel__lastName: "Nachname",
+        formFieldLabel__username: "Benutzername",
+        formButtonPrimary: "Weiter",
+        userButton: {
+            action__manageAccount: "Konto verwalten",
+            action__signOut: "Abmelden"
+        },
+        unstable__errors: {
+            form_identifier_not_found: "Diese E-Mail-Adresse wurde nicht gefunden.",
+            form_password_incorrect: "Falsches Passwort."
+        }
+    };
+
     try {
         // 1. CLERK'Ü BAŞLAT VE TASARIMINI AYARLA
         await window.Clerk.load({
+            // ALMANCA DİL AYARI
+            localization: localizationDE,
+
             appearance: {
                 variables: {
                     colorPrimary: '#2D5016', // CSS Berlin Yeşili
@@ -39,12 +84,16 @@ window.addEventListener("load", async function () {
                         fontFamily: '"Montserrat", sans-serif',
                         fontWeight: '800',
                         color: '#2D5016'
+                    },
+                    footerActionLink: {
+                        color: '#FF8C42',
+                        fontWeight: '600'
                     }
                 }
             }
         });
 
-        console.log("Clerk loaded successfully.");
+        console.log("Clerk (Deutsch) loaded successfully.");
 
         // 2. BUTONLARI YÖNET
         const loginBtn = document.getElementById("header-login-btn");
@@ -60,14 +109,14 @@ window.addEventListener("load", async function () {
 
             // Profil butonunu (UserButton) yerleştir
             if (userContainer) {
+                // Konteyner temizle (dublike olmaması için)
+                userContainer.innerHTML = '';
+
                 window.Clerk.mountUserButton(userContainer, {
-                    afterSignOutUrl: "/"
+                    afterSignOutUrl: "/",
+                    signInUrl: "/" // Çıkış yapınca ana sayfaya dön
                 });
             }
-
-            // Backend'e Token Gönderme Hazırlığı (Opsiyonel)
-            // const token = await window.Clerk.session.getToken();
-            // localStorage.setItem("clerk_token", token);
 
         } else {
             // HAYIR GİRİŞ YAPMAMIŞ
@@ -77,8 +126,9 @@ window.addEventListener("load", async function () {
                 // Tıklanınca Login penceresini aç
                 loginBtn.addEventListener("click", () => {
                     window.Clerk.openSignIn({
-                        afterSignInUrl: "/",
-                        afterSignUpUrl: "/"
+                        // Modern Redirect URL Parametreleri (Console Uyarısı Düzeltildi)
+                        signInFallbackRedirectUrl: window.location.href,
+                        signUpFallbackRedirectUrl: window.location.href
                     });
                 });
             }
