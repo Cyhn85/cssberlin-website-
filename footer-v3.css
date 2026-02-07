@@ -1,16 +1,18 @@
 /* ============================================
    CSS Berlin Footer V3 - Centered Symmetric Design
-   Clean, Single-Line Logic, No Overflow
+   Dark Green Theme (Matches Header V3)
    ============================================ */
 .footer-v3 {
-    background: #FFFFFF;
-    border-top: 1px solid #E5E7EB;
+    background: linear-gradient(135deg, #3d6b1e 0%, #2D5016 40%, #1a3409 100%);
+    /* Dark Green Gradient from Header */
+    border-top: 4px solid #FF8C42;
+    /* Orange Accent Top */
     padding: 60px 0 30px;
     margin-top: 60px;
     font-family: 'Inter', sans-serif;
-    color: #4B5563;
+    color: #FFFFFF;
+    /* White Text */
     overflow-x: hidden;
-    /* Prevent overflow */
 }
 
 .footer-v3-container {
@@ -22,9 +24,7 @@
     /* Center main columns */
     align-items: flex-start;
     gap: 80px;
-    /* Symmetric spacing */
     flex-wrap: wrap;
-    /* Be responsive if needed */
 }
 
 .footer-col {
@@ -32,28 +32,30 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* Center content */
     text-align: center;
-    /* Center text */
     gap: 14px;
     min-width: 200px;
 }
 
-.footer-col h3 {
+.footer-col h3,
+.footer-col h4 {
     font-size: 16px;
-    font-weight: 700;
-    color: #111827;
+    font-weight: 800;
+    color: #FF8C42;
+    /* Orange Headers */
     margin-bottom: 8px;
-    letter-spacing: -0.2px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
 }
 
 .footer-col a,
 .footer-col p,
 .footer-col address {
     font-size: 14px;
-    color: #6B7280;
+    color: rgba(255, 255, 255, 0.85);
+    /* Off-white text */
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: all 0.2s ease;
     font-weight: 500;
     font-style: normal;
     line-height: 1.6;
@@ -61,16 +63,17 @@
 
 .footer-col a:hover {
     color: #FF8C42;
-    /* Brand Orange for visibility */
+    /* Brand Orange on Hover */
     text-decoration: none;
+    transform: translateX(2px);
 }
 
 /* Brand Column Special Styling */
 .footer-brand .logo-text {
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 800;
-    color: #2D5016;
-    /* Brand Green */
+    color: #FF8C42;
+    /* Orange Logo */
     font-family: 'Montserrat', sans-serif;
     margin-bottom: 4px;
     display: block;
@@ -78,19 +81,19 @@
 
 .footer-brand .tagline {
     font-size: 13px;
-    color: #FF8C42;
+    color: #FFFFFF;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
     margin-bottom: 12px;
 }
 
-/* Bottom Bar - Single Line Centered */
+/* Bottom Bar */
 .footer-bottom-v3 {
     max-width: 1000px;
     margin: 60px auto 0;
     padding-top: 24px;
-    border-top: 1px solid #E5E7EB;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -107,18 +110,24 @@
 
 .footer-legal-links a {
     font-size: 13px;
-    color: #9CA3AF;
+    color: rgba(255, 255, 255, 0.6);
     text-decoration: none;
     transition: color 0.2s;
 }
 
 .footer-legal-links a:hover {
-    color: #111827;
+    color: #FF8C42;
+}
+
+.footer-legal-text {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.4);
+    line-height: 1.5;
 }
 
 .copyright {
     font-size: 13px;
-    color: #9CA3AF;
+    color: rgba(255, 255, 255, 0.4);
 }
 
 /* Responsive */
