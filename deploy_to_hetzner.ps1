@@ -52,6 +52,7 @@ python3 -m backend.seed_vitrin
 
 echo "🔄 Restarting Backend..."
 # Try to restart systemd service if it exists
+if systemctl list-units --full -all | grep -Fq "cssberlin-backend.service"; then
     systemctl restart cssberlin-backend
     echo "✅ Service restarted."
 else
@@ -74,16 +75,16 @@ fi
 
 echo "🎉 DEPLOYMENT COMPLETE!"
 '@
-
+ 
 # Create temporary local script with LF line endings
 $RemoteScriptLF = $RemoteScript -replace "`r`n", "`n"
 [System.IO.File]::WriteAllText("deploy_temp.sh", $RemoteScriptLF)
-
+ 
 echo "📤 Uploading deployment script..."
 scp deploy_temp.sh $User@${HostName}:/tmp/deploy_temp.sh
-
+ 
 echo "🚀 Executing on remote server..."
-ssh $User@$HostName "bash /tmp/deploy_temp.sh && rm /tmp/deploy_temp.sh"
+ssh $User@$HostName "bash /tmp/deploy_temp.sh; rm /tmp/deploy_temp.sh"
 
 # Cleanup local temp file
 Remove-Item deploy_temp.sh
