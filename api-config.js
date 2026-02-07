@@ -13,16 +13,15 @@
 
     // Configure API endpoints
     const config = {
+        // Environment name
+        ENVIRONMENT: isLocal ? 'development' : 'production',
+
         // Base URL for REST API
-        // Using relative path '/api' to avoid Mixed Content errors on HTTPS sites.
-        // Nginx or Cloudflare must be configured to proxy /api to the backend.
-        BASE_URL: isLocal ? 'http://localhost:8000' : '',
+        // For Production: Use full HTTPS URL to avoid any ambiguity
+        BASE_URL: isLocal ? 'http://localhost:8000' : 'https://cssberlin.de',
 
         // WebSocket protocol
         WS_PROTOCOL: isLocal ? 'ws' : 'wss',
-
-        // Environment name
-        ENVIRONMENT: isLocal ? 'development' : 'production',
 
         // Helper method to build WebSocket URL
         getWebSocketURL: function (path) {

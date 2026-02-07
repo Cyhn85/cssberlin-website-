@@ -20,26 +20,16 @@ app = FastAPI(
     version="3.1.0",
 )
 
-# ─── CORS AYARLARI (KRİTİK) ─────────────────────────────
-# Frontend (Port 3000/5500) ile Backend (Port 8000) arasındaki
-# tüm engelleri kaldırıyoruz.
+# ─── CORS AYARLARI (LOCAL FIX) ─────────────────────────────
+# Geliştirme modu için tüm engelleri kaldırıp herkese izin veriyoruz.
+# Prodüksiyonda bu ayar 'allow_origins' listesine dönmelidir.
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "http://localhost:5500",
-        "http://127.0.0.1:5500",
-        "http://localhost:8000",
-        "https://cssberlin.de",
-        "https://www.cssberlin.de",
-        "https://cssberlin-website.pages.dev",
-    ],
-    allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:\d+)?", # Allow any localhost port
+    allow_origins=["*"],  # Wildcard allowing ALL origins (Dev Mode Only)
     allow_credentials=True,
-    allow_methods=["*"],  # GET, POST, PUT, DELETE, PATCH, OPTIONS (Hepsi açık)
-    allow_headers=["*"],  # Stripe ve Auth headerlarına izin ver
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # ─── Exception Handler (Hata Yakalayıcı) ────────────────
