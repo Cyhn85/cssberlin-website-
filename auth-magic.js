@@ -252,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Use global API_BASE from api-config.js
                 const baseUrl = window.API_BASE || 'http://localhost:8000';
 
-                const response = await fetch(`${baseUrl}/api/auth/magic-link/request`, {
+                const response = await fetch(`${baseUrl}/api/auth/magic-link`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email })
