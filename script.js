@@ -752,18 +752,16 @@ document.addEventListener('DOMContentLoaded', function () {
     initHeroSlider();
     initSocialHub();
 
-    // ── Vitrin: 40 demo ürün yükleme (vitrin.js) ──
-    // vitrin.js script.js'den sonra yüklenir → setTimeout ile bekle
+    // ── Vitrin: 40 demo ürün (SERVER-SIDE) ──
+    // Disable client-side Vitrin to use real API data (seeded)
     setTimeout(function () {
-        if (window.vitrinManager) {
-            // Target the main products grid on homepage
-            window.vitrinManager.init('productsGrid');
-            console.log('[Vitrin] 40 demo ürün yüklendi ✅');
-        } else {
-            // Fallback: eskisi çalışsın
-            loadFeaturedProducts();
-            loadRecommendations();
-        }
+        // if (window.vitrinManager) {
+        //     window.vitrinManager.init('productsGrid');
+        //     console.log('[Vitrin] 40 demo ürün yüklendi (Client-Side) ✅');
+        // } else {
+        loadFeaturedProducts();
+        loadRecommendations();
+        // }
     }, 100);
 });
 
@@ -772,7 +770,7 @@ document.addEventListener('DOMContentLoaded', function () {
 // FEATURED PRODUCTS
 // ============================================
 async function loadFeaturedProducts() {
-    const featuredGrid = document.getElementById('featuredProductsGrid');
+    const featuredGrid = document.getElementById('productsGrid');
     if (!featuredGrid) return;
 
     try {

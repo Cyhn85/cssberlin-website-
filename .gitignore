@@ -61,6 +61,7 @@ accounting_system/test_accounting.db
 *.sqlite3
 
 # Deployment scripts with credentials
+deploy_to_hetzner.ps1
 **/deploy/*.ps1
 
 # Google OAuth credentials

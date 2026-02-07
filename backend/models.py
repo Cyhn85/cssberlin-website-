@@ -57,6 +57,7 @@ class Product(Base):
     condition = Column(String(50), nullable=False)  # new, like_new, good, fair
     size = Column(String(50))
     color = Column(String(50))
+    original_price = Column(Float, nullable=True)  # Added for sale display
     images = Column(JSON, default=list)  # List of image URLs
     seller_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     is_active = Column(Boolean, default=True)

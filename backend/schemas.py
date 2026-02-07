@@ -67,6 +67,8 @@ class ProductCreate(BaseModel):
     condition: str
     size: Optional[str] = None
     color: Optional[str] = None
+    original_price: Optional[float] = None
+    is_featured: bool = False
     images: Optional[List[str]] = []
 
 
@@ -80,6 +82,8 @@ class ProductUpdate(BaseModel):
     condition: Optional[str] = None
     size: Optional[str] = None
     color: Optional[str] = None
+    original_price: Optional[float] = None
+    is_featured: Optional[bool] = None
     images: Optional[List[str]] = None
     is_active: Optional[bool] = None
 
@@ -95,6 +99,8 @@ class ProductResponse(BaseModel):
     condition: str
     size: Optional[str]
     color: Optional[str]
+    original_price: Optional[float]
+    is_featured: bool
     images: List[str]
     seller_id: int
     is_active: bool
