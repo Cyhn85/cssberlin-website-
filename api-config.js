@@ -14,8 +14,9 @@
     // Configure API endpoints
     const config = {
         // Base URL for REST API
-        // CRITICAL: Production MUST be HTTPS to avoid Mixed Content errors
-        BASE_URL: isLocal ? 'http://localhost:8000' : 'https://api.cssberlin.de',
+        // NOTE: Production is HTTP-only (No SSL). Browsers will block this on HTTPS sites (Mixed Content).
+        // User must allow "Insecure Content" or Setup SSL on Backend.
+        BASE_URL: isLocal ? 'http://localhost:8000' : 'http://195.201.146.224:8000',
 
         // WebSocket protocol
         WS_PROTOCOL: isLocal ? 'ws' : 'wss',
@@ -39,7 +40,7 @@
     // Legacy API_CONFIG object for backward compatibility
     window.API_CONFIG = {
         LOCAL: 'http://localhost:8000',
-        PRODUCTION: 'https://api.cssberlin.de',
+        PRODUCTION: 'http://195.201.146.224:8000',
         current: config.BASE_URL,
 
         // Some older modules expect API_CONFIG.BASE_URL (e.g. favorites.js)
