@@ -73,10 +73,21 @@ else
 fi
 
 echo "🎉 DEPLOYMENT COMPLETE!"
-'@.Replace("`r`n", "`n")
+'@
 
-# Execute via SSH (User will be prompted for password if not key-based)
-ssh $User@$HostName $RemoteScript
+# Create temporary local script with LF line endings
+$RemoteScriptLF = $RemoteScript -replace "`r`n", "`n"
+[System.IO.File]::WriteAllText("deploy_temp.sh", $RemoteScriptLF)
 
+echo "📤 Uploading deployment script..."
+scp deploy_temp.sh $User@${HostName}:/tmp/deploy_temp.sh
+
+echo "🚀 Executing on remote server..."
+ssh $User@$HostName "bash /tmp/deploy_temp.sh && rm /tmp/deploy_temp.sh"
+
+# Cleanup local temp file
+Remove-Item deploy_temp.sh
+
+echo "🎉 DEPLOYMENT COMPLETE!"
 Write-Host "Script execution finished." -ForegroundColor Green
 pause
