@@ -14,7 +14,8 @@
     // Configure API endpoints
     const config = {
         // Base URL for REST API
-        BASE_URL: isLocal ? 'http://localhost:8000' : 'http://195.201.146.224:8000',
+        // CRITICAL: Production MUST be HTTPS to avoid Mixed Content errors
+        BASE_URL: isLocal ? 'http://localhost:8000' : 'https://api.cssberlin.de',
 
         // WebSocket protocol
         WS_PROTOCOL: isLocal ? 'ws' : 'wss',
