@@ -1,22 +1,151 @@
-/* ═══════════════════════════════════════════════════════════════
-   🔧 PRODUCT CARD 20% KÜÇÜLTME - MANUEL OVERRIDE (ADMIN REQUEST)
-   Kartlar artık %20 daha küçük görünecek.
-   ═══════════════════════════════════════════════════════════════ */
+/* --- YENİ ÜRÜN KARTI STİLLERİ --- */
 
-.product-card-v3 {
-    transform: scale(0.8) !important;
-    transform-origin: center !important;
-    margin: -10% !important;
+/* Resim Alanı */
+.product-image-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px 12px 0 0;
 }
 
-.product-card-v3:hover {
-    transform: translateY(-6px) scale(0.82) !important;
+/* Satıldı Kuşağı (Yeşil Zemin, Turuncu Yazı) */
+.sold-badge {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-10deg);
+    background-color: rgba(45, 80, 22, 0.9);
+    /* Koyu Yeşil */
+    color: #FF8C42;
+    /* Turuncu */
+    padding: 10px 20px;
+    font-weight: 800;
+    font-size: 18px;
+    text-transform: uppercase;
+    border: 2px solid #FF8C42;
+    z-index: 10;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
-/* Mobile'da daha az agresif */
-@media (max-width: 768px) {
-    .product-card-v3 {
-        transform: scale(0.9) !important;
-        margin: -5% !important;
-    }
+/* Satılan ürün kartı biraz soluk olsun */
+.product-card.sold {
+    opacity: 0.8;
+    filter: grayscale(0.5);
+}
+
+/* Resim Üzerindeki İkonlar */
+.card-icon-btn {
+    position: absolute;
+    bottom: 10px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+    z-index: 5;
+}
+
+.card-icon-btn:hover {
+    transform: scale(1.1);
+}
+
+.card-icon-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.cart-btn {
+    left: 10px;
+    color: #2D5016;
+}
+
+.wish-btn {
+    right: 10px;
+    color: #FF8C42;
+}
+
+/* Alt Bilgi ve Butonlar */
+.product-info {
+    padding: 12px;
+}
+
+.product-brand {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #666;
+    font-weight: 700;
+}
+
+.product-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 4px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.product-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: 700;
+    color: #2D5016;
+    margin-bottom: 10px;
+}
+
+/* Aksiyon Butonları */
+.product-actions-row {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-action {
+    flex: 1;
+    padding: 8px 0;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    transition: all 0.2s;
+}
+
+/* Pazarlık Et (Turuncu Çizgili) */
+.btn-negotiate {
+    background: transparent;
+    border: 1px solid #FF8C42;
+    color: #FF8C42;
+}
+
+.btn-negotiate:hover {
+    background: #fff5eb;
+}
+
+/* Satın Al (Yeşil Dolu) */
+.btn-buy {
+    background: linear-gradient(135deg, #2D5016 0%, #3d6b1e 100%);
+    color: white;
+}
+
+.btn-buy:hover {
+    box-shadow: 0 4px 10px rgba(45, 80, 22, 0.3);
+    transform: translateY(-1px);
+}
+
+/* Satıldı Butonu */
+.btn-disabled {
+    background: #ddd;
+    color: #888;
+    cursor: not-allowed;
 }
