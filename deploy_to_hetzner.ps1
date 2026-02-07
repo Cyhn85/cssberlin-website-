@@ -15,10 +15,10 @@ $Content = $Content -replace "`r`n", "`n"
 [System.IO.File]::WriteAllText("deploy_temp.sh", $Content)
 
 echo "📤 Uploading deployment script..."
-scp deploy_temp.sh $User@${HostName}:/tmp/deploy_temp.sh
+scp "deploy_temp.sh" "${User}@${HostName}:/tmp/deploy_temp.sh"
 
 echo "🚀 Executing on remote server..."
-ssh $User@$HostName "bash /tmp/deploy_temp.sh; rm /tmp/deploy_temp.sh"
+ssh "${User}@${HostName}" "bash /tmp/deploy_temp.sh; rm /tmp/deploy_temp.sh"
 
 Remove-Item deploy_temp.sh
 
