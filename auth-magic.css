@@ -101,8 +101,8 @@ body.magic-auth-body {
     position: relative;
     z-index: 5;
     width: 90%;
-    max-width: 350px;
-    /* Reduced width further */
+    max-width: 400px;
+    /* Increased from 350px for button symmetry */
     padding: 1px;
     background: var(--card-light);
     backdrop-filter: blur(24px);
@@ -368,9 +368,10 @@ body.magic-auth-body {
 .separator {
     display: flex;
     align-items: center;
-    margin: 16px 0;
+    margin: 20px 0;
     color: #64748b;
-    font-size: 12px;
+    font-size: 13px;
+    font-weight: 500;
 }
 
 .separator::before,
@@ -383,49 +384,70 @@ body.magic-auth-body {
 
 .login-container.dark .separator::before,
 .login-container.dark .separator::after {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .separator span {
-    padding: 0 10px;
+    padding: 0 12px;
 }
 
 .social-login {
     display: flex;
-    gap: 10px;
-    justify-content: center;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .social-button {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
+    width: 100%;
+    height: 48px;
+    border-radius: 12px;
     border: 1px solid #e2e8f0;
     background: white;
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 12px;
     cursor: pointer;
     transition: all 0.2s;
-    color: #475569;
+    font-size: 15px;
+    font-weight: 600;
+    /* Clean text color handled inline for brand specific buttons */
 }
 
-.login-container.dark .social-button {
-    border-color: rgba(255, 255, 255, 0.1);
-    background: rgba(255, 255, 255, 0.05);
-    color: #e2e8f0;
+/* Specific Social Button Styles Overrides */
+.social-button.google {
+    background: white;
+    border: 1px solid #e2e8f0;
+    color: #1f2937;
+}
+
+.login-container.dark .social-button.google {
+    background: white;
+    border: none;
+    color: #1f2937;
+}
+
+.social-button.apple {
+    background: black;
+    color: white;
+    border: 1px solid black;
+}
+
+.login-container.dark .social-button.apple {
+    background: white;
+    color: black;
+    border: none;
 }
 
 .social-button:hover {
-    border-color: var(--primary);
-    color: var(--primary);
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .signup-prompt {
     text-align: center;
-    margin-top: 16px;
-    font-size: 12px;
+    margin-top: 24px;
+    font-size: 13px;
     color: #64748b;
 }
 
@@ -451,15 +473,20 @@ body.magic-auth-body {
     /* Light mode text */
     padding: 12px;
     width: 100%;
-    border-radius: 8px;
-    margin-top: 20px;
+    height: 48px;
+    /* Match Social Buttons */
+    border-radius: 12px;
+    /* Match Social Buttons */
+    margin-top: 0;
+    /* Handled by flex gap in container */
     font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 10px;
     cursor: pointer;
     transition: all 0.2s;
+    font-size: 15px;
 }
 
 .login-container.dark .magic-link-trigger {
