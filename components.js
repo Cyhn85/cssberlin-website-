@@ -106,11 +106,9 @@ function initializeHeaderScripts() {
     };
 
     // 3. Clerk Auth Re-binding
-    // Wait for Clerk to be ready if it isn't yet
     if (window.Clerk) {
         rebindClerk();
     } else {
-        // If Clerk loads later, it usually handles its own mount, but we might need to handle the custom login button
         window.addEventListener('load', rebindClerk);
     }
 }
@@ -121,30 +119,85 @@ function rebindClerk() {
     const loginBtn = document.getElementById("header-login-btn");
     const userContainer = document.getElementById("user-button-container");
 
+    // BRANDING COLOR
+    const BRAND_ORANGE = '#FF8C42';
+    const BRAND_GREEN = '#2D5016';
+
+    // Configure Clerk Appearance Globally if possible, or per mount
+    // Note: Clerk.js usually takes appearance in mount/open calls.
+
     if (window.Clerk.user) {
-        // User is logged in
+        // ID logged in...
         if (loginBtn) loginBtn.style.display = "none";
 
         if (userContainer) {
-            userContainer.innerHTML = ''; // Clear previous
-            try {
-                if (window.UserMenu) {
-                    window.UserMenu.init(window.Clerk.user);
+            userContainer.innerHTML = '';
+
+            // FORCE LOAD USER MENU SCRIPT IF MISSING
+            if (typeof window.UserMenu === 'undefined') {
+                if (!document.querySelector('script[src="user-menu.js"]')) {
+                    const s = document.createElement('script');
+                    s.src = 'user-menu.js';
+                    s.onload = () => {
+                        // Init after load
+                        if (window.UserMenu) window.UserMenu.init(window.Clerk.user);
+                    };
+                    document.body.appendChild(s);
                 } else {
-                    window.Clerk.mountUserButton(userContainer, {
-                        afterSignOutUrl: "/",
-                        signInUrl: "/"
-                    });
+                    // Script tag exists but maybe not loaded? Wait a bit
+                    setTimeout(() => {
+                        if (window.UserMenu) window.UserMenu.init(window.Clerk.user);
+                        else {
+                            // Fallback to default but styled
+                            window.Clerk.mountUserButton(userContainer, {
+                                afterSignOutUrl: "/",
+                                signInUrl: "/",
+                                appearance: {
+                                    variables: {
+                                        colorPrimary: BRAND_GREEN,
+                                        colorTextOnPrimaryBackground: 'white'
+                                    }
+                                }
+                            });
+                        }
+                    }, 500);
                 }
-                console.log('[Components] Clerk UserButton mounted.');
-            } catch (e) {
-                console.error('[Components] Error mounting Clerk UserButton:', e);
+            } else {
+                // Already loaded
+                window.UserMenu.init(window.Clerk.user);
             }
+        }
+    } else {
+        // NOT LOGGED IN
+        if (loginBtn) {
+            loginBtn.style.display = "flex";
+            loginBtn.onclick = () => {
+                window.Clerk.openSignIn({
+                    appearance: {
+                        variables: {
+                            colorPrimary: BRAND_GREEN,
+                            colorTextOnPrimaryBackground: 'white',
+                            colorBackground: '#ffffff',
+                            colorInputBackground: '#f5f5f5',
+                            colorInputText: '#333'
+                        },
+                        elements: {
+                            card: 'shadow-xl border-2 border-[#2D5016]',
+                            headerTitle: 'text-[#2D5016]',
+                            socialButtonsIconButton: 'border border-[#ddd]'
+                        }
+                    }
+                });
+            };
         }
     }
 
     // 4. Guest Protection
     initGuestProtection();
+}
+
+// 4. Guest Protection
+initGuestProtection();
 }
 
 async function loadFilterBar() {
@@ -200,7 +253,14 @@ function initGuestProtection() {
                     console.log('Guest access attempted. Triggering login.');
 
                     if (window.Clerk) {
-                        window.Clerk.openSignIn();
+                        window.Clerk.openSignIn({
+                            appearance: {
+                                variables: {
+                                    colorPrimary: '#2D5016',
+                                    colorTextOnPrimaryBackground: 'white'
+                                }
+                            }
+                        });
                     } else {
                         alert("Bitte melden Sie sich an.");
                     }
