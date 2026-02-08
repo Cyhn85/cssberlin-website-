@@ -24,10 +24,20 @@ const UserMenu = {
         menu.className = 'custom-user-dropdown';
         menu.style.display = 'none'; // Hidden by default
 
+        const allowedEmails = [
+            'ceyhuns.sorguc@gmail.com',
+            'admin@cssberlin.de',
+            'info@cssberlin.de',
+            'seller@cssberlin.de'
+        ];
+        const userEmail = user.primaryEmailAddress ? user.primaryEmailAddress.emailAddress : '';
+        const isAuthorized = allowedEmails.includes(userEmail);
+
         // Menu Structure
         menu.innerHTML = `
             <div class="cud-section">
                 <a href="mein-profil.html" class="cud-link">Mein Profil</a>
+                ${isAuthorized ? '<a href="inserieren.html" class="cud-link" style="color:#2D5016; font-weight:700;"><i data-lucide="plus-circle" style="width:16px; margin-right:8px;"></i> Artikel verkaufen</a>' : ''}
                 <a href="freunde-einladen.html" class="cud-link">Freunde einladen</a>
                 <a href="meine-einstellungen.html" class="cud-link">Meine Einstellungen</a>
                 <a href="personalisierung.html" class="cud-link">Personalisierung</a>

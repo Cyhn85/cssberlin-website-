@@ -56,8 +56,8 @@
 .footer-col p,
 .footer-col address {
     font-size: 14px;
-    color: rgba(255, 255, 255, 0.85);
-    /* Off-white text */
+    color: #FF8C42;
+    /* Orange Text as requested */
     text-decoration: none;
     transition: all 0.2s ease;
     font-weight: 500;
@@ -68,8 +68,8 @@
 }
 
 .footer-col a:hover {
-    color: #FF8C42;
-    /* Brand Orange on Hover */
+    color: #FFFFFF;
+    /* White on Hover */
     text-decoration: none;
     transform: translateX(2px);
 }

@@ -110,27 +110,5 @@ function rebindClerk() {
         }
     }
 
-    // RESTRICT INSERIEREN BUTTON
-    // Only allowed emails can see the "Inserieren" button
-    const allowedEmails = [
-        'ceyhuns.sorguc@gmail.com',
-        'admin@cssberlin.de',
-        'info@cssberlin.de',
-        'seller@cssberlin.de' // Placeholder for testing
-    ];
 
-    const inserierenBtn = document.querySelector('a[href="inserieren.html"]');
-
-    if (inserierenBtn) {
-        if (window.Clerk.user) {
-            const userEmail = window.Clerk.user.primaryEmailAddress.emailAddress;
-            if (allowedEmails.includes(userEmail)) {
-                inserierenBtn.style.display = 'flex'; // Show if authorized
-            } else {
-                inserierenBtn.style.display = 'none'; // Hide if unauthorized
-            }
-        } else {
-            inserierenBtn.style.display = 'none'; // Hide if logged out
-        }
-    }
 }
