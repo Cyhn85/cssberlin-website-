@@ -392,7 +392,20 @@
                             body: JSON.stringify(req)
                         });
 
+                        const data = await resp.json();
+
                         if (resp.ok) {
+                            // Construct Order Object for Confirmation Page
+                            const orderData = {
+                                id: data.order_id || 'ORD-' + Math.floor(Math.random() * 100000),
+                                total: data.total || items.reduce((sum, i) => sum + (i.price * i.quantity), 0) + 4.99, // Fallback calculation
+                                shippingAddress: req.address,
+                                paymentMethod: req.payment_method,
+                                items: cart
+                            };
+
+                            sessionStorage.setItem('lastOrder', JSON.stringify(orderData));
+
                             // Success
                             localStorage.removeItem('cssberlin_cart');
                             window.location.href = 'bestellung-bestaetigung.html'; // Or simple success alert
