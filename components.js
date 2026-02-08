@@ -11,6 +11,17 @@ document.addEventListener('DOMContentLoaded', async function () {
                 headerPlaceholder.innerHTML = html;
                 console.log('[Components] Header loaded.');
                 initializeHeaderScripts();
+
+                // Inject Filter Bar IF on index.html or category pages
+                // We add it after the header, but before the main content or 'smart-header-sentinel'
+                // Actually, user wants it BEFORE showcase.
+                // Let's check if there's a placeholder for it
+                if (!document.getElementById('filter-bar-placeholder')) {
+                    const filterDiv = document.createElement('div');
+                    filterDiv.id = 'filter-bar-placeholder';
+                    headerPlaceholder.parentNode.insertBefore(filterDiv, headerPlaceholder.nextSibling);
+                    loadFilterBar();
+                }
             } else {
                 console.error('[Components] Failed to fetch header:', resp.status);
             }
@@ -101,7 +112,37 @@ function rebindClerk() {
                     window.Clerk.mountUserButton(userContainer, {
                         afterSignOutUrl: "/",
                         signInUrl: "/"
-                    });
+                    }
+
+async function loadFilterBar() {
+                            const placeholder = document.getElementById('filter-bar-placeholder');
+                            if (!placeholder) return;
+
+                            // Only load on index, category pages (check URL or body class?)
+                            // For now, load everywhere the header is, but maybe hide it on specific pages like checkout?
+                            // User asked for "filtering on homepage before showcase and category pages".
+                            const path = window.location.pathname;
+                            if (path.includes('login') || path.includes('register') || path.includes('checkout')) return;
+
+                            try {
+                                const resp = await fetch('components/filter-bar.html');
+                                if (resp.ok) {
+                                    const html = await resp.text();
+                                    placeholder.innerHTML = html;
+
+                                    // Execute scripts in the injected HTML
+                                    const scripts = placeholder.querySelectorAll('script');
+                                    scripts.forEach(script => {
+                                        const newScript = document.createElement('script');
+                                        if (script.src) newScript.src = script.src;
+                                        else newScript.textContent = script.textContent;
+                                        document.body.appendChild(newScript);
+                                    });
+                                }
+                            } catch (e) {
+                                console.error('Failed to load filter bar', e);
+                            }
+                        });
                 }
                 console.log('[Components] Clerk UserButton mounted.');
             } catch (e) {

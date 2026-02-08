@@ -149,9 +149,11 @@
                 </div>
             </div>
 
-            <h3>Meine Garderobe</h3>
-            <p>Sie haben noch keine Artikel hochgeladen.</p>
-            <a href="inserieren.html" class="btn-gradient">Jetzt Artikel verkaufen</a>
+            <div id="selling-section" style="display:none;">
+                <h3>Meine Garderobe</h3>
+                <p>Sie haben noch keine Artikel hochgeladen.</p>
+                <a href="inserieren.html" class="btn-gradient">Jetzt Artikel verkaufen</a>
+            </div>
         </main>
     </div>
 
@@ -176,6 +178,19 @@
                             <p style="margin:0; color:#2D5016;">Verifizierter Nutzer ✅</p>
                         </div>
                     `;
+
+                    // Check authorization for selling section
+                    const allowedEmails = [
+                        'ceyhuns.sorguc@gmail.com',
+                        'admin@cssberlin.de',
+                        'info@cssberlin.de',
+                        'seller@cssberlin.de'
+                    ];
+                    const userEmail = user.primaryEmailAddress ? user.primaryEmailAddress.emailAddress : '';
+                    if (allowedEmails.includes(userEmail)) {
+                        const sellingSection = document.getElementById('selling-section');
+                        if (sellingSection) sellingSection.style.display = 'block';
+                    }
                 }
             }
         });

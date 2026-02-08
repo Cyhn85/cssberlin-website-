@@ -8,7 +8,11 @@ const UserMenu = {
     init(user) {
         this.user = user;
         const container = document.getElementById('user-button-container');
-        if (!container) return;
+        if (!container) {
+            // Retry if container not found (e.g. race condition with header load)
+            setTimeout(() => this.init(user), 500);
+            return;
+        }
 
         // Clean container
         container.innerHTML = '';
