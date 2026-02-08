@@ -135,37 +135,7 @@ function rebindClerk() {
                     window.Clerk.mountUserButton(userContainer, {
                         afterSignOutUrl: "/",
                         signInUrl: "/"
-                    }
-
-async function loadFilterBar() {
-                            const placeholder = document.getElementById('filter-bar-placeholder');
-                            if (!placeholder) return;
-
-                            // Only load on index, category pages (check URL or body class?)
-                            // For now, load everywhere the header is, but maybe hide it on specific pages like checkout?
-                            // User asked for "filtering on homepage before showcase and category pages".
-                            const path = window.location.pathname;
-                            if (path.includes('login') || path.includes('register') || path.includes('checkout')) return;
-
-                            try {
-                                const resp = await fetch('components/filter-bar.html');
-                                if (resp.ok) {
-                                    const html = await resp.text();
-                                    placeholder.innerHTML = html;
-
-                                    // Execute scripts in the injected HTML
-                                    const scripts = placeholder.querySelectorAll('script');
-                                    scripts.forEach(script => {
-                                        const newScript = document.createElement('script');
-                                        if (script.src) newScript.src = script.src;
-                                        else newScript.textContent = script.textContent;
-                                        document.body.appendChild(newScript);
-                                    });
-                                }
-                            } catch (e) {
-                                console.error('Failed to load filter bar', e);
-                            }
-                        });
+                    });
                 }
                 console.log('[Components] Clerk UserButton mounted.');
             } catch (e) {
@@ -176,6 +146,37 @@ async function loadFilterBar() {
 
     // 4. Guest Protection
     initGuestProtection();
+}
+
+async function loadFilterBar() {
+    const placeholder = document.getElementById('filter-bar-placeholder');
+    if (!placeholder) return;
+
+    // Only load on index, category pages
+    const path = window.location.pathname;
+    if (path.includes('login') || path.includes('register') || path.includes('checkout')) return;
+
+    try {
+        const resp = await fetch('components/filter-bar.html');
+        if (resp.ok) {
+            const html = await resp.text();
+            placeholder.innerHTML = html;
+
+            // Execute scripts in the injected HTML
+            const scripts = placeholder.querySelectorAll('script');
+            scripts.forEach(script => {
+                const newScript = document.createElement('script');
+                if (script.src) newScript.src = script.src;
+                else newScript.textContent = script.textContent;
+                document.body.appendChild(newScript);
+            });
+        }
+    } catch (e) {
+        console.error('Failed to load filter bar', e);
+    }
+}
+
+function initGuestProtection() {
 }
 
 function initGuestProtection() {
