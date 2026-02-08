@@ -679,6 +679,36 @@ function applyFavoriteButtonState(button, isFav) {
     }
 }
 
+async function refreshFavoriteIds() {
+    try {
+        // Preferred: FavoritesManager (favorites.js)
+        if (typeof favoritesManager !== 'undefined' && favoritesManager) {
+            if (typeof favoritesManager.init === 'function') await favoritesManager.init();
+            if (typeof favoritesManager.getFavorites === 'function') {
+                const favs = await favoritesManager.getFavorites();
+                favoriteIds = new Set(
+                    (favs || [])
+                        .map((f) => Number(f?.id))
+                        .filter((n) => Number.isFinite(n))
+                );
+                return favoriteIds;
+            }
+        }
+    } catch (e) {
+        // fall back
+    }
+
+    // Fallback: legacy wishlist array in localStorage
+    try {
+        const raw = localStorage.getItem('wishlist');
+        const ids = raw ? JSON.parse(raw) : [];
+        favoriteIds = new Set((ids || []).map((n) => Number(n)).filter((n) => Number.isFinite(n)));
+    } catch (e) {
+        favoriteIds = new Set();
+    }
+    return favoriteIds;
+}
+
 async function toggleFavoriteUI(productId, button, productData) {
     const id = Number(productId);
 
