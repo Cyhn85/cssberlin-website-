@@ -115,7 +115,7 @@ function renderProduct(product) {
                 window.location.href = 'anmelden.html';
             } else {
                 // Start negotiation
-                window.location.href = `meine-anzeigen.html?tab=negotiations&new=${product.id}`;
+                window.location.href = `pazarlik.html?create_offer=${product.id}`;
             }
         };
     }

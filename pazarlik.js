@@ -186,12 +186,104 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    if (authGate.isAuthenticated) {
-        fetchOffers();
-    } else {
-        AuthGuard.redirectToLogin('pazarlik.html');
-    }
 });
+
+// CHECK FOR NEW OFFER PARAM
+const params = new URLSearchParams(window.location.search);
+const newOfferProductId = params.get('create_offer');
+
+if (newOfferProductId && authGate.isAuthenticated) {
+    openNewOfferModal(newOfferProductId);
+}
+
+if (authGate.isAuthenticated) {
+    fetchOffers();
+} else {
+    AuthGuard.redirectToLogin('pazarlik.html');
+}
+});
+
+// NEW OFFER LOGIC
+async function openNewOfferModal(productId) {
+    // 1. Reuse Counter Modal structure or create new one dynamically
+    // For simplicity, let's inject a new modal if it doesn't exist
+    if (!document.getElementById('newOfferModal')) {
+        const modalHtml = `
+        <div class="counter-modal" id="newOfferModal">
+            <div class="counter-modal-content">
+                <div class="counter-modal-header">
+                    <h3 style="font-weight:700;">Neues Angebot senden</h3>
+                    <button class="counter-modal-close" onclick="closeNewOfferModal()" 
+                        style="background:none; border:none; font-size:24px; cursor:pointer;">&times;</button>
+                </div>
+                <div class="counter-modal-body">
+                    <div id="newOfferProductInfo" style="margin-bottom:16px; font-size:14px; color:#555;">
+                        Lade Produktdaten...
+                    </div>
+                    <div style="margin-bottom:16px;">
+                        <label style="display:block; margin-bottom:8px; font-weight:600;">Ihr Preisvorschlag (€)</label>
+                        <input type="number" class="counter-input" id="newOfferAmount" placeholder="Betrag eingeben">
+                    </div>
+                    <div>
+                        <label style="display:block; margin-bottom:8px; font-weight:600;">Nachricht (optional)</label>
+                        <input type="text" class="counter-input" id="newOfferMessage" placeholder="Nachricht an Verkäufer...">
+                    </div>
+                </div>
+                <div class="counter-modal-actions" 
+                    style="padding:20px; display:flex; gap:10px; border-top:1px solid #e5e7eb;">
+                    <button class="card-btn secondary" onclick="closeNewOfferModal()">Abbrechen</button>
+                    <button class="card-btn primary" onclick="submitNewOffer(${productId})">Angebot senden</button>
+                </div>
+            </div>
+        </div>`;
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+    }
+
+    // 2. Fetch Product Info to show user
+    const modal = document.getElementById('newOfferModal');
+    modal.classList.add('show');
+
+    try {
+        const product = await api.getProduct(productId);
+        document.getElementById('newOfferProductInfo').innerHTML = `
+            <strong>${product.name}</strong><br>
+            Listenpreis: <span style="text-decoration:line-through;">${product.price}€</span>
+        `;
+    } catch (e) {
+        document.getElementById('newOfferProductInfo').textContent = "Produkt konnte nicht geladen werden.";
+    }
+}
+
+function closeNewOfferModal() {
+    const modal = document.getElementById('newOfferModal');
+    if (modal) modal.classList.remove('show');
+    // Clean up URL
+    const url = new URL(window.location);
+    url.searchParams.delete('create_offer');
+    window.history.pushState({}, '', url);
+}
+window.closeNewOfferModal = closeNewOfferModal;
+
+async function submitNewOffer(productId) {
+    const amount = parseFloat(document.getElementById('newOfferAmount').value);
+    const message = document.getElementById('newOfferMessage').value;
+
+    if (!amount || amount <= 0) {
+        alert("Bitte geben Sie einen gültigen Betrag ein.");
+        return;
+    }
+
+    try {
+        await api.createOffer(productId, amount, message);
+        closeNewOfferModal();
+        alert("Angebot erfolgreich gesendet!");
+        window.location.reload();
+    } catch (e) {
+        console.error(e);
+        alert("Fehler beim Senden: " + (e.message || "Unbekannter Fehler"));
+    }
+}
+window.submitNewOffer = submitNewOffer;
 
 async function acceptOffer(offerId) {
     await api.acceptOffer(offerId);
