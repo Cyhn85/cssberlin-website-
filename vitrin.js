@@ -20,6 +20,12 @@ function getCart() {
 }
 
 // RENDER FUNCTION
+
+// PAGINATION STATE
+let currentVisibleCount = 20; // Initial: 5 rows * 4 columns = 20
+const ITEMS_PER_LOAD = 12; // Load More: 3 rows * 4 columns = 12
+
+// RENDER FUNCTION
 function renderProducts(products) {
     const grid = document.getElementById('productsGrid');
     if (!grid) return;
@@ -28,7 +34,22 @@ function renderProducts(products) {
     const wishlist = getWishlist();
     const cart = getCart();
 
-    grid.innerHTML = products.map(product => {
+    // Expand mock items if needed for demo (since we only have 6 mock items)
+    let displayProducts = [...products];
+    if (displayProducts.length < 50) {
+        // Duplicate items to simulate a full catalog
+        while (displayProducts.length < 50) {
+            displayProducts = displayProducts.concat(products.map(p => ({
+                ...p,
+                id: p.id + Math.floor(Math.random() * 10000)
+            })));
+        }
+    }
+
+    // Slice for pagination
+    const visibleProducts = displayProducts.slice(0, currentVisibleCount);
+
+    grid.innerHTML = visibleProducts.map(product => {
         // Random "Sold" state for demo
         const isSold = product.status === 'sold' || (Math.random() < 0.15 && !product.forceActive);
         const soldBadge = isSold ? `<div class="sold-badge">VERKAUFT</div>` : '';
@@ -96,7 +117,37 @@ function renderProducts(products) {
 
     // Re-init icons if needed (though we used inline SVGs for performance)
     if (typeof lucide !== 'undefined') lucide.createIcons();
+
+    // Manage Load More Button
+    const container = document.querySelector('.products');
+    let loadMoreBtn = document.getElementById('loadMoreBtn');
+
+    if (visibleProducts.length < displayProducts.length) {
+        if (!loadMoreBtn) {
+            loadMoreBtn = document.createElement('div');
+            loadMoreBtn.id = 'loadMoreBtn';
+            loadMoreBtn.className = 'load-more-container'; // CSS class for styling
+            loadMoreBtn.innerHTML = '<button onclick="loadMoreProducts()" class="btn-load-more">Mehr anzeigen</button>';
+            // Insert AFTER grid but BEFORE footer
+            grid.parentNode.insertBefore(loadMoreBtn, grid.nextSibling);
+        } else {
+            loadMoreBtn.style.display = 'block';
+        }
+    } else {
+        if (loadMoreBtn) loadMoreBtn.style.display = 'none';
+    }
 }
+
+function loadMoreProducts() {
+    currentVisibleCount += ITEMS_PER_LOAD;
+    console.log(`Loading more items... Showing ${currentVisibleCount}`);
+
+    // Re-render with new limit logic
+    // (In a real app, we might just append, but re-rendering is safe for now)
+    if (typeof window.loadedProducts !== 'undefined') renderProducts(window.loadedProducts);
+    else renderProducts(mockProducts);
+}
+
 
 // ACTION HANDLERS
 function showToast(message, type = 'success') {

@@ -34,8 +34,13 @@ const UserMenu = {
             'info@cssberlin.de',
             'seller@cssberlin.de'
         ];
-        const userEmail = user.primaryEmailAddress ? user.primaryEmailAddress.emailAddress : '';
-        const isAuthorized = allowedEmails.includes(userEmail);
+
+        let userEmail = '';
+        if (user.primaryEmailAddress && user.primaryEmailAddress.emailAddress) {
+            userEmail = user.primaryEmailAddress.emailAddress.toLowerCase().trim();
+        }
+
+        const isAuthorized = allowedEmails.some(email => email.toLowerCase() === userEmail);
 
         // Menu Structure
         menu.innerHTML = `

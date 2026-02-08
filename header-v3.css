@@ -211,45 +211,9 @@
     gap: 12px;
 }
 
-/* Dark Mode Toggle - COMPACT */
+/* Dark Mode Removed */
 .dark-mode-toggle-v3 {
-    width: 32px;
-    /* Smaller and cuter */
-    height: 18px;
-    background: rgba(255, 255, 255, 0.2);
-    border: none;
-    border-radius: 9px;
-    cursor: pointer;
-    position: relative;
-    transition: background 0.3s;
-}
-
-.dark-mode-toggle-v3::after {
-    content: '☀️';
-    position: absolute;
-    top: 50%;
-    left: 2px;
-    transform: translateY(-50%);
-    width: 16px;
-    height: 16px;
-    background: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    /* Slight increase */
-    line-height: 1;
-    transition: all 0.3s;
-    z-index: 2;
-    /* Ensure visible */
-    color: #333;
-    /* Ensure icon color */
-}
-
-.dark-mode-toggle-v3.active::after {
-    left: calc(100% - 18px);
-    content: '🌙';
+    display: none !important;
 }
 
 /* Language Selector */
