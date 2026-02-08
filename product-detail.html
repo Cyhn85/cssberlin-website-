@@ -453,24 +453,50 @@
             <!-- Actions -->
             <div class="pd-actions-wrapper">
                 <div class="pd-actions">
-                    <button class="btn-offer" id="btnOffer"><i data-lucide="message-circle" width="16"></i>
+                    <button class="btn-offer" onclick="handleProductAction('negotiate')"><i data-lucide="message-circle"
+                            width="16"></i>
                         Verhandeln</button>
-                    <button class="btn-buy"><i data-lucide="shopping-bag" width="16"></i> Kaufen</button>
+                    <button class="btn-buy" onclick="handleProductAction('buy')"><i data-lucide="shopping-bag"
+                            width="16"></i> Kaufen</button>
                 </div>
-                <button class="btn-message"><i data-lucide="mail" width="16"></i> Nachricht an Verkäufer</button>
+                <button class="btn-message" onclick="messageModal.open()"><i data-lucide="mail" width="16"></i>
+                    Nachricht an Verkäufer</button>
             </div>
 
             <!-- Description (Moved Here) -->
             <div class="pd-description">
                 <h3>Beschreibung</h3>
-                <p>Verkaufe hier eine wunderschöne, kaum getragene Jacke aus hochwertigem Leinen. Perfekt für den
+                <p id="pdDescription">Verkaufe hier eine wunderschöne, kaum getragene Jacke aus hochwertigem Leinen.
+                    Perfekt für den
                     Übergang oder kühle Sommerabende. Die Farbe ist ein warmes Terrakotta. Keine Flecken oder Löcher,
                     frisch gereinigt. Tierfreier Nichtraucherhaushalt.</p>
                 <div style="margin-top:15px; font-size:13px; color:#666;">
-                    <strong>Material:</strong> 100% Leinen<br>
+                    <strong>Material:</strong> <span id="pdMaterial">100% Leinen</span><br>
                     <strong>Eingestellt am:</strong> 06.02.2025
                 </div>
             </div>
+
+            <script>
+                // Extract Product ID from URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const productId = parseInt(urlParams.get('id')) || 1; // Default to 1
+
+                function handleProductAction(action) {
+                    if (action === 'buy') {
+                        if (window.handleBuyClick) {
+                            window.handleBuyClick(productId);
+                        } else {
+                            console.error('handleBuyClick not found');
+                        }
+                    } else if (action === 'negotiate') {
+                        if (window.handleNegotiateClick) {
+                            window.handleNegotiateClick(productId);
+                        } else {
+                            console.error('handleNegotiateClick not found');
+                        }
+                    }
+                }
+            </script>
 
             <!-- Trust -->
             <div class="pd-trust-box">
@@ -558,6 +584,7 @@
     <script src="smart-header.js"></script>
     <script src="components.js"></script>
     <script src="toast.js"></script>
+    <script src="message-modal.js"></script>
 </body>
 
 </html>
