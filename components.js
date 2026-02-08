@@ -58,6 +58,29 @@ function initializeHeaderScripts() {
 
     console.log('[Components] Re-initializing header scripts...');
 
+    // 0. Re-init Dark Mode (CRITICAL: Must happen after header injection)
+    if (window.smartHeader) {
+        window.smartHeader.initDarkMode();
+    } else if (window.SmartHeader) {
+        // If instance doesn't exist yet, creating it will init dark mode
+        // But if it does exist, we might need to force it
+    }
+    // Also try direct init if SmartHeader is not available or logic is separate
+    const toggle = document.getElementById('darkModeToggle');
+    if (toggle) {
+        // Manual init if needed, or rely on SmartHeader
+        const isDark = localStorage.getItem('cssberlin_dark_mode') === 'true';
+        if (isDark) {
+            document.body.classList.add('dark-mode');
+            toggle.classList.add('active');
+        }
+        toggle.addEventListener('click', () => {
+            const isNowDark = document.body.classList.toggle('dark-mode');
+            toggle.classList.toggle('active');
+            localStorage.setItem('cssberlin_dark_mode', isNowDark);
+        });
+    }
+
     // 1. Re-init SmartHeader (Mega Menu, Voice Search, etc.)
     if (window.SmartHeader) {
         window.smartHeader = new SmartHeader();

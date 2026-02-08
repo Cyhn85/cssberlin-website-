@@ -70,13 +70,15 @@
 .header-v3 {
     background: linear-gradient(135deg, #2D5016 0%, #1a3409 100%);
     /* Minimized the bright green (#3d6b1e) for a more premium/dark look */
-    z-index: 1000;
+    z-index: 9999;
+    /* Ensure it stays on top */
+    position: relative;
+    /* As requested, not sticky but correctly positioned */
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 .header-row-logo {
-    padding: 10px 24px 8px;
-    /* REDUCED from 16px 24px 12px */
+    padding: 12px 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -87,27 +89,32 @@
 /* Logo */
 .logo-v3 {
     display: flex;
-    align-items: baseline;
+    align-items: center;
+    /* Better vertical alignment */
     gap: 2px;
     text-decoration: none;
+    padding-left: 0;
+    /* consistent padding */
 }
 
 .logo-v3 .logo-css {
-    font-size: 28px;
-    /* Slightly smaller for a more refined look */
+    font-size: 34px;
+    /* INCREASED */
     font-weight: 800;
     color: #FF8C42;
-    letter-spacing: -1px;
+    letter-spacing: -1.5px;
     font-family: 'Montserrat', 'Inter', sans-serif;
+    line-height: 1;
 }
 
 .logo-v3 .logo-berlin {
-    font-size: 28px;
-    /* Match CSS size */
+    font-size: 34px;
+    /* INCREASED */
     font-weight: 800;
     color: white;
-    letter-spacing: -1px;
+    letter-spacing: -1.5px;
     font-family: 'Montserrat', 'Inter', sans-serif;
+    line-height: 1;
 }
 
 /* Header Right Actions */

@@ -124,6 +124,8 @@
                     Herren</label>
                 <label class="filter-option"><input type="checkbox" value="Kinder" onchange="applyFilters()">
                     Kinder</label>
+                <label class="filter-option"><input type="checkbox" value="Schuhe" onchange="applyFilters()">
+                    Schuhe</label>
                 <label class="filter-option"><input type="checkbox" value="Elektronik" onchange="applyFilters()">
                     Elektronik</label>
             </div>
@@ -200,7 +202,10 @@
         const el = document.getElementById('filter-' + id);
         if (el) {
             el.style.display = el.style.display === 'block' ? 'none' : 'block';
-            if (id === 'size') el.style.display = el.style.display === 'block' ? 'grid' : 'none'; // Grid for size
+            if (id === 'size' && el.style.display === 'block') {
+                // Ensure grid layout
+                el.style.display = 'grid';
+            }
         }
     }
 
@@ -211,6 +216,59 @@
         }
     });
 
+    // --- SMART FILTER LOGIC ---
+    function updateSizeOptions() {
+        const categories = Array.from(document.querySelectorAll('#filter-category input:checked')).map(cb => cb.value);
+        const sizeContainer = document.getElementById('filter-size');
+        const sizeBtn = document.querySelector('button[onclick="toggleFilter(\'size\')"]');
+
+        if (!sizeContainer) return;
+
+        // Default: Clothing sizes
+        let sizeHTML = '';
+        let showSize = true;
+
+        const isShoes = categories.includes('Schuhe') || categories.some(c => c.toLowerCase().includes('schuhe'));
+        const isElectronics = categories.includes('Elektronik');
+        const isClothing = categories.includes('Damen') || categories.includes('Herren') || categories.includes('Kinder') || categories.length === 0;
+
+        if (isElectronics && !isClothing && !isShoes) {
+            showSize = false;
+        } else if (isShoes && !categories.includes('Damen') && !categories.includes('Herren') && !categories.includes('Kinder')) {
+            // Only Shoes selected (or specific shoe category) - heuristic
+            // Generate numeric sizes 36-45
+            for (let i = 36; i <= 46; i++) {
+                sizeHTML += `<label class="filter-option"><input type="checkbox" value="${i}" onchange="applyFilters()"> ${i}</label>`;
+            }
+        } else {
+            // Default or Mixed or Clothing
+            sizeHTML = `
+                <label class="filter-option"><input type="checkbox" value="XS" onchange="applyFilters()"> XS</label>
+                <label class="filter-option"><input type="checkbox" value="S" onchange="applyFilters()"> S</label>
+                <label class="filter-option"><input type="checkbox" value="M" onchange="applyFilters()"> M</label>
+                <label class="filter-option"><input type="checkbox" value="L" onchange="applyFilters()"> L</label>
+                <label class="filter-option"><input type="checkbox" value="XL" onchange="applyFilters()"> XL</label>
+                <label class="filter-option"><input type="checkbox" value="XXL" onchange="applyFilters()"> XXL</label>
+            `;
+        }
+
+        if (showSize) {
+            sizeContainer.innerHTML = sizeHTML;
+            sizeBtn.parentElement.style.display = 'inline-block';
+        } else {
+            sizeBtn.parentElement.style.display = 'none';
+        }
+    }
+
+    // Listen for category changes to update sizes
+    document.querySelectorAll('#filter-category input').forEach(input => {
+        input.addEventListener('change', () => {
+            updateSizeOptions();
+            applyFilters();
+        });
+    });
+
+
     async function applyFilters() {
         const categories = Array.from(document.querySelectorAll('#filter-category input:checked')).map(cb => cb.value);
         const sizes = Array.from(document.querySelectorAll('#filter-size input:checked')).map(cb => cb.value);
@@ -218,28 +276,36 @@
         const minPrice = document.getElementById('price-min').value;
         const maxPrice = document.getElementById('price-max').value;
 
+        // Update Count Badges
+        document.getElementById('cat-count').textContent = categories.length > 0 ? `(${categories.length})` : '';
+
         // Show/Hide Clear Button
         const hasFilters = categories.length > 0 || sizes.length > 0 || conditions.length > 0 || minPrice || maxPrice;
         document.getElementById('clear-filters-btn').style.display = hasFilters ? 'block' : 'none';
 
-        // CLIENT-SIDE FILTERING (Since API might not support all complex queries yet)
+        // CLIENT-SIDE FILTERING
         if (window.loadedProducts) {
             const productsGrid = document.getElementById('productsGrid');
             if (!productsGrid) return;
 
-            // Restore all if needed (we need a master list, assume loadedProducts is it)
             let filtered = window.loadedProducts;
 
             if (categories.length > 0) {
-                filtered = filtered.filter(p => categories.some(c => p.category === c || (p.brand && p.brand.includes(c)) /* fallback logic */));
-                // Note: 'brand' isn't category. We might need better data mapping. 
-                // For now, let's filter by checking if name or brand contains text relevant to category? 
-                // Or better: The API call should have handled the main category. 
-                // If we are on Home, we have mixed. 
+                // Simplistic matching for demo. 
+                // If "Schuhe" is checked, we look for category or subcategory or name containing 'schuhe'
+                // But our checkboxes are 'Damen', 'Herren' etc.
+                // The user asked: "If Schuhe selected -> size 36-45". 
+                // We need a "Schuhe" option in the category dropdown or sub-dropdown.
+                // Current Category Dropdown has: Damen, Herren, Kinder, Elektronik.
+                // Let's assume user selects Damen AND maybe we add a 'Schuhe' option? 
+                // Or we infer from the loaded products?
+
+                // Since the request specifically mentioned "If 'Schuhe' is selected", I will ADD 'Schuhe' to the Category Dropdown dynamically or statically above.
+                filtered = filtered.filter(p => categories.some(c => p.category === c || p.category.includes(c) || (p.brand && p.brand.includes(c))));
             }
 
             if (sizes.length > 0) {
-                filtered = filtered.filter(p => sizes.includes(p.size));
+                filtered = filtered.filter(p => sizes.includes(p.size) || sizes.includes(String(p.size)));
             }
 
             if (conditions.length > 0) {
@@ -255,13 +321,11 @@
                 productsGrid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:40px;">Keine Produkte gefunden.</div>';
             } else {
                 filtered.forEach(product => {
-                    // createProductCard must be globally available
                     if (window.createProductCard) {
                         productsGrid.innerHTML += window.createProductCard(product);
                     }
                 });
                 if (window.attachProductEventListeners) window.attachProductEventListeners();
-                if (window.updateCartButtonStates) window.updateCartButtonStates();
             }
         }
     }
@@ -270,6 +334,7 @@
         document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
         document.getElementById('price-min').value = '';
         document.getElementById('price-max').value = '';
+        updateSizeOptions(); // Reset sizes
         applyFilters();
     }
 </script>
