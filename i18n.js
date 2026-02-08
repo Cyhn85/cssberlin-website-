@@ -211,3 +211,13 @@ window.I18n = {
 document.addEventListener('DOMContentLoaded', () => {
     window.I18n.init();
 });
+
+// GLOBAL EXPORT FOR HEADER BUTTON
+window.toggleLanguageDropdown = function () {
+    if (window.I18n) {
+        const newLang = window.I18n.currentLang === 'de' ? 'en' : 'de';
+        window.I18n.setLanguage(newLang);
+    } else {
+        console.warn('I18n system not ready.');
+    }
+};

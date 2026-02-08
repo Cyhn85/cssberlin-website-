@@ -1,12 +1,6 @@
 // GLOBAL FUNCTIONS (Defined immediately to prevent race conditions)
-window.toggleLanguageDropdown = function () {
-    if (window.I18n) {
-        const newLang = window.I18n.currentLang === 'de' ? 'en' : 'de';
-        window.I18n.setLanguage(newLang);
-    } else {
-        console.warn('I18n not ready yet');
-    }
-};
+// GLOBAL FUNCTIONS (Defined immediately to prevent race conditions)
+// window.toggleLanguageDropdown is now defined in i18n.js to ensure consistent scope access.
 
 document.addEventListener('DOMContentLoaded', async function () {
     console.log('[Components] Initializing component loader...');
