@@ -2,6 +2,7 @@
 <html lang="de" class="scroll-smooth">
 
 <head>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Produktdetails - CSS Berlin</title>
@@ -403,23 +404,7 @@
 
 <body>
 
-    <header class="header-v3">
-        <div class="header-row-logo">
-            <a href="index.html" class="logo-v3"><span class="logo-css">CSS</span><span
-                    class="logo-berlin">berlin</span></a>
-            <div class="header-right-v3">
-                <a href="wunschliste.html" class="header-icon-v3"><i data-lucide="heart"></i></a>
-                <a href="warenkorb.html" class="header-icon-v3"><i data-lucide="shopping-cart"></i></a>
-                <button type="button" class="btn-anmelden-v3" id="header-login-btn">Anmelden</button>
-                <div id="user-button-container"></div>
-            </div>
-        </div>
-        <!-- Simple nav for context -->
-        <nav class="nav-bar-v3" style="justify-content: center; padding: 10px 0;">
-            <a href="index.html" style="text-decoration: none; color: #666; font-size: 13px; font-weight: 600;">← Zurück
-                zur Übersicht</a>
-        </nav>
-    </header>
+    <div id="header-placeholder"></div>
 
     <!-- PRODUCT DETAIL CONTENT -->
     <div class="pd-container">
@@ -522,29 +507,7 @@
     </div>
 
     <!-- FOOTER V3 -->
-    <footer class="footer-v3">
-        <div class="footer-v3-container">
-            <div class="footer-col">
-                <h4>CSS Berlin</h4>
-                <a href="ueber-uns.html">Über uns</a>
-                <a href="nachhaltigkeit.html">Nachhaltigkeit</a>
-                <a href="presse.html">Presse</a>
-            </div>
-            <div class="footer-col">
-                <h4>Entdecken</h4>
-                <a href="wie-funktioniert-es.html">Wie funktioniert's?</a>
-                <a href="verifizierung.html">Echtheitsprüfung</a>
-            </div>
-            <div class="footer-col">
-                <h4>Hilfe</h4>
-                <a href="hilfe-center.html">Hilfe-Center</a>
-                <a href="sicherheit.html">Sicherheit</a>
-            </div>
-        </div>
-        <div class="footer-bottom-v3">
-            <p>&copy; 2026 CSS Berlin. Alle Rechte vorbehalten.</p>
-        </div>
-    </footer>
+    <div id="footer-placeholder"></div>
 
     <!-- SCRIPTS -->
     <script>
@@ -591,6 +554,8 @@
             lucide.createIcons();
         });
     </script>
+<script src="smart-header.js"></script>
+    <script src="components.js"></script>
 </body>
 
 </html>

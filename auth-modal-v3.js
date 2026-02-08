@@ -112,10 +112,16 @@ window.addEventListener("load", async function () {
                 // Konteyner temizle (dublike olmaması için)
                 userContainer.innerHTML = '';
 
-                window.Clerk.mountUserButton(userContainer, {
-                    afterSignOutUrl: "/",
-                    signInUrl: "/" // Çıkış yapınca ana sayfaya dön
-                });
+                // CUSTOM USER MENU (Vinted Style)
+                if (window.UserMenu) {
+                    window.UserMenu.init(window.Clerk.user);
+                } else {
+                    // Fallback if UserMenu script is missing
+                    window.Clerk.mountUserButton(userContainer, {
+                        afterSignOutUrl: "/",
+                        signInUrl: "/"
+                    });
+                }
             }
 
         } else {

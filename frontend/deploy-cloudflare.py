@@ -60,7 +60,7 @@ def main():
     print()
 
     print("5. Environment Variables (Optional):")
-    print("   API_URL = http://195.201.146.224:8000")
+    print("   API_URL = https://195.201.146.224:8000")
     print()
 
     print("6. Click 'Save and Deploy'")

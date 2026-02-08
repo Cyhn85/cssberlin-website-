@@ -17,7 +17,7 @@ class StaticServerInfo:
 
     @property
     def base_url(self) -> str:
-        return f"http://{self.host}:{self.port}"
+        return f"https://{self.host}:{self.port}"
 
 
 class StaticServer:

@@ -1,1537 +1,561 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anzeige aufgeben - CSS Berlin</title>
+    <title>Smarter Inserieren - CSS Berlin</title>
+
+    <!-- Core Styles -->
     <link rel="stylesheet" href="styles.css?v=2030">
-    <!-- header-v2.css KALDIRILDI - Sadece V3 aktif -->
     <link rel="stylesheet" href="header-v3.css">
-    <link rel="stylesheet" href="auth-modal.css">
-    <link rel="stylesheet" href="footer-kleinanzeigen.css">
+    <link rel="stylesheet" href="footer-v3.css">
+    <link rel="stylesheet" href="auth-modal-v3.css">
+    <link rel="stylesheet" href="gradient-button.css">
+
+    <!-- Dependencies -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="api-config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+        data-clerk-publishable-key="pk_test_c3VwZXItd2FzcC04NS5jbGVyay5hY2NvdW50cy5kZXYk"></script>
+
     <style>
-        * { box-sizing: border-box; }
-        body { background: #f5f5f5; min-height: 100vh; }
+        /* CSS Berlin "Smart Flow" Styles */
+        body {
+            background-color: #f9fafb;
+            font-family: 'Inter', sans-serif;
+        }
 
-        .inserieren-page {
+        .upload-container {
             max-width: 800px;
-            margin: 0 auto;
-            padding: 24px 20px 60px;
+            margin: 40px auto;
+            padding: 0 20px;
         }
 
-        .page-header {
-            margin-bottom: 24px;
-        }
-
-        .page-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: #333;
-            margin: 0;
-        }
-
-        /* Form Section */
-        .form-section {
+        /* STEP 1: SMART UPLOAD */
+        .smart-upload-zone {
             background: white;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            border: 1px solid #e0e0e0;
-        }
-
-        .form-section-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #333;
-            padding: 20px 24px;
-            border-bottom: 1px solid #e0e0e0;
-            margin: 0;
-        }
-
-        .form-section-body {
-            padding: 0;
-        }
-
-        /* Form Row - Kleinanzeigen Style */
-        .form-row {
-            display: flex;
-            padding: 16px 24px;
-            border-bottom: 1px solid #f0f0f0;
-            align-items: flex-start;
-        }
-
-        .form-row:last-child {
-            border-bottom: none;
-        }
-
-        .form-label {
-            width: 160px;
-            flex-shrink: 0;
-            padding-top: 10px;
-            font-size: 14px;
-            color: #333;
-            font-weight: 500;
-        }
-
-        .form-label.required::after {
-            content: ' *';
-            color: #E8854C;
-        }
-
-        .form-field {
-            flex: 1;
-        }
-
-        .form-tip {
-            font-size: 12px;
-            color: #666;
-            margin-top: 6px;
-            line-height: 1.4;
-        }
-
-        .form-tip a {
-            color: #2D5016;
-        }
-
-        /* Input Styles */
-        .form-input,
-        .form-textarea,
-        .form-select {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-            font-family: inherit;
-            transition: border-color 0.2s;
-        }
-
-        .form-input:focus,
-        .form-textarea:focus,
-        .form-select:focus {
-            outline: none;
-            border-color: #2D5016;
-        }
-
-        .form-input::placeholder {
-            color: #999;
-        }
-
-        .form-textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        .form-select {
-            appearance: none;
-            background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%23666'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 12px center;
-            padding-right: 32px;
+            border: 2px dashed #E5E7EB;
+            border-radius: 24px;
+            padding: 60px 20px;
+            text-align: center;
             cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Radio/Checkbox Group */
-        .radio-group {
-            display: flex;
+        .smart-upload-zone:hover {
+            border-color: #2D5016;
+            background: #f0fdf4;
+        }
+
+        .smart-upload-zone.analyzing::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #2D5016, #FF8C42, #2D5016);
+            background-size: 200% 100%;
+            animation: loadingGradient 2s infinite linear;
+        }
+
+        @keyframes loadingGradient {
+            0% {
+                background-position: 100% 0;
+            }
+
+            100% {
+                background-position: -100% 0;
+            }
+        }
+
+        .ai-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #FF8C42 0%, #FF6B6B 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(255, 140, 66, 0.3);
+        }
+
+        /* SUCCESS STATE */
+        .analysis-success {
+            display: none;
+            background: #DCFCE7;
+            border: 1px solid #2D5016;
+            color: #166534;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            align-items: center;
+            gap: 12px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* FORM SECTIONS */
+        .form-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            padding: 32px;
+            margin-bottom: 24px;
+            opacity: 0.5;
+            /* Disabled initially */
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .form-card.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 24px;
         }
 
-        .radio-item {
+        .input-group {
             display: flex;
-            align-items: center;
+            flex-direction: column;
             gap: 8px;
-            cursor: pointer;
         }
 
-        .radio-item input {
-            width: 18px;
-            height: 18px;
-            accent-color: #2D5016;
+        .input-group.full {
+            grid-column: 1 / -1;
         }
 
-        /* Price Input */
-        .price-row {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-
-        .price-input-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .price-input {
-            width: 120px;
-            text-align: right;
-        }
-
-        .price-currency {
+        label {
             font-weight: 600;
-            color: #333;
-        }
-
-        .price-type-select {
-            width: 160px;
-        }
-
-        /* Character Counter */
-        .char-counter {
-            text-align: right;
-            font-size: 12px;
-            color: #999;
-            margin-top: 4px;
-        }
-
-        /* Image Upload - Kleinanzeigen Style */
-        .image-upload-area {
-            padding: 24px;
-        }
-
-        .image-dropzone {
-            border: 2px dashed #ccc;
-            border-radius: 8px;
-            padding: 40px 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            background: #fafafa;
-        }
-
-        .image-dropzone:hover {
-            border-color: #2D5016;
-            background: #f5fff5;
-        }
-
-        .image-dropzone-icon {
-            width: 48px;
-            height: 48px;
-            margin: 0 auto 12px;
-            color: #999;
-        }
-
-        .image-dropzone-text {
             font-size: 14px;
-            color: #666;
+            color: #374151;
         }
 
-        .image-dropzone-text span {
-            color: #2D5016;
-            text-decoration: underline;
-            cursor: pointer;
+        input,
+        select,
+        textarea {
+            padding: 12px 16px;
+            border: 1px solid #E5E7EB;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.2s;
         }
 
-        .image-preview-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 16px;
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #2D5016;
+            box-shadow: 0 0 0 3px rgba(45, 80, 22, 0.1);
         }
 
-        .image-preview-item {
-            width: 100px;
-            height: 100px;
-            border-radius: 4px;
-            overflow: hidden;
-            position: relative;
-            border: 1px solid #e0e0e0;
-        }
-
-        .image-preview-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .image-preview-remove {
-            position: absolute;
-            top: 4px;
-            right: 4px;
-            width: 24px;
-            height: 24px;
-            background: rgba(0,0,0,0.6);
-            border: none;
-            border-radius: 50%;
+        /* ECO IMPACT CARD */
+        .eco-impact-card {
+            background: linear-gradient(135deg, #134E4A 0%, #065F46 100%);
             color: white;
-            cursor: pointer;
+            padding: 24px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 14px;
-        }
-
-        .image-hint {
-            font-size: 12px;
-            color: #666;
+            justify-content: space-between;
             margin-top: 12px;
         }
 
-        /* Category Picker Button */
-        .category-picker-btn {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background: white;
-            text-align: left;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 14px;
-            color: #333;
-            transition: border-color 0.2s;
+        .eco-stat {
+            text-align: center;
         }
 
-        .category-picker-btn:hover {
-            border-color: #2D5016;
+        .eco-stat .value {
+            font-size: 24px;
+            font-weight: 800;
         }
 
-        .category-picker-btn.placeholder {
-            color: #999;
-        }
-
-        .category-picker-btn svg {
-            width: 16px;
-            height: 16px;
-            color: #666;
-        }
-
-        /* Category Picker Modal - Vinted Style */
-        .category-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 9999;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .category-modal.open {
-            display: flex;
-        }
-
-        .category-modal-content {
-            background: white;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 480px;
-            max-height: 80vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-
-        .category-modal-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid #e0e0e0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .category-modal-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #333;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .category-back-btn {
-            width: 32px;
-            height: 32px;
-            border: none;
-            background: #f5f5f5;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s;
-        }
-
-        .category-back-btn:hover {
-            background: #e0e0e0;
-        }
-
-        .category-close-btn {
-            width: 32px;
-            height: 32px;
-            border: none;
-            background: none;
-            cursor: pointer;
-            color: #666;
-        }
-
-        .category-search {
-            padding: 12px 20px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .category-search-input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
-            background: #f5f5f5;
-        }
-
-        .category-search-input:focus {
-            outline: none;
-            border-color: #2D5016;
-            background: white;
-        }
-
-        .category-list {
-            flex: 1;
-            overflow-y: auto;
-            padding: 8px 0;
-        }
-
-        .category-item {
-            display: flex;
-            align-items: center;
-            padding: 14px 20px;
-            cursor: pointer;
-            transition: background 0.2s;
-            gap: 14px;
-        }
-
-        .category-item:hover {
-            background: #f5f5f5;
-        }
-
-        .category-item-icon {
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #2D5016;
-        }
-
-        .category-item-icon svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        .category-item-name {
-            flex: 1;
-            font-size: 15px;
-            color: #333;
-        }
-
-        .category-item-arrow {
-            color: #999;
-        }
-
-        .category-item-radio {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #ccc;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .category-item.selected .category-item-radio {
-            border-color: #2D5016;
-        }
-
-        .category-item.selected .category-item-radio::after {
-            content: '';
-            width: 10px;
-            height: 10px;
-            background: #2D5016;
-            border-radius: 50%;
-        }
-
-        /* Smart Suggestions */
-        .smart-suggestions {
-            padding: 12px 20px;
-            background: #fff9e6;
-            border-bottom: 1px solid #ffe082;
-        }
-
-        .smart-suggestions-title {
+        .eco-stat .label {
             font-size: 12px;
-            color: #666;
+            opacity: 0.9;
+        }
+
+        /* PRICE BREAKDOWN */
+        .price-breakdown {
+            background: #F9FAFB;
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 16px;
+            font-size: 14px;
+            color: #4B5563;
+        }
+
+        .breakdown-row {
+            display: flex;
+            justify-content: space-between;
             margin-bottom: 8px;
         }
 
-        .smart-suggestions-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .smart-suggestion-chip {
-            padding: 6px 12px;
-            background: white;
-            border: 1px solid #E8854C;
-            border-radius: 16px;
-            font-size: 13px;
-            color: #E8854C;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .smart-suggestion-chip:hover {
-            background: #E8854C;
-            color: white;
-        }
-
-        /* Location Fields */
-        .location-row {
-            display: flex;
-            gap: 12px;
-        }
-
-        .plz-input {
-            width: 100px;
-        }
-
-        .city-display {
-            flex: 1;
-            padding: 10px 0;
-            color: #2D5016;
-            font-weight: 500;
-        }
-
-        /* Action Buttons */
-        .form-actions {
-            display: flex;
-            gap: 12px;
-            padding: 24px;
-            background: white;
-            border-radius: 4px;
-            border: 1px solid #e0e0e0;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .btn-preview {
-            padding: 12px 24px;
-            background: white;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-
-        .btn-preview:hover {
-            background: #f5f5f5;
-            transform: translateY(-2px);
-        }
-
-        .btn-draft {
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #E8854C 0%, #d4753d 100%);
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
-        }
-
-        .btn-draft:hover {
-            background: linear-gradient(135deg, #2D5016 0%, #3d6b1e 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(45, 80, 22, 0.3);
+        .breakdown-row.total {
+            border-top: 1px solid #E5E7EB;
+            padding-top: 8px;
+            font-weight: 700;
+            font-size: 16px;
+            color: #111827;
         }
 
         .btn-publish {
-            padding: 12px 32px;
-            background: linear-gradient(135deg, #E8854C 0%, #d4753d 100%);
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
+            width: 100%;
+            padding: 16px;
+            background: #2D5016;
             color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: transform 0.2s;
         }
 
         .btn-publish:hover {
-            background: linear-gradient(135deg, #2D5016 0%, #3d6b1e 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(45, 80, 22, 0.3);
+            transform: scale(1.02);
+            background: #3d6b1e;
         }
 
-        /* Mobile */
-        @media (max-width: 768px) {
-            .form-row {
-                flex-direction: column;
-                gap: 8px;
-            }
-
-            .form-label {
-                width: 100%;
-                padding-top: 0;
-            }
-
-            .price-row {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .location-row {
-                flex-direction: column;
-            }
-
-            .plz-input {
-                width: 100%;
-            }
-
-            .form-actions {
-                flex-direction: column;
-            }
-
-            .category-modal-content {
-                max-width: 100%;
-                height: 100%;
-                max-height: 100%;
-                border-radius: 0;
-            }
-        }
-
-        /* Header Action Buttons - Green to Orange Hover */
-        .header-action-btn {
-            padding: 10px 20px;
-            background: linear-gradient(135deg, #2D5016 0%, #3d6b1e 100%);
-            color: white;
-            border: 1.5px solid rgba(255, 255, 255, 0.4);
-            border-radius: 8px;
+        /* Thumbnail Gallery */
+        .thumbnail-gallery {
             display: flex;
-            align-items: center;
             gap: 10px;
-            font-weight: 600;
-            font-size: 14px;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(45, 80, 22, 0.3);
+            margin-top: 20px;
+            flex-wrap: wrap;
         }
 
-        .header-action-btn:hover {
-            background: linear-gradient(135deg, #E8854C 0%, #d4753d 100%);
-            border-color: rgba(255, 255, 255, 0.6);
-            box-shadow: 0 4px 15px rgba(232, 133, 76, 0.4);
-            transform: translateY(-2px);
+        .thumb {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 2px solid #e5e5e5;
         }
     </style>
 </head>
+
 <body>
-    <!-- Header V3 - Modern Gradient Design -->
-    <header class="header-v3">
-        <!-- Logo Row -->
-        <div class="header-row-logo">
-            <!-- Logo -->
-            <a href="index.html" class="logo-v3">
-                <span class="logo-css">CSS</span><span class="logo-berlin">berlin</span>
-            </a>
 
-            <!-- Right Actions -->
-            <div class="header-right-v3">
-                <!-- Favorites -->
-                <a href="wunschliste.html" class="header-icon-v3" title="Favoriten">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                    </svg>
-                </a>
+    <!-- Header will be injected by component loader or script -->
+    <div id="header-placeholder"></div>
+    <!-- Standard Header V3 (Static Fallback) -->
+    <div id="header-placeholder"></div>
 
-                <!-- Negotiations -->
-                <a href="meine-anzeigen.html?tab=negotiations" class="header-icon-v3" title="Verhandlungen">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M17 10H3"></path>
-                        <path d="M21 6H3"></path>
-                        <path d="M21 14H3"></path>
-                        <path d="M17 18H3"></path>
-                    </svg>
-                </a>
+    <div class="upload-container">
+        <h1 style="font-size: 28px; font-weight: 800; margin-bottom: 8px;">Verkaufen & Klima schützen</h1>
+        <p style="color: #666; margin-bottom: 32px;">Lade Fotos hoch – unsere KI erledigt den Rest (Simulation).</p>
 
-                <!-- Edit/Pen Icon -->
-                <a href="inserieren.html" class="header-icon-v3" title="Inserieren">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                    </svg>
-                </a>
+        <!-- STEP 1: PHOTO UPLOAD -->
+        <div class="smart-upload-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+            <div class="ai-badge">✨ AI-POWERED</div>
+            <h3 style="font-size: 20px; font-weight: 700; color: #111827; margin-bottom: 8px;">Fotos hierher ziehen</h3>
+            <p style="color: #6B7280; font-size: 14px;">oder klicken zum Auswählen</p>
+            <input type="file" id="fileInput" hidden multiple accept="image/*">
 
-                <!-- Cart -->
-                <a href="warenkorb.html" class="header-icon-v3" title="Warenkorb">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="9" cy="21" r="1"></circle>
-                        <circle cx="20" cy="21" r="1"></circle>
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                    </svg>
-                </a>
+            <div class="thumbnail-gallery" id="thumbnailGallery"></div>
+        </div>
 
-                <!-- Anmelden Button -->
-                <button type="button" class="btn-anmelden-v3" id="btnAnmeldenV3" onclick="authModal.open('login')">Anmelden</button>
+        <div class="analysis-success" id="analysisSuccess">
+            <i data-lucide="check-circle"></i>
+            <div>
+                <strong>Analyse abgeschlossen!</strong>
+                <span id="aiResultText">Wir haben einen <b>Sneaker</b> von <b>Nike</b> erkannt.</span>
             </div>
         </div>
 
-        <!-- Search Row -->
-        <div class="header-row-search">
-            <!-- Dark Mode Toggle -->
-            <button class="dark-mode-toggle-v3" id="darkModeToggle" title="Modus wechseln"></button>
+        <!-- STEP 2: DETAILS (Initially Disabled) -->
+        <div class="form-card" id="detailsCard">
+            <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 20px;">Produktdetails</h3>
 
-            <!-- Language Selector -->
-            <button class="lang-selector-v3" onclick="toggleLanguageDropdown()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="2" y1="12" x2="22" y2="12"></line>
-                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                </svg>
-                <span>DE</span>
+            <div class="form-grid">
+                <div class="input-group full">
+                    <label>Titel</label>
+                    <input type="text" id="titleInput" placeholder="Was verkaufst du?">
+                </div>
+
+                <div class="input-group">
+                    <label>Kategorie</label>
+                    <select id="categorySelect" onchange="updateDynamicAttributes()">
+                        <option value="">Bitte wählen...</option>
+                        <option value="clothing">Kleidung</option>
+                        <option value="shoes">Schuhe</option>
+                        <option value="electronics">Elektronik</option>
+                        <option value="home">Zuhause</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Zustand</label>
+                    <select id="conditionSelect">
+                        <option value="new">Neu mit Etikett</option>
+                        <option value="very_good">Sehr gut</option>
+                        <option value="good">Gut</option>
+                        <option value="fair">Akzeptabel</option>
+                    </select>
+                </div>
+
+                <!-- DYNAMIC ATTRIBUTES AREA -->
+                <div class="input-group" id="attrBrandGroup" style="display:none;">
+                    <label>Marke</label>
+                    <select id="brandSelect">
+                        <option value="">Marke wählen...</option>
+                        <option value="Nike">Nike</option>
+                        <option value="Adidas">Adidas</option>
+                        <option value="Zara">Zara</option>
+                        <option value="Other">Andere</option>
+                    </select>
+                </div>
+
+                <div class="input-group" id="attrSizeGroup" style="display:none;">
+                    <label>Größe</label>
+                    <select id="sizeSelect">
+                        <option value="">Größe wählen...</option>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="42">42</option>
+                    </select>
+                </div>
+
+                <div class="input-group full">
+                    <label>Material (für CO2-Berechnung)</label>
+                    <select id="materialSelect" onchange="updateSustainability()">
+                        <option value="">Bitte wählen...</option>
+                        <option value="cotton">Baumwolle (Cotton)</option>
+                        <option value="polyester">Polyester</option>
+                        <option value="leather">Leder</option>
+                        <option value="wool">Wolle</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- ECO IMPACT PREVIEW -->
+            <div class="eco-impact-card" id="ecoImpactCard" style="opacity: 0.5;">
+                <div>
+                    <i data-lucide="leaf" style="margin-bottom: 8px;"></i>
+                    <div style="font-weight: 600;">Klima-Impact</div>
+                </div>
+                <div class="eco-stat">
+                    <div class="value" id="waterSavedVal">0 L</div>
+                    <div class="label">Wasser gespart</div>
+                </div>
+                <div class="eco-stat">
+                    <div class="value" id="co2SavedVal">0 kg</div>
+                    <div class="label">CO2 vermieden</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 3: PRICING & SHIPPING -->
+        <div class="form-card" id="pricingCard">
+            <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 20px;">Preis & Versand</h3>
+
+            <div class="form-grid">
+                <div class="input-group">
+                    <label>Preis (€)</label>
+                    <input type="number" id="priceInput" placeholder="0.00" step="0.50" oninput="calculateEarnings()">
+                </div>
+
+                <div class="input-group">
+                    <label>Versandart</label>
+                    <select id="shippingSelect" onchange="calculateEarnings()">
+                        <option value="small">Klein (Großbrief) - 1.60 €</option>
+                        <option value="medium">Mittel (Päckchen) - 4.79 €</option>
+                        <option value="large">Groß (Paket versichert) - 6.99 €</option>
+                    </select>
+                    <small style="color:#666; margin-top:4px;" id="shippingNote">Wird vom Käufer gezahlt.</small>
+                </div>
+            </div>
+
+            <div class="price-breakdown">
+                <div class="breakdown-row">
+                    <span>Verkaufspreis</span>
+                    <span id="displayPrice">0.00 €</span>
+                </div>
+                <div class="breakdown-row" style="color:#EF4444;">
+                    <span>Plattformgebühr (0%)</span>
+                    <span>-0.00 €</span>
+                </div>
+                <div class="breakdown-row total">
+                    <span>Dein Gewinn</span>
+                    <span id="displayEarnings" style="color:#2D5016;">0.00 €</span>
+                </div>
+            </div>
+
+            <button class="btn-publish" style="margin-top: 24px;" onclick="publishListing()">
+                Kostenlos Inserieren
             </button>
-
-            <!-- Category Dropdown -->
-            <button class="category-dropdown-v3">
-                <span>Alle Kategorien</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-            </button>
-
-            <!-- Search Input -->
-            <div class="search-input-v3">
-                <input type="text" placeholder="CLIMATE SMART SOLUTIONS" id="searchInputV3">
-                <button class="search-btn-icon" title="Sprachsuche">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
-                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                        <line x1="12" y1="19" x2="12" y2="23"></line>
-                        <line x1="8" y1="23" x2="16" y2="23"></line>
-                    </svg>
-                </button>
-                <button class="search-btn-icon" title="Bildsuche">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                        <circle cx="12" cy="13" r="4"></circle>
-                    </svg>
-                </button>
-            </div>
-
-            <!-- Filter Button -->
-            <button class="filter-btn-v3">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="4" y1="21" x2="4" y2="14"></line>
-                    <line x1="4" y1="10" x2="4" y2="3"></line>
-                    <line x1="12" y1="21" x2="12" y2="12"></line>
-                    <line x1="12" y1="8" x2="12" y2="3"></line>
-                    <line x1="20" y1="21" x2="20" y2="16"></line>
-                    <line x1="20" y1="12" x2="20" y2="3"></line>
-                    <line x1="1" y1="14" x2="7" y2="14"></line>
-                    <line x1="9" y1="8" x2="15" y2="8"></line>
-                    <line x1="17" y1="16" x2="23" y2="16"></line>
-                </svg>
-                Filter
-            </button>
-
-            <!-- Search Submit -->
-            <button class="search-submit-v3">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <path d="M21 21l-4.35-4.35"></path>
-                </svg>
-            </button>
         </div>
 
-        <!-- Navigation Bar -->
-        <nav class="nav-bar-v3">
-            <div class="nav-container-v3">
-                <a href="damen.html" class="nav-link-v3">DAMEN</a>
-                <a href="herren.html" class="nav-link-v3">HERREN</a>
-                <a href="kinder.html" class="nav-link-v3">KINDER</a>
-                <a href="elektronik.html" class="nav-link-v3">ELEKTRONIK</a>
-                <a href="sale.html" class="nav-link-v3 sale">SALE</a>
-                <a href="wie-funktioniert.html" class="nav-link-v3">WIE FUNKTIONIERT'S</a>
-            </div>
-        </nav>
-    </header>
-
-    <div class="inserieren-page">
-        <div class="page-header">
-            <h1 class="page-title">Anzeige aufgeben</h1>
-        </div>
-
-        <!-- Anzeigendetails -->
-        <div class="form-section">
-            <h2 class="form-section-title">Anzeigendetails</h2>
-            <div class="form-section-body">
-                <!-- Titel -->
-                <div class="form-row">
-                    <div class="form-label required">Titel</div>
-                    <div class="form-field">
-                        <input type="text" id="productTitle" class="form-input" placeholder="" maxlength="80">
-                        <div class="form-tip">Tipp: Mit einem aussagekraftigen Titel verkaufst du besser.</div>
-                    </div>
-                </div>
-
-                <!-- Kategorie -->
-                <div class="form-row">
-                    <div class="form-label required">Kategorie</div>
-                    <div class="form-field">
-                        <button type="button" class="category-picker-btn placeholder" id="categoryPickerBtn" onclick="openCategoryModal()">
-                            <span id="selectedCategoryText">Wahle deine Kategorie</span>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </button>
-                        <input type="hidden" id="selectedCategory" value="">
-                    </div>
-                </div>
-
-                <!-- Preis -->
-                <div class="form-row">
-                    <div class="form-label required">Preis</div>
-                    <div class="form-field">
-                        <div class="price-row">
-                            <div class="price-input-wrapper">
-                                <input type="number" id="price" class="form-input price-input" placeholder=",00" step="0.01" min="0">
-                                <span class="price-currency">EUR</span>
-                            </div>
-                            <select id="priceType" class="form-select price-type-select">
-                                <option value="festpreis">Festpreis</option>
-                                <option value="vb">VB (Verhandlungsbasis)</option>
-                                <option value="verschenken">Zu verschenken</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Beschreibung -->
-                <div class="form-row">
-                    <div class="form-label">Beschreibung</div>
-                    <div class="form-field">
-                        <textarea id="productDesc" class="form-textarea" placeholder="" maxlength="4000" oninput="updateCharCounter()"></textarea>
-                        <div class="char-counter"><span id="charCount">0</span> / 4000 Zeichen</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Bilder -->
-        <div class="form-section">
-            <h2 class="form-section-title">Bilder (empfohlen)</h2>
-            <div class="image-upload-area">
-                <div class="image-dropzone" onclick="document.getElementById('imageInput').click()">
-                    <div class="image-dropzone-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                            <polyline points="21 15 16 10 5 21"></polyline>
-                        </svg>
-                    </div>
-                    <div class="image-dropzone-text">
-                        Drag & Drop<br>
-                        oder <span>Fotos hochladen</span>
-                    </div>
-                </div>
-                <div class="image-preview-grid" id="imagePreviewGrid"></div>
-                <input type="file" id="imageInput" accept="image/*" multiple style="display: none;" onchange="handleImageUpload(event)">
-                <p class="image-hint">
-                    Tipp: Fuge bis zu 20 Bilder (max. 12 MB) per Upload oder Drag & Drop hinzu.
-                    Fur bessere Ergebnisse helfen dir unsere <a href="#">Fototipps</a>
-                </p>
-                <p style="font-size: 12px; color: #999; margin-top: 8px;">
-                    <em>Verschieben, um die Reihenfolge zu andern</em>
-                </p>
-            </div>
-        </div>
-
-        <!-- Ort -->
-        <div class="form-section">
-            <h2 class="form-section-title">Ort</h2>
-            <div class="form-section-body">
-                <div class="form-row">
-                    <div class="form-label required">PLZ</div>
-                    <div class="form-field">
-                        <div class="location-row">
-                            <input type="text" id="plz" class="form-input plz-input" placeholder="z.B. 10115" maxlength="5" oninput="lookupPLZ()">
-                            <div class="city-display" id="cityDisplay">Berlin - Mitte</div>
-                        </div>
-                        <div class="form-tip">
-                            Tipp: Standardmassig zeigen wir nur die Postleitzahl und den Ort an.
-                        </div>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-label">Strasse/Nr. (optional)</div>
-                    <div class="form-field">
-                        <input type="text" id="street" class="form-input" placeholder="">
-                        <label style="display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 13px; color: #666;">
-                            <input type="checkbox" id="showFullAddress">
-                            Vollstandige Adresse anzeigen
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Versand & Abholung -->
-        <div class="form-section" id="deliverySection">
-            <h2 class="form-section-title">
-                <span style="display: flex; align-items: center; gap: 8px;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2D5016" stroke-width="2">
-                        <rect x="1" y="3" width="15" height="13"></rect>
-                        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
-                        <circle cx="5.5" cy="18.5" r="2.5"></circle>
-                        <circle cx="18.5" cy="18.5" r="2.5"></circle>
-                    </svg>
-                    Versand & Abholung
-                </span>
-            </h2>
-            <div class="form-section-body" style="padding: 20px 24px;">
-                <!-- Versand Option -->
-                <label class="delivery-option selected" id="versandOption" onclick="selectDeliveryOption('versand')">
-                    <input type="radio" name="deliveryType" value="versand" checked>
-                    <div class="delivery-option-content">
-                        <div class="delivery-option-label">Versand (DHL/Hermes)</div>
-                        <div class="delivery-option-desc">Artikel wird deutschlandweit versendet</div>
-                    </div>
-                </label>
-
-                <!-- Abholung Option (Berlin only) -->
-                <label class="delivery-option" id="abholungOption" onclick="selectDeliveryOption('abholung')">
-                    <input type="radio" name="deliveryType" value="abholung">
-                    <div class="delivery-option-content">
-                        <div class="delivery-option-label">Abholung in Berlin</div>
-                        <div class="delivery-option-desc">Kaufer holt den Artikel vor Ort ab</div>
-                        <div class="delivery-option-fee">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                            </svg>
-                            1€ Sichere-Termin-Gebuhr
-                        </div>
-                        <div class="berlin-only-notice" id="berlinNotice">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                <circle cx="12" cy="10" r="3"></circle>
-                            </svg>
-                            Nur fur Berlin verfugbar (PLZ 10xxx-14xxx)
-                        </div>
-                    </div>
-                </label>
-
-                <!-- Both Option -->
-                <label class="delivery-option" id="bothOption" onclick="selectDeliveryOption('both')">
-                    <input type="radio" name="deliveryType" value="both">
-                    <div class="delivery-option-content">
-                        <div class="delivery-option-label">Versand + Abholung</div>
-                        <div class="delivery-option-desc">Beide Optionen anbieten</div>
-                    </div>
-                </label>
-
-                <!-- Scraped Product Warning (hidden by default) -->
-                <div id="scrapedWarning" style="display: none; margin-top: 16px; padding: 12px 16px; background: #FFF3E0; border-radius: 8px; border-left: 4px solid #FF9800;">
-                    <div style="display: flex; align-items: center; gap: 8px; color: #E65100; font-size: 13px;">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="12" y1="8" x2="12" y2="12"></line>
-                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                        </svg>
-                        <span>Abholung ist fur importierte Produkte nicht verfugbar.</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Disclaimer -->
-        <div style="padding: 16px 0; font-size: 13px; color: #666; line-height: 1.5;">
-            Es gelten unsere <a href="agb.html" style="color: #2D5016;">Nutzungsbedingungen</a>.
-            Informationen zur Verarbeitung deiner Daten findest du in unserer <a href="datenschutz.html" style="color: #2D5016;">Datenschutzerklarung</a>.
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="form-actions">
-            <button class="btn-preview" onclick="showPreview()">Vorschau</button>
-            <button class="btn-draft" onclick="saveDraft()">Entwurf speichern</button>
-            <button class="btn-publish" onclick="publishArticle()">Anzeige aufgeben</button>
-        </div>
     </div>
 
-    <!-- Category Picker Modal - Vinted Style -->
-    <div class="category-modal" id="categoryModal">
-        <div class="category-modal-content">
-            <div class="category-modal-header">
-                <h3 class="category-modal-title">
-                    <button class="category-back-btn" id="categoryBackBtn" onclick="goBackCategory()" style="display: none;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="15 18 9 12 15 6"></polyline>
-                        </svg>
-                    </button>
-                    <span id="categoryModalTitle">Wahle eine Kategorie</span>
-                </h3>
-                <button class="category-close-btn" onclick="closeCategoryModal()">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                </button>
-            </div>
+    <!-- Frontend Logic for Smart Flow -->
+    <script>
+        // --- 1. IMAGE RECOGNITION SIMULATION ---
+        const fileInput = document.getElementById('fileInput');
+        const dropZone = document.getElementById('dropZone');
+        const gallery = document.getElementById('thumbnailGallery');
+        const detailsCard = document.getElementById('detailsCard');
+        const pricingCard = document.getElementById('pricingCard');
+        const analysisSuccess = document.getElementById('analysisSuccess');
+        const aiResultText = document.getElementById('aiResultText');
 
-            <div class="category-search">
-                <input type="text" class="category-search-input" id="categorySearchInput" placeholder="Finde eine Kategorie" oninput="searchCategories()">
-            </div>
+        // Form Fields
+        const titleInput = document.getElementById('titleInput');
+        const categorySelect = document.getElementById('categorySelect');
 
-            <!-- Smart Suggestions (shown when title has keywords) -->
-            <div class="smart-suggestions" id="smartSuggestions" style="display: none;">
-                <div class="smart-suggestions-title">Vorschlage basierend auf deinem Titel:</div>
-                <div class="smart-suggestions-list" id="smartSuggestionsList"></div>
-            </div>
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                simulateAnalysis(e.target.files[0]);
 
-            <div class="category-list" id="categoryList">
-                <!-- Categories will be populated by JavaScript -->
-            </div>
-        </div>
-    </div>
+                // Show Thumbnail
+                Array.from(e.target.files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'thumb';
+                        gallery.appendChild(img);
+                    }
+                    reader.readAsDataURL(file);
+                });
+            }
+        });
+
+        function simulateAnalysis(file) {
+            dropZone.classList.add('analyzing');
+
+            // Simulate 1.5s delay for "AI"
+            setTimeout(() => {
+                dropZone.classList.remove('analyzing');
+
+                // Mock Prediction based on nothing (Random)
+                const predictions = [
+                    { title: "Nike Air Max Sneaker", cat: "shoes", brand: "Nike" },
+                    { title: "Vintage Jeans Levis", cat: "clothing", brand: "Other" },
+                    { title: "Apple iPhone 12", cat: "electronics", brand: "Other" }
+                ];
+                const pred = predictions[0]; // Always pick sneaker for demo
+
+                // Auto-Fill
+                titleInput.value = pred.title;
+                categorySelect.value = pred.cat;
+
+                // Show Success
+                analysisSuccess.style.display = "flex";
+                aiResultText.innerHTML = `Wir haben einen <b>${pred.brand} Sneaker</b> erkannt.`;
+
+                // Unlock Forms
+                detailsCard.classList.add('active');
+                pricingCard.classList.add('active');
+
+                // Trigger cascading
+                updateDynamicAttributes();
+
+            }, 1500);
+        }
+
+        // --- 2. CASCADING DROPDOWNS ---
+        function updateDynamicAttributes() {
+            const cat = categorySelect.value;
+            const brandGroup = document.getElementById('attrBrandGroup');
+            const sizeGroup = document.getElementById('attrSizeGroup');
+
+            // Reset
+            brandGroup.style.display = 'none';
+            sizeGroup.style.display = 'none';
+
+            if (cat === 'shoes' || cat === 'clothing') {
+                brandGroup.style.display = 'flex';
+                sizeGroup.style.display = 'flex';
+            }
+            // More logic can be added here
+        }
+
+        // --- 3. SUSTAINABILITY CALC ---
+        function updateSustainability() {
+            const material = document.getElementById('materialSelect').value;
+            const ecoCard = document.getElementById('ecoImpactCard');
+            const waterVal = document.getElementById('waterSavedVal');
+            const co2Val = document.getElementById('co2SavedVal');
+
+            let water = 0;
+            let co2 = 0;
+
+            if (material === 'cotton') { water = 2700; co2 = 12; }
+            if (material === 'polyester') { water = 50; co2 = 5; }
+            if (material === 'leather') { water = 8000; co2 = 15; }
+            if (material === 'wool') { water = 500; co2 = 9; }
+
+            if (water > 0) {
+                ecoCard.style.opacity = "1";
+                waterVal.innerText = `${water} L`;
+                co2Val.innerText = `${co2} kg`;
+            }
+        }
+
+        // --- 4. FEE CALCULATION ---
+        function calculateEarnings() {
+            const price = parseFloat(document.getElementById('priceInput').value) || 0;
+            const shippingSelect = document.getElementById('shippingSelect');
+            // Mock shipping costs
+            const shippingCosts = { small: 1.60, medium: 4.79, large: 6.99 };
+            const shipping = shippingCosts[shippingSelect.value];
+
+            document.getElementById('displayPrice').innerText = price.toFixed(2) + ' €';
+
+            // CSS Berlin is currently commission-free for beta? Or 0% per request?
+            // "You earn" = Price (Shipping is paid by buyer extra)
+            document.getElementById('displayEarnings').innerText = price.toFixed(2) + ' €';
+
+            // Shipping note update
+            document.getElementById('shippingNote').innerText = `Käufer zahlt zusätzlich ${shipping.toFixed(2)} € Versand`;
+        }
+
+        // --- 5. PUBLISH API CALL ---
+        async function publishListing() {
+            const btn = document.querySelector('.btn-publish');
+            btn.innerText = "Veröffentliche...";
+            btn.disabled = true;
+
+            // Simulate API Call
+            setTimeout(() => {
+                alert("Anzeige erfolgreich veröffentlicht! (Demo)");
+                window.location.href = "index.html";
+            }, 1000);
+        }
+
+        // Init icons
+        lucide.createIcons();
+    </script>
 
     <!-- Footer -->
-    <footer class="footer" style="background: linear-gradient(135deg, #FF8C42 0%, #2D5016 100%); padding: 24px 0; margin-top: 40px;">
-        <div style="max-width: 1400px; margin: 0 auto; padding: 0 32px; text-align: center; color: rgba(255,255,255,0.8); font-size: 12px;">
-            &copy; 2025 CSS Berlin - Climate Smart Solutions
-        </div>
-    </footer>
-
-    <script src="api-config.js"></script>
-    <script src="api-client.js"></script>
-    <script src="email-service.js"></script>
-    <script src="auth-gate.js"></script>
-    <script src="auth-guard.js"></script>
-
-    <script>
-        // Category Data - Hierarchical Structure (Vinted-style)
-        const categoryData = {
-            root: [
-                { id: 'damen', name: 'Damen', icon: 'dress', hasChildren: true },
-                { id: 'herren', name: 'Herren', icon: 'shirt', hasChildren: true },
-                { id: 'kinder', name: 'Kinder', icon: 'baby', hasChildren: true },
-                { id: 'home', name: 'Home & Living', icon: 'home', hasChildren: true },
-                { id: 'elektronik', name: 'Elektronik', icon: 'device', hasChildren: true }
-            ],
-            damen: [
-                { id: 'damen_kleidung', name: 'Kleidung', icon: 'hanger', hasChildren: true },
-                { id: 'damen_schuhe', name: 'Schuhe', icon: 'shoe', hasChildren: true },
-                { id: 'damen_taschen', name: 'Taschen', icon: 'bag', hasChildren: false },
-                { id: 'damen_accessoires', name: 'Accessoires', icon: 'accessory', hasChildren: true },
-                { id: 'damen_schmuck', name: 'Schmuck', icon: 'jewelry', hasChildren: false }
-            ],
-            herren: [
-                { id: 'herren_kleidung', name: 'Kleidung', icon: 'hanger', hasChildren: true },
-                { id: 'herren_schuhe', name: 'Schuhe', icon: 'shoe', hasChildren: true },
-                { id: 'herren_accessoires', name: 'Accessoires', icon: 'accessory', hasChildren: false }
-            ],
-            kinder: [
-                { id: 'kinder_maedchen', name: 'Madchen', icon: 'dress', hasChildren: true },
-                { id: 'kinder_jungen', name: 'Jungen', icon: 'shirt', hasChildren: true },
-                { id: 'kinder_baby', name: 'Baby (0-24 Monate)', icon: 'baby', hasChildren: false }
-            ],
-            damen_kleidung: [
-                { id: 'damen_kleider', name: 'Kleider', icon: 'dress', hasChildren: false },
-                { id: 'damen_oberteile', name: 'Oberteile & T-Shirts', icon: 'shirt', hasChildren: false },
-                { id: 'damen_hosen', name: 'Hosen & Jeans', icon: 'pants', hasChildren: false },
-                { id: 'damen_pullover', name: 'Pullover & Strickjacken', icon: 'sweater', hasChildren: false },
-                { id: 'damen_jacken', name: 'Jacken & Mantel', icon: 'jacket', hasChildren: false },
-                { id: 'damen_roecke', name: 'Rocke', icon: 'skirt', hasChildren: false },
-                { id: 'damen_sportbekleidung', name: 'Sportbekleidung', icon: 'sport', hasChildren: false }
-            ],
-            damen_schuhe: [
-                { id: 'damen_sneaker', name: 'Sneaker', icon: 'sneaker', hasChildren: false },
-                { id: 'damen_stiefel', name: 'Stiefel & Stiefeletten', icon: 'boot', hasChildren: false },
-                { id: 'damen_pumps', name: 'Pumps & High Heels', icon: 'heel', hasChildren: false },
-                { id: 'damen_sandalen', name: 'Sandalen', icon: 'sandal', hasChildren: false },
-                { id: 'damen_loafer', name: 'Loafer & Mokassins', icon: 'loafer', hasChildren: false }
-            ],
-            herren_kleidung: [
-                { id: 'herren_tshirts', name: 'T-Shirts & Polos', icon: 'shirt', hasChildren: false },
-                { id: 'herren_hemden', name: 'Hemden', icon: 'shirt', hasChildren: false },
-                { id: 'herren_hosen', name: 'Hosen & Jeans', icon: 'pants', hasChildren: false },
-                { id: 'herren_pullover', name: 'Pullover & Hoodies', icon: 'sweater', hasChildren: false },
-                { id: 'herren_jacken', name: 'Jacken & Mantel', icon: 'jacket', hasChildren: false },
-                { id: 'herren_anzuege', name: 'Anzuge & Sakkos', icon: 'suit', hasChildren: false }
-            ],
-            herren_schuhe: [
-                { id: 'herren_sneaker', name: 'Sneaker', icon: 'sneaker', hasChildren: false },
-                { id: 'herren_stiefel', name: 'Stiefel & Boots', icon: 'boot', hasChildren: false },
-                { id: 'herren_business', name: 'Business-Schuhe', icon: 'oxford', hasChildren: false },
-                { id: 'herren_loafer', name: 'Bootsschuhe, Loafer & Mokassins', icon: 'loafer', hasChildren: false },
-                { id: 'herren_sandalen', name: 'Sandalen & Clogs', icon: 'sandal', hasChildren: false }
-            ]
-        };
-
-        // Category Icons (SVG paths)
-        const categoryIcons = {
-            dress: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 8v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8l-3-6H6z"/><path d="M3 8h18"/><path d="M16 12a4 4 0 1 1-8 0"/></svg>',
-            shirt: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>',
-            baby: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>',
-            home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
-            device: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>',
-            hanger: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1l7 6v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6l7-6h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/></svg>',
-            shoe: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 18v-3a3 3 0 0 1 3-3h14a3 3 0 0 1 3 3v3"/><path d="M4 12V8a2 2 0 0 1 2-2h3l2 2h5a2 2 0 0 1 2 2v2"/></svg>',
-            bag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>',
-            accessory: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',
-            jewelry: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
-            sneaker: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 18v-3a3 3 0 0 1 3-3h14a3 3 0 0 1 3 3v3"/><path d="M4 12V8a2 2 0 0 1 2-2h3l2 2h5a2 2 0 0 1 2 2v2"/></svg>',
-            boot: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/><path d="M7 5v6l3 3v8h8v-8l3-7-14-2z"/></svg>',
-            pants: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2h12l-1 20h-4l-1-10-1 10H7L6 2z"/></svg>',
-            sweater: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg>',
-            jacket: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 3h16l2 7v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V10l2-7z"/><path d="M9 3v18"/><path d="M15 3v18"/><path d="M2 10h20"/></svg>'
-        };
-
-        // Current navigation state
-        let categoryNavStack = ['root'];
-        let selectedCategoryPath = [];
-
-        // Smart keyword to category mapping
-        const keywordCategoryMap = {
-            'sneaker': ['damen_sneaker', 'herren_sneaker'],
-            'schuhe': ['damen_schuhe', 'herren_schuhe'],
-            'schuh': ['damen_schuhe', 'herren_schuhe'],
-            'air max': ['damen_sneaker', 'herren_sneaker'],
-            'jordan': ['damen_sneaker', 'herren_sneaker'],
-            'nike': ['damen_sneaker', 'herren_sneaker'],
-            'adidas': ['damen_sneaker', 'herren_sneaker'],
-            'jacke': ['damen_jacken', 'herren_jacken'],
-            'mantel': ['damen_jacken', 'herren_jacken'],
-            'coat': ['damen_jacken', 'herren_jacken'],
-            'jeans': ['damen_hosen', 'herren_hosen'],
-            'hose': ['damen_hosen', 'herren_hosen'],
-            'kleid': ['damen_kleider'],
-            'dress': ['damen_kleider'],
-            'rock': ['damen_roecke'],
-            'shirt': ['damen_oberteile', 'herren_tshirts'],
-            't-shirt': ['damen_oberteile', 'herren_tshirts'],
-            'pullover': ['damen_pullover', 'herren_pullover'],
-            'hoodie': ['damen_pullover', 'herren_pullover'],
-            'tasche': ['damen_taschen'],
-            'bag': ['damen_taschen'],
-            'stiefel': ['damen_stiefel', 'herren_stiefel'],
-            'boots': ['damen_stiefel', 'herren_stiefel']
-        };
-
-        // Open Category Modal
-        function openCategoryModal() {
-            const modal = document.getElementById('categoryModal');
-            modal.classList.add('open');
-            categoryNavStack = ['root'];
-            renderCategoryList();
-            checkSmartSuggestions();
-        }
-
-        // Close Category Modal
-        function closeCategoryModal() {
-            const modal = document.getElementById('categoryModal');
-            modal.classList.remove('open');
-        }
-
-        // Render Category List
-        function renderCategoryList() {
-            const currentLevel = categoryNavStack[categoryNavStack.length - 1];
-            const categories = categoryData[currentLevel] || [];
-            const list = document.getElementById('categoryList');
-            const backBtn = document.getElementById('categoryBackBtn');
-            const title = document.getElementById('categoryModalTitle');
-
-            // Update back button and title
-            if (categoryNavStack.length > 1) {
-                backBtn.style.display = 'flex';
-                const parentCat = categoryData[categoryNavStack[categoryNavStack.length - 2]]?.find(c => c.id === currentLevel);
-                title.innerHTML = `<button class="category-back-btn" onclick="goBackCategory()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="15 18 9 12 15 6"></polyline>
-                    </svg>
-                </button>
-                <span>${parentCat?.name || 'Kategorie'}</span>`;
-            } else {
-                backBtn.style.display = 'none';
-                title.innerHTML = '<span>Wahle eine Kategorie</span>';
-            }
-
-            // Render categories
-            list.innerHTML = categories.map(cat => `
-                <div class="category-item" onclick="${cat.hasChildren ? `navigateToCategory('${cat.id}')` : `selectCategory('${cat.id}', '${cat.name}')`}">
-                    <div class="category-item-icon">
-                        ${categoryIcons[cat.icon] || categoryIcons['hanger']}
-                    </div>
-                    <span class="category-item-name">${cat.name}</span>
-                    ${cat.hasChildren ? `
-                        <span class="category-item-arrow">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="9 18 15 12 9 6"></polyline>
-                            </svg>
-                        </span>
-                    ` : `
-                        <div class="category-item-radio"></div>
-                    `}
-                </div>
-            `).join('');
-        }
-
-        // Navigate to sub-category
-        function navigateToCategory(categoryId) {
-            categoryNavStack.push(categoryId);
-            renderCategoryList();
-        }
-
-        // Go back to parent category
-        function goBackCategory() {
-            if (categoryNavStack.length > 1) {
-                categoryNavStack.pop();
-                renderCategoryList();
-            }
-        }
-
-        // Select final category
-        function selectCategory(categoryId, categoryName) {
-            document.getElementById('selectedCategory').value = categoryId;
-            document.getElementById('selectedCategoryText').textContent = categoryName;
-            document.getElementById('categoryPickerBtn').classList.remove('placeholder');
-            closeCategoryModal();
-        }
-
-        // Search categories
-        function searchCategories() {
-            const query = document.getElementById('categorySearchInput').value.toLowerCase();
-            const list = document.getElementById('categoryList');
-
-            if (query.length < 2) {
-                renderCategoryList();
-                return;
-            }
-
-            // Flatten and search all categories
-            let results = [];
-            Object.keys(categoryData).forEach(key => {
-                categoryData[key].forEach(cat => {
-                    if (cat.name.toLowerCase().includes(query)) {
-                        results.push(cat);
-                    }
-                });
-            });
-
-            list.innerHTML = results.slice(0, 10).map(cat => `
-                <div class="category-item" onclick="selectCategory('${cat.id}', '${cat.name}')">
-                    <div class="category-item-icon">
-                        ${categoryIcons[cat.icon] || categoryIcons['hanger']}
-                    </div>
-                    <span class="category-item-name">${cat.name}</span>
-                    <div class="category-item-radio"></div>
-                </div>
-            `).join('');
-        }
-
-        // Check for smart suggestions based on title
-        function checkSmartSuggestions() {
-            const title = document.getElementById('productTitle').value.toLowerCase();
-            const suggestionsDiv = document.getElementById('smartSuggestions');
-            const suggestionsList = document.getElementById('smartSuggestionsList');
-
-            if (!title) {
-                suggestionsDiv.style.display = 'none';
-                return;
-            }
-
-            let suggestions = [];
-            Object.keys(keywordCategoryMap).forEach(keyword => {
-                if (title.includes(keyword)) {
-                    keywordCategoryMap[keyword].forEach(catId => {
-                        // Find category name
-                        Object.keys(categoryData).forEach(key => {
-                            const cat = categoryData[key].find(c => c.id === catId);
-                            if (cat && !suggestions.find(s => s.id === catId)) {
-                                suggestions.push({ id: catId, name: cat.name });
-                            }
-                        });
-                    });
-                }
-            });
-
-            if (suggestions.length > 0) {
-                suggestionsDiv.style.display = 'block';
-                suggestionsList.innerHTML = suggestions.slice(0, 4).map(s => `
-                    <span class="smart-suggestion-chip" onclick="selectCategory('${s.id}', '${s.name}')">${s.name}</span>
-                `).join('');
-            } else {
-                suggestionsDiv.style.display = 'none';
-            }
-        }
-
-        // Title input event for smart detection
-        document.getElementById('productTitle').addEventListener('input', function() {
-            // If modal is open, update suggestions
-            if (document.getElementById('categoryModal').classList.contains('open')) {
-                checkSmartSuggestions();
-            }
-        });
-
-        // Image Upload
-        let uploadedImages = [];
-
-        function handleImageUpload(event) {
-            const files = Array.from(event.target.files);
-            const grid = document.getElementById('imagePreviewGrid');
-
-            files.forEach(file => {
-                if (uploadedImages.length >= 20) return;
-
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    uploadedImages.push({
-                        file: file,
-                        url: e.target.result
-                    });
-                    renderImagePreviews();
-                };
-                reader.readAsDataURL(file);
-            });
-
-            event.target.value = '';
-        }
-
-        function renderImagePreviews() {
-            const grid = document.getElementById('imagePreviewGrid');
-            grid.innerHTML = uploadedImages.map((img, i) => `
-                <div class="image-preview-item">
-                    <img src="${img.url}" alt="Bild ${i + 1}">
-                    <button class="image-preview-remove" onclick="removeImage(${i})">x</button>
-                </div>
-            `).join('');
-        }
-
-        function removeImage(index) {
-            uploadedImages.splice(index, 1);
-            renderImagePreviews();
-        }
-
-        // Character counter
-        function updateCharCounter() {
-            const textarea = document.getElementById('productDesc');
-            document.getElementById('charCount').textContent = textarea.value.length;
-        }
-
-        // PLZ Lookup (simple demo)
-        const plzData = {
-            '10115': 'Berlin - Mitte',
-            '10178': 'Berlin - Mitte',
-            '10243': 'Berlin - Friedrichshain',
-            '10999': 'Berlin - Kreuzberg',
-            '12043': 'Berlin - Neukolln',
-            '13353': 'Berlin - Wedding',
-            '13593': 'Berlin - Spandau',
-            '14195': 'Berlin - Dahlem',
-            '80331': 'Munchen - Altstadt',
-            '20095': 'Hamburg - Altstadt',
-            '50667': 'Koln - Altstadt',
-            '60311': 'Frankfurt am Main'
-        };
-
-        // State: is product scraped/imported?
-        let isScrapedProduct = false;
-
-        function lookupPLZ() {
-            const plz = document.getElementById('plz').value;
-            const cityDisplay = document.getElementById('cityDisplay');
-
-            if (plzData[plz]) {
-                cityDisplay.textContent = plzData[plz];
-                cityDisplay.style.color = '#2D5016';
-            } else if (plz.length === 5) {
-                cityDisplay.textContent = 'PLZ nicht gefunden';
-                cityDisplay.style.color = '#999';
-            } else {
-                cityDisplay.textContent = '';
-            }
-
-            // Update Abholung availability based on PLZ
-            updateAbholungAvailability();
-        }
-
-        // Check if PLZ is in Berlin (starts with 1 and in range 10xxx-14xxx)
-        function isBerlinPLZ(plz) {
-            if (!plz || plz.length !== 5) return false;
-            const num = parseInt(plz);
-            return num >= 10000 && num <= 14999;
-        }
-
-        // Update Abholung option based on PLZ and scraped status
-        function updateAbholungAvailability() {
-            const plz = document.getElementById('plz').value;
-            const abholungOption = document.getElementById('abholungOption');
-            const bothOption = document.getElementById('bothOption');
-            const berlinNotice = document.getElementById('berlinNotice');
-            const scrapedWarning = document.getElementById('scrapedWarning');
-
-            const isBerlin = isBerlinPLZ(plz);
-
-            // If scraped product, always disable Abholung
-            if (isScrapedProduct) {
-                abholungOption.classList.add('disabled');
-                bothOption.classList.add('disabled');
-                scrapedWarning.style.display = 'block';
-                berlinNotice.style.display = 'none';
-
-                // Reset to Versand if Abholung was selected
-                const currentDelivery = document.querySelector('input[name="deliveryType"]:checked')?.value;
-                if (currentDelivery === 'abholung' || currentDelivery === 'both') {
-                    selectDeliveryOption('versand');
-                }
-                return;
-            }
-
-            scrapedWarning.style.display = 'none';
-
-            if (isBerlin) {
-                // Berlin PLZ - enable Abholung
-                abholungOption.classList.remove('disabled');
-                bothOption.classList.remove('disabled');
-                berlinNotice.innerHTML = `
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                    Berlin erkannt - Abholung verfugbar
-                `;
-                berlinNotice.style.color = '#2D5016';
-            } else {
-                // Not Berlin - disable Abholung
-                abholungOption.classList.add('disabled');
-                bothOption.classList.add('disabled');
-                berlinNotice.innerHTML = `
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                        <circle cx="12" cy="10" r="3"></circle>
-                    </svg>
-                    Nur fur Berlin verfugbar (PLZ 10xxx-14xxx)
-                `;
-                berlinNotice.style.color = '#2D5016';
-
-                // Reset to Versand if Abholung was selected
-                const currentDelivery = document.querySelector('input[name="deliveryType"]:checked')?.value;
-                if (currentDelivery === 'abholung' || currentDelivery === 'both') {
-                    selectDeliveryOption('versand');
-                }
-            }
-        }
-
-        // Select delivery option
-        function selectDeliveryOption(type) {
-            const options = document.querySelectorAll('.delivery-option');
-            options.forEach(opt => opt.classList.remove('selected'));
-
-            const selectedOption = document.getElementById(type + 'Option');
-            if (selectedOption && !selectedOption.classList.contains('disabled')) {
-                selectedOption.classList.add('selected');
-                selectedOption.querySelector('input[type="radio"]').checked = true;
-            }
-        }
-
-        // Mark product as scraped (called from external source if needed)
-        function setScrapedProduct(scraped) {
-            isScrapedProduct = scraped;
-            updateAbholungAvailability();
-        }
-
-        // Load user data
-        function loadUserData() {
-            // User data is now loaded from localStorage when publishing
-        }
-
-        // Save Draft
-        function saveDraft() {
-            const formData = collectFormData();
-            localStorage.setItem('cssberlin_listing_draft', JSON.stringify(formData));
-            alert('Entwurf wurde gespeichert!');
-        }
-
-        // Show Preview
-        function showPreview() {
-            alert('Vorschau-Funktion wird bald verfugbar sein!');
-        }
-
-        // Publish Article
-        function publishArticle() {
-            const formData = collectFormData();
-
-            // Validation
-            if (!formData.title) {
-                alert('Bitte gib einen Titel ein.');
-                return;
-            }
-            if (!formData.category) {
-                alert('Bitte wahle eine Kategorie.');
-                return;
-            }
-            if (!formData.price && formData.priceType !== 'verschenken') {
-                alert('Bitte gib einen Preis ein.');
-                return;
-            }
-
-            // Save to localStorage
-            const listings = JSON.parse(localStorage.getItem('cssberlin_listings') || '[]');
-            formData.id = 'listing_' + Date.now();
-            formData.createdAt = new Date().toISOString();
-            formData.status = 'active';
-            formData.images = uploadedImages.map(img => img.url);
-            listings.push(formData);
-            localStorage.setItem('cssberlin_listings', JSON.stringify(listings));
-
-            // Clear draft
-            localStorage.removeItem('cssberlin_listing_draft');
-
-            alert('Anzeige wurde erfolgreich aufgegeben!');
-            window.location.href = 'mein-konto.html';
-        }
-
-        function collectFormData() {
-            const user = JSON.parse(localStorage.getItem('cssberlin_current_user') || '{}');
-            return {
-                title: document.getElementById('productTitle').value,
-                category: document.getElementById('selectedCategory').value,
-                price: parseFloat(document.getElementById('price').value) || 0,
-                priceType: document.getElementById('priceType').value,
-                description: document.getElementById('productDesc').value,
-                plz: document.getElementById('plz').value,
-                city: document.getElementById('cityDisplay').textContent,
-                street: document.getElementById('street').value,
-                showFullAddress: document.getElementById('showFullAddress').checked,
-                sellerName: user.firstName || 'Verkaufer'
-            };
-        }
-
-        // Load draft on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            loadUserData();
-
-            const draft = localStorage.getItem('cssberlin_listing_draft');
-            if (draft) {
-                const data = JSON.parse(draft);
-                document.getElementById('productTitle').value = data.title || '';
-                document.getElementById('price').value = data.price || '';
-                document.getElementById('priceType').value = data.priceType || 'festpreis';
-                document.getElementById('productDesc').value = data.description || '';
-                document.getElementById('plz').value = data.plz || '';
-                document.getElementById('street').value = data.street || '';
-
-                if (data.plz) lookupPLZ();
-                updateCharCounter();
-            }
-        });
-    </script>
+    <div id="footer-placeholder"></div>
+<script src="smart-header.js"></script>
+    <script src="components.js"></script>
 </body>
-</html>
 
+</html>

@@ -3,7 +3,7 @@
 // ============================================
 
 // API Configuration
-const API_URL = 'http://localhost:8000';  // Production: http://195.201.146.224:8000
+const API_URL = 'http://localhost:8000';  // Production: https://195.201.146.224:8000
 
 // Payment configuration (loaded from API)
 let paymentConfig = null;

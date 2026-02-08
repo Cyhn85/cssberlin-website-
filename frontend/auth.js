@@ -55,7 +55,7 @@ const authGate = {
             // URL alırken API_CONFIG kullanıyoruz
             const url = (window.API_CONFIG && window.API_CONFIG.getUrl) 
                 ? window.API_CONFIG.getUrl('/auth/token')
-                : 'http://195.201.146.224:8001/auth/token'; // Fallback
+                : 'https://195.201.146.224:8001/auth/token'; // Fallback
 
             const response = await fetch(url, {
                 method: 'POST',
@@ -102,7 +102,7 @@ const authGate = {
 
             const url = (window.API_CONFIG && window.API_CONFIG.getUrl) 
                 ? window.API_CONFIG.getUrl('/auth/register')
-                : 'http://195.201.146.224:8001/auth/register';
+                : 'https://195.201.146.224:8001/auth/register';
 
             const response = await fetch(url, {
                 method: 'POST',
@@ -137,7 +137,7 @@ const authGate = {
         try {
             const url = (window.API_CONFIG && window.API_CONFIG.getUrl) 
                 ? window.API_CONFIG.getUrl('/auth/me')
-                : 'http://195.201.146.224:8001/auth/me';
+                : 'https://195.201.146.224:8001/auth/me';
 
             const response = await fetch(url, {
                 headers: { 'Authorization': `Bearer ${token}` }

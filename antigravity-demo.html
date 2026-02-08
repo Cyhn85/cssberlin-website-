@@ -2,6 +2,7 @@
 <html lang="de" class="scroll-smooth">
 
 <head>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CSS Berlin | Climate Smart Solutions</title>
@@ -120,6 +121,26 @@
             opacity: 0.4;
         }
     </style>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="header-v3.css">
+    <link rel="stylesheet" href="auth-modal-v3.css">
+    <link rel="stylesheet" href="cookie-consent.css">
+    <link rel="stylesheet" href="footer-v3.css">
+    <link rel="stylesheet" href="gradient-button.css">
+    
+    <!-- CLERK AUTH -->
+    <script async crossorigin="anonymous"
+      data-clerk-publishable-key="pk_test_c3VwZXItd2FzcC04NS5jbGVyay5hY2NvdW50cy5kZXYk"
+      src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+      type="text/javascript"></script>
+    
+    <script src="api-config.js"></script>
+    <script src="auth-modal-v3.js"></script>
+
 </head>
 
 <body class="font-sans antialiased transition-colors duration-300">
@@ -145,114 +166,11 @@
     </div>
 
     <!-- 2. HEADER -->
-    <header class="sticky top-0 z-40 w-full shadow-sm bg-white/95 backdrop-blur-md transition-colors duration-300">
-        <!-- Top Row: Logo & Actions -->
-        <div class="w-full max-w-[95%] mx-auto px-4 sm:px-6">
-            <div class="flex justify-between items-center h-20 md:h-24">
+    
+    
+    <div id="header-placeholder"></div>
 
-                <!-- LOGO -->
-                <div class="flex-shrink-0 flex items-center cursor-pointer group">
-                    <span
-                        class="font-heading font-extrabold text-4xl md:text-5xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-brand-orange to-brand-green drop-shadow-sm group-hover:scale-105 transition-transform duration-300">
-                        CSSberlin
-                    </span>
-                </div>
 
-                <!-- ACTIONS -->
-                <div class="hidden md:flex items-center gap-4">
-                    <button
-                        class="w-12 h-12 rounded-full bg-gray-50 text-gray-500 hover:text-brand-orange hover:bg-brand-orange/10 flex items-center justify-center transition-all"><i
-                            data-lucide="heart" class="w-5 h-5"></i></button>
-                    <button
-                        class="w-12 h-12 rounded-full bg-gray-50 text-gray-500 hover:text-brand-green hover:bg-brand-green/10 flex items-center justify-center transition-all relative">
-                        <i data-lucide="gavel" class="w-5 h-5"></i>
-                        <span class="absolute top-2 right-2 flex h-2 w-2"><span
-                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-orange opacity-75"></span><span
-                                class="relative inline-flex rounded-full h-2 w-2 bg-brand-orange"></span></span>
-                    </button>
-                    <button
-                        class="w-12 h-12 rounded-full bg-gray-50 text-gray-500 hover:text-brand-orange hover:bg-brand-orange/10 flex items-center justify-center transition-all relative">
-                        <i data-lucide="shopping-cart" class="w-5 h-5"></i>
-                        <span
-                            class="absolute -top-1 -right-1 bg-brand-green text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white">2</span>
-                    </button>
-                    <div class="w-px h-8 bg-gray-200 mx-2"></div>
-                    <!-- ANMELDEN BUTTON: Orange -> Green Gradient -->
-                    <button onclick="document.getElementById('auth-modal').classList.remove('hidden')"
-                        class="bg-gradient-to-r from-brand-orange to-brand-green hover:from-brand-rust hover:to-brand-darkGreen text-white h-12 px-8 rounded-full font-heading font-bold text-sm transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center gap-2">
-                        Anmelden
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Middle Row: Search & Filter -->
-        <div class="hidden md:flex items-center justify-center border-b border-gray-100 py-6 px-4 relative z-20">
-            <!-- Language (Standard Style) -->
-            <div class="absolute left-6 lg:left-12 flex items-center gap-3 z-30">
-                <button
-                    class="flex items-center gap-2 text-black bg-white border border-brand-green hover:bg-gray-50 transition-colors font-bold text-xs uppercase px-4 py-3 rounded-xl shadow-sm">
-                    <i data-lucide="globe" class="w-4 h-4 text-gray-500"></i>
-                    <span>DE</span>
-                </button>
-            </div>
-
-            <!-- Search Bar Complex -->
-            <div class="w-full max-w-5xl flex items-center gap-3 z-20 mx-auto">
-                <div
-                    class="flex-grow h-14 flex items-stretch shadow-sm hover:shadow-md transition-shadow duration-300 rounded-2xl group">
-                    <!-- Category Dropdown -->
-                    <button
-                        class="h-full pl-6 pr-4 flex items-center gap-2 bg-white border border-brand-green rounded-l-2xl text-sm font-bold text-black hover:bg-gray-50 transition-all min-w-[180px] justify-between">
-                        <span>Alle Kategorien</span>
-                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
-                    </button>
-                    <!-- Input -->
-                    <div class="relative flex-grow">
-                        <input type="text"
-                            class="block w-full h-full pl-6 pr-24 bg-white rounded-r-2xl border-y border-r border-brand-green focus:outline-none font-heading font-bold tracking-wide text-black placeholder-gray-400"
-                            placeholder="CLIMATE SMART SOLUTIONS">
-                        <div class="absolute inset-y-0 right-2 flex items-center gap-1">
-                            <button class="p-2 text-gray-400 hover:text-brand-orange"><i data-lucide="mic"
-                                    class="w-5 h-5"></i></button>
-                            <div class="h-6 w-px bg-gray-200 mx-1"></div>
-                            <button class="p-2 text-gray-400 hover:text-brand-green"><i data-lucide="camera"
-                                    class="w-5 h-5"></i></button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Filter Button -->
-                <button
-                    class="h-full flex items-center gap-2 px-6 rounded-2xl text-sm font-bold transition-all shadow-sm bg-white text-black border border-brand-green hover:shadow-md">
-                    <i data-lucide="sliders-horizontal" class="w-4 h-4"></i> Filter
-                </button>
-
-                <!-- Search Button -->
-                <button
-                    class="h-14 rounded-2xl bg-white border border-brand-green px-8 flex items-center justify-center hover:shadow-md transition-all">
-                    <i data-lucide="search" class="w-5 h-5 text-black"></i>
-                </button>
-            </div>
-        </div>
-
-        <!-- Bottom Row: Nav Links -->
-        <div class="hidden md:block bg-gradient-to-r from-brand-orange to-brand-green shadow-md">
-            <div class="max-w-7xl mx-auto flex justify-center space-x-12 py-0">
-                <a href="#"
-                    class="block py-4 font-heading font-bold text-sm uppercase tracking-widest text-white hover:text-white/90">Damen</a>
-                <a href="#"
-                    class="block py-4 font-heading font-bold text-sm uppercase tracking-widest text-white hover:text-white/90">Herren</a>
-                <a href="#"
-                    class="block py-4 font-heading font-bold text-sm uppercase tracking-widest text-white hover:text-white/90">Kinder</a>
-                <a href="#"
-                    class="block py-4 font-heading font-bold text-sm uppercase tracking-widest text-white hover:text-white/90">Elektronik</a>
-                <a href="#"
-                    class="block py-4 font-heading font-bold text-sm uppercase tracking-widest text-white hover:text-white/90"><span
-                        class="bg-red-500/20 px-2 py-0.5 rounded border border-white/20">Sale</span></a>
-            </div>
-        </div>
-    </header>
 
     <!-- MAIN CONTENT -->
     <main class="flex-grow pt-6">
@@ -337,29 +255,11 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="bg-gradient-to-r from-brand-orange to-brand-green text-white pt-12 pb-6 relative overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 relative z-10">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
-                <div class="col-span-2 md:col-span-1">
-                    <span class="font-heading font-extrabold text-xl tracking-tighter text-white">CSS<span
-                            class="text-white/80">berlin</span></span>
-                    <p class="mt-2 text-xs text-white/70 leading-relaxed max-w-xs">Der Marktplatz für bewussten Konsum.
-                    </p>
-                </div>
-                <div>
-                    <h4 class="font-bold text-white text-sm mb-3">Stöbern</h4>
-                    <ul class="space-y-2 text-xs text-white/70">
-                        <li><a href="#" class="hover:text-white">Kleidung</a></li>
-                        <li><a href="#" class="hover:text-white">Elektronik</a></li>
-                    </ul>
-                </div>
-                <!-- ... other cols ... -->
-            </div>
-            <div class="border-t border-white/10 pt-4 text-[10px] text-white/50">
-                <p>© 2025 CSS Berlin. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+    
+    
+    <div id="footer-placeholder"></div>
+
+
 
     <!-- AUTH MODAL (Hidden by default) -->
     <div id="auth-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center px-4">
@@ -530,6 +430,8 @@
         requestAnimationFrame(updateSlider);
 
     </script>
+<script src="smart-header.js"></script>
+    <script src="components.js"></script>
 </body>
 
 </html>

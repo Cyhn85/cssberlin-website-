@@ -2,6 +2,7 @@
 <html lang="de">
 
 <head>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mein Konto - CSS Berlin</title>
@@ -672,14 +673,7 @@
         window.addEventListener("load", async function () {
             // Load Header mockup if needed or just logo
             document.getElementById('header-placeholder').innerHTML = `
-                <header class="header-v3" style="position:relative; margin-bottom:0;">
-                    <div class="header-row-logo">
-                        <a href="index.html" class="logo-v3"><span class="logo-css">CSS</span><span class="logo-berlin">berlin</span></a>
-                        <div class="header-right-v3">
-                            <a href="index.html" style="font-weight:600; color:#111; text-decoration:none;">← Zurück zum Shop</a>
-                        </div>
-                    </div>
-                </header>
+                <div id="header-placeholder"></div>
             `;
 
             if (window.Clerk) {
@@ -702,6 +696,9 @@
             lucide.createIcons();
         });
     </script>
+<script src="smart-header.js"></script>
+    <script src="components.js"></script>
+<div id="footer-placeholder"></div>
 </body>
 
 </html>

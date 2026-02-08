@@ -26,7 +26,7 @@
 
         // Helper method to build WebSocket URL
         getWebSocketURL: function (path) {
-            const wsBase = this.BASE_URL.replace('http://', '').replace('https://', '');
+            const wsBase = this.BASE_URL.replace('https://', '').replace('https://', '');
             return `${this.WS_PROTOCOL}://${wsBase}${path}`;
         }
     };
@@ -40,7 +40,7 @@
     // Legacy API_CONFIG object for backward compatibility
     window.API_CONFIG = {
         LOCAL: 'http://localhost:8000',
-        PRODUCTION: 'http://195.201.146.224:8000',
+        PRODUCTION: 'https://195.201.146.224:8000',
         current: config.BASE_URL,
 
         // Some older modules expect API_CONFIG.BASE_URL (e.g. favorites.js)

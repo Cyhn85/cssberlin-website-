@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meine Verkaufe - CSS Berlin</title>
     <link rel="stylesheet" href="styles.css?v=2030">
     <!-- header-v2.css KALDIRILDI - Sadece V3 aktif -->
     <link rel="stylesheet" href="header-v3.css">
-    <link rel="stylesheet" href="auth-modal.css">
+    
     <link rel="stylesheet" href="toast.css">
     <style>
         body.page-wrapper {
@@ -405,6 +406,7 @@
     </style>
 </head>
 <body class="page-wrapper">
+    <div id="header-placeholder"></div>
     <main class="page-main">
         <!-- Header will be injected -->
         <div id="header-container"></div>
@@ -947,6 +949,14 @@
             loadSellerData();
         });
     </script>
+
+    
+    <div id="footer-placeholder"></div>
+
+
+<script>window.addEventListener('load', () => lucide.createIcons());</script>
+<script src="smart-header.js"></script>
+    <script src="components.js"></script>
 </body>
 </html>
 

@@ -14,7 +14,7 @@
     // Configure API endpoints
     const config = {
         // Base URL for REST API
-        BASE_URL: isLocal ? 'http://localhost:8000' : 'http://195.201.146.224:8000',
+        BASE_URL: isLocal ? 'http://localhost:8000' : 'https://195.201.146.224:8000',
 
         // WebSocket protocol
         WS_PROTOCOL: isLocal ? 'ws' : 'wss',
@@ -24,7 +24,7 @@
 
         // Helper method to build WebSocket URL
         getWebSocketURL: function (path) {
-            const wsBase = this.BASE_URL.replace('http://', '').replace('https://', '');
+            const wsBase = this.BASE_URL.replace('https://', '').replace('https://', '');
             return `${this.WS_PROTOCOL}://${wsBase}${path}`;
         }
     };

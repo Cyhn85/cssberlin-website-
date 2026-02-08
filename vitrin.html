@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CSS Berlin — Ürün Vitrini</title>
@@ -313,6 +314,7 @@
     </style>
 </head>
 <body class="vitrin-page">
+    <div id="header-placeholder"></div>
 
 <!-- ── TOP BAR ── -->
 <div class="vitrin-topbar">
@@ -460,5 +462,12 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
+
+    
+    <div id="footer-placeholder"></div>
+
+
+<script src="smart-header.js"></script>
+    <script src="components.js"></script>
 </body>
 </html>

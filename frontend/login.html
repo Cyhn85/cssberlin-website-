@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anmelden & Registrieren - CSS Berlin</title>
@@ -225,7 +226,7 @@
                 </div>
                 <div class="input-group">
                     <label for="login-password">Passwort</label>
-                    <input type="password" id="login-password" name="password" placeholder="••••••••" required>
+                    <input type="password" id="login-password" name="password" placeholder="" required>
                 </div>
                 
                 <button type="submit" class="main-btn auth-btn-login-submit">
@@ -244,7 +245,7 @@
 
             <form id="auth-gate-register-form" class="form-section">
                 <div class="input-group">
-                    <label for="reg-name">Vollständiger Name</label>
+                    <label for="reg-name">Vollstndiger Name</label>
                     <input type="text" id="reg-name" name="first_name" placeholder="Max Mustermann" required>
                 </div>
                 <div class="input-group">
@@ -253,11 +254,11 @@
                 </div>
                 <div class="input-group">
                     <label for="reg-password">Passwort erstellen</label>
-                    <input type="password" id="reg-password" name="password" placeholder="••••••••" required>
+                    <input type="password" id="reg-password" name="password" placeholder="" required>
                 </div>
                 <div class="input-group">
-                    <label for="reg-confirm-password">Passwort bestätigen</label>
-                    <input type="password" id="reg-confirm-password" name="confirm_password" placeholder="••••••••" required>
+                    <label for="reg-confirm-password">Passwort besttigen</label>
+                    <input type="password" id="reg-confirm-password" name="confirm_password" placeholder="" required>
                 </div>
 
                 <button type="submit" class="main-btn auth-btn-register-submit">

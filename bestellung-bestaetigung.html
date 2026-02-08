@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bestellung bestätigt - CSS Berlin</title>
@@ -312,6 +313,26 @@
     <script src="api-config.js"></script>
     <script src="api-client.js"></script>
 
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="header-v3.css">
+    <link rel="stylesheet" href="auth-modal-v3.css">
+    <link rel="stylesheet" href="cookie-consent.css">
+    <link rel="stylesheet" href="footer-v3.css">
+    <link rel="stylesheet" href="gradient-button.css">
+    
+    <!-- CLERK AUTH -->
+    <script async crossorigin="anonymous"
+      data-clerk-publishable-key="pk_test_c3VwZXItd2FzcC04NS5jbGVyay5hY2NvdW50cy5kZXYk"
+      src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+      type="text/javascript"></script>
+    
+    <script src="api-config.js"></script>
+    <script src="auth-modal-v3.js"></script>
+
 </head>
 <body>
     <!-- News Banner at Top -->
@@ -353,32 +374,11 @@
     </div>
 
     <!-- Header - Sadeleştirilmiş -->
-    <header class="header" style="position: sticky; top: 40px; z-index: 998;">
-        <div class="header-container">
-            <a href="index.html" style="text-decoration: none; display: flex; flex-direction: column; align-items: stretch; gap: 0; width: 200px;">
-                <div style="font-size: 36px; font-weight: 800; color: white; letter-spacing: 2px; text-align: center;">CSS Berlin</div>
-                <div style="font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.9); letter-spacing: 1px; text-transform: uppercase; text-align: center;">Climate Smart Solutions</div>
-            </a>
-            <div class="header-actions" style="gap: 12px; margin-left: auto; display: flex; align-items: center;">
-                <button onclick="authGate.showLoginModal(null, null, 'login')" class="header-btn auth-btn" style="padding: 10px 18px; background: #E8854C; color: white; border-radius: 8px; display: flex; align-items: center; gap: 8px; font-weight: 600; text-decoration: none; font-size: 14px; transition: all 0.3s ease; border: none; cursor: pointer;">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                    Anmelden
-                </button>
-                <button onclick="authGate.showLoginModal(null, null, 'register')" class="header-btn auth-btn" style="padding: 10px 18px; background: #E8854C; color: white; border-radius: 8px; display: flex; align-items: center; gap: 8px; font-weight: 600; text-decoration: none; font-size: 14px; transition: all 0.3s ease; border: none; cursor: pointer;">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="8.5" cy="7" r="4"></circle>
-                        <line x1="20" y1="8" x2="20" y2="14"></line>
-                        <line x1="23" y1="11" x2="17" y2="11"></line>
-                    </svg>
-                    Registrieren
-                </button>
-            </div>
-        </div>
-    </header>
+    
+    
+    <div id="header-placeholder"></div>
+
+
 
     <!-- User Dashboard Bar -->
     <div class="user-dashboard-bar">
@@ -535,13 +535,11 @@
     </div>
 
     <!-- Footer -->
-    <footer class="footer" style="background: linear-gradient(135deg, #FF8C42 0%, #2D5016 100%); padding: 0; margin-top: 60px;">
-        <div style="max-width: 1400px; margin: 0 auto; padding: 24px 32px;">
-            <div style="text-align: center; color: rgba(255,255,255,0.8); font-size: 12px;">
-                © 2025 CSS Berlin
-            </div>
-        </div>
-    </footer>
+    
+    
+    <div id="footer-placeholder"></div>
+
+
 
     <script>
         // Load order data
@@ -592,6 +590,9 @@
             document.getElementById('orderTotal').textContent = order.total.toFixed(2).replace('.', ',') + '€';
         });
     </script>
+<script>window.addEventListener('load', () => lucide.createIcons());</script>
+<script src="smart-header.js"></script>
+    <script src="components.js"></script>
 </body>
 </html>
 

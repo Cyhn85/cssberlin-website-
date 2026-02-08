@@ -2,6 +2,7 @@
 <html lang="de">
 
 <head>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Auth System Test - CSS Berlin</title>
@@ -161,6 +162,7 @@
 </head>
 
 <body>
+    <div id="header-placeholder"></div>
     <div class="test-container">
         <div class="test-header">
             <h1 class="test-title">🔐 Auth System Test</h1>
@@ -243,6 +245,9 @@
         // Re-check every 5 seconds
         setInterval(checkBackendStatus, 5000);
     </script>
+<script src="smart-header.js"></script>
+    <script src="components.js"></script>
+<div id="footer-placeholder"></div>
 </body>
 
 </html>

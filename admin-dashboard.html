@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - CSS Berlin</title>
@@ -64,6 +65,7 @@
     </style>
 </head>
 <body>
+    <div id="header-placeholder"></div>
     <div class="admin-layout">
         <aside class="admin-sidebar">
             <h2>Admin Panel</h2>
@@ -166,5 +168,8 @@
             ordersView.innerHTML += '<table>...</table>';
         }
     </script>
+<script src="smart-header.js"></script>
+    <script src="components.js"></script>
+<div id="footer-placeholder"></div>
 </body>
 </html>

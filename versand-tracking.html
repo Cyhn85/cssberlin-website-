@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sendungsverfolgung - CSS Berlin</title>
     <meta name="description" content="Verfolgen Sie Ihre Sendung bei CSS Berlin - DHL, Hermes, DPD, GLS">
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="footer.css">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* ============================================
@@ -669,8 +670,29 @@
             }
         }
     </style>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="header-v3.css">
+    <link rel="stylesheet" href="auth-modal-v3.css">
+    <link rel="stylesheet" href="cookie-consent.css">
+    <link rel="stylesheet" href="footer-v3.css">
+    <link rel="stylesheet" href="gradient-button.css">
+    
+    <!-- CLERK AUTH -->
+    <script async crossorigin="anonymous"
+      data-clerk-publishable-key="pk_test_c3VwZXItd2FzcC04NS5jbGVyay5hY2NvdW50cy5kZXYk"
+      src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+      type="text/javascript"></script>
+    
+    <script src="api-config.js"></script>
+    <script src="auth-modal-v3.js"></script>
+
 </head>
 <body class="page-wrapper">
+    <div id="header-placeholder"></div>
     <main class="page-main">
 
     <!-- Hero Section -->
@@ -1050,6 +1072,14 @@
             loadMyShipments();
         });
     </script>
+
+    
+    <div id="footer-placeholder"></div>
+
+
+<script>window.addEventListener('load', () => lucide.createIcons());</script>
+<script src="smart-header.js"></script>
+    <script src="components.js"></script>
 </body>
 </html>
 

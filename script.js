@@ -2191,3 +2191,70 @@ window.filterProducts = function (category, subCategory) {
     }, 400);
 };
 
+// ============================================
+// USER DASHBOARD LOGIC (Added V4)
+// ============================================
+async function updateUserDashboard() {
+    // Check if user is logged in via Clerk
+    // We wait a bit to ensure Clerk is fully initialized
+    setTimeout(() => {
+        if (!window.Clerk || !window.Clerk.user) {
+            console.log('[Dashboard] User not logged in');
+            return;
+        }
+
+        const user = window.Clerk.user;
+        console.log('[Dashboard] Updating for user:', user.firstName);
+
+        // 1. Update Dashboard Bar Counts (Mock Data or Fetch from API)
+        // In real app: const res = await fetch(`${API_BASE_URL}/api/users/me/stats`, ...);
+        const stats = {
+            notifications: 2,
+            offers: 1,
+            wishlist: localStorage.getItem('cssberlin_wishlist') ? JSON.parse(localStorage.getItem('cssberlin_wishlist')).length : 0,
+            cart: localStorage.getItem('cssberlin_cart') ? JSON.parse(localStorage.getItem('cssberlin_cart')).length : 0,
+        };
+
+        const notifBadge = document.querySelector('.dashboard-icon-btn[title="Benachrichtigungen"] .badge');
+        if (notifBadge) {
+            notifBadge.innerText = stats.notifications;
+            notifBadge.style.display = stats.notifications > 0 ? 'flex' : 'none';
+        }
+
+        const offerBadge = document.getElementById('negotiationCount');
+        if (offerBadge) {
+            offerBadge.innerText = stats.offers;
+            offerBadge.style.display = stats.offers > 0 ? 'flex' : 'none';
+        }
+
+        const wishlistBadge = document.getElementById('wishlistCount');
+        if (wishlistBadge) {
+            wishlistBadge.innerText = stats.wishlist;
+            wishlistBadge.style.display = stats.wishlist > 0 ? 'flex' : 'none';
+        }
+
+        const cartBadge = document.getElementById('cartCount');
+        if (cartBadge) {
+            cartBadge.innerText = stats.cart;
+            cartBadge.style.display = stats.cart > 0 ? 'flex' : 'none';
+        }
+
+        // 2. Add 'Last Seen' or Badges to Header if needed
+        // (This is often handled by smart-header.js directly)
+
+    }, 2000); // 2s delay to wait for Clerk
+}
+
+// Hook into Clerk load
+window.addEventListener('load', () => {
+    // Initial check
+    updateUserDashboard();
+
+    // Listen for changes
+    if (window.Clerk) {
+        window.Clerk.addListener((payload) => {
+            updateUserDashboard();
+        });
+    }
+});
+

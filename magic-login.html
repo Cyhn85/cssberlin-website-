@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anmeldung per E-Mail-Link - CSS Berlin</title>
@@ -124,6 +125,26 @@
             margin-top: 20px;
         }
     </style>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="header-v3.css">
+    <link rel="stylesheet" href="auth-modal-v3.css">
+    <link rel="stylesheet" href="cookie-consent.css">
+    <link rel="stylesheet" href="footer-v3.css">
+    <link rel="stylesheet" href="gradient-button.css">
+    
+    <!-- CLERK AUTH -->
+    <script async crossorigin="anonymous"
+      data-clerk-publishable-key="pk_test_c3VwZXItd2FzcC04NS5jbGVyay5hY2NvdW50cy5kZXYk"
+      src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+      type="text/javascript"></script>
+    
+    <script src="api-config.js"></script>
+    <script src="auth-modal-v3.js"></script>
+
 </head>
 <body>
     <!-- News Banner at Top -->
@@ -139,14 +160,11 @@
     </div>
 
     <!-- Header -->
-    <header class="header" style="position: sticky; top: 40px; z-index: 998;">
-        <div class="header-container">
-            <a href="index.html" style="text-decoration: none; display: flex; flex-direction: column; align-items: stretch; gap: 0; width: 200px;">
-                <div style="font-size: 36px; font-weight: 800; color: white; letter-spacing: 2px; text-align: center;">CSS Berlin</div>
-                <div style="font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.9); letter-spacing: 1px; text-transform: uppercase; text-align: center;">Climate Smart Solutions</div>
-            </a>
-        </div>
-    </header>
+    
+    
+    <div id="header-placeholder"></div>
+
+
 
     <!-- Main Content -->
     <div class="magic-login-container">
@@ -202,11 +220,11 @@
     </div>
 
     <!-- Footer -->
-    <footer class="footer" style="background: linear-gradient(135deg, #FF8C42 0%, #2D5016 100%); padding: 24px 0;">
-        <div style="max-width: 1400px; margin: 0 auto; padding: 0 32px; text-align: center; color: rgba(255,255,255,0.8); font-size: 12px;">
-            &copy; 2025 CSS Berlin - Climate Smart Solutions
-        </div>
-    </footer>
+    
+    
+    <div id="footer-placeholder"></div>
+
+
 
     <!-- Scripts -->
     <script src="api-config.js"></script>
@@ -323,6 +341,9 @@
             document.getElementById('errorMessage').textContent = message;
         }
     </script>
+<script>window.addEventListener('load', () => lucide.createIcons());</script>
+<script src="smart-header.js"></script>
+    <script src="components.js"></script>
 </body>
 </html>
 

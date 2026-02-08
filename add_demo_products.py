@@ -5,7 +5,7 @@ CSS Berlin - Demo Ürün Ekleme Scripti
 import requests
 import random
 
-API_BASE = "http://195.201.146.224:8000"
+API_BASE = "https://195.201.146.224:8000"
 
 # Demo kullanıcı bilgileri
 USER_EMAIL = "seller1@cssberlin.de"

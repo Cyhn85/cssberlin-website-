@@ -8,7 +8,7 @@ export async function onRequest(context) {
     const { request, env } = context;
 
     // Backend API URL (Hetzner server)
-    const BACKEND_URL = 'http://195.201.146.224:8000';
+    const BACKEND_URL = 'https://195.201.146.224:8000';
 
     // Extract the path from the request
     const url = new URL(request.url);
