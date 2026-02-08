@@ -186,21 +186,21 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-});
 
-// CHECK FOR NEW OFFER PARAM
-const params = new URLSearchParams(window.location.search);
-const newOfferProductId = params.get('create_offer');
 
-if (newOfferProductId && authGate.isAuthenticated) {
-    openNewOfferModal(newOfferProductId);
-}
+    // CHECK FOR NEW OFFER PARAM
+    const params = new URLSearchParams(window.location.search);
+    const newOfferProductId = params.get('create_offer');
 
-if (authGate.isAuthenticated) {
-    fetchOffers();
-} else {
-    AuthGuard.redirectToLogin('pazarlik.html');
-}
+    if (newOfferProductId && authGate.isAuthenticated) {
+        openNewOfferModal(newOfferProductId);
+    }
+
+    if (authGate.isAuthenticated) {
+        fetchOffers();
+    } else {
+        AuthGuard.redirectToLogin('pazarlik.html');
+    }
 });
 
 // NEW OFFER LOGIC
