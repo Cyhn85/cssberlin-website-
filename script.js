@@ -647,94 +647,66 @@ function applyFavoriteButtonState(button, isFav) {
     if (isFav) {
         button.classList.add('active');
         if (svg) {
-            svg.setAttribute('fill', '#F44336');
-            svg.setAttribute('stroke', '#F44336');
+            svg.setAttribute('fill', '#E0245E');
+            svg.setAttribute('stroke', '#E0245E');
         }
-        button.title = 'Von Wunschliste entfernen';
+        button.title = 'Von Favoriten entfernen';
     } else {
         button.classList.remove('active');
         if (svg) {
             svg.setAttribute('fill', 'none');
             svg.setAttribute('stroke', 'currentColor');
         }
-        button.title = 'Zur Wunschliste hinzufügen';
+        button.title = 'Zu Favoriten hinzufügen';
     }
-}
 
-async function refreshFavoriteIds() {
-    try {
-        // Preferred: FavoritesManager (favorites.js)
-        if (typeof favoritesManager !== 'undefined' && favoritesManager) {
-            if (typeof favoritesManager.init === 'function') await favoritesManager.init();
-            if (typeof favoritesManager.getFavorites === 'function') {
-                const favs = await favoritesManager.getFavorites();
-                favoriteIds = new Set(
-                    (favs || [])
-                        .map((f) => Number(f?.id))
-                        .filter((n) => Number.isFinite(n))
-                );
-                return favoriteIds;
+    // Sync all other buttons for same product
+    const prodId = button.dataset.productId;
+    if (prodId) {
+        const others = document.querySelectorAll(`.wishlist-btn[data-product-id="${prodId}"], .wish-btn[data-product-id="${prodId}"]`);
+        others.forEach(oth => {
+            if (oth !== button) {
+                if (isFav) oth.classList.add('active');
+                else oth.classList.remove('active');
+
+                const s = oth.querySelector('svg');
+                if (s) {
+                    s.setAttribute('fill', isFav ? '#E0245E' : 'none');
+                    s.setAttribute('stroke', isFav ? '#E0245E' : 'currentColor');
+                }
             }
-        }
-    } catch (e) {
-        // fall back
+        });
     }
-
-    // Fallback: legacy wishlist array in localStorage
-    try {
-        const raw = localStorage.getItem('wishlist');
-        const ids = raw ? JSON.parse(raw) : [];
-        favoriteIds = new Set((ids || []).map((n) => Number(n)).filter((n) => Number.isFinite(n)));
-    } catch (e) {
-        favoriteIds = new Set();
-    }
-    return favoriteIds;
 }
 
 async function toggleFavoriteUI(productId, button, productData) {
     const id = Number(productId);
 
+    // 1. Toggle Local State first for speed
+    let isFav = button.classList.contains('active');
+    applyFavoriteButtonState(button, !isFav); // Optimistic UI
+
     try {
         // Preferred: FavoritesManager (favorites.js)
         if (typeof favoritesManager !== 'undefined' && favoritesManager) {
             if (typeof favoritesManager.init === 'function') await favoritesManager.init();
-            if (typeof favoritesManager.toggleFavorite === 'function') {
-                await favoritesManager.toggleFavorite(id, productData || null);
-                const isFav = typeof favoritesManager.isFavorite === 'function'
-                    ? await favoritesManager.isFavorite(id)
-                    : favoriteIds.has(id);
-
-                if (isFav) favoriteIds.add(id);
-                else favoriteIds.delete(id);
-
-                applyFavoriteButtonState(button, isFav);
-                return isFav;
-            }
-        }
-    } catch (e) {
-        // fall back
-    }
-
-    // Fallback: legacy wishlist array in localStorage
-    try {
-        const raw = localStorage.getItem('wishlist');
-        const list = raw ? JSON.parse(raw) : [];
-        const idx = (list || []).findIndex((x) => Number(x) === id);
-        let isFav = false;
-        if (idx >= 0) {
-            list.splice(idx, 1);
-            isFav = false;
+            await favoritesManager.toggleFavorite(id, productData || null);
+            isFav = await favoritesManager.isFavorite(id);
         } else {
-            list.push(id);
-            isFav = true;
+            // Fallback
+            isFav = !isFav; // Just toggle
         }
-        localStorage.setItem('wishlist', JSON.stringify(list));
+
         if (isFav) favoriteIds.add(id);
         else favoriteIds.delete(id);
+
         applyFavoriteButtonState(button, isFav);
         return isFav;
+
     } catch (e) {
-        return false;
+        // Revert on error
+        applyFavoriteButtonState(button, isFav); // Revert
+        return isFav;
     }
 }
 
@@ -919,6 +891,12 @@ function createProductCard(product) {
 
                     ${isSold ? '<div class="sold-badge">VERKAUFT</div>' : ''}
                     <div class="product-card-v3-condition-badge ${badgeClass}">${product.condition}</div>
+                    
+                    <button class="card-icon-btn wish-btn ${inWishlist ? 'active' : ''}" data-product-id="${product.id}" title="Favoriten">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="${inWishlist ? '#E0245E' : 'none'}" stroke="${inWishlist ? '#E0245E' : 'currentColor'}" stroke-width="2">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </button>
             </div>
 
             <div class="product-card-v3-body">
@@ -945,8 +923,7 @@ function createProductCard(product) {
 
                 <!-- Row 4: Action Buttons (MANDATORY) -->
                 <div class="product-card-v3-actions">
-                    <button class="gradient-button gradient-button-variant negotiate-btn" data-product-id="${product.id}" ${isSold ? 'disabled' : ''}>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px;"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path></svg>
+                    <button class="gradient-button negotiate-btn" data-product-id="${product.id}" ${isSold ? 'disabled' : ''}>
                         Gebot
                     </button>
                     <button class="gradient-button buy-btn" data-product-id="${product.id}" ${isSold ? 'disabled' : ''}>
@@ -1230,10 +1207,9 @@ function handleAddToCart(productId, buttonElement) {
 
         // Update button UI - back to default
         if (buttonElement) {
-            buttonElement.style.background = 'white';
-            buttonElement.style.borderColor = '#2D5016';
+            buttonElement.style.background = '#FF8C42'; // Orange default
             buttonElement.style.color = '#2D5016';
-            buttonElement.querySelector('svg').setAttribute('stroke', '#2D5016');
+            buttonElement.innerHTML = 'Kaufen';
         }
     } else {
         // Add to cart (toggle on)
@@ -1253,10 +1229,9 @@ function handleAddToCart(productId, buttonElement) {
 
         // Update button UI - show as active
         if (buttonElement) {
-            buttonElement.style.background = '#2D5016';
-            buttonElement.style.borderColor = '#2D5016';
+            buttonElement.style.background = '#2D5016'; // Green active
             buttonElement.style.color = 'white';
-            buttonElement.querySelector('svg').setAttribute('stroke', 'white');
+            buttonElement.innerHTML = 'Im Warenkorb'; // Text feedback
         }
     }
 

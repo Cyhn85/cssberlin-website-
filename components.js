@@ -110,5 +110,38 @@ function rebindClerk() {
         }
     }
 
+    // 4. Guest Protection
+    initGuestProtection();
+}
 
+function initGuestProtection() {
+    // Select all protected icons: Messages, Negotiations, Wishlist, Cart
+    const protectedSelectors = [
+        'a[href="nachrichten.html"]',
+        'a[href="pazarlik.html"]',
+        'a[href="wunschliste.html"]',
+        'a[href="warenkorb.html"]'
+    ];
+
+    protectedSelectors.forEach(selector => {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach(el => {
+            el.addEventListener('click', function (e) {
+                // Check Clerk Login Status
+                const isGuest = !window.Clerk || !window.Clerk.user;
+
+                if (isGuest) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Guest access attempted. Triggering login.');
+
+                    if (window.Clerk) {
+                        window.Clerk.openSignIn();
+                    } else {
+                        alert("Bitte melden Sie sich an.");
+                    }
+                }
+            });
+        });
+    });
 }

@@ -45,9 +45,11 @@
     transform: scale(1.08);
 }
 
-/* Hover Icons (Heart & Cart) - Top Right/Left Overlay */
+/* Hover Icons (Heart) - Top Right Overlay */
 .card-icon-btn {
     position: absolute;
+    top: 10px;
+    right: 10px;
     width: 32px;
     height: 32px;
     border-radius: 50%;
@@ -57,185 +59,83 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     transition: all 0.2s;
     z-index: 5;
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(-5px);
     color: #4b5563;
 }
 
-.product-card:hover .card-icon-btn {
+.product-card-v3:hover .card-icon-btn {
     opacity: 1;
     transform: translateY(0);
 }
 
 .card-icon-btn:hover {
-    background: #111;
-    color: white;
+    transform: scale(1.1);
 }
 
 .card-icon-btn.active {
-    background: #fff0f0;
-    color: #ef4444;
-    /* Active Heart Red */
+    background: #fff;
+    color: #E0245E;
+    /* Red Heart */
 }
 
-.card-icon-btn.active-cart {
-    background: #f0fdf4;
-    color: #166534;
-    /* Active Cart Green */
-}
-
-.cart-btn {
-    bottom: 10px;
-    right: 46px;
-    transition-delay: 0.05s;
-}
-
-.wish-btn {
-    bottom: 10px;
-    right: 10px;
-    transition-delay: 0s;
-}
-
-.card-icon-btn svg {
-    width: 16px;
-    height: 16px;
-    stroke-width: 2px;
-}
-
-
-/* Sold Badge */
-.sold-badge {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-12deg);
-    background: rgba(255, 255, 255, 0.95);
-    color: #ef4444;
-    border: 2px solid #ef4444;
-    padding: 6px 14px;
-    font-weight: 800;
-    font-size: 13px;
-    letter-spacing: 1px;
-    z-index: 10;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
-}
-
-.product-card.sold .product-image-wrapper {
-    opacity: 0.6;
-}
-
-
-/* COMPACT INFO AREA */
-.product-info {
-    padding: 10px;
+/* Row 4: Actions (Buttons) - ORANGE THEME */
+.product-card-v3-actions {
     display: flex;
-    flex-direction: column;
-    gap: 6px;
-    background: white;
-    flex-grow: 1;
-    justify-content: space-between;
-}
-
-/* Row 1: Brand + Price */
-.info-row-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    line-height: 1;
-}
-
-.product-brand {
-    font-size: 10px;
-    font-weight: 800;
-    text-transform: uppercase;
-    color: #9ca3af;
-    letter-spacing: 0.5px;
-}
-
-.product-price {
-    font-size: 15px;
-    font-weight: 700;
-    color: #2D5016;
-}
-
-/* Row 2: Title + Size */
-.info-row-mid {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     gap: 8px;
+    margin-top: auto;
+    padding-top: 10px;
 }
 
-.product-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: #111;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin: 0;
-}
-
-.product-size {
-    font-size: 10px;
-    padding: 2px 6px;
-    background: #f3f4f6;
-    border-radius: 4px;
-    color: #6b7280;
-    font-weight: 600;
-    flex-shrink: 0;
-}
-
-/* Row 3: Actions (Buttons) - Compact */
-.product-actions-row {
-    display: flex;
-    gap: 6px;
-    margin-top: 2px;
-    /* Very tight spacing */
-}
-
-.btn-action {
+.product-card-v3-actions button {
     flex: 1;
-    height: 32px;
-    border-radius: 6px;
-    font-size: 11px;
+    height: 36px;
+    border-radius: 8px;
+    font-size: 13px;
     font-weight: 700;
+    /* Bold text */
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
     border: none;
+    cursor: pointer;
     transition: all 0.2s;
 }
 
-.btn-negotiate {
-    background: white;
-    border: 1px solid #e5e7eb;
-    color: #4b5563;
+/* Negotiate Button */
+.negotiate-btn {
+    background: #FFE8D6;
+    /* Light Orange */
+    color: #2D5016;
+    /* Dark Green Text */
+    border: 1px solid #FF8C42;
 }
 
-.btn-negotiate:hover {
-    border-color: #FF8C42;
-    color: #FF8C42;
-    background: #fff7ed;
-}
-
-.btn-buy {
-    background: #2D5016;
+.negotiate-btn:hover {
+    background: #FF8C42;
     color: white;
-    border: 1px solid #2D5016;
 }
 
-.btn-buy:hover {
-    background: #1a3309;
-    box-shadow: 0 4px 12px rgba(45, 80, 22, 0.2);
+/* Buy Button */
+.buy-btn {
+    background: #FF8C42;
+    /* Brand Orange */
+    color: #2D5016;
+    /* Brand Green Text */
 }
 
-.btn-disabled {
+.buy-btn:hover {
+    background: #E07B3A;
+    /* Darker Orange */
+    color: white;
+}
+
+/* Disabled State */
+.negotiate-btn:disabled,
+.buy-btn:disabled {
     background: #f3f4f6;
     color: #9ca3af;
     cursor: not-allowed;
