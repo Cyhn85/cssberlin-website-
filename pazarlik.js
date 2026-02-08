@@ -39,10 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         updateCounts();
     }
-    
+
     function updateCounts() {
         if (!document.getElementById('allCount')) return;
-        
+
         const counts = {
             all: allOffers.length,
             pending: allOffers.filter(n => n.status === 'pending').length,
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .reduce((sum, n) => sum + (n.product_price - (n.counter_amount || n.offer_amount)), 0);
         document.getElementById('savedAmount').textContent = savings.toFixed(2) + '€';
     }
-    
+
     function createNegotiationCard(offer) {
         const currentUser = authGate.currentUser;
         const isBuyer = currentUser.id === offer.buyer_id;
@@ -89,9 +89,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let actionsHtml = '';
         if (offer.status === 'pending') {
             if (isBuyer) {
-                 actionsHtml = `<button class="card-btn secondary" onclick="cancelOffer(${offer.id})">Zurückziehen</button>`;
+                actionsHtml = `<button class="card-btn secondary" onclick="cancelOffer(${offer.id})">Zurückziehen</button>`;
             } else {
-                 actionsHtml = `
+                actionsHtml = `
                     <button class="card-btn danger" onclick="rejectOffer(${offer.id})">Ablehnen</button>
                     <button class="card-btn secondary" onclick="openCounterModal(${offer.id})">Gegenangebot</button>
                     <button class="card-btn success" onclick="acceptOffer(${offer.id})">Annehmen</button>`;
@@ -109,28 +109,32 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             actionsHtml = `<button class="card-btn primary" onclick="viewProduct(${offer.product_id})" style="width: 100%;">Erneut verhandeln</button>`;
         }
-        
+
         const discount = Math.round((1 - offer.offer_amount / offer.product_price) * 100);
 
         return `
-            <div class="negotiation-card ${offer.status}">
+            <div class="negotiation-card ${offer.status} ${offer.product_is_sold ? 'sold-item' : ''}" id="offer-card-${offer.id}">
                 <div class="card-product">
-                    <img src="${offer.product_image || 'https://via.placeholder.com/80x100?text=Bild'}" alt="${offer.product_name}" class="card-product-image">
+                    <div style="position:relative;">
+                        <img src="${offer.product_image || 'https://via.placeholder.com/80x100?text=Bild'}" alt="${offer.product_name}" class="card-product-image" style="${offer.product_is_sold ? 'filter: grayscale(100%); opacity: 0.6;' : ''}">
+                        ${offer.product_is_sold ? '<div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:rgba(0,0,0,0.7); color:white; padding:4px; border-radius:50%;"><i data-lucide="lock" width="16" height="16"></i></div>' : ''}
+                    </div>
                     <div class="card-product-info">
-                        <div class="card-product-title">${offer.product_name}</div>
+                        <div class="card-product-title" style="${offer.product_is_sold ? 'color:#999;' : ''}">${offer.product_name}</div>
                         <div>
-                            <span class="card-product-price">${offer.product_price.toFixed(2)}€</span>
+                            <span class="card-product-price" style="${offer.product_is_sold ? 'color:#999; text-decoration:line-through;' : ''}">${offer.product_price ? offer.product_price.toFixed(2) : '0.00'}€</span>
+                            ${offer.product_is_sold ? '<span style="color:#ef4444; font-weight:700; font-size:12px; margin-left:8px;">VERKAUFT</span>' : ''}
                         </div>
                         <div class="seller-info">
-                            <div class="seller-name">${isBuyer ? offer.seller_name : offer.buyer_name}</div>
+                            <div class="seller-name">${isBuyer ? (offer.seller_name || 'Verkäufer') : (offer.buyer_name || 'Käufer')}</div>
                         </div>
                     </div>
                 </div>
-                <div class="card-offer">
+                <div class="card-offer" style="${offer.product_is_sold ? 'opacity:0.6;' : ''}">
                     <div class="offer-row">
                         <span class="offer-label">Status</span>
                         <span class="status-badge ${offer.status}">
-                            ${statusIcons[offer.status]} ${statusLabels[offer.status]}
+                            ${statusIcons[offer.status] || ''} ${statusLabels[offer.status] || offer.status}
                         </span>
                     </div>
                     <div class="offer-row">
@@ -142,7 +146,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
                 <div class="card-actions">
-                    ${actionsHtml}
+                    ${offer.product_is_sold
+                ? `<button class="card-btn secondary" onclick="deleteOffer(${offer.id})"><i data-lucide="trash-2" style="width:14px; vertical-align:middle;"></i> Löschen</button>`
+                : actionsHtml}
                 </div>
             </div>
         `;
@@ -151,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function setupWebSockets() {
         sockets.forEach(socket => socket.close());
         sockets = [];
-        
+
         const uniqueOfferIds = [...new Set(allOffers.map(o => o.id))];
 
         uniqueOfferIds.forEach(offerId => {
@@ -166,11 +172,11 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             ws.onerror = (error) => console.error(`WebSocket error for offer ${offerId}:`, error);
             ws.onclose = () => console.log(`WebSocket disconnected for offer ${offerId}`);
-            
+
             sockets.push(ws);
         });
     }
-    
+
     filterTabs.forEach(tab => {
         tab.addEventListener('click', () => {
             currentFilter = tab.dataset.filter;
@@ -199,11 +205,25 @@ async function cancelOffer(offerId) {
     await api.declineOffer(offerId);
 }
 
+async function deleteOffer(offerId) {
+    if (!confirm("Möchten Sie dieses Angebot wirklich löschen?")) return;
+    try {
+        await api.deleteOffer(offerId);
+        // Refresh list
+        // Ideally we assume success and remove from DOM or re-fetch
+        location.reload();
+    } catch (e) {
+        console.error(e);
+        alert("Fehler beim Löschen.");
+    }
+}
+window.deleteOffer = deleteOffer;
+
 function openCounterModal(offerId) {
     // Implement modal logic
 }
 
-function proceedToCheckout(offerId){
+function proceedToCheckout(offerId) {
     // Implement checkout logic
 }
 

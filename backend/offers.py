@@ -43,6 +43,14 @@ class OfferOut(BaseModel):
     message: Optional[str]
     created_at: datetime
     updated_at: datetime
+    
+    # Enriched fields
+    product_name: Optional[str] = None
+    product_image: Optional[str] = None
+    product_price: Optional[float] = None
+    product_is_sold: Optional[bool] = None
+    seller_name: Optional[str] = None
+    buyer_name: Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -148,13 +156,51 @@ async def list_offers(
 ):
     user = await _get_user(authorization, db)
 
-    # Buyer veya seller olduğu teklifleri göster
-    result = await db.execute(
-        select(Offer).where(
-            (Offer.buyer_id == user.id) | (Offer.seller_id == user.id)
-        ).order_by(Offer.created_at.desc())
-    )
-    return result.scalars().all()
+    # Buyer veya seller olduğu teklifleri göster (Join ile)
+    # Eager load relationships for Pydantic to access them
+    from sqlalchemy.orm import selectinload
+    
+    query = select(Offer).options(
+        selectinload(Offer.product),
+        selectinload(Offer.seller),
+        selectinload(Offer.buyer)
+    ).where(
+        (Offer.buyer_id == user.id) | (Offer.seller_id == user.id)
+    ).order_by(Offer.created_at.desc())
+
+    result = await db.execute(query)
+    offers = result.scalars().all()
+    
+    # Map ORM objects to Schema manually to ensure fields are populated
+    offer_list = []
+    for o in offers:
+        # Get primary image
+        img = None
+        if o.product.images and isinstance(o.product.images, list) and len(o.product.images) > 0:
+             img = o.product.images[0]
+        
+        offer_dict = OfferOut(
+            id=o.id,
+            product_id=o.product_id,
+            buyer_id=o.buyer_id,
+            seller_id=o.seller_id,
+            offer_amount=o.offer_amount,
+            counter_amount=o.counter_amount,
+            status=o.status,
+            message=o.message,
+            created_at=o.created_at,
+            updated_at=o.updated_at,
+            
+            product_name=o.product.name if o.product else "Unknown",
+            product_image=img,
+            product_price=o.product.price if o.product else 0.0,
+            product_is_sold=o.product.is_sold if o.product else False,
+            seller_name=f"{o.seller.first_name} {o.seller.last_name}" if o.seller else "Unknown",
+            buyer_name=f"{o.buyer.first_name} {o.buyer.last_name}" if o.buyer else "Unknown"
+        )
+        offer_list.append(offer_dict)
+        
+    return offer_list
 
 
 # ─── ACCEPT ──────────────────────────────────────────────
@@ -257,3 +303,32 @@ async def counter_offer(
     await db.commit()
     await db.refresh(offer)
     return offer
+
+
+# ─── DELETE (Archive) ─────────────────────────────────────
+@router.delete("/{offer_id}")
+async def delete_offer(
+    offer_id: int,
+    authorization: Optional[str] = _Header(default=None),
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Teklifi siler (Veritabanından tamamen kaldırır veya soft-delete)
+    Burada şimdilik hard-delete yapıyoruz ki liste temizlensin.
+    """
+    user = await _get_user(authorization, db)
+    
+    result = await db.execute(select(Offer).where(Offer.id == offer_id))
+    offer = result.scalar_one_or_none()
+    
+    if not offer:
+        raise HTTPException(status_code=404, detail="Teklif bulunamadı")
+        
+    # Sadece tarafı olanlar silebilir
+    if offer.buyer_id != user.id and offer.seller_id != user.id:
+        raise HTTPException(status_code=403, detail="Bu teklifi silme yetkiniz yok")
+
+    await db.delete(offer)
+    await db.commit()
+    
+    return {"message": "Teklif silindi", "id": offer_id}

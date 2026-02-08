@@ -214,6 +214,15 @@ class APIClient {
         });
     }
 
+    /**
+     * Delete offer (archive)
+     */
+    async deleteOffer(offerId) {
+        return await this.request(`/api/offers/${offerId}`, {
+            method: 'DELETE'
+        });
+    }
+
     // ============== MESSAGES ==============
 
     /**
