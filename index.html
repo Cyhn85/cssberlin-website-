@@ -2,6 +2,17 @@
 <html lang="de" class="scroll-smooth">
 
 <head>
+    <script>
+        // Global I18n Toggle Fallback
+        window.toggleLanguageDropdown = function () {
+            if (window.I18n) {
+                const newLang = window.I18n.currentLang === 'de' ? 'en' : 'de';
+                window.I18n.setLanguage(newLang);
+            } else {
+                console.warn("I18n not loaded yet");
+            }
+        };
+    </script>
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

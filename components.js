@@ -1,3 +1,13 @@
+// GLOBAL FUNCTIONS (Defined immediately to prevent race conditions)
+window.toggleLanguageDropdown = function () {
+    if (window.I18n) {
+        const newLang = window.I18n.currentLang === 'de' ? 'en' : 'de';
+        window.I18n.setLanguage(newLang);
+    } else {
+        console.warn('I18n not ready yet');
+    }
+};
+
 document.addEventListener('DOMContentLoaded', async function () {
     console.log('[Components] Initializing component loader...');
 
@@ -96,14 +106,6 @@ function initializeHeaderScripts() {
         s.src = 'i18n.js';
         document.body.appendChild(s);
     }
-
-    // Global toggle function
-    window.toggleLanguageDropdown = function () {
-        if (window.I18n) {
-            const newLang = window.I18n.currentLang === 'de' ? 'en' : 'de';
-            window.I18n.setLanguage(newLang);
-        }
-    };
 
     // 3. Clerk Auth Re-binding
     if (window.Clerk) {
