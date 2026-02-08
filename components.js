@@ -90,21 +90,20 @@ function initializeHeaderScripts() {
     }
 
     // 2. Language Selector Logic
-    // If toggleLanguageDropdown is not defined globally, we define a simple version here or link it to I18n
-    if (typeof window.toggleLanguageDropdown === 'undefined') {
-        window.toggleLanguageDropdown = function () {
-            if (window.I18n && typeof window.I18n.setLanguage === 'function') {
-                const newLang = window.I18n.currentLang === 'de' ? 'en' : 'de';
-                window.I18n.setLanguage(newLang);
-
-                // Update button visual
-                const btnSpan = document.querySelector('.lang-selector-v3 span');
-                if (btnSpan) btnSpan.textContent = newLang.toUpperCase();
-            } else {
-                console.warn('I18n system not ready or missing.');
-            }
-        };
+    // Load I18n Script if missing
+    if (!document.querySelector('script[src="i18n.js"]')) {
+        const s = document.createElement('script');
+        s.src = 'i18n.js';
+        document.body.appendChild(s);
     }
+
+    // Global toggle function
+    window.toggleLanguageDropdown = function () {
+        if (window.I18n) {
+            const newLang = window.I18n.currentLang === 'de' ? 'en' : 'de';
+            window.I18n.setLanguage(newLang);
+        }
+    };
 
     // 3. Clerk Auth Re-binding
     // Wait for Clerk to be ready if it isn't yet

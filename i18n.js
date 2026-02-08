@@ -1,171 +1,213 @@
-/**
- * CSS Berlin - Internationalization (i18n) System
- * Handles language switching between German (de) and English (en)
- */
+/* =============================================
+   I18N - INTERNATIONALIZATION SYSTEM
+   German & English Dictionaries
+   ============================================= */
 
-const I18n = {
-    currentLang: 'de',
-    translations: {},
-    defaultLang: 'de',
+const translations = {
+    'de': {
+        // Header
+        'announcement.offer': 'PREISVORSCHLAG SENDEN & SPAREN',
+        'announcement.shipping': 'KOSTENLOSER VERSAND AB 50€',
+        'announcement.secure': 'SICHER BEZAHLEN MIT KÄUFERSCHUTZ',
+        'nav.damen': 'DAMEN',
+        'nav.herren': 'HERREN',
+        'nav.kinder': 'KINDER',
+        'nav.elektronik': 'ELEKTRONIK',
+        'nav.sonstiges': 'SONSTIGES',
+        'nav.sale': 'SALE',
+        'btn.login': 'Anmelden',
+        'cat.all': 'Alle Kategorien',
+        'search.placeholder': 'CLIMATE SMART SOLUTIONS',
 
-    /**
-     * Initialize the i18n system
-     */
-    async init() {
-        // Load saved language preference
-        const savedLang = localStorage.getItem('cssberlin_lang') || this.defaultLang;
+        // Hero
+        'hero.collection': 'Aktuelle Kollektion',
+        'hero.fresh': 'Frisch Eingetroffen',
+        'loader.text': 'Produkte werden geladen...',
 
-        // Load both language files
-        await Promise.all([
-            this.loadTranslations('de'),
-            this.loadTranslations('en')
-        ]);
+        // Product Card
+        'card.new': 'NEUWERTIG',
+        'card.good': 'GUT',
+        'card.very_good': 'SEHR GUT',
+        'card.sold': 'VERKAUFT',
+        'btn.negotiate': 'Verhandeln',
+        'btn.buy': 'Kaufen',
+        'btn.loadmore': 'Mehr anzeigen',
 
-        // Apply saved language
-        this.setLanguage(savedLang);
+        // Footer
+        'footer.about': 'Über uns',
+        'footer.sustainability': 'Nachhaltigkeit',
+        'footer.press': 'Presse',
+        'footer.advertising': 'Werbung',
+        'footer.accessibility': 'Barrierefreiheit',
+        'footer.how': "Wie funktioniert's?",
+        'footer.verification': 'Artikelverifizierung',
+        'footer.apps': 'Smartphone-Apps',
+        'footer.infoboard': 'Infoboard',
+        'footer.help': 'Hilfe-Center',
+        'footer.trust': 'Vertrauen und Sicherheit',
+        'footer.imprint': 'Impressum',
+        'footer.privacy': 'Datenschutz',
+        'footer.terms': 'AGB',
+        'footer.withdrawal': 'Widerrufsrecht',
+        'footer.rights': 'Alle Rechte vorbehalten.',
+
+        // Dialogs
+        'toast.wishlist_add': 'Zur Wunschliste hinzugefügt',
+        'toast.wishlist_remove': 'Von der Wunschliste entfernt',
+        'toast.cart_add': 'In den Warenkorb gelegt',
+        'toast.cart_remove': 'Aus Warenkorb entfernt'
+    },
+    'en': {
+        // Header
+        'announcement.offer': 'SEND OFFER & SAVE',
+        'announcement.shipping': 'FREE SHIPPING OVER 50€',
+        'announcement.secure': 'SECURE CHECKOUT WITH BUYER PROCTECTION',
+        'nav.damen': 'WOMEN',
+        'nav.herren': 'MEN',
+        'nav.kinder': 'KIDS',
+        'nav.elektronik': 'ELECTRONICS',
+        'nav.sonstiges': 'OTHERS',
+        'nav.sale': 'SALE',
+        'btn.login': 'Sign In',
+        'cat.all': 'All Categories',
+        'search.placeholder': 'SEARCH ITEMS...',
+
+        // Hero
+        'hero.collection': 'Current Collection',
+        'hero.fresh': 'Just Arrived',
+        'loader.text': 'Loading products...',
+
+        // Product Card
+        'card.new': 'LIKE NEW',
+        'card.good': 'GOOD',
+        'card.very_good': 'VERY GOOD',
+        'card.sold': 'SOLD OUT',
+        'btn.negotiate': 'Make Offer',
+        'btn.buy': 'Buy Now',
+        'btn.loadmore': 'Load More',
+
+        // Footer
+        'footer.about': 'About Us',
+        'footer.sustainability': 'Sustainability',
+        'footer.press': 'Press',
+        'footer.advertising': 'Advertising',
+        'footer.accessibility': 'Accessibility',
+        'footer.how': 'How it works?',
+        'footer.verification': 'Item Verification',
+        'footer.apps': 'Mobile Apps',
+        'footer.infoboard': 'Infoboard',
+        'footer.help': 'Help Center',
+        'footer.trust': 'Trust & Safety',
+        'footer.imprint': 'Imprint',
+        'footer.privacy': 'Privacy Policy',
+        'footer.terms': 'Terms & Conditions',
+        'footer.withdrawal': 'Right of Withdrawal',
+        'footer.rights': 'All rights reserved.',
+
+        // Dialogs
+        'toast.wishlist_add': 'Added to Wishlist',
+        'toast.wishlist_remove': 'Removed from Wishlist',
+        'toast.cart_add': 'Added to Cart',
+        'toast.cart_remove': 'Removed from Cart'
+    }
+};
+
+window.I18n = {
+    currentLang: localStorage.getItem('cssberlin_lang') || 'de',
+
+    init() {
+        console.log('[I18n] Initializing language:', this.currentLang);
+        this.updatePage();
+        this.updateButton();
     },
 
-    /**
-     * Load translation file for a specific language
-     */
-    async loadTranslations(lang) {
-        try {
-            const response = await fetch(`i18n/${lang}.json`);
-            if (response.ok) {
-                this.translations[lang] = await response.json();
-                console.log(`✓ Loaded translations for: ${lang}`);
-            } else {
-                console.warn(`Failed to load translations for: ${lang}`);
-            }
-        } catch (error) {
-            console.error(`Error loading translations for ${lang}:`, error);
-        }
-    },
-
-    /**
-     * Get translation for a key (supports nested keys like "header.search_placeholder")
-     */
-    t(key) {
-        const keys = key.split('.');
-        let value = this.translations[this.currentLang];
-
-        for (const k of keys) {
-            if (value && typeof value === 'object' && k in value) {
-                value = value[k];
-            } else {
-                // Fallback to default language
-                value = this.translations[this.defaultLang];
-                for (const fallbackKey of keys) {
-                    if (value && typeof value === 'object' && fallbackKey in value) {
-                        value = value[fallbackKey];
-                    } else {
-                        return key; // Return key if not found
-                    }
-                }
-                break;
-            }
-        }
-
-        return value || key;
-    },
-
-    /**
-     * Set the current language and update all translated elements
-     */
     setLanguage(lang) {
-        if (!this.translations[lang]) {
-            console.warn(`Language ${lang} not loaded`);
-            return;
-        }
-
+        if (lang !== 'de' && lang !== 'en') return;
         this.currentLang = lang;
         localStorage.setItem('cssberlin_lang', lang);
-        document.documentElement.lang = lang;
+        this.updatePage();
+        this.updateButton();
 
-        // Update language selector buttons
-        this.updateLanguageButtons(lang);
-
-        // Translate all elements with data-i18n attribute
-        this.translatePage();
-
-        // Dispatch event for other scripts that might need to react
-        window.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang } }));
-
-        console.log(`✓ Language switched to: ${lang}`);
-    },
-
-    /**
-     * Update the language selector buttons' visual state
-     */
-    updateLanguageButtons(lang) {
-        const deBtn = document.getElementById('lang-de');
-        const enBtn = document.getElementById('lang-en');
-
-        if (!deBtn || !enBtn) return;
-
-        // Use CSS classes for styling
-        if (lang === 'de') {
-            deBtn.classList.add('active');
-            enBtn.classList.remove('active');
-        } else {
-            enBtn.classList.add('active');
-            deBtn.classList.remove('active');
+        // Reload products if function exists to refresh card text
+        if (typeof renderProducts === 'function' && window.loadedProducts) {
+            renderProducts(window.loadedProducts);
+        } else if (typeof renderProducts === 'function' && typeof mockProducts !== 'undefined') {
+            renderProducts(mockProducts);
         }
     },
 
-    /**
-     * Translate all elements with data-i18n attributes
-     */
-    translatePage() {
-        // Translate text content
-        document.querySelectorAll('[data-i18n]').forEach(element => {
-            const key = element.getAttribute('data-i18n');
-            const translation = this.t(key);
-            if (translation !== key) {
-                element.textContent = translation;
-            }
-        });
+    getText(key) {
+        return translations[this.currentLang][key] || key;
+    },
 
-        // Translate placeholders
-        document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
-            const key = element.getAttribute('data-i18n-placeholder');
-            const translation = this.t(key);
-            if (translation !== key) {
-                element.placeholder = translation;
-            }
-        });
+    updateButton() {
+        const btnSpan = document.querySelector('.lang-selector-v3 span');
+        if (btnSpan) btnSpan.textContent = this.currentLang.toUpperCase();
+    },
 
-        // Translate titles (tooltips)
-        document.querySelectorAll('[data-i18n-title]').forEach(element => {
-            const key = element.getAttribute('data-i18n-title');
-            const translation = this.t(key);
-            if (translation !== key) {
-                element.title = translation;
-            }
-        });
+    updatePage() {
+        // Map DOM elements to translation keys
+        const mapping = [
+            // Header
+            { sel: '.announcement-item:nth-child(1)', key: 'announcement.offer', html: true, icon: '🌟 ' },
+            { sel: '.announcement-item:nth-child(3)', key: 'announcement.shipping', html: true, icon: '🚚 ' },
+            { sel: '.announcement-item:nth-child(5)', key: 'announcement.secure', html: true, icon: '🔒 ' },
+            { sel: 'a[href="?category=damen"]', key: 'nav.damen' },
+            { sel: 'a[href="?category=herren"]', key: 'nav.herren' },
+            { sel: 'a[href="?category=kinder"]', key: 'nav.kinder' },
+            { sel: 'a[href="?category=elektronik"]', key: 'nav.elektronik' },
+            { sel: 'a[href="sonstiges.html"]', key: 'nav.sonstiges' },
+            { sel: '#header-login-btn', key: 'btn.login' },
+            { sel: '#categoryDropdownTrigger span', key: 'cat.all' },
+            { attr: 'placeholder', sel: '#searchInputV3', key: 'search.placeholder' },
 
-        // Translate aria-labels
-        document.querySelectorAll('[data-i18n-aria]').forEach(element => {
-            const key = element.getAttribute('data-i18n-aria');
-            const translation = this.t(key);
-            if (translation !== key) {
-                element.setAttribute('aria-label', translation);
-            }
+            // Hero
+            { sel: '.products > div > div:first-child', key: 'hero.collection' },
+            { sel: '#pageTitle', key: 'hero.fresh' },
+
+            // Buttons
+            { sel: '.btn-load-more', key: 'btn.loadmore' },
+
+            // Footer
+            { sel: 'a[href="ueber-uns.html"]', key: 'footer.about' },
+            { sel: 'a[href="nachhaltigkeit.html"]', key: 'footer.sustainability' },
+            { sel: 'a[href="presse.html"]', key: 'footer.press' },
+            { sel: 'a[href="werbung.html"]', key: 'footer.advertising' },
+            { sel: 'a[href="barrierefreiheit.html"]', key: 'footer.accessibility' },
+            { sel: 'a[href="wie-funktioniert-es.html"]', key: 'footer.how' },
+            { sel: 'a[href="verifizierung.html"]', key: 'footer.verification' },
+            { sel: 'a[href="apps.html"]', key: 'footer.apps' },
+            { sel: 'a[href="infoboard.html"]', key: 'footer.infoboard' },
+            { sel: 'a[href="hilfe-center.html"]', key: 'footer.help' },
+            { sel: 'a[href="sicherheit.html"]', key: 'footer.trust' },
+            { sel: 'a[href="impressum.html"]', key: 'footer.imprint' },
+            { sel: 'a[href="datenschutz.html"]', key: 'footer.privacy' },
+            { sel: 'a[href="agb.html"]', key: 'footer.terms' },
+            { sel: 'a[href="widerrufsrecht.html"]', key: 'footer.withdrawal' },
+            // Copyright
+            { sel: '.footer-bottom-v3 p', key: 'footer.rights', html: true, prefix: '&copy; 2026 CSS Berlin - Climate Smart Solutions. ' }
+
+        ];
+
+        mapping.forEach(item => {
+            const els = document.querySelectorAll(item.sel);
+            els.forEach(el => {
+                const text = this.getText(item.key);
+                if (item.attr) {
+                    el.setAttribute(item.attr, text);
+                } else if (item.html) {
+                    const prefix = item.prefix || '';
+                    const icon = item.icon ? `<span class="announcement-icon">${item.icon.trim()}</span> ` : '';
+                    el.innerHTML = icon + prefix + text;
+                } else {
+                    el.textContent = text;
+                }
+            });
         });
     }
 };
 
-/**
- * Global function to set language (called by language buttons)
- */
-function setLanguage(lang) {
-    I18n.setLanguage(lang);
-}
-
-// Initialize when DOM is ready
+// Auto-Init on Load
 document.addEventListener('DOMContentLoaded', () => {
-    I18n.init();
+    window.I18n.init();
 });
-
-// Export for use in other scripts
-window.I18n = I18n;

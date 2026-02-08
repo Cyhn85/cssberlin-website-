@@ -99,13 +99,13 @@ function renderProducts(products) {
 
                 <div class="product-actions-row">
                     ${isSold ?
-                '<button class="btn-action btn-disabled" disabled onclick="event.stopPropagation()">VERKAUFT</button>' :
+                `<button class="btn-action btn-disabled" disabled onclick="event.stopPropagation()">${window.I18n ? window.I18n.getText('card.sold') : 'VERKAUFT'}</button>` :
                 `
                         <button class="btn-action btn-negotiate" onclick="startNegotiation('${product.id}', event)">
-                            Verhandeln
+                            ${window.I18n ? window.I18n.getText('btn.negotiate') : 'Verhandeln'}
                         </button>
                         <button class="btn-action btn-buy" onclick="buyNow('${product.id}', event)">
-                            Kaufen
+                            ${window.I18n ? window.I18n.getText('btn.buy') : 'Kaufen'}
                         </button>
                         `
             }
