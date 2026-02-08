@@ -245,27 +245,33 @@ function initGuestProtection() {
     protectedSelectors.forEach(selector => {
         const elements = document.querySelectorAll(selector);
         elements.forEach(el => {
-            el.addEventListener('click', function (e) {
-                // Check Clerk Login Status
-                const isGuest = !window.Clerk || !window.Clerk.user;
+            // Remove old listeners to prevent stacking
+            const newEl = el.cloneNode(true);
+            if (el.parentNode) el.parentNode.replaceChild(newEl, el);
 
-                if (isGuest) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log('Guest access attempted. Triggering login.');
+            newEl.addEventListener('click', function (e) {
+                // 1. Check if Clerk is loaded
+                if (window.Clerk && window.Clerk.user) {
+                    // Logged in -> Allow navigation
+                    return;
+                }
 
-                    if (window.Clerk) {
-                        window.Clerk.openSignIn({
-                            appearance: {
-                                variables: {
-                                    colorPrimary: '#2D5016',
-                                    colorTextOnPrimaryBackground: 'white'
-                                }
+                // 2. Not logged in
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Safe Guest Guard: Preventing navigation', newEl.href);
+
+                if (window.Clerk) {
+                    window.Clerk.openSignIn({
+                        appearance: {
+                            variables: {
+                                colorPrimary: '#2D5016',
+                                colorTextOnPrimaryBackground: 'white'
                             }
-                        });
-                    } else {
-                        alert("Bitte melden Sie sich an.");
-                    }
+                        }
+                    });
+                } else {
+                    alert("Bitte warten Sie, bis die Anmeldung geladen ist.");
                 }
             });
         });

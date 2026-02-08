@@ -90,31 +90,39 @@
 .logo-v3 {
     display: flex;
     align-items: center;
-    /* Better vertical alignment */
     gap: 2px;
     text-decoration: none;
     padding-left: 0;
-    /* consistent padding */
+    line-height: normal;
+    /* Fix vertical alignment */
+    height: 48px;
+    /* Force height */
 }
 
 .logo-v3 .logo-css {
-    font-size: 34px;
-    /* INCREASED */
-    font-weight: 800;
+    font-size: 38px;
+    /* Slightly larger */
+    font-weight: 900;
     color: #FF8C42;
-    letter-spacing: -1.5px;
+    letter-spacing: -2px;
     font-family: 'Montserrat', 'Inter', sans-serif;
     line-height: 1;
+    display: flex;
+    align-items: center;
 }
 
 .logo-v3 .logo-berlin {
-    font-size: 34px;
-    /* INCREASED */
+    font-size: 38px;
     font-weight: 800;
     color: white;
     letter-spacing: -1.5px;
     font-family: 'Montserrat', 'Inter', sans-serif;
     line-height: 1;
+    display: flex;
+    align-items: center;
+    position: relative;
+    top: 1px;
+    /* Optical adjustment */
 }
 
 /* Header Right Actions */
@@ -122,7 +130,8 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    /* Tighter spacing as requested */
+    height: 100%;
+    /* Fill height */
 }
 
 /* Icon Buttons */
@@ -130,15 +139,15 @@
     position: relative;
     display: flex;
     align-items: center;
+    /* Vertical Center */
     justify-content: center;
-    width: 32px;
-    /* REDUCED from 36px */
-    height: 32px;
-    /* REDUCED from 36px */
+    width: 40px;
+    /* Standardize */
+    height: 40px;
     color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
     transition: all 0.2s;
-    border-radius: 6px;
+    border-radius: 8px;
 }
 
 .header-icon-v3:hover {
