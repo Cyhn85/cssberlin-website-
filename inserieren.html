@@ -258,10 +258,45 @@
 </head>
 
 <body>
+    <!-- STRICT ACCESS CONTROL -->
+    <script>
+        window.addEventListener('load', async function () {
+            // Wait for Clerk
+            const checkAuth = () => {
+                if (window.Clerk && window.Clerk.isReady()) {
+                    const user = window.Clerk.user;
+                    const allowedEmails = [
+                        'ceyhuns.sorguc@gmail.com',
+                        'admin@cssberlin.de',
+                        'info@cssberlin.de',
+                        'seller@cssberlin.de'
+                    ];
+
+                    let isAuthorized = false;
+                    if (user && user.primaryEmailAddress) {
+                        if (allowedEmails.includes(user.primaryEmailAddress.emailAddress)) {
+                            isAuthorized = true;
+                        }
+                    }
+
+                    if (!isAuthorized) {
+                        console.warn('Unauthorized access to Inserieren. Redirecting...');
+                        window.location.href = 'index.html';
+                    } else {
+                        document.body.style.display = 'block'; // Show content if authorized
+                    }
+                } else {
+                    setTimeout(checkAuth, 100);
+                }
+            };
+
+            // Hide body initially to prevent flash of content
+            document.body.style.display = 'none';
+            checkAuth();
+        });
+    </script>
 
     <!-- Header will be injected by component loader or script -->
-    <div id="header-placeholder"></div>
-    <!-- Standard Header V3 (Static Fallback) -->
     <div id="header-placeholder"></div>
 
     <div class="upload-container">
