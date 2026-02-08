@@ -20,7 +20,7 @@
     <!-- Standard Styles -->
     <link rel="stylesheet" href="header-v3.css">
     <link rel="stylesheet" href="auth-modal-v3.css">
-    
+
     <link rel="stylesheet" href="product-card-glass.css">
     <link rel="stylesheet" href="footer-v3.css">
 
@@ -231,11 +231,11 @@
 
 <body>
     <!-- HEADER V3 (Standard) -->
-    
+
     </div>
 
-    
-    
+
+
     <div id="header-placeholder"></div>
 
 
@@ -269,9 +269,28 @@
             <!-- Right: Summary -->
             <div class="summary-panel">
                 <h2 class="summary-title">Zusammenfassung</h2>
+
+                <!-- Coupon Section -->
+                <div class="coupon-section" style="margin-bottom: 20px;">
+                    <div style="display:flex; gap:8px;">
+                        <input type="text" id="couponCode" placeholder="Gutscheincode"
+                            style="flex:1; padding:8px; border:1px solid #ddd; border-radius:6px; font-size:14px;">
+                        <button id="applyCouponBtn"
+                            style="padding:8px 12px; background:#f3f4f6; border:1px solid #ddd; border-radius:6px; cursor:pointer; font-weight:600;">
+                            OK
+                        </button>
+                    </div>
+                    <small id="couponMessage"
+                        style="display:block; margin-top:5px; font-size:12px; min-height:18px;"></small>
+                </div>
+
                 <div class="summary-row">
                     <span>Zwischensumme</span>
                     <span id="subtotalAmount">0,00€</span>
+                </div>
+                <div class="summary-row" id="discountRow" style="display:none; color:#2D5016;">
+                    <span>Rabatt</span>
+                    <span id="discountAmount">-0,00€</span>
                 </div>
                 <div class="summary-row">
                     <span>Versand</span>
@@ -281,12 +300,114 @@
                     <span>Gesamt</span>
                     <span id="totalAmount">0,00€</span>
                 </div>
-                <button class="checkout-btn" id="checkoutBtn">ZUR KASSE</button>
+                <button class="checkout-btn" id="checkoutBtn">BESTELLEN</button>
                 <div style="text-align:center; margin-top:12px;">
                     <a href="index.html" style="color:#6b7280; font-size:13px; text-decoration:none;">Weiter
                         einkaufen</a>
                 </div>
             </div>
+
+            <script>
+                // Backend Interaction Logic
+                const API_URL = window.API_BASE_URL || 'http://localhost:8000';
+                let currentDiscountCode = null;
+
+                document.getElementById('applyCouponBtn').addEventListener('click', async () => {
+                    const code = document.getElementById('couponCode').value.trim();
+                    const msg = document.getElementById('couponMessage');
+                    if (!code) return;
+
+                    try {
+                        let cart = JSON.parse(localStorage.getItem('cssberlin_cart') || '[]');
+                        // Correct price parsing
+                        const items = cart.map(i => ({
+                            id: i.id || 0,
+                            quantity: i.quantity || 1,
+                            price: typeof i.price === 'number' ? i.price : parseFloat(i.price.replace('€', '').replace(',', '.'))
+                        }));
+
+                        const resp = await fetch(`${API_URL}/api/cart/calculate`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ code: code, cart_items: items })
+                        });
+
+                        const data = await resp.json();
+
+                        if (resp.ok) {
+                            msg.textContent = data.message;
+                            msg.style.color = 'green';
+                            currentDiscountCode = code;
+
+                            // Update UI
+                            document.getElementById('discountRow').style.display = 'flex';
+                            document.getElementById('discountAmount').textContent = '-' + data.discount.toFixed(2).replace('.', ',') + '€';
+
+                            // Update Subtotal/Total from backend or re-calc locally
+                            // Using backend totals is safer but we need to account for Shipping logic which might be frontend only or mix.
+                            // Backend returned {subtotal, discount, total} (without shipping likely, based on our python code).
+                            // Python code: total = subtotal - discount.
+                            // Frontend shipping is 4.99.
+
+                            const finalTotal = data.total + 4.99; // Adding shipping
+                            document.getElementById('totalAmount').textContent = finalTotal.toFixed(2).replace('.', ',') + '€';
+                        } else {
+                            msg.textContent = data.detail || 'Code ungültig';
+                            msg.style.color = 'red';
+                            currentDiscountCode = null;
+                            document.getElementById('discountRow').style.display = 'none';
+                            // Reload base cart totals
+                            loadCart();
+                        }
+                    } catch (e) {
+                        console.error(e);
+                        msg.textContent = 'Fehler bei der Anfrage';
+                        msg.style.color = 'red';
+                    }
+                });
+
+                document.getElementById('checkoutBtn').addEventListener('click', async () => {
+                    const btn = document.getElementById('checkoutBtn');
+                    btn.disabled = true;
+                    btn.textContent = 'Verarbeite...';
+
+                    try {
+                        let cart = JSON.parse(localStorage.getItem('cssberlin_cart') || '[]');
+                        const items = cart.map(i => ({
+                            id: i.id || 0,
+                            quantity: i.quantity || 1,
+                            price: typeof i.price === 'number' ? i.price : parseFloat(i.price.replace('€', '').replace(',', '.'))
+                        }));
+
+                        const req = {
+                            cart_items: items,
+                            address: { street: "Sample Str. 1", city: "Berlin" }, // Mock Address
+                            payment_method: "Credit Card",
+                            discount_code: currentDiscountCode
+                        };
+
+                        const resp = await fetch(`${API_URL}/api/checkout`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(req)
+                        });
+
+                        if (resp.ok) {
+                            // Success
+                            localStorage.removeItem('cssberlin_cart');
+                            window.location.href = 'bestellung-bestaetigung.html'; // Or simple success alert
+                        } else {
+                            alert('Bestellung fehlgeschlagen.');
+                        }
+                    } catch (e) {
+                        console.error(e);
+                        alert('Verbindungsfehler');
+                    } finally {
+                        btn.disabled = false;
+                        btn.textContent = 'BESTELLEN';
+                    }
+                });
+            </script>
         </div>
     </div>
 
@@ -296,8 +417,8 @@
         lucide.createIcons();
     </script>
 
-    
-    
+
+
     <div id="footer-placeholder"></div>
 
 
@@ -380,7 +501,7 @@
 
         loadCart();
     </script>
-<script src="smart-header.js"></script>
+    <script src="smart-header.js"></script>
     <script src="components.js"></script>
     <script src="toast.js"></script>
     <script src="message-modal.js"></script>

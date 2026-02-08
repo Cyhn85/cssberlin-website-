@@ -453,14 +453,27 @@
             <!-- Actions -->
             <div class="pd-actions-wrapper">
                 <div class="pd-actions">
-                    <button class="btn-offer" onclick="handleProductAction('negotiate')"><i data-lucide="message-circle"
-                            width="16"></i>
-                        Verhandeln</button>
-                    <button class="btn-buy" onclick="handleProductAction('buy')"><i data-lucide="shopping-bag"
-                            width="16"></i> Kaufen</button>
+                    <button class="btn-offer negotiate-btn" onclick="handleNegotiateClick(productId || 1)">
+                        <span class="icon-wrap"><i data-lucide="message-circle" width="16"></i></span>
+                        Verhandeln
+                    </button>
+                    <!-- Buy Button acts as 'Direct Checkout' or 'Cart' depending on preference. 
+                         User asked for 'Sepet' (Cart) functionality sync, so we add logic to toggle cart or buy.
+                         For now, we keep 'Kaufen' as Buy Now (Direct) matching script.js handleBuyClick -->
+                    <button class="btn-buy" onclick="handleBuyClick(productId || 1)">
+                        <span class="icon-wrap"><i data-lucide="shopping-bag" width="16"></i></span>
+                        Kaufen
+                    </button>
                 </div>
-                <button class="btn-message" onclick="messageModal.open()"><i data-lucide="mail" width="16"></i>
-                    Nachricht an Verkäufer</button>
+                <!-- Add Wishlist interaction explicitly -->
+                <button class="btn-message wishlist-btn" onclick="toggleFavoriteUI(productId || 1, this)"
+                    style="margin-top:10px; justify-content:center;">
+                    <i data-lucide="heart" width="16"></i> Auf die Wunschliste
+                </button>
+
+                <button class="btn-message" onclick="window.messageModal.open()" style="margin-top:10px;">
+                    <i data-lucide="mail" width="16"></i> Nachricht an Verkäufer
+                </button>
             </div>
 
             <!-- Description (Moved Here) -->
@@ -481,21 +494,21 @@
                 const urlParams = new URLSearchParams(window.location.search);
                 const productId = parseInt(urlParams.get('id')) || 1; // Default to 1
 
-                function handleProductAction(action) {
-                    if (action === 'buy') {
-                        if (window.handleBuyClick) {
-                            window.handleBuyClick(productId);
-                        } else {
-                            console.error('handleBuyClick not found');
-                        }
-                    } else if (action === 'negotiate') {
-                        if (window.handleNegotiateClick) {
-                            window.handleNegotiateClick(productId);
-                        } else {
-                            console.error('handleNegotiateClick not found');
+                // Active State Check on Load
+                window.addEventListener('load', async () => {
+                    // Check Wishlist
+                    if (typeof favoritesManager !== 'undefined') {
+                        const isFav = await favoritesManager.isFavorite(productId);
+                        if (isFav) {
+                            const btn = document.querySelector('.wishlist-btn');
+                            if (btn) {
+                                btn.classList.add('active');
+                                btn.querySelector('svg').setAttribute('fill', '#E0245E');
+                                btn.querySelector('svg').setAttribute('stroke', '#E0245E');
+                            }
                         }
                     }
-                }
+                });
             </script>
 
             <!-- Trust -->

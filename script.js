@@ -1593,6 +1593,14 @@ function showNotification(message, type = 'info') {
     }, 3000);
 }
 
+// ============================================
+// GLOBAL EXPORTS (For Product Detail Page)
+// ============================================
+window.handleAddToCart = handleAddToCart;
+window.toggleFavoriteUI = toggleFavoriteUI;
+window.handleBuyClick = handleBuyClick;
+window.handleNegotiateClick = handleNegotiateClick;
+
 // Add animation styles
 const notificationStyle = document.createElement('style');
 notificationStyle.textContent = `

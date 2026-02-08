@@ -47,19 +47,57 @@ class MessageModal {
         }, 300);
     }
 
-    send() {
+    async send() {
         const text = document.getElementById('msgText').value;
         if (!text.trim()) {
             if (window.Toast) window.Toast.show('Fehler', 'Bitte geben Sie eine Nachricht ein.', 'error');
             return;
         }
 
-        // Simulate backend
-        setTimeout(() => {
-            this.close();
-            if (window.Toast) window.Toast.show('Gesendet! 📬', 'Deine Nachricht wurde an den Verkäufer gesendet.', 'success');
-            document.getElementById('msgText').value = '';
-        }, 800);
+        const sendBtn = this.modal.querySelector('.send-msg-btn');
+        const originalText = sendBtn.innerText;
+        sendBtn.innerText = 'Senden...';
+        sendBtn.disabled = true;
+
+        try {
+            // Get user email if logged in (Clerk)
+            let userEmail = 'Gast';
+            if (window.Clerk && window.Clerk.user) {
+                userEmail = window.Clerk.user.primaryEmailAddress.emailAddress;
+            }
+
+            // Get Product ID if on product page
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+
+            const API_URL = window.API_BASE_URL || 'http://localhost:8000';
+
+            const response = await fetch(`${API_URL}/api/send-message`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    text: text,
+                    email: userEmail,
+                    product_id: productId
+                })
+            });
+
+            if (response.ok) {
+                if (window.Toast) window.Toast.show('Gesendet! 📬', 'Ihre Nachricht wurde erfolgreich übermittelt.', 'success');
+                this.close();
+                document.getElementById('msgText').value = '';
+            } else {
+                throw new Error('Send failed');
+            }
+        } catch (error) {
+            console.error('Message Send Error:', error);
+            if (window.Toast) window.Toast.show('Fehler', 'Nachricht konnte nicht gesendet werden.', 'error');
+        } finally {
+            sendBtn.innerText = originalText;
+            sendBtn.disabled = false;
+        }
     }
 }
 

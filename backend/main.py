@@ -107,6 +107,92 @@ async def startup():
         print(f"❌ Database Init Error: {e}")
 
 # ─── ENTRY POINT ─────────────────────────────────────────
+# ─── MODELS ──────────────────────────────────────────────
+from pydantic import BaseModel, EmailStr
+from typing import List, Optional
+
+class MessageRequest(BaseModel):
+    text: str
+    email: Optional[EmailStr] = None
+    product_id: Optional[str] = None
+
+class CartItem(BaseModel):
+    id: int
+    quantity: int = 1
+    price: float
+
+class CouponRequest(BaseModel):
+    code: str
+    cart_items: List[CartItem]
+
+class CheckoutRequest(BaseModel):
+    cart_items: List[CartItem]
+    address: dict
+    payment_method: str
+    discount_code: Optional[str] = None
+
+# ─── NEW ENDPOINTS (LIVE OPERATION) ──────────────────────
+
+# 1. MESSAGING & EMAIL TRIGGER
+@app.post("/api/send-message")
+async def send_message(msg: MessageRequest):
+    # Simulate Email Sending
+    log_msg = f"📩 NEW MESSAGE to info@cssberlin.de\nFROM: {msg.email or 'Guest'}\nPRODUCT: {msg.product_id or 'General'}\nCONTENT: {msg.text}"
+    print(log_msg)
+    # In production, use SMTP or SendGrid here
+    return {"status": "success", "message": "Nachricht erfolgreich gesendet."}
+
+# 2. CART CALCULATION (COUPON)
+@app.post("/api/cart/calculate")
+async def calculate_cart(req: CouponRequest):
+    subtotal = sum(item.price * item.quantity for item in req.cart_items)
+    discount = 0.0
+    message = None
+    
+    if req.code.upper() == "WELCOME10":
+        discount = subtotal * 0.10
+        message = "Willkommensrabatt (10%) angewendet!"
+    elif req.code.upper() == "CSSBERLIN20":
+         discount = subtotal * 0.20
+         message = "Spezialrabatt (20%) angewendet!"
+    else:
+        return JSONResponse(status_code=400, content={"detail": "Ungültiger Code"})
+
+    total = subtotal - discount
+    return {
+        "subtotal": subtotal,
+        "discount": discount,
+        "total": total,
+        "message": message
+    }
+
+# 3. CHECKOUT (STOCK UPDATE & CONFIRMATION)
+@app.post("/api/checkout")
+async def checkout(req: CheckoutRequest):
+    # Logic: 
+    # 1. Validate Stock (Mock: Always available for now)
+    # 2. Deduct Stock (Mock: Print to console)
+    # 3. Process Payment (Mock)
+    
+    print(f"📦 NEW ORDER RECEIVED!")
+    print(f"Items: {len(req.cart_items)}")
+    print(f"Address: {req.address}")
+    print(f"Payment: {req.payment_method}")
+    
+    if req.discount_code:
+        print(f"Discount Used: {req.discount_code}")
+        
+    # Simulate DB Update
+    for item in req.cart_items:
+        print(f"UPDATE products SET status='SOLD' WHERE id={item.id}")
+        
+    return {
+        "status": "success",
+        "order_id": "ORD-" + os.urandom(4).hex().upper(),
+        "message": "Bestellung erfolgreich eingegangen."
+    }
+
+# ─── ENTRY POINT ─────────────────────────────────────────
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
     uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)

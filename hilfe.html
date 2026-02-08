@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hilfe Center - CSS Berlin</title>
+
+    <!-- V3 Standards -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="header-v3.css">
+    <link rel="stylesheet" href="footer-v3.css">
+    <link rel="stylesheet" href="auth-modal-v3.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f9f9f9;
+            margin: 0;
+            color: #333;
+        }
+
+        .help-hero {
+            background: linear-gradient(135deg, #2D5016 0%, #1a3309 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .help-hero h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .help-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 40px;
+        }
+
+        .help-sidebar {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            height: fit-content;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .help-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            color: #666;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .help-nav-item:hover,
+        .help-nav-item.active {
+            background: #f0fdf4;
+            color: #2D5016;
+        }
+
+        .faq-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .faq-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24px;
+            color: #2D5016;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .accordion-item {
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+        }
+
+        .accordion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            color: #111;
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            color: #666;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .accordion-item.active .accordion-content {
+            max-height: 200px;
+            margin-top: 10px;
+        }
+
+        .accordion-icon {
+            transition: transform 0.3s;
+        }
+
+        .accordion-item.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+        @media (max-width: 768px) {
+            .help-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="header-placeholder"></div>
+
+    <div class="help-hero">
+        <h1>Hilfe-Center</h1>
+        <p>Wie können wir Ihnen helfen?</p>
+    </div>
+
+    <div class="help-container">
+        <!-- Sidebar -->
+        <div class="help-sidebar">
+            <div class="help-nav-item active" onclick="showCategory('versand')">
+                <i data-lucide="truck"></i> Versand & Lieferung
+            </div>
+            <div class="help-nav-item" onclick="showCategory('rueckgabe')">
+                <i data-lucide="rotate-ccw"></i> Rückgabe & Erstattung
+            </div>
+            <div class="help-nav-item" onclick="showCategory('zahlung')">
+                <i data-lucide="credit-card"></i> Zahlung
+            </div>
+            <div class="help-nav-item" onclick="showCategory('konto')">
+                <i data-lucide="user"></i> Mein Konto
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="faq-section" id="faqContent">
+            <h2 class="faq-title">Versand & Lieferung</h2>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Wie hoch sind die Versandkosten?</span>
+                    <i data-lucide="chevron-down" class="accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <p>Der Standardversand innerhalb Deutschlands kostet 4,99 €. Ab einem Bestellwert von 50 € ist der
+                        Versand für Sie kostenlos.</p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Wie lange dauert die Lieferung?</span>
+                    <i data-lucide="chevron-down" class="accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <p>In der Regel erhalten Sie Ihre Bestellung innerhalb von 2-4 Werktagen. Sie erhalten eine
+                        Sendungsnummer, sobald das Paket unser Lager verlässt.</p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Versenden Sie auch ins Ausland?</span>
+                    <i data-lucide="chevron-down" class="accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <p>Aktuell versenden wir nur innerhalb Deutschlands und nach Österreich. Für Österreich fallen
+                        gesonderte Versandkosten an.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="api-config.js"></script>
+    <script src="components.js"></script>
+    <script src="smart-header.js"></script>
+
+    <script>
+        // Init Icons
+        lucide.createIcons();
+
+        function toggleAccordion(header) {
+            const item = header.parentElement;
+            item.classList.toggle('active');
+        }
+
+        const faqData = {
+            'versand': {
+                title: 'Versand & Lieferung',
+                items: [
+                    { q: 'Wie hoch sind die Versandkosten?', a: '4,99 € Standard, ab 50 € kostenlos.' },
+                    { q: 'Lieferzeit?', a: '2-4 Werktage mit DHL.' },
+                    { q: 'Wo ist mein Paket?', a: 'Sie erhalten einen Tracking-Link per E-Mail.' }
+                ]
+            },
+            'rueckgabe': {
+                title: 'Rückgabe & Erstattung',
+                items: [
+                    { q: 'Wie kann ich einen Artikel zurücksenden?', a: 'Nutzen Sie das Retourenportal in Ihrem Kundenkonto.' },
+                    { q: 'Ist die Rücksendung kostenlos?', a: 'Ja, wir übernehmen die Kosten für Retouren innerhalb von 14 Tagen.' },
+                    { q: 'Wann erhalte ich mein Geld zurück?', a: 'Nach Prüfung der Ware, in der Regel 3-5 Werktage.' }
+                ]
+            },
+            'zahlung': {
+                title: 'Zahlung',
+                items: [
+                    { q: 'Welche Zahlungsarten akzeptieren Sie?', a: 'Kreditkarte, PayPal, Klarna und Sofortüberweisung.' },
+                    { q: 'Ist die Zahlung sicher?', a: 'Ja, wir nutzen SSL-Verschlüsselung und sichere Zahlungsdienstleister.' }
+                ]
+            },
+            'konto': {
+                title: 'Mein Konto',
+                items: [
+                    { q: 'Ich habe mein Passwort vergessen', a: 'Klicken Sie beim Login auf "Passwort vergessen".' },
+                    { q: 'Wie ändere ich meine Adresse?', a: 'In Ihrem Profil unter "Adressen".' }
+                ]
+            }
+        };
+
+        function showCategory(cat) {
+            const data = faqData[cat];
+            if (!data) return;
+
+            // Update Active Nav
+            document.querySelectorAll('.help-nav-item').forEach(el => el.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            const container = document.getElementById('faqContent');
+            let html = `<h2 class="faq-title">${data.title}</h2>`;
+
+            data.items.forEach(item => {
+                html += `
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>${item.q}</span>
+                        <i data-lucide="chevron-down" class="accordion-icon"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>${item.a}</p>
+                    </div>
+                </div>`;
+            });
+
+            container.innerHTML = html;
+            lucide.createIcons();
+        }
+    </script>
+</body>
+
+</html>
