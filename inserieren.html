@@ -300,10 +300,12 @@
                     <label>Kategorie</label>
                     <select id="categorySelect" onchange="updateDynamicAttributes()">
                         <option value="">Bitte wählen...</option>
-                        <option value="clothing">Kleidung</option>
-                        <option value="shoes">Schuhe</option>
-                        <option value="electronics">Elektronik</option>
-                        <option value="home">Zuhause</option>
+                        <option value="Damen">Damen</option>
+                        <option value="Herren">Herren</option>
+                        <option value="Kinder">Kinder</option>
+                        <option value="Elektronik">Elektronik</option>
+                        <option value="Zuhause">Zuhause</option>
+                        <option value="Sonstiges">Sonstiges</option>
                     </select>
                 </div>
 
@@ -488,9 +490,12 @@
             brandGroup.style.display = 'none';
             sizeGroup.style.display = 'none';
 
-            if (cat === 'shoes' || cat === 'clothing') {
+            if (['Damen', 'Herren', 'Kinder'].includes(cat)) {
                 brandGroup.style.display = 'flex';
                 sizeGroup.style.display = 'flex';
+            } else if (cat === 'Elektronik') {
+                brandGroup.style.display = 'flex';
+                // size hidden
             }
             // More logic can be added here
         }
@@ -554,7 +559,7 @@
 
     <!-- Footer -->
     <div id="footer-placeholder"></div>
-<script src="smart-header.js"></script>
+    <script src="smart-header.js"></script>
     <script src="components.js"></script>
 </body>
 

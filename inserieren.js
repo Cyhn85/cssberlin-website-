@@ -44,20 +44,19 @@ const BRAND_DATABASE = {
 
 // Subcategory Database
 const SUBCATEGORIES = {
-    'Herren': ['T-Shirts', 'Hemden', 'Pullover', 'Jacken', 'Hosen', 'Jeans', 'Anzüge', 'Shorts', 'Unterwäsche'],
-    'Damen': ['Kleider', 'Blusen', 'Tops', 'Röcke', 'Hosen', 'Jacken', 'Pullover', 'Jumpsuits', 'Unterwäsche'],
-    'Kinder': ['Babykleidung', 'Mädchen', 'Jungen', 'Schulkleidung', 'Jacken', 'Schuhe'],
-    'Schuhe': ['Sneaker', 'Stiefel', 'Sandalen', 'Pumps', 'Loafer', 'Sportschuhe', 'Flip-Flops'],
-    'Accessoires': ['Taschen', 'Gürtel', 'Schals', 'Mützen', 'Sonnenbrillen', 'Schmuck', 'Uhren'],
-    'Sportbekleidung': ['Fitness', 'Laufen', 'Yoga', 'Fußball', 'Basketball', 'Tennis', 'Schwimmen'],
-    'Taschen': ['Handtaschen', 'Rucksäcke', 'Umhängetaschen', 'Clutches', 'Shopper', 'Geldbörsen']
+    'Herren': ['T-Shirts', 'Hemden', 'Pullover', 'Jacken', 'Hosen', 'Jeans', 'Anzüge', 'Shorts', 'Unterwäsche', 'Schuhe'],
+    'Damen': ['Kleider', 'Blusen', 'Tops', 'Röcke', 'Hosen', 'Jacken', 'Pullover', 'Jumpsuits', 'Unterwäsche', 'Schuhe', 'Taschen'],
+    'Kinder': ['Babykleidung', 'Mädchen', 'Jungen', 'Schulkleidung', 'Jacken', 'Schuhe', 'Spielzeug'],
+    'Elektronik': ['Smartphones', 'Tablets', 'Laptops', 'Kameras', 'Audio', 'Gaming', 'Zubehör'],
+    'Zuhause': ['Deko', 'Textilien', 'Küche', 'Möbel', 'Garten', 'Lampen'],
+    'Sonstiges': ['Hobbys', 'Bücher', 'Musik', 'Filme', 'Sammlerstücke', 'Haustierbedarf', 'Anderes']
 };
 
 // State
 let selectedSubcategory = '';
 
 // Initialize
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Check if user is logged in
     checkAuthAndRedirect();
 
