@@ -156,6 +156,8 @@ class MessageResponse(BaseModel):
     product_id: Optional[int]
     content: str
     is_read: bool
+    type: Optional[str] = "text"
+    metadata_json: Optional[dict] = None
     created_at: datetime
 
     class Config:

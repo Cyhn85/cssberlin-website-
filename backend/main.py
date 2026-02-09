@@ -68,6 +68,7 @@ from products import router as products_router
 from offers import router as offers_router
 from payments import router as payments_router
 from checkout import router as checkout_router
+from messages import router as messages_router
 from error_logger import router as error_router
 
 app.include_router(auth_router)
@@ -76,6 +77,7 @@ app.include_router(products_router)
 app.include_router(offers_router)
 app.include_router(payments_router)
 app.include_router(checkout_router)
+app.include_router(messages_router)
 app.include_router(error_router)
 
 # ─── HEALTH CHECK ────────────────────────────────────────
