@@ -56,45 +56,70 @@
             top: 100px;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            /* Center align */
             gap: 16px;
             height: fit-content;
         }
 
+        .pd-main-image-container {
+            width: 100%;
+            max-width: 450px;
+            /* Restrict width */
+            margin: 0 auto;
+        }
+
         .pd-main-image {
             width: 100%;
-            aspect-ratio: 4/5;
-            border-radius: 12px;
+            aspect-ratio: 3/4;
+            /* Vinted style portrait */
+            max-height: 550px;
+            /* Reduced max height */
+            border-radius: 8px;
             overflow: hidden;
-            background: #eee;
+            background: #f0f0f0;
             border: 1px solid rgba(0, 0, 0, 0.05);
             cursor: zoom-in;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .pd-main-image img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
+            /* Ensure full image visible */
+            background: #fff;
         }
 
         .pd-thumbnails {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+            grid-template-columns: repeat(5, 1fr);
+            /* More thumbnails per row */
+            gap: 8px;
+            width: 100%;
+            max-width: 450px;
         }
 
         .pd-thumb {
             aspect-ratio: 1;
-            border-radius: 8px;
-            background: #ddd;
+            border-radius: 4px;
+            background: #fff;
             cursor: pointer;
-            opacity: 0.7;
+            opacity: 0.6;
             transition: all 0.2s;
             overflow: hidden;
+            border: 1px solid #ddd;
+        }
+
+        .pd-thumb.active {
+            opacity: 1;
+            border-color: #2D5016;
         }
 
         .pd-thumb:hover {
             opacity: 1;
-            border: 2px solid #2D5016;
         }
 
         .pd-thumb img {
@@ -610,6 +635,132 @@
     <script src="components.js"></script>
     <script src="toast.js"></script>
     <script src="message-modal.js"></script>
+    <!-- Lightbox Modal -->
+    <div id="lightboxModal" class="lightbox-modal">
+        <span class="lightbox-close">&times;</span>
+        <img class="lightbox-content" id="lightboxImage">
+        <div class="lightbox-caption" id="lightboxCaption"></div>
+    </div>
+
+    <style>
+        /* Lightbox CSS */
+        .lightbox-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            padding-top: 50px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .lightbox-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 900px;
+            max-height: 85vh;
+            object-fit: contain;
+        }
+
+        .lightbox-caption {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+            text-align: center;
+            color: #ccc;
+            padding: 10px 0;
+            height: 150px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .lightbox-close:hover,
+        .lightbox-close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        @media only screen and (max-width: 700px) {
+            .lightbox-content {
+                width: 100%;
+            }
+        }
+    </style>
+
+    <script>
+        // Lightbox Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const lightbox = document.getElementById('lightboxModal');
+            const lightboxImg = document.getElementById("lightboxImage");
+            const captionText = document.getElementById("lightboxCaption");
+            // Note: .pd-main-image element was modified earlier to be a container
+            const mainImageContainer = document.querySelector('.pd-main-image');
+            const mainImageImg = document.querySelector('.pd-main-image img');
+
+            if (mainImageContainer && mainImageImg) {
+                mainImageContainer.addEventListener('click', function () {
+                    lightbox.style.display = "block";
+                    lightboxImg.src = mainImageImg.src;
+                    captionText.innerHTML = mainImageImg.alt || '';
+                });
+            }
+
+            const span = document.getElementsByClassName("lightbox-close")[0];
+            if (span) {
+                span.onclick = function () {
+                    lightbox.style.display = "none";
+                }
+            }
+
+            lightbox.onclick = function (e) {
+                if (e.target === lightbox) {
+                    lightbox.style.display = "none";
+                }
+            }
+
+            // Handle Thumbnails
+            document.querySelectorAll('.pd-thumb').forEach(thumb => {
+                thumb.addEventListener('click', function () {
+                    const img = this.querySelector('img');
+                    if (img && mainImageImg) {
+                        mainImageImg.src = img.src;
+                        // Update Active State
+                        document.querySelectorAll('.pd-thumb').forEach(t => t.classList.remove('active'));
+                        this.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // Handle "Ask Seller" (Nachricht)
+        function openSellerChat() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id') || '123';
+            const sellerId = 101;
+            window.location.href = `nachrichten.html?seller_id=${sellerId}&product_id=${productId}`;
+        }
+
+        // Handle Buy Now
+        function buyNow() {
+            // Add logic to add to cart + redirect
+            window.location.href = 'checkout.html';
+        }
+    </script>
 </body>
 
 </html>

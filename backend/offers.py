@@ -142,6 +142,14 @@ async def create_offer(
 
     # 7. Satıcıya bildirim
     await _notify(product.seller_id, new_offer.id, "new_offer", db)
+    
+    # 8. Real-time WebSocket notification
+    try:
+        from websocket import notify_offer_created
+        await notify_offer_created(new_offer.id, product.seller_id)
+    except ImportError:
+        # WebSocket module not available, skip real-time notification
+        pass
 
     await db.commit()
     await db.refresh(new_offer)
@@ -228,6 +236,13 @@ async def accept_offer(
 
     # Alıcıya bildirim
     await _notify(offer.buyer_id, offer.id, "offer_accepted", db)
+    
+    # Real-time WebSocket notification
+    try:
+        from websocket import notify_offer_updated
+        await notify_offer_updated(offer.id, offer.buyer_id, offer.seller_id, "accepted")
+    except ImportError:
+        pass
 
     await db.commit()
     await db.refresh(offer)
@@ -259,6 +274,13 @@ async def decline_offer(
 
     # Alıcıya bildirim
     await _notify(offer.buyer_id, offer.id, "offer_declined", db)
+    
+    # Real-time WebSocket notification
+    try:
+        from websocket import notify_offer_updated
+        await notify_offer_updated(offer.id, offer.buyer_id, offer.seller_id, "declined")
+    except ImportError:
+        pass
 
     await db.commit()
     await db.refresh(offer)
@@ -299,6 +321,13 @@ async def counter_offer(
 
     # Alıcıya bildirim
     await _notify(offer.buyer_id, offer.id, "counter_offer", db)
+    
+    # Real-time WebSocket notification
+    try:
+        from websocket import notify_counter_offer
+        await notify_counter_offer(offer.id, offer.buyer_id, offer.seller_id)
+    except ImportError:
+        pass
 
     await db.commit()
     await db.refresh(offer)

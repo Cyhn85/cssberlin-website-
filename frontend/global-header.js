@@ -15,39 +15,263 @@ const GlobalHeader = {
     __eventsBound: false,
 
     /**
-     * Header HTML'ini olustur
+     * Header HTML'ini olustur (PROJECT HYBRID: React Header → Vanilla)
+     * Kaynak: _YENI_TASARIM/components/Header.tsx
+     * AuthGate ve mevcut login akışı korunmuştur.
      */
     getHeaderHTML() {
         const S = this.SLOGAN;
         return `
-    <!-- News Banner at Top -->
-    <div class="news-banner-v2" data-global-shell="1">
-        <div class="news-slider" id="newsSlider" style="animation-duration: 28s;">
-            <div class="news-item" data-link="index.html"><span>${S}</span></div>
-            <div class="news-item" data-link="co2-impact.html"><span>🌍 248.5 Tonnen CO₂ gespart</span></div>
-            <div class="news-item" data-link="campaign.html"><span>📦 2 kaufen = 3. Versand GRATIS</span></div>
-            <div class="news-item" data-link="co2-impact.html"><span>🏆 CO₂ Top 100 Rangliste</span></div>
-            <div class="news-item" data-link="index.html"><span>${S}</span></div>
+    <!-- Top Ticker (Kaynak: _YENI_TASARIM/components/TopTicker.tsx) -->
+    <div class="top-ticker" data-global-shell="1">
+        <div class="top-ticker-content" id="topTickerContent">
+            <!-- Messages will be populated by JS -->
         </div>
     </div>
 
-    <!-- Modern Header V2 -->
+    <!-- Modern Header V2 (PROJECT HYBRID) -->
     <header class="header-v2" id="globalHeader" data-global-shell="1">
-        <div class="header-container-v2">
-            <!-- Mobile Menu Button -->
-            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
-                <span></span>
-                <span></span>
-                <span></span>
+        <!-- ROW 1: BRANDING & USER ACTIONS -->
+        <div class="header-row-1">
+            <div class="header-container">
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+
+                <!-- LOGO - CSSberlin (React stilinde) -->
+                <a href="index.html" class="header-logo-modern">
+                    <span class="logo-text-modern">CSSberlin</span>
+                </a>
+
+                <!-- RIGHT GROUP: User Actions (Symmetrical Buttons) -->
+                <div class="header-actions-modern">
+                    <!-- Desktop User Icons -->
+                    <div class="header-icons-group">
+                        <!-- Wishlist -->
+                        <a href="wunschliste.html" class="header-icon-btn-modern" title="Wunschliste">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06 1.06 7.78 7.78z"></path>
+                            </svg>
+                        </a>
+
+                        <!-- Offers -->
+                        <a href="angebote.html" class="header-icon-btn-modern header-icon-btn-offers" title="Meine Angebote">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2-2h12a2 2 0 0 0 2-2V4a2 2 0 0 0 2-2h12a2 2 0 0 0 2-2z"></path>
+                                <polyline points="14,2 14,8 20,8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10,9 9,9 9,9"></polyline>
+                            </svg>
+                            <span class="offer-notification-dot"></span>
+                        </a>
+
+                        <!-- Cart -->
+                        <a href="warenkorb.html" class="header-icon-btn-modern" title="Warenkorb">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="20" cy="21" r="1"></circle>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            </svg>
+                            <span class="icon-badge-modern" id="cartCount">0</span>
+                        </a>
+
+                        <div class="header-divider"></div>
+
+                        <!-- LOGIN BUTTON (ORANGE -> GREEN GRADIENT) -->
+                        <button class="header-login-btn" id="headerLoginBtn" onclick="GlobalHeader.openAuthModal()">
+                            Anmelden
+                        </button>
+                    </div>
+
+                    <!-- Mobile Menu Button -->
+                    <div class="header-mobile-actions">
+                        <button class="mobile-menu-btn" id="mobileMenuBtn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="3" y1="6" x2="21" y2="6"></line>
+                                <line x1="3" y1="12" x2="21" y2="12"></line>
+                                <line x1="3" y1="18" x2="21" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ROW 2: SEARCH & NAVIGATION -->
+        <div class="header-row-2">
+            <div class="header-container">
+                <!-- Search Bar -->
+                <div class="header-search-modern">
+                    <form action="search.html" method="GET" class="search-form-modern">
+                        <div class="search-input-wrapper-modern">
+                            <svg class="search-icon-modern" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="M21 21l-4.35-4.35"></path>
+                            </svg>
+                            <input type="text" name="q" placeholder="Was suchst du?" autocomplete="off">
+                            <button type="button" class="search-visual-btn" title="Visuelle Suche">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                    <polyline points="21,15 16,10 5,21"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                        <button type="submit" class="search-submit-btn-modern">Suchen</button>
+                    </form>
+                </div>
+
+                <!-- Main Navigation -->
+                <nav class="header-nav-modern">
+                    <ul class="nav-list-modern">
+                        <li class="nav-item-modern">
+                            <a href="#damen" class="nav-link-modern">Damen</a>
+                            <div class="nav-dropdown-modern">
+                                <a href="damen.html#kleider">Kleider</a>
+                                <a href="damen.html#blusen">Blusen</a>
+                                <a href="damen.html#hosen">Hosen</a>
+                                <a href="damen.html#roecke">Röcke</a>
+                                <a href="damen.html#schuhe">Schuhe</a>
+                                <a href="damen.html#taschen">Taschen</a>
+                                <a href="damen.html#accessoires">Accessoires</a>
+                                <a href="damen.html#sport">Sport</a>
+                            </div>
+                        </li>
+                        <li class="nav-item-modern">
+                            <a href="#herren" class="nav-link-modern">Herren</a>
+                            <div class="nav-dropdown-modern">
+                                <a href="herren.html#hemden">Hemden</a>
+                                <a href="herren.html#t-shirts">T-Shirts</a>
+                                <a href="herren.html#jeans">Jeans</a>
+                                <a href="herren.html#anzuege">Anzüge</a>
+                                <a href="herren.html#schuhe">Schuhe</a>
+                                <a href="herren.html#uhren">Uhren</a>
+                                <a href="herren.html#sport">Sport</a>
+                                <a href="herren.html#jacken">Jacken</a>
+                            </div>
+                        </li>
+                        <li class="nav-item-modern">
+                            <a href="#kinder" class="nav-link-modern">Kinder</a>
+                            <div class="nav-dropdown-modern">
+                                <a href="kinder.html#maedchen">Mädchen</a>
+                                <a href="kinder.html#jungen">Jungen</a>
+                                <a href="kinder.html#baby">Baby</a>
+                                <a href="kinder.html#spielzeug">Spielzeug</a>
+                                <a href="kinder.html#schuhe">Schuhe</a>
+                                <a href="kinder.html#schulbedarf">Schulbedarf</a>
+                            </div>
+                        </li>
+                        <li class="nav-item-modern">
+                            <a href="#elektronik" class="nav-link-modern">Elektronik</a>
+                            <div class="nav-dropdown-modern">
+                                <a href="elektronik.html#smartphones">Smartphones</a>
+                                <a href="elektronik.html#laptops">Laptops</a>
+                                <a href="elektronik.html#tablets">Tablets</a>
+                                <a href="elektronik.html#kameras">Kameras</a>
+                                <a href="elektronik.html#audio">Audio</a>
+                                <a href="elektronik.html#gaming">Gaming</a>
+                                <a href="elektronik.html#haushalt">Haushalt</a>
+                            </div>
+                        </li>
+                        <li class="nav-item-modern nav-item-sale">
+                            <a href="#sale" class="nav-link-modern">Sale</a>
+                            <div class="nav-dropdown-modern">
+                                <a href="sale.html#damen-sale">Damen Sale</a>
+                                <a href="sale.html#herren-sale">Herren Sale</a>
+                                <a href="sale.html#tech-deals">Tech Deals</a>
+                                <a href="sale.html#last-chance">Last Chance</a>
+                                <a href="sale.html#unter-20">Unter 20€</a>
+                                <a href="sale.html#unter-50">Unter 50€</a>
+                            </div>
+                        </li>
+                        <li class="nav-item-modern">
+                            <a href="#how-it-works" class="nav-link-modern">Wie funktioniert's</a>
+                            <div class="nav-dropdown-modern">
+                                <a href="how-it-works.html#kaufen">Kaufen</a>
+                                <a href="how-it-works.html#verkaufen">Verkaufen</a>
+                                <a href="how-it-works.html#versand">Versand</a>
+                                <a href="how-it-works.html#echtheitspruefung">Echtheitsprüfung</a>
+                                <a href="how-it-works.html#rueckgabe">Rückgabe</a>
+                                <a href="how-it-works.html#gebuehren">Gebühren</a>
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <!-- User Menu (Logged In) - Hidden by default -->
+        <div class="user-menu-wrapper-modern" id="userMenuWrapper" style="display: none;">
+            <button class="user-menu-btn-modern" id="userMenuBtn" onclick="GlobalHeader.toggleDropdown(event)">
+                <div class="user-avatar-modern" id="userAvatar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                <span class="user-name-modern" id="userName">Profil</span>
+                <svg class="dropdown-arrow-modern" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
             </button>
-
-            <!-- Logo -->
-            <a href="index.html" class="header-logo">
-                <span class="logo-text">CSS</span>
-                <span class="logo-subtext">Berlin</span>
-            </a>
-
-            <!-- Search Bar -->
+            <!-- User Dropdown -->
+            <div class="user-dropdown-modern" id="userDropdown">
+                <div class="dropdown-user-info-modern">
+                    <div class="dropdown-avatar-modern" id="dropdownAvatar">U</div>
+                    <div class="dropdown-user-details-modern">
+                        <span class="dropdown-user-name-modern" id="dropdownUserName">User</span>
+                        <span class="dropdown-user-email-modern" id="dropdownUserEmail">user@email.com</span>
+                    </div>
+                </div>
+                <div class="dropdown-divider-modern"></div>
+                <a href="profil.html" class="dropdown-item-modern">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    Mein Profil
+                </a>
+                <a href="verkaeufe.html" class="dropdown-item-modern">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M16 8l-8 8M8 8l8 8"></path>
+                    </svg>
+                    Meine Verkaufe
+                </a>
+                <a href="bestellungen.html" class="dropdown-item-modern">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2-2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <path d="M16 10a4 4 0 0 1 8 8"></path>
+                    </svg>
+                    Meine Bestellungen
+                </a>
+                <a href="messages.html" class="dropdown-item-modern">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7a2 2 0 0 1-2 2v12a2 2 0 0 0 2-2h12a2 2 0 0 0 2-2V7l-4 4V5a2 2 0 0 0-2 2z"></path>
+                    </svg>
+                    Nachrichten
+                </a>
+                <div class="dropdown-divider-modern"></div>
+                <a href="#" class="dropdown-item-modern logout-item" onclick="GlobalHeader.logout(); return false;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2 2V5a2 2 0 0 1-2 2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    Abmelden
+                </a>
+            </div>
+        </div>
+    </header>
+        `;
+    }
             <div class="header-search-v2">
                 <form action="search.html" method="GET" class="search-form-v2">
                     <div class="search-input-wrapper">

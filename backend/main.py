@@ -60,7 +60,7 @@ async def global_exception_handler(request: Request, exc: Exception):
         content={"detail": "Internal Server Error", "error": str(exc)}
     )
 
-# ─── ROUTERS ─────────────────────────────────────────────
+# ─── ROUTERS ─────────────────────────────────────
 # Importing routers (Ensure these files exist and import updated models if needed)
 from auth import router as auth_router
 from auth_oauth import router as auth_oauth_router
@@ -70,6 +70,7 @@ from payments import router as payments_router
 from checkout import router as checkout_router
 from messages import router as messages_router
 from error_logger import router as error_router
+from websocket import websocket_endpoint
 
 app.include_router(auth_router)
 app.include_router(auth_oauth_router)
@@ -79,6 +80,9 @@ app.include_router(payments_router)
 app.include_router(checkout_router)
 app.include_router(messages_router)
 app.include_router(error_router)
+
+# WebSocket endpoint
+app.websocket("/ws/{token}")(websocket_endpoint)
 
 # ─── HEALTH CHECK ────────────────────────────────────────
 @app.get("/")

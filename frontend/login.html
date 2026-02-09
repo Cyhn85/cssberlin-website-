@@ -219,14 +219,16 @@
                 <button class="toggle-btn" id="tab-register" onclick="switchTab('register')">Registrieren</button>
             </div>
 
-            <form id="auth-gate-login-form" class="form-section active">
+            <div id="errorMessage" style="display: none; margin-bottom: 16px;"></div>
+
+            <form id="loginForm" class="form-section active">
                 <div class="input-group">
-                    <label for="login-email">E-Mail Adresse</label>
-                    <input type="email" id="login-email" name="email" placeholder="name@beispiel.de" required>
+                    <label for="loginEmail">E-Mail Adresse</label>
+                    <input type="email" id="loginEmail" name="email" placeholder="name@beispiel.de" required>
                 </div>
                 <div class="input-group">
-                    <label for="login-password">Passwort</label>
-                    <input type="password" id="login-password" name="password" placeholder="" required>
+                    <label for="loginPassword">Passwort</label>
+                    <input type="password" id="loginPassword" name="password" placeholder="" required>
                 </div>
                 
                 <button type="submit" class="main-btn auth-btn-login-submit">
@@ -243,22 +245,36 @@
                 </div>
             </form>
 
-            <form id="auth-gate-register-form" class="form-section">
+            <form id="registerForm" class="form-section">
                 <div class="input-group">
-                    <label for="reg-name">Vollstndiger Name</label>
-                    <input type="text" id="reg-name" name="first_name" placeholder="Max Mustermann" required>
+                    <label for="firstName">Vorname</label>
+                    <input type="text" id="firstName" name="firstName" placeholder="Max" required>
                 </div>
                 <div class="input-group">
-                    <label for="reg-email">E-Mail Adresse</label>
-                    <input type="email" id="reg-email" name="email" placeholder="name@beispiel.de" required>
+                    <label for="lastName">Nachname</label>
+                    <input type="text" id="lastName" name="lastName" placeholder="Mustermann" required>
                 </div>
                 <div class="input-group">
-                    <label for="reg-password">Passwort erstellen</label>
-                    <input type="password" id="reg-password" name="password" placeholder="" required>
+                    <label for="email">E-Mail Adresse</label>
+                    <input type="email" id="email" name="email" placeholder="name@beispiel.de" required>
                 </div>
                 <div class="input-group">
-                    <label for="reg-confirm-password">Passwort besttigen</label>
-                    <input type="password" id="reg-confirm-password" name="confirm_password" placeholder="" required>
+                    <label for="password">Passwort erstellen</label>
+                    <input type="password" id="password" name="password" placeholder="" required>
+                </div>
+                <div class="input-group">
+                    <label for="confirmPassword">Passwort bestätigen</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="" required>
+                </div>
+
+                <div class="input-group">
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <span style="font-weight: normal; font-size: 12px;">
+                            Ich akzeptiere die <a href="agb.html" style="color: var(--primary-orange);">AGB</a> und 
+                            <a href="datenschutz.html" style="color: var(--primary-orange);">Datenschutzbestimmungen</a>
+                        </span>
+                    </label>
                 </div>
 
                 <button type="submit" class="main-btn auth-btn-register-submit">

@@ -649,9 +649,9 @@
     <!-- Messages Container -->
     <div class="messages-container">
         <!-- Conversations Panel -->
-        <div class="conversations-panel">
+        <div class="conversations-panel" id="conversationsPanel">
             <div class="conversations-header">
-                <h2>Nachrichten</h2>
+                <h2>Posteingang</h2>
                 <div class="conversations-search">
                     <input type="text" placeholder="Suchen..." id="searchConversations">
                 </div>
@@ -659,77 +659,84 @@
             <!-- Conversations List -->
             <div class="conversations-list" id="conversationsList">
                 <div class="chat-empty">
+                    <div class="spinner"></div>
                     <span>Lade Nachrichten...</span>
                 </div>
             </div>
         </div>
 
         <!-- Chat Panel -->
-        <div class="chat-panel" id="chatPanel" style="display:none;">
-            <div class="chat-header">
-                <div class="chat-header-info">
-                    <div class="chat-header-avatar" id="activeChatAvatar">?</div>
-                    <div>
-                        <div class="chat-header-name" id="activeChatName">Chat</div>
-                        <div class="chat-header-status" id="activeChatStatus">● Online</div>
+        <div class="chat-panel" id="chatPanel">
+            <!-- Empty State (No Chat Selected) -->
+            <div id="noChatSelected" class="chat-empty" style="display: flex;">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    style="color: #ccc; margin-bottom: 20px;">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <h3 style="color: #666; font-size: 18px; font-weight: 600;">Wähle eine Unterhaltung</h3>
+                <p style="color: #999; margin-top: 8px;">Klicke auf eine Konversation links, um den Chat zu öffnen.</p>
+            </div>
+
+            <!-- Active Chat Interface (Hidden initially) -->
+            <div id="activeChatInterface" style="display: none; flex-direction: column; height: 100%;">
+                <div class="chat-header">
+                    <div class="chat-header-info">
+                        <button class="chat-action-btn mobile-back-btn" onclick="closeChatMobile()"
+                            style="display:none; margin-right: 10px;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <line x1="19" y1="12" x2="5" y2="12"></line>
+                                <polyline points="12 19 5 12 12 5"></polyline>
+                            </svg>
+                        </button>
+                        <div class="chat-header-avatar" id="activeChatAvatar">?</div>
+                        <div>
+                            <div class="chat-header-name" id="activeChatName">Chat</div>
+                            <div class="chat-header-status" id="activeChatStatus">● Online</div>
+                        </div>
+                    </div>
+                    <div class="chat-header-actions">
+                        <button class="chat-action-btn" title="Mehr">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="1"></circle>
+                                <circle cx="12" cy="5" r="1"></circle>
+                                <circle cx="12" cy="19" r="1"></circle>
+                            </svg>
+                        </button>
                     </div>
                 </div>
-                <div class="chat-header-actions">
-                    <button class="chat-action-btn" title="Mehr">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <circle cx="12" cy="12" r="1"></circle>
-                            <circle cx="12" cy="5" r="1"></circle>
-                            <circle cx="12" cy="19" r="1"></circle>
-                        </svg>
-                    </button>
-                    <button class="chat-action-btn mobile-back-btn" onclick="closeChatMobile()" style="display:none;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <line x1="19" y1="12" x2="5" y2="12"></line>
-                            <polyline points="12 19 5 12 12 5"></polyline>
-                        </svg>
-                    </button>
+
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Messages will be injected here -->
+                </div>
+
+                <!-- Quick Responses -->
+                <div class="quick-responses" id="quickResponses">
+                    <button class="quick-response-btn" onclick="insertQuickResponse('Ja, noch verfügbar!')">Noch
+                        verfügbar</button>
+                    <button class="quick-response-btn" onclick="insertQuickResponse('Versand morgen möglich')">Versand
+                        morgen</button>
+                    <button class="quick-response-btn" onclick="insertQuickResponse('Preis ist verhandelbar')">Preis
+                        verhandelbar</button>
+                    <button class="quick-response-btn" onclick="insertQuickResponse('Ich sende mehr Fotos')">Mehr
+                        Fotos</button>
+                </div>
+
+                <div class="chat-input">
+                    <div class="chat-input-container">
+                        <textarea class="chat-input-field" placeholder="Nachricht schreiben..."
+                            id="messageInput"></textarea>
+                        <button class="chat-send-btn" id="sendMessageBtn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
-
-            <div class="chat-messages" id="chatMessages">
-                <!-- Messages will be injected here -->
-            </div>
-
-            <!-- Quick Responses -->
-            <div class="quick-responses" id="quickResponses">
-                <button class="quick-response-btn" onclick="insertQuickResponse('Ja, noch verfügbar!')">Noch
-                    verfügbar</button>
-                <button class="quick-response-btn" onclick="insertQuickResponse('Versand morgen möglich')">Versand
-                    morgen</button>
-                <button class="quick-response-btn" onclick="insertQuickResponse('Preis ist verhandelbar')">Preis
-                    verhandelbar</button>
-                <button class="quick-response-btn" onclick="insertQuickResponse('Ich sende mehr Fotos')">Mehr
-                    Fotos</button>
-            </div>
-
-            <div class="chat-input">
-                <div class="chat-input-container">
-                    <textarea class="chat-input-field" placeholder="Nachricht schreiben..."
-                        id="messageInput"></textarea>
-                    <button class="chat-send-btn" id="sendMessageBtn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <line x1="22" y1="2" x2="11" y2="13"></line>
-                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div class="chat-empty" id="emptyStatePlaceholder">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
-            <h2>Wähle eine Unterhaltung</h2>
-            <p>Klicke auf eine Konversation links, um den Chat zu öffnen.</p>
         </div>
     </div> <!-- API Configuration (MUST load first) -->
     <script src="api-config.js"></script>

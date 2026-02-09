@@ -1,6 +1,6 @@
 /**
- * CSS Berlin - Authentication System
- * Local storage based authentication for demo purposes
+ * CSS Berlin - JWT Authentication System
+ * Secure authentication with JWT tokens and httpOnly cookies
  */
 
 // Initialize toast if not available
@@ -12,71 +12,259 @@ if (typeof toast === 'undefined') {
     };
 }
 
-/**
- * Register a new user
- */
-async function register(userData) {
-    try {
-        if (!window.api && typeof APIClient !== 'undefined') {
-            window.api = new APIClient();
+// JWT Token Management
+class JWTAuth {
+    constructor() {
+        this.baseURL = (typeof API_CONFIG !== 'undefined' && API_CONFIG.current) ? API_CONFIG.current : (window.API_BASE || '');
+        this.token = null;
+        this.user = null;
+        this.init();
+    }
+
+    init() {
+        // Check if we have a token in localStorage (for development)
+        const storedToken = localStorage.getItem('jwt_token');
+        if (storedToken) {
+            this.token = storedToken;
+            this.validateToken();
+        }
+    }
+
+    setToken(token) {
+        this.token = token;
+        localStorage.setItem('jwt_token', token);
+    }
+
+    clearToken() {
+        this.token = null;
+        this.user = null;
+        localStorage.removeItem('jwt_token');
+    }
+
+    async validateToken() {
+        if (!this.token) return false;
+
+        try {
+            const response = await fetch(`${this.baseURL}/api/auth/me`, {
+                headers: {
+                    'Authorization': `Bearer ${this.token}`
+                }
+            });
+
+            if (response.ok) {
+                this.user = await response.json();
+                return true;
+            } else {
+                this.clearToken();
+                return false;
+            }
+        } catch (error) {
+            console.error('Token validation failed:', error);
+            this.clearToken();
+            return false;
+        }
+    }
+
+    async fetchWithAuth(url, options = {}) {
+        const headers = {
+            'Content-Type': 'application/json',
+            ...options.headers
+        };
+
+        if (this.token) {
+            headers['Authorization'] = `Bearer ${this.token}`;
         }
 
-        if (!window.api || typeof window.api.register !== 'function') {
-            throw new Error('API client not available');
-        }
-
-        const created = await window.api.register({
-            email: userData.email,
-            password: userData.password,
-            firstName: userData.firstName,
-            lastName: userData.lastName
+        return fetch(url, {
+            ...options,
+            headers
         });
+    }
 
-        return { success: true, user: created };
-    } catch (error) {
-        return { success: false, error: error.message || 'Registrierung fehlgeschlagen.' };
+    getAuthHeaders() {
+        return this.token ? { 'Authorization': `Bearer ${this.token}` } : {};
     }
 }
 
+// Global auth instance
+window.auth = new JWTAuth();
+
 /**
- * Login user
+ * Register a new user with JWT
  */
-async function login(email, password, redirect = true) {
+async function register(userData) {
     try {
         const baseURL = (typeof API_CONFIG !== 'undefined' && API_CONFIG.current) ? API_CONFIG.current : (window.API_BASE || '');
-        const url = `${baseURL}/api/auth/login`;
-
-        const body = {
-            email: email,
-            password: password,
-        };
+        const url = `${baseURL}/api/auth/register`;
 
         const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(body)
+            body: JSON.stringify({
+                email: userData.email,
+                password: userData.password,
+                firstName: userData.firstName,
+                lastName: userData.lastName
+            })
         });
 
         const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.detail || 'Registrierung fehlgeschlagen.');
+        }
+
+        // Store JWT token
+        if (data.access_token) {
+            window.auth.setToken(data.access_token);
+        }
+
+        return { success: true, user: data, token: data.access_token };
+    } catch (error) {
+        return { success: false, error: error.message || 'Registrierung fehlgeschlagen.' };
+    }
+}
+
+/**
+ * Login user with JWT
+ */
+async function login(email, password, redirect = true) {
+    try {
+        const baseURL = (typeof API_CONFIG !== 'undefined' && API_CONFIG.current) ? API_CONFIG.current : (window.API_BASE || '');
+        const url = `${baseURL}/api/auth/login`;
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        });
+
+        const data = await response.json();
+        
         if (!response.ok) {
             throw new Error(data.detail || 'E-Mail oder Passwort ist falsch');
         }
+
+        // Store JWT token
+        if (data.access_token) {
+            window.auth.setToken(data.access_token);
+        }
+
+        // Get user data
+        await window.auth.validateToken();
 
         if (redirect) {
             window.location.href = 'index.html';
         }
 
-        return { success: true, data };
+        return { success: true, data, user: window.auth.user };
     } catch (error) {
         return { success: false, error: error.message || 'Login fehlgeschlagen.' };
     }
 }
 
-async function fetchWithAuth(url, options = {}) {
-    // Cookies are sent automatically by the browser, so no need to add Authorization header.
-    return fetch(url, options);
+/**
+ * Google OAuth Login
+ */
+async function loginWithGoogle(idToken, email, name, picture = null) {
+    try {
+        const baseURL = (typeof API_CONFIG !== 'undefined' && API_CONFIG.current) ? API_CONFIG.current : (window.API_BASE || '');
+        const url = `${baseURL}/api/auth/google`;
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id_token: idToken,
+                email: email,
+                name: name,
+                picture: picture
+            })
+        });
+
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.detail || 'Google Login fehlgeschlagen.');
+        }
+
+        // Store JWT token
+        if (data.access_token) {
+            window.auth.setToken(data.access_token);
+        }
+
+        // Get user data
+        await window.auth.validateToken();
+
+        return { success: true, data, user: window.auth.user };
+    } catch (error) {
+        return { success: false, error: error.message || 'Google Login fehlgeschlagen.' };
+    }
+}
+
+/**
+ * Magic Link Request
+ */
+async function requestMagicLink(email) {
+    try {
+        const baseURL = (typeof API_CONFIG !== 'undefined' && API_CONFIG.current) ? API_CONFIG.current : (window.API_BASE || '');
+        const url = `${baseURL}/api/auth/magic-link/request`;
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: email })
+        });
+
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.detail || 'Magic Link Anfrage fehlgeschlagen.');
+        }
+
+        return { success: true, data };
+    } catch (error) {
+        return { success: false, error: error.message || 'Magic Link Anfrage fehlgeschlagen.' };
+    }
+}
+
+/**
+ * Password Reset Request
+ */
+async function requestPasswordReset(email) {
+    try {
+        const baseURL = (typeof API_CONFIG !== 'undefined' && API_CONFIG.current) ? API_CONFIG.current : (window.API_BASE || '');
+        const url = `${baseURL}/api/auth/password-reset/request`;
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: email })
+        });
+
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.detail || 'Passwort-Reset Anfrage fehlgeschlagen.');
+        }
+
+        return { success: true, data };
+    } catch (error) {
+        return { success: false, error: error.message || 'Passwort-Reset Anfrage fehlgeschlagen.' };
+    }
 }
 
 /**
@@ -85,13 +273,36 @@ async function fetchWithAuth(url, options = {}) {
 async function logout() {
     try {
         const baseURL = (typeof API_CONFIG !== 'undefined' && API_CONFIG.current) ? API_CONFIG.current : (window.API_BASE || '');
-        await fetch(`${baseURL}/api/auth/logout`, { method: 'POST' });
+        
+        if (window.auth.token) {
+            await fetch(`${baseURL}/api/auth/logout`, { 
+                method: 'POST',
+                headers: window.auth.getAuthHeaders()
+            });
+        }
     } catch (error) {
         console.error("Logout failed:", error);
     } finally {
-        // Even if API call fails, redirect to ensure a clean state
+        // Clear local auth state
+        window.auth.clearToken();
+        
+        // Redirect to home
         window.location.href = 'index.html';
     }
+}
+
+/**
+ * Check if user is logged in
+ */
+async function isLoggedIn() {
+    return await window.auth.validateToken();
+}
+
+/**
+ * Get current user
+ */
+function getCurrentUser() {
+    return window.auth.user;
 }
 
 /**
@@ -102,9 +313,7 @@ async function authenticate(email, password) {
     if (!result.success) {
         return { success: false, error: result.error };
     }
-    // With httpOnly cookies, we can't get the user data directly after login.
-    // We assume the caller will fetch it with a separate call to /api/auth/me
-    return { success: true };
+    return { success: true, user: result.user };
 }
 
 // Registration Form Handler
@@ -146,6 +355,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
+            // Show loading state
+            const submitBtn = registerForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Wird registriert...';
+            submitBtn.disabled = true;
+
             // Register user
             const result = await register({
                 firstName,
@@ -155,6 +370,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 newsletter
             });
 
+            // Restore button state
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+
             if (result.success) {
                 // Show success message
                 if (typeof toast !== 'undefined') {
@@ -162,13 +381,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         'Konto erstellt!',
                         `Willkommen bei CSS Berlin, ${firstName}! Ihr Konto wurde erfolgreich erstellt.`
                     );
-                }
-
-                // Login the user
-                const loginResult = await login(email, password, false);
-                if (!loginResult.success) {
-                    showError(loginResult.error);
-                    return;
                 }
 
                 // Redirect to home
@@ -196,11 +408,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
+            // Show loading state
+            const submitBtn = loginForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Wird angemeldet...';
+            submitBtn.disabled = true;
+
             const result = await authenticate(email, password);
+
+            // Restore button state
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
 
             if (result.success) {
                 if (typeof toast !== 'undefined') {
-                    toast.success('Angemeldet!', `Willkommen zurück, ${result.user.firstName}!`);
+                    toast.success('Angemeldet!', `Willkommen zurück, ${result.user.first_name}!`);
                 }
 
                 setTimeout(() => {
@@ -240,5 +462,8 @@ window.logout = logout;
 window.isLoggedIn = isLoggedIn;
 window.getCurrentUser = getCurrentUser;
 window.authenticate = authenticate;
+window.loginWithGoogle = loginWithGoogle;
+window.requestMagicLink = requestMagicLink;
+window.requestPasswordReset = requestPasswordReset;
 
-console.log('CSS Berlin Auth System loaded');
+console.log('CSS Berlin JWT Auth System loaded');

@@ -72,6 +72,44 @@
     border-radius: 6px;
     text-transform: uppercase;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    z-index: 5;
+}
+
+/* Card Icons Overlay (Top Right) */
+.card-icons-overlay {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 10;
+}
+
+.card-icon-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #444;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-icon-btn:hover {
+    transform: scale(1.1);
+    background: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-icon-btn.active {
+    /* Active state styling handled inline or via specific class overrides */
+    background: white;
 }
 
 .product-card-v3-condition-badge.neu {

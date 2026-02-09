@@ -897,6 +897,10 @@ function createProductCard(product) {
     // Check if product is in wishlist
     const inWishlist = favoriteIds.has(product.id);
 
+    // Check if in cart
+    const cart = JSON.parse(localStorage.getItem('cssberlin_cart') || '[]');
+    const inCart = cart.some(item => item.id === product.id);
+
     const discount = Math.round(((product.newPrice - product.price) / product.newPrice) * 100);
 
     // Generate seller info (mock data for now, will be replaced with API data)
@@ -922,11 +926,22 @@ function createProductCard(product) {
                     ${isSold ? '<div class="sold-badge">VERKAUFT</div>' : ''}
                     <div class="product-card-v3-condition-badge ${badgeClass}">${product.condition}</div>
                     
-                    <button class="card-icon-btn wish-btn ${inWishlist ? 'active' : ''}" data-product-id="${product.id}" title="Favoriten">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="${inWishlist ? '#E0245E' : 'none'}" stroke="${inWishlist ? '#E0245E' : 'currentColor'}" stroke-width="2">
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                        </svg>
-                    </button>
+                    <!-- Action Icons Top Right -->
+                    <div class="card-icons-overlay">
+                        <button class="card-icon-btn wishlist-btn ${inWishlist ? 'active' : ''}" data-product-id="${product.id}" title="Favoriten">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="${inWishlist ? '#E0245E' : 'none'}" stroke="${inWishlist ? '#E0245E' : 'currentColor'}" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
+                        <button class="card-icon-btn add-to-cart-btn ${inCart ? 'active' : ''}" data-product-id="${product.id}" title="In den Warenkorb" 
+                            style="${inCart ? 'background:#2D5016; color:white; border-color:#2D5016;' : ''}">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${inCart ? 'white' : 'currentColor'}" stroke-width="2">
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="20" cy="21" r="1"></circle>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            </svg>
+                        </button>
+                    </div>
             </div>
 
             <div class="product-card-v3-body">

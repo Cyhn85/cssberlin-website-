@@ -113,7 +113,7 @@ function renderConversations() {
 
     if (conversations.length === 0) {
         list.innerHTML = `
-            <div class="chat-empty">
+            <div class="chat-empty" style="padding: 20px; text-align: center;">
                 <span>Keine Nachrichten vorhanden.</span>
             </div>`;
         return;
@@ -123,6 +123,9 @@ function renderConversations() {
         const otherUser = c.user;
         const isActive = otherUser.id == currentConversationId ? 'active' : '';
         const timeDisplay = formatTime(c.last_message_time);
+
+        // Mock status
+        const isUnread = c.unread_count > 0;
 
         // Avatar logic
         let avatarHtml = `<div class="conversation-avatar">${getInitials(otherUser.first_name, otherUser.last_name)}</div>`;
@@ -138,9 +141,9 @@ function renderConversations() {
                     <span class="conversation-name">${otherUser.first_name} ${otherUser.last_name}</span>
                     <span class="conversation-time">${timeDisplay}</span>
                 </div>
-                <div class="conversation-preview">${c.last_message}</div>
+                <div class="conversation-preview ${isUnread ? 'unread' : ''}" style="${isUnread ? 'font-weight:700;color:#111;' : ''}">${escapeHtml(c.last_message)}</div>
             </div>
-            ${c.unread_count > 0 ? `<div class="conversation-unread">${c.unread_count}</div>` : ''}
+            ${isUnread ? `<div class="conversation-unread">${c.unread_count}</div>` : ''}
         </div>
         `;
     }).join('');
@@ -149,19 +152,38 @@ function renderConversations() {
 window.selectConversation = async function (userId) {
     currentConversationId = userId;
 
-    // UI Update
+    // UI Update: Highlight active conversation
     document.querySelectorAll('.conversation-item').forEach(el => el.classList.remove('active'));
-    // Try to find the element we just clicked (simple approach) or re-render
-    renderConversations(); // Re-render to set active class properly
+    // Re-render to update active state visibly
+    renderConversations();
 
-    // Show Chat Panel (mobile/desktop toggle)
-    document.getElementById('chatPanel').style.display = 'flex';
-    document.getElementById('emptyStatePlaceholder').style.display = 'none';
+    // Mobile/Desktop Logic: Show Chat Panel
+    const chatPanel = document.getElementById('chatPanel');
+    const noChat = document.getElementById('noChatSelected');
+    const activeChat = document.getElementById('activeChatInterface');
+
+    if (window.innerWidth <= 968) {
+        // Mobile: Show full screen chat
+        document.getElementById('conversationsPanel').style.display = 'none';
+        chatPanel.style.display = 'flex';
+        // Ensure back button is visible
+        const backBtn = document.querySelector('.mobile-back-btn');
+        if (backBtn) backBtn.style.display = 'flex';
+    } else {
+        // Desktop
+        chatPanel.style.display = 'flex';
+    }
+
+    // Switch from Empty State to Active Chat
+    if (noChat) noChat.style.display = 'none';
+    if (activeChat) activeChat.style.display = 'flex';
 
     // Set Header Info
     const conv = conversations.find(c => c.user.id == userId);
     if (conv) {
         document.getElementById('activeChatName').textContent = `${conv.user.first_name} ${conv.user.last_name}`;
+        document.getElementById('activeChatStatus').textContent = '● Online'; // Mock status
+
         const avatarEl = document.getElementById('activeChatAvatar');
         if (conv.user.profile_picture) {
             avatarEl.innerHTML = `<img src="${conv.user.profile_picture}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
@@ -179,7 +201,7 @@ window.selectConversation = async function (userId) {
 
 async function loadMessages(otherUserId) {
     const container = document.getElementById('chatMessages');
-    container.innerHTML = '<div style="text-align:center;padding:20px;">Lade...</div>';
+    container.innerHTML = '<div style="text-align:center;padding:20px;color:#999;"><div class="spinner"></div> Lade Nachrichten...</div>';
 
     try {
         const token = await window.Clerk.session.getToken();
@@ -193,7 +215,7 @@ async function loadMessages(otherUserId) {
         renderMessages(messages);
     } catch (e) {
         console.error("Error loading messages:", e);
-        container.innerHTML = '<div style="text-align:center;color:red;">Fehler beim Laden.</div>';
+        container.innerHTML = '<div style="text-align:center;color:red;padding:20px;">Fehler beim Laden der Nachrichten.</div>';
     }
 }
 
@@ -201,21 +223,41 @@ function renderMessages(messages) {
     const container = document.getElementById('chatMessages');
     container.innerHTML = '';
 
+    if (messages.length === 0) {
+        container.innerHTML = '<div style="text-align:center;padding:40px;color:#999;">Schreibe die erste Nachricht! 👋</div>';
+        return;
+    }
+
+    // Sort by date (oldest first)
+    // Assuming API returns sorted, but good to be safe if functionality allows
+    // messages.sort((a,b) => new Date(a.created_at) - new Date(b.created_at));
+
+    let lastDate = '';
+
     messages.forEach(msg => {
-        const isMe = msg.sender_id != currentConversationId; // If sender is NOT the other person, it's Me. 
-        // Wait, currentConversationId is the OTHER user.
-        // If msg.sender_id == currentConversationId, it's incoming.
-        // If msg.sender_id != currentConversationId (which means it's my ID), it's sent.
+        // Date Divider Logic
+        const msgDate = new Date(msg.created_at).toLocaleDateString();
+        if (msgDate !== lastDate) {
+            const dateDiv = document.createElement('div');
+            dateDiv.className = 'date-divider';
+            dateDiv.innerHTML = `<span>${msgDate === new Date().toLocaleDateString() ? 'Heute' : msgDate}</span>`;
+            container.appendChild(dateDiv);
+            lastDate = msgDate;
+        }
+
+        const isMe = msg.sender_id != currentConversationId;
+        // Note: currentConversationId is the OTHER USER ID. So if sender != otherUser, it must be me.
 
         const div = document.createElement('div');
-        div.className = `message ${isMe ? 'sent' : ''}`;
+        div.className = `message ${isMe ? 'sent' : 'received'}`;
 
         const time = new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
         div.innerHTML = `
+            ${!isMe ? `<div class="message-avatar">${getInitials(msg.sender_name || 'User', '')}</div>` : ''}
             <div class="message-content">
                 <div class="message-bubble">${escapeHtml(msg.content)}</div>
-                <div class="message-time">${time}</div>
+                <span class="message-time">${time}</span>
             </div>
         `;
         container.appendChild(div);

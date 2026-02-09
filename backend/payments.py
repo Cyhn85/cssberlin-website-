@@ -21,6 +21,9 @@ router = APIRouter(prefix="/api/payment", tags=["Payments"])
 # ─── Env ─────────────────────────────────────────────────
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
 STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY", "")
+KLARNA_API_URL = os.getenv("KLARNA_API_URL", "https://api.playground.klarna.com")
+KLARNA_USERNAME = os.getenv("KLARNA_USERNAME", "")
+KLARNA_PASSWORD = os.getenv("KLARNA_PASSWORD", "")
 
 
 # ─── Schemas ─────────────────────────────────────────────
@@ -56,7 +59,7 @@ async def payment_config():
     return {
         "stripe_enabled": bool(STRIPE_SECRET_KEY),
         "paypal_enabled": True,   # mock
-        "klarna_enabled": True,   # mock
+        "klarna_enabled": bool(KLARNA_USERNAME and KLARNA_PASSWORD),
         "publishable_key": STRIPE_PUBLISHABLE_KEY or "pk_test_placeholder",
     }
 
