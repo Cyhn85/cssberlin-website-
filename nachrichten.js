@@ -27,12 +27,48 @@ document.addEventListener('DOMContentLoaded', async function () {
     // 2. Load Conversations
     await loadConversations();
 
+    // 2.5 Check URL Params for New Chat
+    const urlParams = new URLSearchParams(window.location.search);
+    const sellerId = urlParams.get('seller_id');
+    const productId = urlParams.get('product_id');
+
+    if (sellerId) {
+        initiateChatWithUser(parseInt(sellerId), productId);
+    }
+
     // 3. Setup socket or polling (Polling for now)
     setInterval(loadConversations, 10000); // Poll every 10s
 
     // 4. Input listeners
     setupInputListeners();
 });
+
+function initiateChatWithUser(userId, productId) {
+    currentConversationId = userId;
+
+    // Check if conversation already exists
+    const existing = conversations.find(c => c.user.id == userId);
+
+    if (existing) {
+        selectConversation(userId);
+    } else {
+        // Setup UI for new chat
+        document.getElementById('chatPanel').style.display = 'flex';
+        document.getElementById('emptyStatePlaceholder').style.display = 'none';
+
+        document.getElementById('activeChatName').textContent = "Neuer Chat"; // Ideally fetch user info
+        document.getElementById('activeChatAvatar').textContent = "?";
+
+        document.getElementById('chatMessages').innerHTML =
+            '<div style="text-align:center;padding:20px;color:#666;">Schreiben Sie die erste Nachricht...</div>';
+
+        // Pre-fill message if product context
+        if (productId) {
+            const input = document.getElementById('messageInput');
+            if (input) input.value = `Ich habe eine Frage zu Artikel #${productId}.`;
+        }
+    }
+}
 
 async function waitForClerk() {
     return new Promise(resolve => {

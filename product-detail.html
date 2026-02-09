@@ -453,26 +453,33 @@
             <!-- Actions -->
             <div class="pd-actions-wrapper">
                 <div class="pd-actions">
-                    <button class="btn-offer negotiate-btn" onclick="handleNegotiateClick(productId || 1)">
-                        <span class="icon-wrap"><i data-lucide="message-circle" width="16"></i></span>
-                        Verhandeln
-                    </button>
-                    <!-- Buy Button acts as 'Direct Checkout' or 'Cart' depending on preference. 
-                         User asked for 'Sepet' (Cart) functionality sync, so we add logic to toggle cart or buy.
-                         For now, we keep 'Kaufen' as Buy Now (Direct) matching script.js handleBuyClick -->
-                    <button class="btn-buy" onclick="handleBuyClick(productId || 1)">
-                        <span class="icon-wrap"><i data-lucide="shopping-bag" width="16"></i></span>
-                        Kaufen
-                    </button>
+                    <!-- Top Row: Negotiate & Message -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; grid-column: 1 / -1;">
+                        <button class="btn-offer negotiate-btn" onclick="handleNegotiateClick(productId || 1)">
+                            <span class="icon-wrap"><i data-lucide="message-circle" width="16"></i></span>
+                            Verhandeln
+                        </button>
+
+                        <button class="btn-message" onclick="startChatWithSeller(2, productId || 1)"
+                            style="margin-top:0;">
+                            <span class="icon-wrap"><i data-lucide="mail" width="16"></i></span>
+                            Nachricht
+                        </button>
+                    </div>
+
+                    <!-- Bottom Row: Buy Now -->
+                    <div style="grid-column: 1 / -1;">
+                        <button class="btn-buy" onclick="handleBuyClick(productId || 1)" style="width:100%;">
+                            <span class="icon-wrap"><i data-lucide="shopping-bag" width="16"></i></span>
+                            Kaufabwicklung starten
+                        </button>
+                    </div>
                 </div>
-                <!-- Add Wishlist interaction explicitly -->
+
+                <!-- Extensions -->
                 <button class="btn-message wishlist-btn" onclick="toggleFavoriteUI(productId || 1, this)"
                     style="margin-top:10px; justify-content:center;">
                     <i data-lucide="heart" width="16"></i> Auf die Wunschliste
-                </button>
-
-                <button class="btn-message" onclick="window.messageModal.open()" style="margin-top:10px;">
-                    <i data-lucide="mail" width="16"></i> Nachricht an Verkäufer
                 </button>
             </div>
 
@@ -493,6 +500,11 @@
                 // Extract Product ID from URL
                 const urlParams = new URLSearchParams(window.location.search);
                 const productId = parseInt(urlParams.get('id')) || 1; // Default to 1
+
+                function startChatWithSeller(sellerId, productId) {
+                    // Redirect to messages with context
+                    window.location.href = `nachrichten.html?seller_id=${sellerId}&product_id=${productId}`;
+                }
 
                 // Active State Check on Load
                 window.addEventListener('load', async () => {
