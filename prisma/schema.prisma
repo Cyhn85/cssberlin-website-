@@ -94,20 +94,19 @@ model Product {
   brand     String?
   size      String?
   color     String?
-  condition    Condition // DÜZELTİLDİ: ProductCondition -> Condition
+  condition    ProductCondition // BURASI DÜZELDİ
   status       ProductStatus @default(AVAILABLE)
   viewCount    Int       @default(0)
   likeCount    Int       @default(0)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
    
-  // Category logic can be complex, for now simple string or relation
   categoryId  String?
   category    Category? @relation(fields: [categoryId], references: [id])
 
   images      ProductImage[]
   favorites   Favorite[]
-  chats       Chat[] // Chats related to this product negotiation
+  chats       Chat[]
 }
 
 model ProductImage {
@@ -129,8 +128,8 @@ model Category {
   products  Product[]
 }
 
-// DÜZELTİLDİ: İsmi ProductCondition yerine Condition yapıldı
-enum Condition {
+// BURASI DÜZELDİ: ProductCondition ismine geri döndük
+enum ProductCondition {
   NEW_WITH_TAGS
   NEW_WITHOUT_TAGS
   VERY_GOOD
@@ -177,40 +176,4 @@ model Message {
   sender    User     @relation(fields: [senderId], references: [id])
   content   String?
   imageUrl  String?
-  isRead    Boolean  @default(false)
-  isOffer   Boolean  @default(false)
-  offerPrice Decimal?
-  createdAt DateTime @default(now())
-}
-
-model Notification {
-  id        String   @id @default(uuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  type      NotificationType
-  title     String
-  message   String
-  link      String?
-  isRead    Boolean  @default(false)
-  createdAt DateTime @default(now())
-}
-
-enum NotificationType {
-  SYSTEM
-  MESSAGE
-  PRICE_DROP
-  SOLD
-  FOLLOW
-  REVIEW
-}
-
-model Review {
-  id        String   @id @default(uuid())
-  reviewerId String
-  reviewer  User     @relation("WrittenReviews", fields: [reviewerId], references: [id])
-  targetId  String
-  target    User     @relation("ReceivedReviews", fields: [targetId], references: [id])
-  rating    Int      // 1-5
-  comment   String?
-  createdAt DateTime @default(now())
-}
+  isRead

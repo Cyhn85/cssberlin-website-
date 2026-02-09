@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
-import { Condition } from "@prisma/client";
+import { ProductCondition } from "@prisma/client"; // DÜZELTİLDİ
 
 // Formdan gelen verileri tanımla
 interface CreateProductData {
@@ -35,13 +35,14 @@ export async function createProduct(data: CreateProductData) {
     }
 
     // Condition mapping (Frontend string -> Prisma Enum)
-    let conditionEnum: Condition = Condition.GOOD; // Default
+    // DÜZELTİLDİ: Condition -> ProductCondition
+    let conditionEnum: ProductCondition = ProductCondition.GOOD; // Default
     switch (data.condition) {
-        case "new_with_tags": conditionEnum = Condition.NEW_WITH_TAGS; break;
-        case "new_without_tags": conditionEnum = Condition.NEW_WITHOUT_TAGS; break;
-        case "very_good": conditionEnum = Condition.VERY_GOOD; break;
-        case "good": conditionEnum = Condition.GOOD; break;
-        case "satisfactory": conditionEnum = Condition.SATISFACTORY; break;
+        case "new_with_tags": conditionEnum = ProductCondition.NEW_WITH_TAGS; break;
+        case "new_without_tags": conditionEnum = ProductCondition.NEW_WITHOUT_TAGS; break;
+        case "very_good": conditionEnum = ProductCondition.VERY_GOOD; break;
+        case "good": conditionEnum = ProductCondition.GOOD; break;
+        case "satisfactory": conditionEnum = ProductCondition.SATISFACTORY; break;
     }
 
     // Kategori Mapping (Slug -> ID)
