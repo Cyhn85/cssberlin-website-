@@ -12,12 +12,30 @@
             display: grid;
             grid-template-columns: 350px 1fr;
             max-width: 1400px;
-            margin: var(--spacing-2xl) auto;
-            height: calc(100vh - 200px);
+            margin: 40px auto;
+            /* Increased from spacing-2xl */
+            height: calc(100vh - 180px);
+            /* Adjusted */
             background: var(--bg-primary);
             border-radius: var(--radius-xl);
             overflow: hidden;
+            /* Keeps sidebar scroll internal */
             box-shadow: var(--shadow-lg);
+            position: relative;
+            z-index: 1;
+            /* Ensure above background */
+        }
+
+        /* Adjust for fixed header */
+        body {
+            padding-top: 20px;
+            /* Base padding */
+        }
+
+        /* Breadcrumb spacing */
+        .breadcrumb-container {
+            margin-top: 140px;
+            /* Pushes content down below fixed header */
         }
 
         /* Conversations List */
@@ -25,6 +43,7 @@
             border-right: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
+            background: #fff;
         }
 
         .conversations-header {
@@ -612,7 +631,7 @@
     <div id="header-placeholder"></div>
 
     <!-- Breadcrumb / Back Navigation -->
-    <div style="max-width: 1400px; margin: 20px auto; padding: 0 20px;">
+    <div class="breadcrumb-container" style="max-width: 1400px; margin: 20px auto; padding: 0 20px;">
         <a href="index.html"
             style="display: inline-flex; align-items: center; gap: 8px; color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 14px; transition: color 0.2s;">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
