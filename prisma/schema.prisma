@@ -7,8 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-
 model User {
   id        String   @id @default(uuid())
   clerkId   String   @unique
@@ -86,23 +84,23 @@ enum TransactionStatus {
 }
 
 model Product {
-  id          String   @id @default(uuid())
-  sellerId    String
-  seller      User     @relation(fields: [sellerId], references: [id])
-  title       String
+  id        String   @id @default(uuid())
+  sellerId  String
+  seller    User     @relation(fields: [sellerId], references: [id])
+  title     String
   description String
-  price       Decimal
-  currency    String   @default("EUR")
-  brand       String?
-  size        String?
-  color       String?
-  condition   ProductCondition
-  status      ProductStatus @default(AVAILABLE)
-  viewCount   Int      @default(0)
-  likeCount   Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
+  price     Decimal
+  currency  String   @default("EUR")
+  brand     String?
+  size      String?
+  color     String?
+  condition    Condition // DÜZELTİLDİ: ProductCondition -> Condition
+  status       ProductStatus @default(AVAILABLE)
+  viewCount    Int       @default(0)
+  likeCount    Int       @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+   
   // Category logic can be complex, for now simple string or relation
   categoryId  String?
   category    Category? @relation(fields: [categoryId], references: [id])
@@ -131,7 +129,8 @@ model Category {
   products  Product[]
 }
 
-enum ProductCondition {
+// DÜZELTİLDİ: İsmi ProductCondition yerine Condition yapıldı
+enum Condition {
   NEW_WITH_TAGS
   NEW_WITHOUT_TAGS
   VERY_GOOD
