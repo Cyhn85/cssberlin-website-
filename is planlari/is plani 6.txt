@@ -1,0 +1,4 @@
+1. ✅ [Upload] `/sell` sayfasındaki demo resim yükleyiciyi `UploadButton` (Uploadthing) ile değiştirildi.
+2. ✅ [Action] `src/actions/product-actions.ts` oluşturuldu ve `createProduct` fonksiyonu tamamlandı. (Kategori eşleştirmesi yapıldı).
+3. ✅ [Form] `/sell` sayfasındaki form Server Action'a bağlandı.
+4. ✅ [UX] Ürün yüklendikten sonra kullanıcıyı /profile sayfasına yönlendirme eklendi.

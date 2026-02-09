@@ -1,0 +1,39 @@
+System Health Check & Optimization Plan
+Goal
+Identify the root cause of the "Favorites broken" issue, verify the integrity of critical system files (Schema, DB, Inbox), and implement necessary fixes with robust logging.
+
+User Review Required
+None currently. Technical fixes for reported issues.
+Proposed Changes
+1. Database & Schema (
+prisma/schema.prisma
+ & 
+src/lib/db.ts
+)
+Review: Validate Favorite model relationships (User <-> Product).
+Check: Ensure 
+src/lib/db.ts
+ uses the correct PrismaClient instantiation for the current Prisma version (5.x).
+2. Favorites Feature (
+src/actions/favorite-actions.ts
+ & Frontend)
+Problem: Users report favorites are broken.
+Root Cause Analysis:
+Check if Favorite model exists.
+Check if Server Action toggleFavorite exists and is connected.
+Check if Frontend ProductCard calls the action.
+Fix:
+[NEW/FIX] 
+src/actions/favorite-actions.ts
+: Implement toggleFavorite with auth check and logging.
+[MODIFY] 
+src/components/product-card.tsx
+: Connect heart icon to server action.
+3. Inbox & Messaging (src/app/inbox & src/actions/chat-actions.ts)
+Review: Ensure message sending/receiving logic handles auth() correctly and updates lastMessage.
+Verification Plan
+Automated Verification
+None (Manual testing required).
+Manual Verification
+Favorites: Click heart icon -> Check DB for new record -> Check UI update (Toast/Color).
+Inbox: Verify chat list loads without error.

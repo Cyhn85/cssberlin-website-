@@ -1,0 +1,66 @@
+# MISSION: CSS BERLIN - "GERMAN PROFESSIONAL" TRANSFORMATION & LOGIC WIRING
+# ROLE: Senior Full-Stack Architect & UI/UX Lead
+# GOAL: Translate entire app to German, fix UI aesthetics to "Premium 2026" standards, and wire backend logic (Offers, Chat, Favs).
+
+# STATUS LEGEND:
+# 🔴 = TODO (Yapılacak/Sırada)
+# 🟡 = IN PROGRESS (Kısmen Yapıldı/Mevcut Yapı Var Ama Güncellenecek)
+# ✅ = DONE (Tamamlandı)
+
+✅ Şu an elimizde "Mock Data" ile çalışan İngilizce/Türkçe bir taslak (Frontend V1) var.
+✅ Bunu "Canlı, Almanca ve Profesyonel" bir sisteme dönüştüreceğiz.
+
+## 1. DİL DÖNÜŞÜMÜ (GERMAN LOCALIZATION) - ÖNCELİKLİ
+✅ Sistemdeki TÜM metinleri (UI, Hata Mesajları, Butonlar, Placeholder'lar) profesyonel Almancaya çevir.
+- ✅ "Make Offer" -> "Preisvorschlag senden"
+- ✅ "Buy Now" -> "Sofort kaufen"
+- ✅ "Search..." -> "Suchen..."
+- ✅ "Favorites" -> "Merkliste"
+- ✅ "Inbox" -> "Postfach"
+- ✅ **Kural:** Asla İngilizce kelime kalmayacak. Para birimi formatı: `1.234,56 €` olacak.
+
+## 2. UI/UX "SIHİRLİ DOKUNUŞLAR" (DESIGN OVERHAUL)
+✅ Mevcut yapı bozulmayacak, sadece CSS ve Component stilleri şu kurallara göre güncellenecek:
+
+### A. Renk Paleti ve Atmosfer
+- ✅ **Header & Footer:** `#1a3b28` (Derin Orman Yeşili). Footer içeriği sabit kalsın, sadece zemin rengi ve yazı renklerini uyarla.
+- ✅ **Background:** `#fdfbf7` (Sıcak Bej/Krem). Dümdüz beyaz yok.
+- ✅ **Action (Butonlar):** `#f47521` (Canlı Turuncu). Hover durumunda koyulaşsın.
+- ✅ **Dashboard:** "Amatör" görünümden kurtul. Kart yapısı (Card Layout), hafif gölgeler (shadow-sm) ve yuvarlak köşeler (rounded-xl) kullan. (Mevcut yapı var, stil güncellenecek)
+- ✅ **Ürün Detay:** Ürün kartlarının olduğu arka plan beyaz kalacak.
+
+### B. Header & Navigation
+- ✅ **Top Marquee:** Header'ın en tepesine kayan yazı şeridi ekle (Yeşil zemin, Beyaz yazı). Örn: "🚚 Kostenloser Versand ab 50€!".
+- ✅ **İkonlar:** Sepet, Profil, Kalp ikonlarını Header rengiyle uyumlu, modern çizgisel ikonlarla (Lucide-React) değiştir. (Lucide kullanılıyor, renk uyumu sağlanacak)
+
+### C. Profesyonel Bildirimler (Toasts)
+- 🟡 `window.alert` kullanmayı bırak. (Basit alert kullanıldı, geliştirilebilir)
+- 🟡 `sonner` veya `react-hot-toast` kütüphanesini kur. "Teklif Gönderildi" uyarısı ekranın sağ üstünden şık bir şekilde kaysın.
+
+## 3. BACKEND MANTIK KURULUMU (LOGIC WIRING)
+
+### A. Teklif ve Mesajlaşma Sistemi (CRITICAL)
+"Teklif Ver" (Preisvorschlag) butonu sadece bir alert vermeyecek. Şu akışı kodla:
+1. ✅ Alıcı fiyatı girer ve "Gönder" der.
+2. ✅ Sistem, **Veritabanında (Prisma)** alıcı ve satıcı arasında bir `Conversation` (Sohbet) yoksa oluşturur.
+3. ✅ Sohbetin içine `Message` olarak otomatik bir mesaj atar: *"Möchte diesen Artikel für 40€ kaufen."*
+4. ✅ Mesajın tipini `OFFER` olarak işaretle.
+5. 🟡 Satıcı `/inbox` sayfasına girdiğinde bu mesajı ve "Kabul Et / Reddet" butonlarını görür. (Mesaj oluşuyor ama Inbox sayfası henüz mock)
+
+### B. Favori (Merkliste) Sistemi
+- ✅ Ürün kartındaki Kalp ikonunu gerçek API'ye bağla.
+- ✅ Tıklayınca `Favorite` tablosuna ekle/çıkar.
+- ✅ Sayfa yenilense bile kalp dolu gelmeli (Persistency).
+
+### C. Çerez (Cookie) Modalı
+- 🔴 Sayfa açılışında ortada beliren, Yeşil/Turuncu temalı, profesyonel "Cookie-Einstellungen" modalı ekle. (Referans: Kullanıcı görseli).
+
+---
+**UYGULAMA PLANI:**
+1. ✅ Önce `globals.css` ve Tailwind ayarlarını yeni renklere göre güncelle.
+2. ✅ Tüm hardcoded İngilizce metinleri bul ve Almanca yap.
+3. ✅ `OfferModal` bileşenini güncelle ve Server Action ile Chat sistemine bağla.
+4. ✅ `Navbar` ve `Footer` renklerini sabitle.
+5. ✅ Son olarak Dashboard ve Bildirim tasarımlarını modernleştir.
+
+Kodları parça parça değil, **tam dosya** olarak ver. Başla.

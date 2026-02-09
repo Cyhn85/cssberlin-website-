@@ -1,26 +1,88 @@
+# ============================================
+# CSS BERLIN - DOCKER COMPOSE CONFIGURATION
+# Production setup with PostgreSQL database
+# ============================================
+
 version: '3.8'
 
 services:
-  backend:
-    build: .
-    ports:
-      - "8000:8000"
-      - "8001:8001"
-    env_file:
-      - ./.env
-    volumes:
-      - ./backend/cssberlin.db:/app/cssberlin.db
-    depends_on:
-      - redis
+  # ---- PostgreSQL Database ----
+  db:
+    image: postgres:16-alpine
+    container_name: cssberlin-db
     restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-cssberlin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-supersecretpassword}
+      POSTGRES_DB: ${POSTGRES_DB:-cssberlin}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-cssberlin} -d ${POSTGRES_DB:-cssberlin}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - cssberlin-network
+
+  # ---- Next.js Application ----
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cssberlin-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      # Database
+      DATABASE_URL: postgresql://${POSTGRES_USER:-cssberlin}:${POSTGRES_PASSWORD:-supersecretpassword}@db:5432/${POSTGRES_DB:-cssberlin}?schema=public
+      
+      # Clerk Auth (set in .env)
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+      CLERK_SECRET_KEY: ${CLERK_SECRET_KEY}
+      NEXT_PUBLIC_CLERK_SIGN_IN_URL: /sign-in
+      NEXT_PUBLIC_CLERK_SIGN_UP_URL: /sign-up
+      NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: /
+      NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: /
+      
+      # Node
+      NODE_ENV: production
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/"]
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 40s
+    networks:
+      - cssberlin-network
 
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
+  # ---- Database Admin (Optional - Development) ----
+  adminer:
+    image: adminer:latest
+    container_name: cssberlin-adminer
     restart: unless-stopped
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - cssberlin-network
+    profiles:
+      - dev
+
+# ---- Volumes ----
+volumes:
+  postgres_data:
+    driver: local
+
+# ---- Networks ----
+networks:
+  cssberlin-network:
+    driver: bridge

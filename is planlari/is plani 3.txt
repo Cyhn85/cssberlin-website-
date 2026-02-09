@@ -1,0 +1,31 @@
+# 🚀 IS PLANI 3: DATA FLOW & END-TO-END CONNECTION
+# HEDEF: Sayfaların sahte veri yerine Prisma/Postgres veritabanından gerçek verileri okumasını sağlamak (Fetching).
+
+# STATUS LEGEND:
+# 🔴 = TODO (Yapılacak/Bağlantı Yok)
+# 🟡 = IN PROGRESS (Kod Yazılıyor)
+# ✅ = DONE (Tamamlandı - Canlı Veri Akıyor)
+
+## 1. INBOX & MESSAGING (GERÇEK VERİ BAĞLANTISI)
+- 🔴 [Inbox] `/inbox` sayfasını `prisma.chat.findMany` ile veritabanına bağla. Sahte listeyi sil.
+- 🔴 [Chat] `/inbox/[id]` detay sayfasını gerçek mesajları çekecek şekilde güncelle.
+- 🔴 [Logic] Teklif verildiğinde Inbox'ta "Yeni Mesaj" olarak en üste düşmesini sağla.
+- 🔴 [UI] Mesajlaşma balonlarında gönderen kişinin (Alıcı/Satıcı) doğru tarafta görünmesini sağla.
+
+## 2. CATALOG & PRODUCT DISPLAY (GERÇEK VİTRİN)
+- 🔴 [Catalog] `/catalog` ve Ana Sayfa akışını `prisma.product.findMany` ile DB'ye bağla.
+- 🔴 [Filter] Sidebar filtrelerini (Marka, Fiyat, Beden) URL parametreleri üzerinden Prisma `where` sorgusuna dönüştür.
+- 🔴 [Detail] `/items/[id]` sayfasındaki ürün verilerini tamamen DB'den çek (Şu an partial mock olabilir, kontrol et).
+
+## 3. SEEDING (TEST VERİSİ OLUŞTURMA)
+- 🔴 [Seed] Veritabanı boş olduğu için site boş görünecek. `prisma/seed.ts` dosyası oluştur.
+- 🔴 [Data] İçine 10-15 tane Almanca, fotoğraflı, farklı kategorilerde "Demo Ürün" ve "Demo Kullanıcı" ekleyen bir script yaz.
+- 🔴 [Action] `npx prisma db seed` komutunu çalıştırılabilir hale getir.
+
+## 4. PROFILE & USER DATA
+- 🔴 [Profile] `/profile` sayfasını `clerk` ve `prisma.user` verisiyle senkronize et.
+- 🔴 [Listings] Profildeki "Dolabım" (Satılanlar) sekmesini gerçek ürünlere bağla.
+
+## 5. IMAGE UPLOADING (GERÇEK YÜKLEME)
+- 🔴 [Sell] `/sell` sayfasındaki resim yükleme alanını `Uploadthing` ile canlıya al.
+- 🔴 [Action] Yüklenen resim URL'lerini ürün oluştururken veritabanına kaydet.

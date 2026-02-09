@@ -1,0 +1,4 @@
+1. ✅ [Webhook] Clerk `user.created` ve `user.updated` olaylarını dinleyen API Route (`/api/webhooks/clerk`).
+2. ✅ [Database] Clerk'ten gelen veriyi Neon DB'ye (User tablosu) eşleyen `upsert` mantığı.
+3. ✅ [Upload] `Uploadthing` ayarlarının (`core.ts`) güvenli hale getirilmesi (Mevcut yapı zaten güvenli).
+4. ✅ [UX/Logs] Teklif (Offer) işlemine Email Logu simülasyonu eklendi. (Not: Frontend Toast mesajı UI entegrasyonu sırasında eklenecek).

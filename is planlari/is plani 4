@@ -1,0 +1,21 @@
+# MISSION: FINAL WIRING & LAUNCH (NEON POSTGRES)
+# STATUS: CRITICAL - PRODUCTION READY
+# GOAL: Connect the app to the real Neon database, seed data, and confirm live functionality.
+
+Antigravity, Neon (Frankfurt) veritabanı bağlantı kodumu aldım. Artık sistemi "Mock Data"dan kurtarıp CANLI hale getiriyoruz.
+
+İşte temizlenmiş veritabanı bağlantı adresim (Connection String):
+
+DATABASE_URL="postgresql://neondb_owner:npg_WSdx7zKrjM9X@ep-red-boat-agv3mj4h-pooler.c-2.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+
+**ACİL GÖREV LİSTESİ (Sırasıyla Uygula):**
+
+1.  **Bağlantıyı Kur:** Bu URL'i projenin `.env` dosyasına işle.
+2.  **Şemayı Kontrol Et:** `prisma/schema.prisma` dosyasında `provider` değerinin `"postgresql"` olduğundan emin ol. (Eğer `sqlite` ise değiştir).
+3.  **Motoru Ateşle (Push):** Terminalde `npx prisma db push` komutunu çalıştır. Bu, veritabanı tablolarını Neon sunucusunda oluşturacak.
+4.  **Depoyu Doldur (Seed):** Hazırladığın `seed-script.js` dosyasını çalıştır (`node seed-script.js`). İçeriye demo ürünler (Nike, Zara vb.) ve kullanıcılar yüklensin.
+5.  **Son Kontrolleri Yap:**
+    * `/inbox` sayfasını kontrol et; artık veritabanı boşsa boş, doluysa dolu gelmeli (Mock data silinmeli).
+    * `/catalog` ve Ana Sayfa, veritabanına yüklediğin o demo ürünleri göstermeli.
+
+Bunu yaptığında terminalde "Success" mesajını görmek istiyorum. Başla.

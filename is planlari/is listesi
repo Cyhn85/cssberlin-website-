@@ -1,0 +1,93 @@
+# 🚀 PROJECT MASTER REFERENCE: VINTED-STYLE MARKETPLACE CLONE
+# STATUS LEGEND:
+# 🔴 = TODO (Yapılacak)
+# 🟡 = IN PROGRESS (Backend/API Entegrasyonu Bekliyor)
+# ✅ = DONE (Tamamlandı - UI Hazır & Test Edildi)
+
+## 1. CORE INFRASTRUCTURE & CONFIGURATION
+- ✅ [System] Next.js 14+ (App Router) Kurulumu ve Yapılandırması
+- ✅ [System] TypeScript Strict Mode Aktivasyonu
+- 🟡 [Auth] Clerk Entegrasyonu (UI Hazır, Webhook Eksik)
+- 🟡 [DB] Veritabanı Şeması Tasarımı (Prisma/Postgres) - (Şema hazır, Migration gerekli)
+- 🟡 [Storage] Resim Yükleme Altyapısı (Ui Hazır, Backend Eksik)
+- ✅ [UI] Tailwind CSS Yapılandırması ve Global Renk Paleti (Vinted Yeşili/Mavisi tonları)
+- ✅ [UI] Font Optimizasyonu (Okunabilir, temiz sans-serif fontlar)
+- ✅ [Utils] Tarih Formatlayıcılar ve Para Birimi Formatlayıcıları
+
+## 2. LAYOUT & GLOBAL COMPONENTS (Vinted Style)
+- ✅ [Layout] Sticky Navbar Tasarımı
+  - Logo (Sol)
+  - "Katalog" Dropdown Menüsü
+  - Geniş Arama Çubuğu
+  - Sağ İkonlar: Mesajlar, Bildirimler (Kalp), Profil
+  - "Ürün Sat" Butonu
+- ✅ [Layout] Footer (Yardım, Hakkımızda, Gizlilik, Sosyal Medya linkleri)
+- ✅ [Mobile] Alt Navigasyon Barı (Sadece mobilde görünür)
+- ✅ [Component] Modal/Dialog Yapısı (Wallet, Report, Offer için kullanıldı)
+- ✅ [Component] Button Varyasyonları (Primary, Secondary, Outline, Danger)
+
+## 3. HOMEPAGE & DISCOVERY
+- ✅ [Home] Hero Section ("Dolabını boşalt" çağrısı)
+- ✅ [Home] "Popüler Ürünler" Akışı (Grid yapısı, responsive)
+- ✅ [Home] "Haber Akışı" (Takip edilenler sekmesi eklendi)
+- ✅ [Home] Kategori Kartları
+- ✅ [Search] Gelişmiş Arama Motoru Logic'i (UI Hazır, Mock Data)
+- ✅ [Search] Filtreleme Sidebar'ı (/catalog sayfasında eklendi - UI Hazır)
+  - Kategori, Beden, Marka, Durum, Fiyat Filtreleri
+
+## 4. PRODUCT MANAGEMENT (LISTING)
+- ✅ [Product] "Ürün Ekle" Sayfası (/sell)
+- ✅ [Product] Fotoğraf Yükleyici (UI Hazır)
+- ✅ [Product] Başlık ve Açıklama Alanları
+- ✅ [Product] Dinamik Kategori Seçimi
+- ✅ [Product] Ürün Detay Sayfası (/items/[id])
+  - Resim Galerisi
+  - Satıcı Kartı
+  - "Satın Al" ve "Teklif Ver" Butonları
+  - Benzer Ürünler Bölümü (UI Hazır)
+
+## 5. USER DASHBOARD & PROFILE
+- ✅ [Dashboard] Sidebar Menüsü
+- ✅ [Profile] Genel Profil Görünümü (/profile/[id])
+- ✅ [Profile] "Dolabım" Sekmesi
+- ✅ [Profile] "Yorumlar" Sekmesi
+- ✅ [Settings] Profil Düzenleme (/settings - Profil Sekmesi)
+- ✅ [Settings] Hesap Ayarları (/settings - Hesap Sekmesi)
+
+## 6. INBOX & MESSAGING SYSTEM
+- ✅ [Inbox] Konuşma Listesi (/inbox - UI Hazır)
+  - Kullanıcı Sohbetleri, Okunmamış mesaj indikatörü
+- ✅ [Chat] Mesajlaşma Alanı (/inbox - UI Hazır)
+  - Mesaj balonları, Yazma alanı
+- ✅ [Chat] "Teklif" Sistemi (Chat içinde offer kartları UI Hazır)
+
+## 7. FAVORITES & NOTIFICATIONS
+- ✅ [Favs] Favoriler Sayfası (/favorites - UI Hazır)
+- ✅ [Notif] Bildirim Merkezi (Navbar Popover olarak eklendi - Mock Data)
+- ✅ [Notif] Fiyat Düşüş Bildirimi UI (Bildirim merkezinde örneklendi)
+
+## 8. WALLET & TRANSACTIONS (Cüzdan)
+- ✅ [Wallet] Cüzdan Sayfası UI (/wallet)
+- ✅ [Wallet] Bakiye Geçmişi Tablosu
+- ✅ [Wallet] "Banka Hesabına Aktar" Modali
+- ✅ [Checkout] Ödeme Sayfası (/checkout - UI Hazır)
+  - Adres, Kargo, Ödeme Adımları
+- ✅ [Checkout] Sipariş Özeti ve Durum Takibi (Sipariş alındı ekranı)
+
+## 9. ADMIN & SAFETY
+- ✅ [Admin] Admin Paneli UI (/admin)
+  - Kullanıcı Yönetimi
+  - Ürün Yönetimi
+  - İstatistikler
+- ✅ [Safety] Raporlama Sistemi (Ürün detayda modal olarak eklendi - UI Hazır)
+
+***
+**GÜNCEL DURUM:**
+✨ **TÜM FRONTEND (UI) GÖREVLERİ TAMAMLANDI.** ✨
+Projenin görsel yüzü, Vinted benzeri modern bir tasarımla tamamen oluşturuldu. Tüm sayfalar arası navigasyon çalışıyor.
+
+**SIRADAKİ AŞAMA (BACKEND):**
+Şu an tüm sayfalar "Mock Data" (sahte veriler) ile çalışmaktadır. Gerçek bir pazar yeri olması için yapılması gerekenler:
+1. Veritabanının (Postgres) ayağa kaldırılması.
+2. API rotalarının (Next.js API Routes) yazılması.
+3. Frontend'in bu API'lere bağlanması.
