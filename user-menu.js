@@ -9,91 +9,93 @@ const UserMenu = {
         this.user = user;
         const container = document.getElementById('user-button-container');
         if (!container) {
-            // Retry if container not found (e.g. race condition with header load)
+            console.warn('[UserMenu] Container not found, retrying...');
             setTimeout(() => this.init(user), 500);
             return;
         }
 
-        // Clean container
-        container.innerHTML = '';
-        container.style.display = 'block';
+        console.log('[UserMenu] Initializing for user:', user.firstName);
 
-        // 1. Create Avatar Trigger
+        // Clear existing content (important if re-initializing)
+        container.innerHTML = '';
+
+        // 1. Create Wrapper (Relative positioning context)
+        const wrapper = document.createElement('div');
+        wrapper.style.position = 'relative';
+        wrapper.style.display = 'inline-block';
+
+        // 2. Create Avatar Trigger
         const trigger = document.createElement('div');
         trigger.className = 'custom-user-trigger';
         trigger.innerHTML = `<img src="${user.imageUrl}" alt="${user.firstName}" />`;
 
-        // 2. Create Dropdown Menu
+        // 3. Create Dropdown Menu
         const menu = document.createElement('div');
         menu.className = 'custom-user-dropdown';
-        menu.style.display = 'none'; // Hidden by default
-
-        const allowedEmails = [
-            'ceyhuns.sorguc@gmail.com',
-            'admin@cssberlin.de',
-            'info@cssberlin.de',
-            'seller@cssberlin.de'
-        ];
-
-        let userEmail = '';
-        if (user.primaryEmailAddress && user.primaryEmailAddress.emailAddress) {
-            userEmail = user.primaryEmailAddress.emailAddress.toLowerCase().trim();
-        }
-
-        const isAuthorized = allowedEmails.some(email => email.toLowerCase() === userEmail);
-
-        // Menu Structure
+        // HTML Structure
         menu.innerHTML = `
-            <div class="cud-section">
-                <a href="mein-profil.html" class="cud-link">Mein Profil</a>
-                ${isAuthorized ? '<a href="inserieren.html" class="cud-link" style="color:#2D5016; font-weight:700;"><i data-lucide="plus-circle" style="width:16px; margin-right:8px;"></i> Artikel verkaufen</a>' : ''}
-                <a href="freunde-einladen.html" class="cud-link">Freunde einladen</a>
-                <a href="meine-einstellungen.html" class="cud-link">Meine Einstellungen</a>
-                <a href="personalisierung.html" class="cud-link">Personalisierung</a>
+            <div class="cud-header">
+                <div class="cud-user-info">
+                    <img src="${user.imageUrl}" class="cud-avatar-small">
+                    <div>
+                        <div class="cud-name">${user.fullName || user.firstName}</div>
+                        <div class="cud-sub">Mitglied seit 2024</div>
+                    </div>
+                </div>
             </div>
             <div class="cud-section">
+                <a href="mein-profil.html" class="cud-link">
+                    <i data-lucide="user"></i> Mein Profil
+                </a>
+                <a href="meine-einstellungen.html" class="cud-link">
+                    <i data-lucide="settings"></i> Einstellungen
+                </a>
+            </div>
+             <div class="cud-section">
                 <a href="geldbeutel.html" class="cud-link">
-                    Geldbeutel
+                    <i data-lucide="wallet"></i> Geldbeutel
                     <span class="cud-balance">75,55 €</span>
                 </a>
             </div>
             <div class="cud-section">
-                <a href="meine-bestellungen.html" class="cud-link">Meine Bestellungen</a>
-                <a href="spenden.html" class="cud-link">Spenden</a>
-            </div>
-            <div class="cud-section">
-                <a href="#" id="custom-logout-btn" class="cud-link cud-logout">Ausloggen</a>
+                <a href="sonstiges.html" class="cud-link">
+                    <i data-lucide="help-circle"></i> Hilfe-Center
+                </a>
+                 <a href="#" id="custom-logout-btn" class="cud-link cud-logout">
+                    <i data-lucide="log-out"></i> Ausloggen
+                </a>
             </div>
         `;
 
-        // 3. Append to Container
-        container.appendChild(trigger);
-        container.appendChild(menu);
+        // 4. Append
+        wrapper.appendChild(trigger);
+        wrapper.appendChild(menu);
+        container.appendChild(wrapper);
 
-        // 4. Styles Injection
+        // 5. Inject Styles
         this.injectStyles();
+        if (window.lucide) window.lucide.createIcons();
 
-        // 5. Event Listeners
-        trigger.addEventListener('click', (e) => {
+        // 6. Events
+        const toggleMenu = (e) => {
             e.stopPropagation();
-            const isOpen = menu.style.display === 'block';
-            menu.style.display = isOpen ? 'none' : 'block';
-        });
+            menu.classList.toggle('active');
+        };
 
-        // Close when clicking outside
+        trigger.addEventListener('click', toggleMenu);
+
         document.addEventListener('click', (e) => {
-            if (!container.contains(e.target)) {
-                menu.style.display = 'none';
+            if (!wrapper.contains(e.target)) {
+                menu.classList.remove('active');
             }
         });
 
-        // Handle Logout
         const logoutBtn = menu.querySelector('#custom-logout-btn');
         if (logoutBtn) {
             logoutBtn.addEventListener('click', async (e) => {
                 e.preventDefault();
                 await window.Clerk.signOut();
-                window.location.href = '/';
+                window.location.href = 'index.html';
             });
         }
     },
@@ -132,21 +134,55 @@ const UserMenu = {
             /* Dropdown Menu */
             .custom-user-dropdown {
                 position: absolute;
-                top: 50px; /* Below avatar */
+                top: 50px;
                 right: 0;
-                width: 280px;
+                width: 300px;
                 background: white;
                 border: 1px solid #e5e7eb;
                 box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-                border-radius: 4px;
+                border-radius: 8px;
                 z-index: 10000;
-                padding: 8px 0;
-                animation: fadeIn 0.2s ease-out;
+                padding: 0;
+                overflow: hidden;
+                display: none; /* Controlled by active class */
+                transform-origin: top right;
+            }
+            
+            .custom-user-dropdown.active {
+                display: block;
+                animation: scaleIn 0.2s ease-out;
             }
 
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(-10px); }
-                to { opacity: 1; transform: translateY(0); }
+            @keyframes scaleIn {
+                from { opacity: 0; transform: scale(0.95); }
+                to { opacity: 1; transform: scale(1); }
+            }
+
+            /* Menu Header */
+            .cud-header {
+                padding: 16px;
+                border-bottom: 1px solid #f3f4f6;
+                background: #fdfdfd;
+            }
+            .cud-user-info {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+            .cud-avatar-small {
+                width: 48px;
+                height: 48px;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+            .cud-name {
+                font-weight: 700;
+                color: #111;
+                font-size: 16px;
+            }
+            .cud-sub {
+                font-size: 12px;
+                color: #666;
             }
 
             /* Sections */
@@ -161,33 +197,48 @@ const UserMenu = {
             /* Links */
             .cud-link {
                 display: flex;
-                justify-content: space-between;
                 align-items: center;
-                padding: 10px 20px;
+                gap: 12px;
+                padding: 12px 20px;
                 color: #374151;
                 text-decoration: none;
-                font-size: 15px;
+                font-size: 14px;
                 transition: background 0.1s;
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                font-family: 'Inter', sans-serif;
             }
             .cud-link:hover {
                 background-color: #f9fafb;
                 color: #2D5016; /* Brand Green */
             }
+            .cud-link svg {
+                width: 18px;
+                height: 18px;
+                color: #9CA3AF;
+            }
+            .cud-link:hover svg {
+                color: #2D5016;
+            }
 
             /* Balance */
             .cud-balance {
-                color: #09919c; /* Vinted-like teal or keep brand green? */
-                font-weight: 600;
+                color: #09919c; 
+                font-weight: 700;
+                margin-left: auto;
             }
 
             /* Logout */
             .cud-logout {
-                color: #ef4444; /* Red */
+                color: #ef4444; 
             }
             .cud-logout:hover {
                 color: #dc2626;
                 background-color: #fee2e2;
+            }
+            .cud-logout svg {
+                color: #ef4444;
+            }
+            .cud-logout:hover svg {
+                color: #dc2626;
             }
         `;
         document.head.appendChild(style);
