@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta charset="UTF-8">
@@ -244,7 +245,9 @@
 
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800;900&display=swap"
+        rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <link rel="stylesheet" href="header-v3.css">
@@ -252,24 +255,26 @@
     <link rel="stylesheet" href="cookie-consent.css">
     <link rel="stylesheet" href="footer-v3.css">
     <link rel="stylesheet" href="gradient-button.css">
-    
+
     <!-- CLERK AUTH -->
     <script async crossorigin="anonymous"
-      data-clerk-publishable-key="pk_test_c3VwZXItd2FzcC04NS5jbGVyay5hY2NvdW50cy5kZXYk"
-      src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
-      type="text/javascript"></script>
-    
+        data-clerk-publishable-key="pk_test_c3VwZXItd2FzcC04NS5jbGVyay5hY2NvdW50cy5kZXYk"
+        src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" type="text/javascript"></script>
+
     <script src="api-config.js"></script>
     <script src="auth-modal-v3.js"></script>
 
 </head>
+
 <body>
     <!-- News Banner at Top -->
     <div class="news-banner" style="position: sticky; top: 0; z-index: 999;">
         <div class="news-slider" id="newsSlider">
             <div class="news-item" data-link="co2-impact.html">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                    <path
+                        d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z">
+                    </path>
                 </svg>
                 <span>🌍 248.5 Tonnen CO₂ gespart - Jeder Kauf zählt für unseren Planeten!</span>
             </div>
@@ -282,7 +287,9 @@
             </div>
             <div class="news-item" data-link="/leaderboard">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+                    <path
+                        d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z">
+                    </path>
                 </svg>
                 <span>🏆 CO₂ Rangliste - Wer spart am meisten? Klick für die Top 100!</span>
             </div>
@@ -303,15 +310,18 @@
     </div>
 
     <!-- Header - Sadeleştirilmiş -->
-    
-    
+
+
     <header class="header-v3">
         <div class="header-row-logo">
-            <a href="index.html" class="logo-v3"><span class="logo-css">CSS</span><span class="logo-berlin">berlin</span></a>
+            <a href="index.html" class="logo-v3"><span class="logo-css">CSS</span><span
+                    class="logo-berlin">berlin</span></a>
             <div class="header-right-v3">
                 <a href="wunschliste.html" class="header-icon-v3" title="Favoriten"><i data-lucide="heart"></i></a>
-                <a href="inserieren.html" class="header-icon-v3" title="Inserieren"><i data-lucide="plus-circle"></i></a>
-                <a href="warenkorb.html" class="header-icon-v3" title="Warenkorb"><i data-lucide="shopping-cart"></i></a>
+                <a href="inserieren.html" class="header-icon-v3" title="Inserieren"><i
+                        data-lucide="plus-circle"></i></a>
+                <a href="warenkorb.html" class="header-icon-v3" title="Warenkorb"><i
+                        data-lucide="shopping-cart"></i></a>
                 <button type="button" class="btn-anmelden-v3" id="header-login-btn">Anmelden</button>
                 <div id="user-button-container"></div>
             </div>
@@ -350,36 +360,51 @@
             <!-- Sol - Kullanıcı Aksiyonları -->
             <div class="dashboard-actions">
                 <!-- Bildirimler -->
-                <button class="dashboard-icon-btn" title="Benachrichtigungen">
-                    <svg viewBox="0 0 24 24">
+                <!-- 1. Benachrichtigungen (Bell) -->
+                <a href="benachrichtigungen.html" class="dashboard-icon-btn" title="Benachrichtigungen">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
                         <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
                     </svg>
                     <span class="label">Benachrichtigungen</span>
                     <span class="badge">2</span>
-                </button>
+                </a>
 
-                <!-- Verhandlungen / Pazarlıklar -->
+                <!-- 2. Verhandlungen (Tag) -->
                 <a href="pazarlik.html" class="dashboard-icon-btn" title="Verhandlungen">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                        <line x1="7" y1="7" x2="7.01" y2="7"></line>
                     </svg>
                     <span class="label">Verhandlungen</span>
                     <span class="badge" id="negotiationCount">0</span>
                 </a>
 
-                <!-- Wunschliste -->
-                <a href="wunschliste.html" class="dashboard-icon-btn" id="wishlistBtn" title="Wunschliste">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                <!-- 3. Nachrichten (Envelope) -->
+                <a href="nachrichten.html" class="dashboard-icon-btn" title="Nachrichten">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    <span class="label">Nachrichten</span>
+                    <span class="badge" id="messageCount">0</span>
+                </a>
+
+                <!-- 4. Wunschliste (Heart) - ACTIVE -->
+                <a href="wunschliste.html" class="dashboard-icon-btn active" id="wishlistBtn" title="Wunschliste"
+                    style="color:var(--primary-green); background:var(--bg-tertiary);">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                        </path>
                     </svg>
                     <span class="label">Wunschliste</span>
                     <span class="badge" id="wishlistCount">0</span>
                 </a>
 
-                <!-- Warenkorb -->
+                <!-- 5. Warenkorb (Cart) -->
                 <a href="warenkorb.html" class="dashboard-icon-btn" title="Warenkorb">
-                    <svg viewBox="0 0 24 24">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="9" cy="21" r="1"></circle>
                         <circle cx="20" cy="21" r="1"></circle>
                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
@@ -423,7 +448,9 @@
         <!-- Empty State -->
         <div class="wishlist-empty" id="wishlistEmpty" style="display: none;">
             <svg class="wishlist-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                <path
+                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                </path>
             </svg>
             <h2>Deine Wunschliste ist leer</h2>
             <p>Speichere Artikel, die dir gefallen, indem du auf das Herz-Symbol klickst</p>
@@ -446,8 +473,8 @@
     </div>
 
     <!-- Footer -->
-    
-    
+
+
     <footer class="footer-v3">
         <div class="footer-v3-container">
             <div class="footer-col">
@@ -485,7 +512,8 @@
                 CSS Berlin | Ceyhun Sabahattin Sorguc | Am Omnibushof 12, 13593 Berlin<br>
                 USt-IdNr.: DE459278750 | St.-Nr.: 19/538/01452 | Kleinunternehmer i.S.d. § 19 UStG
             </div>
-            <p style="margin-top: 10px; color:var(--brand-orange);">&copy; 2026 CSS Berlin - Climate Smart Solutions. Alle Rechte vorbehalten.</p>
+            <p style="margin-top: 10px; color:var(--brand-orange);">&copy; 2026 CSS Berlin - Climate Smart Solutions.
+                Alle Rechte vorbehalten.</p>
         </div>
     </footer>
 
@@ -495,11 +523,11 @@
     <script src="auth-gate.js"></script>
     <script src="auth-guard.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             loadWishlist();
 
             // Clear all button
-            document.getElementById('clearAllBtn')?.addEventListener('click', function() {
+            document.getElementById('clearAllBtn')?.addEventListener('click', function () {
                 if (confirm('Möchtest du wirklich alle Artikel entfernen?')) {
                     clearWishlist();
                 }
@@ -571,7 +599,7 @@
             window.location.href = `product-detail.html?id=${productId}`;
         }
     </script>
-<script>window.addEventListener('load', () => lucide.createIcons());</script>
+    <script>window.addEventListener('load', () => lucide.createIcons());</script>
 </body>
-</html>
 
+</html>
