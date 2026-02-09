@@ -189,11 +189,7 @@ function rebindClerk() {
     }
 
     // 4. Guest Protection
-    initGuestProtection();
-}
-
-// 4. Guest Protection
-initGuestProtection();
+    // initGuestProtection(); // DISABLED: User wants direct access to pages
 }
 
 async function loadFilterBar() {
@@ -224,50 +220,3 @@ async function loadFilterBar() {
     }
 }
 
-function initGuestProtection() {
-}
-
-function initGuestProtection() {
-    // Select all protected icons: Messages, Negotiations, Wishlist, Cart
-    const protectedSelectors = [
-        'a[href="nachrichten.html"]',
-        'a[href="pazarlik.html"]',
-        'a[href="wunschliste.html"]',
-        'a[href="warenkorb.html"]'
-    ];
-
-    protectedSelectors.forEach(selector => {
-        const elements = document.querySelectorAll(selector);
-        elements.forEach(el => {
-            // Remove old listeners to prevent stacking
-            const newEl = el.cloneNode(true);
-            if (el.parentNode) el.parentNode.replaceChild(newEl, el);
-
-            newEl.addEventListener('click', function (e) {
-                // 1. Check if Clerk is loaded
-                if (window.Clerk && window.Clerk.user) {
-                    // Logged in -> Allow navigation
-                    return;
-                }
-
-                // 2. Not logged in
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('Safe Guest Guard: Preventing navigation', newEl.href);
-
-                if (window.Clerk) {
-                    window.Clerk.openSignIn({
-                        appearance: {
-                            variables: {
-                                colorPrimary: '#2D5016',
-                                colorTextOnPrimaryBackground: 'white'
-                            }
-                        }
-                    });
-                } else {
-                    alert("Bitte warten Sie, bis die Anmeldung geladen ist.");
-                }
-            });
-        });
-    });
-}
