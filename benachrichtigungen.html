@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benachrichtigungen - CSS Berlin</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="header-v3.css">
+    <link rel="stylesheet" href="footer-v3.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .notifications-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            min-height: 400px;
+        }
+
+        .notif-header {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notif-header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a3409;
+            margin: 0;
+        }
+
+        .notif-empty {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="notifications-container">
+        <div class="notif-header">
+            <h1>Benachrichtigungen</h1>
+            <button style="border:none; background:none; color:#FF8C42; font-weight:600; cursor:pointer;">Alle als
+                gelesen markieren</button>
+        </div>
+        <div class="notif-list">
+            <div class="notif-empty">
+                <i data-lucide="bell-off" style="width:40px; height:40px; color:#ccc; margin-bottom:10px;"></i>
+                <p>Keine neuen Benachrichtigungen.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="components.js"></script>
+    <script>
+        window.addEventListener('load', () => {
+            lucide.createIcons();
+        });
+    </script>
+</body>
+
+</html>
