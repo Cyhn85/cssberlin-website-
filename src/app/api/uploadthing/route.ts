@@ -1,5 +1,3 @@
-export const runtime = "edge";
-
 import { createRouteHandler } from "uploadthing/next";
 
 import { ourFileRouter } from "./core";

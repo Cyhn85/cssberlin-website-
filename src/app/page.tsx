@@ -1,4 +1,4 @@
-export const runtime = "edge"; import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { HomeClient } from "@/components/home-client";
 import { auth } from "@clerk/nextjs/server";
 
