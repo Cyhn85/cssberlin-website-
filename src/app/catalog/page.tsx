@@ -1,3 +1,5 @@
+export const runtime = "edge";
+
 import { CatalogUI } from "@/components/catalog-ui";
 import { db as prisma } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";

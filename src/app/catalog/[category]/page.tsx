@@ -1,3 +1,4 @@
+export const runtime = "edge";
 "use client";
 
 import { useState } from "react";
@@ -284,8 +285,8 @@ export default function CatalogPage({ params }: { params: { category: string } }
                                                 key={size}
                                                 onClick={() => toggleFilter(size, selectedSizes, setSelectedSizes)}
                                                 className={`px-3 py-1 text-sm border rounded-lg transition-colors ${selectedSizes.includes(size)
-                                                        ? "bg-[#2E9E5C] text-white border-[#2E9E5C]"
-                                                        : "border-gray-200 hover:border-gray-300"
+                                                    ? "bg-[#2E9E5C] text-white border-[#2E9E5C]"
+                                                    : "border-gray-200 hover:border-gray-300"
                                                     }`}
                                             >
                                                 {size}
@@ -370,8 +371,8 @@ export default function CatalogPage({ params }: { params: { category: string } }
                     <div className="flex-1">
                         <div
                             className={`grid gap-4 ${viewMode === "grid"
-                                    ? "grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-                                    : "grid-cols-1"
+                                ? "grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                                : "grid-cols-1"
                                 }`}
                         >
                             {products.map((product) => (

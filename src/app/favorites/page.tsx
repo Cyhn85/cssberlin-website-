@@ -1,3 +1,4 @@
+export const runtime = "edge";
 import { auth } from "@clerk/nextjs/server";
 import { db as prisma } from "@/lib/db";
 import { FavoritesClient } from "@/components/favorites-client";

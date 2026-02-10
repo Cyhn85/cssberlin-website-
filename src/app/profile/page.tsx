@@ -1,3 +1,4 @@
+export const runtime = "edge";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { db as prisma } from "@/lib/db";
