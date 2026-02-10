@@ -8,8 +8,8 @@ import { Footer } from "@/components/footer";
 import { BottomNav } from "@/components/bottom-nav";
 import { CookieBanner } from "@/components/cookie-banner";
 
-// 👇 İŞTE SİHİRLİ SATIR BURADA 👇
-export const runtime = "edge";
+// ❌ "export const runtime = 'edge';" SATIRI SİLİNDİ!
+// Artık Cloudflare panelinden "nodejs_compat" ile yöneteceğiz.
 
 const inter = Inter({
   subsets: ["latin"],
