@@ -5,7 +5,7 @@
 :root {
   --background: #fdfbf7;
   --foreground: #1a1a1a;
-  --css-green: #1a3b28;
+  --brand-green: #1a3b28;
 }
 
 body {
@@ -13,26 +13,16 @@ body {
   color: var(--foreground);
   margin: 0;
   padding: 0;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
   overflow-x: hidden;
-  /* Sağa kaymayı (horizontal scroll) kesin engeller */
+  /* Kesinlikle sağa kaymayı engeller */
 }
 
-/* Sayfayı her cihazda tam ortalayan konteyner */
+/* Tüm bileşenleri ortalayan sihirli kapsayıcı */
 .page-container {
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto !important;
-  /* İçeriği merkeze zorlar */
-  padding: 0 1.5rem;
-}
-
-main {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  /* Main içindeki her şeyi ortalar */
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
 }

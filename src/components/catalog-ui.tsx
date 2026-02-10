@@ -83,20 +83,20 @@ export function CatalogUI({ products, brands, sizes, conditions }: CatalogUIProp
     };
 
     return (
-        <div className="page-container bg-[var(--css-cream)] min-h-screen">
+        <div className="bg-[#fdfbf7] min-h-screen">
             {/* Mobile Filter Header */}
             <div className="md:hidden sticky top-[64px] z-20 bg-white border-b border-gray-100 px-4 py-3 flex items-center justify-between shadow-sm">
                 <button
                     onClick={() => setIsMobileFiltersOpen(true)}
                     className="flex items-center gap-2 text-gray-700 font-medium"
                 >
-                    <Filter className="w-5 h-5 text-[var(--css-green)]" />
+                    <Filter className="w-5 h-5 text-[#1a3b28]" />
                     Filtern
                 </button>
                 <span className="text-gray-500 text-sm">{products.length} Ergebnisse</span>
             </div>
 
-            <div className="container px-4 md:px-6 py-6 md:py-8">
+            <div className="page-container py-6 md:py-8">
                 <div className="flex flex-col md:flex-row gap-8">
 
                     {/* Sidebar Filters */}

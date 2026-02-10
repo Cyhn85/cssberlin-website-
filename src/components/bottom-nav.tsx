@@ -21,16 +21,16 @@ export function BottomNav() {
     };
 
     const navItems = [
-        { href: "/", icon: Home, label: "Ana Sayfa" },
-        { href: "/search", icon: Search, label: "Ara" },
-        { href: "/sell", icon: PlusCircle, label: "Sat" },
-        { href: "/inbox", icon: MessageSquare, label: "Mesajlar" },
+        { href: "/", icon: Home, label: "Startseite" },
+        { href: "/catalog", icon: Search, label: "Suche" },
+        { href: "/sell", icon: PlusCircle, label: "Verkaufen" },
+        { href: "/inbox", icon: MessageSquare, label: "Nachrichten" },
         { href: "/profile", icon: User, label: "Profil" },
     ];
 
     return (
-        <nav className="bottom-nav" aria-label="Mobile Navigation">
-            <div className="flex justify-around items-center h-16">
+        <nav className="fixed bottom-0 left-0 right-0 bg-white border-t md:hidden z-50 px-4" aria-label="Mobile Navigation">
+            <div className="flex justify-around items-center h-16 max-w-md mx-auto">
                 {navItems.map((item) => {
                     const Icon = item.icon;
                     const active = isActive(item.href);
@@ -39,17 +39,17 @@ export function BottomNav() {
                         <Link
                             key={item.href}
                             href={item.href}
-                            className={`bottom-nav-item ${active ? "active" : ""}`}
+                            className={`flex flex-col items-center justify-center transition-colors ${active ? "text-[#1a3b28]" : "text-gray-400 hover:text-gray-600"}`}
                             aria-current={active ? "page" : undefined}
                         >
                             {item.href === "/sell" ? (
-                                <div className="w-12 h-12 -mt-6 bg-[#2E9E5C] rounded-full flex items-center justify-center shadow-lg">
+                                <div className="w-12 h-12 -mt-8 bg-[#1a3b28] rounded-full flex items-center justify-center shadow-lg border-4 border-white transition-transform hover:scale-105 active:scale-95">
                                     <Icon className="w-6 h-6 text-white" />
                                 </div>
                             ) : (
                                 <>
-                                    <Icon className={`w-6 h-6 ${active ? "text-[#2E9E5C]" : ""}`} />
-                                    <span className="text-[10px] mt-1">{item.label}</span>
+                                    <Icon className={`w-5 h-5 ${active ? "text-[#1a3b28]" : ""}`} />
+                                    <span className={`text-[10px] mt-1 font-medium ${active ? "text-[#1a3b28]" : ""}`}>{item.label}</span>
                                 </>
                             )}
                         </Link>

@@ -158,19 +158,19 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
     };
 
     return (
-        <div className="page-container bg-[var(--css-cream)]">
-            <div className="container px-4 md:px-6 py-6">
+        <div className="bg-[#fdfbf7] min-h-screen">
+            <div className="page-container py-6">
                 {/* Breadcrumb */}
                 <nav className="text-sm text-gray-500 mb-4 hidden md:block">
-                    <Link href="/" className="hover:text-[var(--css-green)]">
+                    <Link href="/" className="hover:text-[#1a3b28]">
                         Startseite
                     </Link>
                     <span className="mx-2">/</span>
-                    <Link href="/catalog/men" className="hover:text-[var(--css-green)]">
+                    <Link href="/catalog/men" className="hover:text-[#1a3b28]">
                         Herren
                     </Link>
                     <span className="mx-2">/</span>
-                    <Link href="/catalog/men/shoes" className="hover:text-[var(--css-green)]">
+                    <Link href="/catalog/men/shoes" className="hover:text-[#1a3b28]">
                         Schuhe
                     </Link>
                     <span className="mx-2">/</span>
@@ -231,7 +231,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                                 <button
                                     key={index}
                                     onClick={() => setCurrentImageIndex(index)}
-                                    className={`relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${currentImageIndex === index ? "border-[var(--css-green)] ring-2 ring-green-100" : "border-transparent opacity-70 hover:opacity-100"
+                                    className={`relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${currentImageIndex === index ? "border-[#1a3b28] ring-2 ring-green-100" : "border-transparent opacity-70 hover:opacity-100"
                                         }`}
                                 >
                                     <Image
@@ -291,7 +291,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                                 </button>
                                 <button
                                     onClick={() => setShowOfferModal(true)}
-                                    className="btn-secondary flex items-center justify-center gap-2 py-3 text-lg border-[var(--css-green)] text-[var(--css-green)] hover:bg-green-50"
+                                    className="btn-secondary flex items-center justify-center gap-2 py-3 text-lg border-[#1a3b28] text-[#1a3b28] hover:bg-green-50"
                                 >
                                     Preisvorschlag
                                 </button>
@@ -299,17 +299,17 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
 
                             <Link
                                 href={`/inbox?product=${product.id}`}
-                                className="mt-3 w-full btn-secondary border-gray-200 text-gray-600 flex items-center justify-center gap-2 py-2.5 group hover:text-[var(--css-green)] hover:border-[var(--css-green)]"
+                                className="mt-3 w-full btn-secondary border-gray-200 text-gray-600 flex items-center justify-center gap-2 py-2.5 group hover:text-[#1a3b28] hover:border-[#1a3b28]"
                             >
-                                <MessageCircle className="w-5 h-5 group-hover:text-[var(--css-green)] transition-colors" />
-                                <span className="group-hover:text-[var(--css-green)] transition-colors">Verkäufer kontaktieren</span>
+                                <MessageCircle className="w-5 h-5 group-hover:text-[#1a3b28] transition-colors" />
+                                <span className="group-hover:text-[#1a3b28] transition-colors">Verkäufer kontaktieren</span>
                             </Link>
                         </div>
 
                         {/* Product Details */}
                         <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
                             <h2 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                                <Flag className="w-4 h-4 text-[var(--css-green)]" />
+                                <Flag className="w-4 h-4 text-[#1a3b28]" />
                                 Artikelmerkmale
                             </h2>
                             <div className="grid grid-cols-2 gap-y-4 gap-x-8 text-sm">
@@ -323,7 +323,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                                 </div>
                                 <div className="detail-item">
                                     <span className="text-gray-500 block mb-1">Zustand</span>
-                                    <p className="font-medium text-[var(--css-green)] bg-green-50 px-2 py-0.5 rounded-md inline-block">{product.condition}</p>
+                                    <p className="font-medium text-[#1a3b28] bg-green-50 px-2 py-0.5 rounded-md inline-block">{product.condition}</p>
                                 </div>
                                 <div className="detail-item">
                                     <span className="text-gray-500 block mb-1">Farbe</span>
@@ -365,7 +365,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                                 <div className="flex-1 min-w-0">
                                     <Link
                                         href={`/profile/${product.seller.id}`}
-                                        className="font-bold text-lg text-gray-900 hover:text-[var(--css-green)] truncate block"
+                                        className="font-bold text-lg text-gray-900 hover:text-[#1a3b28] truncate block"
                                     >
                                         {product.seller.name}
                                     </Link>
@@ -404,13 +404,13 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                         {/* Protection Info */}
                         <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-5 flex items-start gap-4 border border-green-100">
                             <div className="bg-white p-2 rounded-full shadow-sm">
-                                <Shield className="w-6 h-6 text-[var(--css-green)]" />
+                                <Shield className="w-6 h-6 text-[#1a3b28]" />
                             </div>
                             <div>
                                 <h3 className="font-semibold text-gray-900 mb-1">Käuferschutz</h3>
                                 <p className="text-sm text-gray-600 leading-relaxed">
                                     Ihr Geld ist sicher. Erhalten Sie den Artikel nicht oder weicht er von der Beschreibung ab, bekommen Sie Ihr Geld zurück.
-                                    <a href="#" className="block mt-1 text-[var(--css-green)] font-medium hover:underline">Mehr erfahren &rarr;</a>
+                                    <a href="#" className="block mt-1 text-[#1a3b28] font-medium hover:underline">Mehr erfahren &rarr;</a>
                                 </p>
                             </div>
                         </div>
@@ -421,7 +421,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                 <section className="mt-16 pt-8 border-t border-gray-200">
                     <div className="flex items-center justify-between mb-8">
                         <h2 className="text-2xl font-bold text-gray-900">Das könnte dir auch gefallen</h2>
-                        <Link href="/catalog/men/shoes" className="text-[var(--css-green)] font-medium hover:underline">
+                        <Link href="/catalog/men/shoes" className="text-[#1a3b28] font-medium hover:underline">
                             Alle anzeigen
                         </Link>
                     </div>

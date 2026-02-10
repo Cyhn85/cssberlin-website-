@@ -4,6 +4,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { BottomNav } from "@/components/bottom-nav";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -22,8 +23,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <html lang="de" className={inter.variable}>
         <body className="min-h-screen flex flex-col font-sans antialiased">
           <Navbar />
-          <main className="flex-1">{children}</main>
+          <main className="flex-1 pb-16 md:pb-0">{children}</main>
           <Footer />
+          <BottomNav />
         </body>
       </html>
     </ClerkProvider>
