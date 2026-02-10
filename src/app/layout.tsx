@@ -1,3 +1,6 @@
+// 👇 BU SATIRI GERİ GETİRDİK, ÇÜNKÜ ARTIK DOSYA BOYUTUMUZ KÜÇÜK VE GÜVENLİ 👇
+export const runtime = "edge";
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -7,9 +10,6 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { BottomNav } from "@/components/bottom-nav";
 import { CookieBanner } from "@/components/cookie-banner";
-
-// ❌ "export const runtime = 'edge';" SATIRI SİLİNDİ!
-// Artık Cloudflare panelinden "nodejs_compat" ile yöneteceğiz.
 
 const inter = Inter({
   subsets: ["latin"],
