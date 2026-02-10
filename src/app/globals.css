@@ -3,58 +3,42 @@
 @tailwind utilities;
 
 :root {
-  /* HSL Formatına çevrildi: Tailwind Config ile tam uyum için */
-  --background: 45 33% 98%;
-  /* #fdfbf7 */
-  --foreground: 0 0% 10%;
-  /* #1a1a1a */
-  --primary: 144 55% 40%;
-  /* #2E9E5C */
-  --css-green: 145 39% 13%;
-  /* #1a3b28 */
-
-  --radius: 0.75rem;
-  --border: 0 0% 90%;
+  --background: #fdfbf7;
+  --foreground: #1a1a1a;
+  --css-green: #1a3b28;
+  --brand-green: #2E9E5C;
 }
 
 body {
-  background-color: hsl(var(--background));
-  color: hsl(var(--foreground));
+  background-color: var(--background);
+  color: var(--foreground);
   margin: 0;
   font-family: var(--font-inter), ui-sans-serif, system-ui;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  /* Sağa kaymayı engeller */
 }
 
 .page-container {
-  max-width: 80rem;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 1.5rem;
 }
 
 .btn-primary {
-  background-color: hsl(var(--css-green));
+  background-color: var(--css-green);
   color: white;
-  padding: 0.75rem 2rem;
+  padding: 0.75rem 1.5rem;
   border-radius: 9999px;
   font-weight: 800;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   gap: 0.5rem;
-  transition: all 0.3s ease;
-  border: none;
-  cursor: pointer;
+  transition: all 0.2s;
 }
 
-.product-card {
-  background: white;
-  border-radius: 1rem;
-  overflow: hidden;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  transition: all 0.4s ease;
-}
-
-.product-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+/* Devasa resimleri ve taşmaları engellemek için */
+img {
+  max-width: 100%;
+  height: auto;
 }
