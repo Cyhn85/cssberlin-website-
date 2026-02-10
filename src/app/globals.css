@@ -3,9 +3,12 @@
 @tailwind utilities;
 
 :root {
+  /* Gövde yine açık renk kalsın ki siyah header patlasın */
   --background: #fdfbf7;
   --foreground: #1a1a1a;
-  --brand-green: #1a3b28;
+  /* Yeni Header Rengi: Tam Siyah */
+  --header-bg: #000000;
+  --header-text: #ffffff;
 }
 
 body {
@@ -13,16 +16,20 @@ body {
   color: var(--foreground);
   margin: 0;
   padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   overflow-x: hidden;
-  /* Kesinlikle sağa kaymayı engeller */
+  /* Sağa kaymayı kesin engeller */
 }
 
-/* Tüm bileşenleri ortalayan sihirli kapsayıcı */
+/* İçeriği merkeze çivileyen kapsayıcı */
 .page-container {
   width: 100%;
-  max-width: 1280px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1.25rem;
-  padding-right: 1.25rem;
+  max-width: 1200px;
+  /* İdeal genişlik */
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 }

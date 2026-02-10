@@ -2,36 +2,55 @@
 
 import Link from "next/link";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-import { ShoppingBag, PlusCircle, Search } from "lucide-react";
+import { ShoppingBag, Search, User } from "lucide-react";
 
 export function Navbar() {
     return (
-        <nav className="w-full bg-white border-b sticky top-0 z-50">
-            <div className="page-container h-20 flex items-center justify-between">
-                {/* Sol: Logo */}
-                <Link href="/" className="flex items-center gap-2">
-                    <div className="w-10 h-10 bg-[#1a3b28] rounded-xl flex items-center justify-center">
-                        <ShoppingBag className="text-white w-6 h-6" />
-                    </div>
-                    <span className="font-black text-2xl tracking-tighter text-[#1a3b28]">CSS BERLIN</span>
+        // SİYAH ARKA PLAN, BEYAZ METİN, KOMPAKT YÜKSEKLİK (py-4)
+        <nav className="w-full bg-black text-white border-b border-white/10 sticky top-0 z-50 font-sans">
+            <div className="page-container flex items-center justify-between py-4">
+
+                {/* SOL: LOGO (Görseldeki gibi sadece beyaz metin) */}
+                <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
+                    {/* İkonu kaldırdık, sadece görseldeki gibi güçlü yazı kaldı */}
+                    <span className="font-black text-2xl tracking-tighter text-white">
+                        CSS BERLIN
+                    </span>
                 </Link>
 
-                {/* Sağ: Butonlar */}
-                <div className="flex items-center gap-4">
+                {/* SAĞ: İKONLAR VE BUTONLAR (Backend Mantığı Korundu) */}
+                <div className="flex items-center gap-6">
+                    {/* Arama İkonu (Görseldeki gibi) */}
+                    <button className="text-white hover:text-gray-300 transition-colors">
+                        <Search className="w-5 h-5" />
+                    </button>
+
+                    {/* Backend Mantığı: Giriş Yapmamışsa */}
                     <SignedOut>
-                        <Link href="/sign-in" className="text-sm font-bold text-gray-600 hover:text-[#1a3b28]">
-                            Einloggen
+                        <Link href="/sign-in" className="text-sm font-bold text-white hover:text-gray-300 flex items-center gap-2">
+                            <User className="w-5 h-5" /> {/* Giriş ikonu */}
+                            <span className="hidden md:inline">Einloggen</span>
                         </Link>
-                        <Link href="/sign-up" className="bg-[#1a3b28] text-white px-6 py-2.5 rounded-full font-bold text-sm hover:opacity-90 transition-all">
+                        {/* Satış Butonu: Kontrast için beyaz zemin, siyah yazı */}
+                        <Link href="/sign-up" className="bg-white text-black px-4 py-2 rounded-full font-bold text-sm hover:bg-gray-200 transition-all">
                             Verkaufen
                         </Link>
                     </SignedOut>
 
+                    {/* Backend Mantığı: Giriş Yapmışsa */}
                     <SignedIn>
-                        <Link href="/sell" className="flex items-center gap-2 bg-[#1a3b28] text-white px-6 py-2.5 rounded-full font-bold text-sm">
-                            <PlusCircle className="w-4 h-4" /> Verkaufen
+                        <Link href="/cart" className="text-white hover:text-gray-300 transition-colors">
+                            <ShoppingBag className="w-5 h-5" />
                         </Link>
-                        <UserButton afterSignOutUrl="/" />
+                        {/* Clerk UserButton - Beyaz temaya uygun */}
+                        <UserButton
+                            afterSignOutUrl="/"
+                            appearance={{
+                                elements: {
+                                    userButtonTrigger: "focus:shadow-none focus:ring-0"
+                                }
+                            }}
+                        />
                     </SignedIn>
                 </div>
             </div>
