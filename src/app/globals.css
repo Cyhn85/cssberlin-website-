@@ -3,15 +3,23 @@
 @tailwind utilities;
 
 :root {
-  --background: #fdfbf7;
-  --foreground: #1a1a1a;
-  --primary: #2E9E5C;
-  --css-green: #1a3b28;
+  /* HSL Formatına çevrildi: Tailwind Config ile tam uyum için */
+  --background: 45 33% 98%;
+  /* #fdfbf7 */
+  --foreground: 0 0% 10%;
+  /* #1a1a1a */
+  --primary: 144 55% 40%;
+  /* #2E9E5C */
+  --css-green: 145 39% 13%;
+  /* #1a3b28 */
+
+  --radius: 0.75rem;
+  --border: 0 0% 90%;
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
   margin: 0;
   font-family: var(--font-inter), ui-sans-serif, system-ui;
   -webkit-font-smoothing: antialiased;
@@ -24,7 +32,7 @@ body {
 }
 
 .btn-primary {
-  background-color: var(--css-green);
+  background-color: hsl(var(--css-green));
   color: white;
   padding: 0.75rem 2rem;
   border-radius: 9999px;
