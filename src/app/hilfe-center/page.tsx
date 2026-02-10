@@ -1,143 +1,91 @@
-import { Metadata } from "next";
+import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import {
-    HelpCircle,
-    ShoppingBag,
-    Truck,
-    CreditCard,
-    Shield,
-    MessageCircle,
-    Package,
-    RotateCcw,
-    User,
-    ChevronRight,
-    Search,
-    Mail,
-} from "lucide-react";
+import { ArrowRight, ShoppingBag, Sparkles } from "lucide-react";
 
-export const metadata: Metadata = {
-    title: "Hilfe-Center | CSS Berlin",
-    description: "CSS Berlin Hilfe-Center - Häufig gestellte Fragen und Support",
-};
+export default async function HomePage() {
+    const products = await prisma.product.findMany({
+        where: { status: "AVAILABLE" },
+        orderBy: { createdAt: "desc" },
+        take: 8,
+        include: { images: { take: 1 } },
+    });
 
-const helpCategories = [
-    {
-        icon: ShoppingBag,
-        title: "Kaufen",
-        description: "Kaufvorgang, Zahlung und Warenkorb",
-        topics: ["Wie kaufe ich ein?", "Zahlungsmethoden", "Bestellung verfolgen", "Angebot machen"],
-    },
-    {
-        icon: Package,
-        title: "Verkaufen",
-        description: "Artikel einstellen, Preise und Verkaufstipps",
-        topics: ["Artikel hochladen", "Preis festlegen", "Fototipps", "Provision"],
-    },
-    {
-        icon: Truck,
-        title: "Versand",
-        description: "Versandoptionen, Sendungsverfolgung und Lieferung",
-        topics: ["Wie versende ich?", "Versandkosten", "Lieferzeit", "Sendungsverfolgung"],
-    },
-    {
-        icon: CreditCard,
-        title: "Zahlungen",
-        description: "Zahlungssicherheit und Geldbeutel-Transaktionen",
-        topics: ["Sicherheit", "Geld auszahlen", "Zahlung ausstehend", "Wann kommt das Geld?"],
-    },
-    {
-        icon: Shield,
-        title: "Sicherheit",
-        description: "Käuferschutz und sicheres Einkaufen",
-        topics: ["Was ist Käuferschutz?", "Fälschungen melden", "Artikel nicht erhalten", "Kontoschutz"],
-    },
-    {
-        icon: RotateCcw,
-        title: "Rückgabe",
-        description: "Rückgabeprozess und Stornierungen",
-        topics: ["Wie sende ich zurück?", "Rückgabefrist", "Bestellung stornieren", "Rückerstattungsdauer"],
-    },
-];
-
-const popularQuestions = [
-    {
-        question: "Ich habe einen Artikel gekauft, aber er ist nicht angekommen. Was soll ich tun?",
-        answer: "Überprüfen Sie zuerst die Sendungsverfolgung. Wenn der Artikel nach 10 Werktagen nicht ankommt, klicken Sie auf 'Problem melden'. Ihr Geld ist durch den Käuferschutz abgesichert.",
-    },
-    {
-        question: "Wie hoch ist die Verkaufsprovision?",
-        answer: "CSS Berlin erhebt eine Provision von 5% auf jeden erfolgreichen Verkauf. Wenn Sie beispielsweise für 100€ verkaufen, werden 95€ Ihrem Geldbeutel gutgeschrieben.",
-    },
-];
-
-export default function HelpPage() {
     return (
-        <div className="min-h-screen bg-gray-50 pb-20">
-            {/* Hero */}
-            <div className="bg-[#1a3b28] text-white py-20">
-                <div className="page-container text-center">
-                    <HelpCircle className="w-16 h-16 mx-auto mb-6 text-green-400" />
-                    <h1 className="text-4xl md:text-5xl font-black tracking-tighter mb-6">
-                        Wie können wir helfen?
+        <div className="flex flex-col gap-20 pb-20">
+            {/* Premium Hero Section */}
+            <section className="relative h-[650px] flex items-center justify-center bg-[#1a3b28] overflow-hidden">
+                <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+                <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-transparent"></div>
+
+                <div className="page-container relative z-10 text-center text-white">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-8 animate-fade-in">
+                        <Sparkles className="w-4 h-4 text-green-400" />
+                        <span className="text-xs font-bold tracking-widest uppercase">Est. 2026 Berlin-Spandau</span>
+                    </div>
+
+                    <h1 className="text-7xl md:text-9xl font-black tracking-tighter mb-8 leading-none">
+                        BERLIN<br /><span className="text-green-400">VINTAGE</span>
                     </h1>
-                    <div className="max-w-2xl mx-auto relative">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                        <input
-                            type="text"
-                            placeholder="Suchen Sie nach Antworten..."
-                            className="w-full pl-12 pr-4 py-4 rounded-full text-gray-900 focus:outline-none focus:ring-4 ring-green-500/20 shadow-xl"
-                        />
+
+                    <p className="text-lg md:text-2xl text-green-100/70 mb-12 max-w-2xl mx-auto font-medium">
+                        Nachhaltige Mode aus dem Herzen Berlins. Entdecke einzigartige Schätze.
+                    </p>
+
+                    <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
+                        <Link href="/catalog" className="btn-primary text-lg px-12 py-5 bg-white text-[#1a3b28] hover:bg-green-50">
+                            JETZT SHOPPEN <ArrowRight className="w-5 h-5" />
+                        </Link>
+                        <Link href="/sell" className="px-12 py-5 rounded-full border-2 border-white/30 text-white font-black hover:bg-white/10 transition-all">
+                            ARTIKEL VERKAUFEN
+                        </Link>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div className="page-container py-16">
-                {/* Categories */}
-                <section className="mb-20">
-                    <h2 className="text-3xl font-black tracking-tight mb-10 text-[#1a3b28]">Hilfe-Kategorien</h2>
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {helpCategories.map((category) => {
-                            const Icon = category.icon;
-                            return (
-                                <div key={category.title} className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm hover:shadow-xl transition-all group">
-                                    <div className="w-14 h-14 bg-green-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-[#1a3b28] transition-colors">
-                                        <Icon className="w-7 h-7 text-[#1a3b28] group-hover:text-white transition-colors" />
+            {/* Modern Product Grid */}
+            <section className="page-container">
+                <div className="flex items-end justify-between mb-12 border-b border-gray-100 pb-8">
+                    <div>
+                        <h2 className="text-4xl font-black tracking-tight text-[#1a3b28]">Frisch Eingetroffen</h2>
+                        <p className="text-gray-500 mt-2 text-lg font-medium">Die neuesten Fundstücke aus Spandau</p>
+                    </div>
+                    <Link href="/catalog" className="group flex items-center gap-2 text-[#1a3b28] font-black text-sm uppercase tracking-wider">
+                        Alle ansehen <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+                    </Link>
+                </div>
+
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+                    {products.map((product) => (
+                        <Link href={`/items/${product.id}`} key={product.id} className="product-card group">
+                            <div className="aspect-[3/4] bg-[#f3f4f1] relative overflow-hidden">
+                                {product.images[0] ? (
+                                    <img
+                                        src={product.images[0].url}
+                                        alt={product.title}
+                                        className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700 ease-in-out"
+                                    />
+                                ) : (
+                                    <div className="flex items-center justify-center h-full text-gray-300">
+                                        <ShoppingBag className="w-12 h-12" />
                                     </div>
-                                    <h3 className="text-xl font-bold mb-2">{category.title}</h3>
-                                    <p className="text-gray-500 mb-6 text-sm">{category.description}</p>
-                                    <ul className="space-y-3">
-                                        {category.topics.map((topic) => (
-                                            <li key={topic}>
-                                                <Link href="#" className="text-sm font-medium text-gray-600 hover:text-[#2E9E5C] flex items-center gap-2">
-                                                    <ChevronRight className="w-4 h-4" /> {topic}
-                                                </Link>
-                                            </li>
-                                        ))}
-                                    </ul>
+                                )}
+                                <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-full font-black text-sm shadow-xl text-[#1a3b28]">
+                                    €{Number(product.price).toFixed(2)}
                                 </div>
-                            );
-                        })}
-                    </div>
-                </section>
-
-                {/* Popular Questions */}
-                <section className="max-w-3xl mx-auto">
-                    <h2 className="text-3xl font-black tracking-tight mb-8 text-center text-[#1a3b28]">FAQ - Häufige Fragen</h2>
-                    <div className="space-y-4">
-                        {popularQuestions.map((faq, index) => (
-                            <details key={index} className="bg-white rounded-xl border border-gray-100 group overflow-hidden">
-                                <summary className="p-5 flex items-center justify-between cursor-pointer list-none font-bold">
-                                    {faq.question}
-                                    <ChevronRight className="w-5 h-5 transform transition-transform group-open:rotate-90" />
-                                </summary>
-                                <div className="px-5 pb-5 text-gray-600 leading-relaxed border-t border-gray-50 pt-4">
-                                    {faq.answer}
+                            </div>
+                            <div className="p-6">
+                                <p className="text-[10px] text-green-600 font-black uppercase tracking-[0.2em] mb-2">{product.brand || "Vintage Collection"}</p>
+                                <h3 className="text-xl font-bold text-gray-900 group-hover:text-[#1a3b28] transition-colors truncate">{product.title}</h3>
+                                <div className="mt-4 flex items-center justify-between">
+                                    <span className="text-xs font-bold text-gray-400">Berlin, DE</span>
+                                    <div className="h-1 w-1 rounded-full bg-gray-300"></div>
+                                    <span className="text-xs font-bold text-gray-400">Zustand: Gut</span>
                                 </div>
-                            </details>
-                        ))}
-                    </div>
-                </section>
-            </div>
+                            </div>
+                        </Link>
+                    ))}
+                </div>
+            </section>
         </div>
     );
 }

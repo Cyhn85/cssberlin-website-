@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
+import { ArrowRight, ShoppingBag, Sparkles } from "lucide-react";
 
 export default async function HomePage() {
   const products = await prisma.product.findMany({
@@ -11,46 +11,40 @@ export default async function HomePage() {
   });
 
   return (
-    <div className="flex flex-col gap-16 pb-20">
-      {/* 21st.dev Style Hero Section */}
-      <section className="relative h-[500px] flex items-center justify-center bg-[#1a3b28] overflow-hidden">
-        <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+    <div className="flex flex-col gap-20 pb-20">
+      {/* Premium Hero Section */}
+      <section className="relative h-[650px] flex items-center justify-center bg-[#1a3b28] overflow-hidden">
+        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
         <div className="page-container relative z-10 text-center text-white">
-          <h1 className="text-6xl md:text-8xl font-black tracking-tighter mb-6">BERLIN VINTAGE</h1>
-          <p className="text-lg md:text-xl text-green-100/80 mb-10 max-w-2xl mx-auto">
-            Sustainable fashion from the heart of Spandau. Buy, sell, and bargain.
-          </p>
-          <div className="flex gap-4 justify-center">
-            <Link href="/catalog" className="bg-white text-[#1a3b28] px-10 py-4 rounded-full font-black hover:scale-105 transition-transform">SHOP NOW</Link>
-            <Link href="/sell" className="border-2 border-white text-white px-10 py-4 rounded-full font-black hover:bg-white/10 transition-all">SELL ITEMS</Link>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 mb-8">
+            <Sparkles className="w-4 h-4 text-green-400" />
+            <span className="text-xs font-bold tracking-widest uppercase">Est. 2026 Berlin-Spandau</span>
+          </div>
+          <h1 className="text-7xl md:text-9xl font-black tracking-tighter mb-8 leading-none">BERLIN<br /><span className="text-green-400">VINTAGE</span></h1>
+          <p className="text-lg md:text-2xl text-green-100/70 mb-12 max-w-2xl mx-auto">Nachhaltige Mode aus dem Herzen Berlins. Entdecke einzigartige Schätze.</p>
+          <div className="flex flex-col sm:flex-row gap-5 justify-center">
+            <Link href="/catalog" className="btn-primary text-lg px-12 py-5 bg-white text-[#1a3b28] hover:bg-green-50">JETZT SHOPPEN <ArrowRight className="w-5 h-5" /></Link>
+            <Link href="/sell" className="px-12 py-5 rounded-full border-2 border-white/30 text-white font-black hover:bg-white/10 transition-all">VERKAUFEN</Link>
           </div>
         </div>
       </section>
 
       {/* Product Grid */}
       <section className="page-container">
-        <div className="flex items-end justify-between mb-8">
-          <div>
-            <h2 className="text-3xl font-black tracking-tight">Populär in Berlin</h2>
-            <p className="text-gray-500">En son eklenen parçalar</p>
-          </div>
-          <Link href="/catalog" className="text-[#1a3b28] font-bold hover:underline">Tümünü gör →</Link>
+        <div className="flex items-end justify-between mb-12 border-b pb-8">
+          <div><h2 className="text-4xl font-black text-[#1a3b28]">Frisch Eingetroffen</h2><p className="text-gray-500 font-medium">Neueste Fundstücke</p></div>
+          <Link href="/catalog" className="text-[#1a3b28] font-black text-sm uppercase tracking-wider hover:underline">Alle ansehen →</Link>
         </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
           {products.map((product) => (
             <Link href={`/items/${product.id}`} key={product.id} className="product-card group">
               <div className="aspect-[3/4] bg-gray-100 relative overflow-hidden">
-                {product.images[0] && (
-                  <img src={product.images[0].url} alt={product.title} className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500" />
-                )}
-                <div className="absolute bottom-3 left-3 bg-white px-3 py-1 rounded-md font-black text-sm shadow-sm">
-                  €{Number(product.price)}
-                </div>
+                {product.images[0] && <img src={product.images[0].url} alt={product.title} className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700" />}
+                <div className="absolute top-4 right-4 bg-white/90 px-4 py-2 rounded-full font-black text-sm shadow-xl text-[#1a3b28]">€{Number(product.price).toFixed(2)}</div>
               </div>
-              <div className="p-4">
-                <h3 className="font-bold text-gray-800 truncate">{product.title}</h3>
-                <p className="text-xs text-gray-400 mt-1 uppercase tracking-widest">{product.brand || "Vintage"}</p>
+              <div className="p-6">
+                <p className="text-[10px] text-green-600 font-black uppercase tracking-widest mb-2">{product.brand || "Vintage"}</p>
+                <h3 className="text-xl font-bold truncate">{product.title}</h3>
               </div>
             </Link>
           ))}
