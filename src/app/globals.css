@@ -1,4 +1,3 @@
-/* src/app/globals.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -14,18 +13,26 @@ body {
   color: var(--foreground);
   margin: 0;
   padding: 0;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
   overflow-x: hidden;
-  /* Sağa kaymayı engeller */
+  /* Sağa kaymayı (horizontal scroll) kesin engeller */
 }
 
-/* Sayfayı her zaman ortalayan sihirli sınıf */
+/* Sayfayı her cihazda tam ortalayan konteyner */
 .page-container {
   width: 100%;
   max-width: 1200px;
-  margin: 0 auto;
-  /* Sol ve sağ boşluğu otomatik yaparak ortalar */
+  margin: 0 auto !important;
+  /* İçeriği merkeze zorlar */
   padding: 0 1.5rem;
+}
+
+main {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Main içindeki her şeyi ortalar */
 }
