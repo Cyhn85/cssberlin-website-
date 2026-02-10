@@ -13,11 +13,9 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.37.3",
-    "@neondatabase/serverless": "^1.0.2",
-    "@prisma/adapter-neon": "^7.3.0",
     "@prisma/client": "^5.22.0",
+    "@prisma/extension-accelerate": "^3.0.1",
     "@radix-ui/react-slot": "^1.2.4",
-    "@types/ws": "^8.18.1",
     "@uploadthing/react": "^7.3.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -29,8 +27,7 @@
     "react-dom": "19.2.3",
     "svix": "^1.84.1",
     "tailwind-merge": "^3.4.0",
-    "uploadthing": "^7.7.4",
-    "ws": "^8.19.0"
+    "uploadthing": "^7.7.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
