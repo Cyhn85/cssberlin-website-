@@ -1,21 +1,28 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Resim optimizasyonu ayarları
+  // Resim ayarları
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "img.clerk.com" },
       { protocol: "https", hostname: "utfs.io" },
     ],
-    // Cloudflare ücretsiz planda resim optimizasyonunu kapatmak hataları önler
     unoptimized: true,
   },
-  // Build hatalarını yoksay (Hız kazandırır)
+  // Hata yoksayma ayarları
   typescript: {
     ignoreBuildErrors: true,
   },
   eslint: {
     ignoreDuringBuilds: true,
+  },
+  // 👇 İŞTE HATAYI ÇÖZEN SİHİRLİ AYAR 👇
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      // ws paketini dışlıyoruz ki Cloudflare'in global WebSocket'i ile çakışmasın
+      config.externals.push('ws');
+    }
+    return config;
   },
 };
 
