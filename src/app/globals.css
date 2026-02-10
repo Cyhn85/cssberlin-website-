@@ -1,3 +1,4 @@
+/* src/app/globals.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,39 +7,25 @@
   --background: #fdfbf7;
   --foreground: #1a1a1a;
   --css-green: #1a3b28;
-  --brand-green: #2E9E5C;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
   margin: 0;
-  font-family: var(--font-inter), ui-sans-serif, system-ui;
-  -webkit-font-smoothing: antialiased;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   overflow-x: hidden;
   /* Sağa kaymayı engeller */
 }
 
+/* Sayfayı her zaman ortalayan sihirli sınıf */
 .page-container {
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
+  /* Sol ve sağ boşluğu otomatik yaparak ortalar */
   padding: 0 1.5rem;
-}
-
-.btn-primary {
-  background-color: var(--css-green);
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 9999px;
-  font-weight: 800;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: all 0.2s;
-}
-
-/* Devasa resimleri ve taşmaları engellemek için */
-img {
-  max-width: 100%;
-  height: auto;
 }
