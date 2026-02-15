@@ -2,5 +2,6 @@
   "name": "cssberlin",
   "compatibility_date": "2025-12-01",
   "compatibility_flags": ["nodejs_compat"],
+  "pages_build_command": "npm run cf:build",
   "pages_build_output_dir": ".worker-next"
 }
