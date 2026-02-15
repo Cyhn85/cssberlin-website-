@@ -39,17 +39,17 @@ export function BottomNav() {
                         <Link
                             key={item.href}
                             href={item.href}
-                            className={`flex flex-col items-center justify-center transition-colors ${active ? "text-[#1a3b28]" : "text-gray-400 hover:text-gray-600"}`}
+                            className={`flex flex-col items-center justify-center transition-colors ${active ? "text-berlin-green" : "text-gray-400 hover:text-gray-600"}`}
                             aria-current={active ? "page" : undefined}
                         >
                             {item.href === "/sell" ? (
-                                <div className="w-12 h-12 -mt-8 bg-[#1a3b28] rounded-full flex items-center justify-center shadow-lg border-4 border-white transition-transform hover:scale-105 active:scale-95">
+                                <div className="w-12 h-12 -mt-8 bg-berlin-green rounded-full flex items-center justify-center shadow-lg border-4 border-white transition-transform hover:scale-105 active:scale-95">
                                     <Icon className="w-6 h-6 text-white" />
                                 </div>
                             ) : (
                                 <>
-                                    <Icon className={`w-5 h-5 ${active ? "text-[#1a3b28]" : ""}`} />
-                                    <span className={`text-[10px] mt-1 font-medium ${active ? "text-[#1a3b28]" : ""}`}>{item.label}</span>
+                                    <Icon className={`w-5 h-5 ${active ? "text-berlin-green" : ""}`} />
+                                    <span className={`text-[10px] mt-1 font-medium ${active ? "text-berlin-green" : ""}`}>{item.label}</span>
                                 </>
                             )}
                         </Link>

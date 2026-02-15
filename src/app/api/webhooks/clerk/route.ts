@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { WebhookEvent } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
+import { sendWelcomeEmail } from "@/lib/email";
 
 export async function POST(req: Request) {
     // Clerk Dashboard -> Webhooks -> Endpoint -> Signing Secret
@@ -61,14 +62,14 @@ export async function POST(req: Request) {
         }
 
         // Upsert user to database
-        await db.user.upsert({
+        const user = await db.user.upsert({
             where: { clerkId: id },
             update: {
                 email: email,
                 firstName: first_name,
                 lastName: last_name,
                 avatarUrl: image_url,
-                username: username || email.split("@")[0], // Fallback username
+                username: username || email.split("@")[0],
             },
             create: {
                 clerkId: id,
@@ -80,6 +81,14 @@ export async function POST(req: Request) {
                 isVerified: false,
             },
         });
+
+        // Send welcome email on first registration
+        if (eventType === "user.created") {
+            const displayName = first_name || username || email.split("@")[0];
+            sendWelcomeEmail(email, displayName).catch((err) =>
+                console.error("Failed to send welcome email:", err)
+            );
+        }
 
         return NextResponse.json({ message: "User synced successfully", user: id });
     }

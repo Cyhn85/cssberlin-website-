@@ -12,14 +12,15 @@ import {
     MapPin,
     Calendar,
     MessageCircle,
+    ShoppingBag,
 } from "lucide-react";
 
-// Demo orders
+// Demo orders — will be replaced with real DB data
 const demoOrders = [
     {
-        id: "ORD-2024-001",
+        id: "ORD-2026-001",
         status: "delivered",
-        date: "2024-02-05",
+        date: "2026-02-05",
         product: {
             id: "1",
             title: "Nike Air Force 1 Low White",
@@ -35,14 +36,14 @@ const demoOrders = [
         shipping: {
             carrier: "DHL",
             trackingNumber: "JJD000000000000123",
-            estimatedDelivery: "2024-02-08",
-            deliveredAt: "2024-02-07",
+            estimatedDelivery: "2026-02-08",
+            deliveredAt: "2026-02-07",
         },
     },
     {
-        id: "ORD-2024-002",
+        id: "ORD-2026-002",
         status: "shipped",
-        date: "2024-02-08",
+        date: "2026-02-08",
         product: {
             id: "2",
             title: "Levi's 501 Original Jeans",
@@ -56,15 +57,15 @@ const demoOrders = [
             avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
         },
         shipping: {
-            carrier: "Hermes",
-            trackingNumber: "H0000000000000456",
-            estimatedDelivery: "2024-02-12",
+            carrier: "DHL",
+            trackingNumber: "JJD000000000000456",
+            estimatedDelivery: "2026-02-12",
         },
     },
     {
-        id: "ORD-2024-003",
+        id: "ORD-2026-003",
         status: "processing",
-        date: "2024-02-09",
+        date: "2026-02-09",
         product: {
             id: "3",
             title: "Zara Blazer",
@@ -83,18 +84,18 @@ const demoOrders = [
 
 const statusConfig = {
     processing: {
-        label: "Hazırlanıyor",
-        color: "text-yellow-600 bg-yellow-50",
+        label: "In Bearbeitung",
+        color: "text-yellow-700 bg-yellow-50 border border-yellow-200",
         icon: Clock,
     },
     shipped: {
-        label: "Kargoda",
-        color: "text-blue-600 bg-blue-50",
+        label: "Unterwegs",
+        color: "text-blue-700 bg-blue-50 border border-blue-200",
         icon: Truck,
     },
     delivered: {
-        label: "Teslim Edildi",
-        color: "text-green-600 bg-green-50",
+        label: "Zugestellt",
+        color: "text-green-700 bg-green-50 border border-green-200",
         icon: Check,
     },
 };
@@ -110,31 +111,38 @@ export default function OrdersPage() {
             : demoOrders.filter((order) => order.status === filter);
 
     return (
-        <div className="page-container bg-gray-50">
-            <div className="container px-4 md:px-6 py-6">
-                {/* Header */}
-                <div className="mb-6">
-                    <h1 className="text-2xl font-bold text-gray-900">Siparişlerim</h1>
-                    <p className="text-gray-500 text-sm">
-                        Tüm satın aldığınız ürünleri buradan takip edin
+        <div className="min-h-screen bg-[var(--background)]">
+            {/* Header */}
+            <div className="bg-gradient-to-br from-berlin-green to-berlin-green/90 text-white py-10">
+                <div className="page-container">
+                    <div className="flex items-center gap-3 mb-2">
+                        <Package className="w-6 h-6" />
+                        <h1 className="text-2xl md:text-3xl font-black uppercase tracking-tight">Meine Bestellungen</h1>
+                    </div>
+                    <p className="text-white/60 text-sm">
+                        Verfolge alle deine Einkäufe und Lieferungen.
                     </p>
                 </div>
+            </div>
 
+            <div className="page-container py-8">
                 {/* Filter Tabs */}
-                <div className="flex gap-2 mb-6 overflow-x-auto pb-2 scrollbar-hide">
+                <div className="flex gap-2 mb-8 overflow-x-auto pb-2">
                     {[
-                        { value: "all", label: "Tümü" },
-                        { value: "processing", label: "Hazırlanıyor" },
-                        { value: "shipped", label: "Kargoda" },
-                        { value: "delivered", label: "Teslim Edildi" },
+                        { value: "all", label: "Alle" },
+                        { value: "processing", label: "In Bearbeitung" },
+                        { value: "shipped", label: "Unterwegs" },
+                        { value: "delivered", label: "Zugestellt" },
                     ].map((tab) => (
                         <button
                             key={tab.value}
+                            type="button"
                             onClick={() => setFilter(tab.value as typeof filter)}
-                            className={`px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-colors ${filter === tab.value
-                                    ? "bg-[#2E9E5C] text-white"
-                                    : "bg-white text-gray-600 hover:bg-gray-100"
-                                }`}
+                            className={`px-5 py-2 rounded-full whitespace-nowrap text-xs font-black uppercase tracking-widest transition-colors ${
+                                filter === tab.value
+                                    ? "bg-css-orange text-berlin-green"
+                                    : "bg-white text-gray-600 hover:bg-gray-100 border border-gray-200"
+                            }`}
                         >
                             {tab.label}
                         </button>
@@ -143,16 +151,20 @@ export default function OrdersPage() {
 
                 {/* Orders List */}
                 {filteredOrders.length === 0 ? (
-                    <div className="bg-white rounded-2xl p-12 text-center shadow-sm">
+                    <div className="bg-white rounded-2xl p-12 text-center shadow-sm border border-gray-100">
                         <Package className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                        <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                            Henüz siparişiniz yok
+                        <h2 className="text-xl font-black text-gray-900 mb-2">
+                            Noch keine Bestellungen
                         </h2>
-                        <p className="text-gray-500 mb-6">
-                            Alışverişe başlayın ve siparişlerinizi buradan takip edin.
+                        <p className="text-gray-500 mb-6 text-sm">
+                            Beginne jetzt mit dem Einkaufen und verfolge deine Bestellungen hier.
                         </p>
-                        <Link href="/" className="btn-primary inline-flex items-center gap-2">
-                            Ürünleri Keşfet
+                        <Link
+                            href="/catalog"
+                            className="inline-flex items-center gap-2 bg-css-orange text-berlin-green px-6 py-3 rounded-lg font-black text-xs uppercase tracking-widest hover:bg-berlin-green hover:text-white transition-colors duration-300"
+                        >
+                            <ShoppingBag className="w-4 h-4" />
+                            Produkte entdecken
                         </Link>
                     </div>
                 ) : (
@@ -164,24 +176,28 @@ export default function OrdersPage() {
                             return (
                                 <div
                                     key={order.id}
-                                    className="bg-white rounded-xl shadow-sm overflow-hidden"
+                                    className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow"
                                 >
                                     {/* Order Header */}
-                                    <div className="p-4 border-b flex items-center justify-between">
-                                        <div className="flex items-center gap-4">
-                                            <span className="text-sm text-gray-500">
+                                    <div className="p-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+                                        <div className="flex items-center gap-3">
+                                            <span className="text-xs font-black text-gray-400 uppercase tracking-wider">
                                                 {order.id}
                                             </span>
                                             <span
-                                                className={`px-3 py-1 rounded-full text-xs font-medium ${status.color}`}
+                                                className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider flex items-center gap-1 ${status.color}`}
                                             >
-                                                <StatusIcon className="w-3 h-3 inline mr-1" />
+                                                <StatusIcon className="w-3 h-3" />
                                                 {status.label}
                                             </span>
                                         </div>
-                                        <div className="flex items-center gap-2 text-sm text-gray-500">
-                                            <Calendar className="w-4 h-4" />
-                                            {new Date(order.date).toLocaleDateString("de-DE")}
+                                        <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                                            <Calendar className="w-3.5 h-3.5" />
+                                            {new Date(order.date).toLocaleDateString("de-DE", {
+                                                day: "2-digit",
+                                                month: "long",
+                                                year: "numeric",
+                                            })}
                                         </div>
                                     </div>
 
@@ -189,24 +205,24 @@ export default function OrdersPage() {
                                     <div className="p-4 flex items-start gap-4">
                                         <Link
                                             href={`/items/${order.product.id}`}
-                                            className="relative w-20 h-20 flex-shrink-0"
+                                            className="relative w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden"
                                         >
                                             <Image
                                                 src={order.product.image}
                                                 alt={order.product.title}
                                                 fill
-                                                className="object-cover rounded-lg"
+                                                className="object-cover hover:scale-105 transition-transform"
                                             />
                                         </Link>
                                         <div className="flex-1 min-w-0">
                                             <Link
                                                 href={`/items/${order.product.id}`}
-                                                className="font-medium text-gray-900 hover:text-[#2E9E5C]"
+                                                className="font-bold text-gray-900 hover:text-berlin-green transition-colors text-sm"
                                             >
                                                 {order.product.title}
                                             </Link>
-                                            <p className="text-sm text-gray-500">
-                                                Beden: {order.product.size}
+                                            <p className="text-xs text-gray-500 mt-0.5">
+                                                Größe: {order.product.size}
                                             </p>
                                             <div className="flex items-center gap-2 mt-2">
                                                 <Image
@@ -216,14 +232,14 @@ export default function OrdersPage() {
                                                     height={20}
                                                     className="rounded-full"
                                                 />
-                                                <span className="text-sm text-gray-500">
+                                                <span className="text-xs text-gray-500 font-medium">
                                                     @{order.seller.name}
                                                 </span>
                                             </div>
                                         </div>
                                         <div className="text-right">
-                                            <div className="font-bold text-gray-900">
-                                                €{order.product.price.toFixed(2)}
+                                            <div className="font-black text-berlin-green text-lg">
+                                                €{order.product.price.toFixed(2).replace(".", ",")}
                                             </div>
                                         </div>
                                     </div>
@@ -231,25 +247,33 @@ export default function OrdersPage() {
                                     {/* Shipping Info */}
                                     {order.shipping && (
                                         <div className="px-4 pb-4">
-                                            <div className="p-3 bg-gray-50 rounded-lg">
+                                            <div className="p-3 bg-gray-50 rounded-lg border border-gray-100">
                                                 <div className="flex items-center justify-between mb-2">
-                                                    <span className="text-sm font-medium text-gray-700">
-                                                        <Truck className="w-4 h-4 inline mr-1" />
+                                                    <span className="text-xs font-bold text-gray-700 flex items-center gap-1.5">
+                                                        <Truck className="w-3.5 h-3.5 text-berlin-green" />
                                                         {order.shipping.carrier}
                                                     </span>
-                                                    <span className="text-sm text-gray-500">
+                                                    <span className="text-[10px] text-gray-400 font-mono">
                                                         {order.shipping.trackingNumber}
                                                     </span>
                                                 </div>
-                                                <div className="flex items-center gap-1 text-sm text-gray-500">
-                                                    <MapPin className="w-4 h-4" />
+                                                <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                                                    <MapPin className="w-3.5 h-3.5" />
                                                     {order.status === "delivered"
-                                                        ? `${new Date(
+                                                        ? `Zugestellt am ${new Date(
                                                             order.shipping.deliveredAt!
-                                                        ).toLocaleDateString("de-DE")} tarihinde teslim edildi`
-                                                        : `Tahmini teslimat: ${new Date(
+                                                        ).toLocaleDateString("de-DE", {
+                                                            day: "2-digit",
+                                                            month: "long",
+                                                            year: "numeric",
+                                                        })}`
+                                                        : `Voraussichtliche Lieferung: ${new Date(
                                                             order.shipping.estimatedDelivery
-                                                        ).toLocaleDateString("de-DE")}`}
+                                                        ).toLocaleDateString("de-DE", {
+                                                            day: "2-digit",
+                                                            month: "long",
+                                                            year: "numeric",
+                                                        })}`}
                                                 </div>
                                             </div>
                                         </div>
@@ -259,17 +283,17 @@ export default function OrdersPage() {
                                     <div className="px-4 pb-4 flex items-center gap-2">
                                         <Link
                                             href={`/inbox?order=${order.id}`}
-                                            className="btn-secondary text-sm py-2 flex-1 sm:flex-none"
+                                            className="flex items-center gap-1.5 px-4 py-2 border border-gray-200 text-gray-700 rounded-lg font-bold text-xs hover:bg-gray-50 transition-colors"
                                         >
-                                            <MessageCircle className="w-4 h-4 mr-1" />
-                                            Satıcıya Mesaj
+                                            <MessageCircle className="w-3.5 h-3.5" />
+                                            Verkäufer kontaktieren
                                         </Link>
                                         <Link
                                             href={`/profile/orders/${order.id}`}
-                                            className="btn-primary text-sm py-2 flex-1 sm:flex-none"
+                                            className="flex items-center gap-1.5 px-4 py-2 bg-css-orange text-berlin-green rounded-lg font-black text-xs uppercase tracking-wider hover:bg-berlin-green hover:text-white transition-colors duration-300"
                                         >
-                                            Detayları Gör
-                                            <ChevronRight className="w-4 h-4 ml-1" />
+                                            Details ansehen
+                                            <ChevronRight className="w-3.5 h-3.5" />
                                         </Link>
                                     </div>
                                 </div>

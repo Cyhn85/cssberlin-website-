@@ -1,232 +1,165 @@
-"use client";
-
-import { useState } from "react";
-import Link from "next/link";
+import { redirect } from "next/navigation";
+import { auth } from "@clerk/nextjs/server";
+import { db as prisma } from "@/lib/db";
 import Image from "next/image";
-import { Check, ChevronRight, CreditCard, MapPin, Package, Shield, Truck } from "lucide-react";
+import { Shield, Truck, Package, Leaf } from "lucide-react";
+import { CheckoutForm } from "./checkout-form";
 
-// Mock Product Data for Checkout
-const product = {
-    id: "1",
-    title: "Nike Air Force 1 Low - Beyaz Sneaker",
-    price: 45.0,
-    shipping: 4.99,
-    protectionFee: 2.25, // Alıcı koruması ücreti (~%5)
-    image: "https://images.unsplash.com/photo-1600269452121-4f2416e55c28?w=200&h=200&fit=crop",
-    seller: "alex_style",
-};
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
-export default function CheckoutPage() {
-    const [step, setStep] = useState(1); // 1: Address, 2: Shipping, 3: Payment
-    const [selectedAddress, setSelectedAddress] = useState("addr1");
-    const [selectedShipping, setSelectedShipping] = useState("dhl");
-    const [isProcessing, setIsProcessing] = useState(false);
-    const [isSuccess, setIsSuccess] = useState(false);
+export default async function CheckoutPage(props: { searchParams: SearchParams }) {
+    const searchParams = await props.searchParams;
+    const { userId } = await auth();
 
-    const total = product.price + product.shipping + product.protectionFee;
-
-    const handlePayment = () => {
-        setIsProcessing(true);
-        // Simulate payment processing
-        setTimeout(() => {
-            setIsProcessing(false);
-            setIsSuccess(true);
-        }, 2000);
-    };
-
-    if (isSuccess) {
-        return (
-            <div className="page-container flex flex-col items-center justify-center min-h-[60vh]">
-                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6 animate-scale-in">
-                    <Check className="w-10 h-10 text-[#2E9E5C]" />
-                </div>
-                <h1 className="text-2xl font-bold text-gray-900 mb-2">Siparişiniz Alındı!</h1>
-                <p className="text-gray-600 mb-8 text-center max-w-md">
-                    Ödemeniz başarıyla gerçekleşti. Satıcı ürünü kargoladığında size haber vereceğiz.
-                </p>
-                <div className="flex gap-4">
-                    <Link href="/orders" className="btn-secondary">
-                        Siparişimi Takip Et
-                    </Link>
-                    <Link href="/" className="btn-primary">
-                        Alışverişe Devam Et
-                    </Link>
-                </div>
-            </div>
-        );
+    if (!userId) {
+        redirect("/sign-in");
     }
 
+    const productId = typeof searchParams.product === "string" ? searchParams.product : null;
+
+    if (!productId) {
+        redirect("/");
+    }
+
+    const product = await prisma.product.findUnique({
+        where: { id: productId },
+        include: {
+            images: { take: 1, orderBy: { order: "asc" } },
+            seller: {
+                select: { username: true, firstName: true },
+            },
+        },
+    });
+
+    if (!product || product.status !== "AVAILABLE") {
+        redirect("/catalog");
+    }
+
+    const price = Number(product.price);
+    const sellerName = product.seller?.username || product.seller?.firstName || "Verkäufer";
+
     return (
-        <div className="page-container bg-gray-50 min-h-screen py-8">
-            <div className="container max-w-4xl px-4 md:px-6">
-                <h1 className="text-2xl font-bold text-gray-900 mb-8">Ödeme Yap</h1>
+        <div className="bg-[#fdfbf7] min-h-screen">
+            <div className="page-container py-8">
+                <h1 className="text-2xl font-black text-berlin-green uppercase tracking-tight mb-8">
+                    Bestellübersicht
+                </h1>
 
                 <div className="grid lg:grid-cols-3 gap-8">
-                    {/* Main Content - Steps */}
+                    {/* Main Content */}
                     <div className="lg:col-span-2 space-y-6">
-
-                        {/* Step 1: Address */}
-                        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-                            <div className="flex items-center justify-between mb-4">
-                                <h2 className="text-lg font-semibold flex items-center gap-2">
-                                    <div className="w-6 h-6 rounded-full bg-gray-900 text-white flex items-center justify-center text-sm">1</div>
-                                    Teslimat Adresi
-                                </h2>
-                                <button className="text-[#2E9E5C] text-sm font-medium hover:underline">Değiştir</button>
-                            </div>
-
-                            <label className="flex items-start gap-3 p-4 border rounded-lg cursor-pointer bg-gray-50 border-[#2E9E5C] ring-1 ring-[#2E9E5C]">
-                                <input
-                                    type="radio"
-                                    name="address"
-                                    checked={selectedAddress === "addr1"}
-                                    onChange={() => setSelectedAddress("addr1")}
-                                    className="mt-1 text-[#2E9E5C] focus:ring-[#2E9E5C]"
-                                />
-                                <div>
-                                    <div className="font-medium text-gray-900">Ev Adresim</div>
-                                    <div className="text-sm text-gray-600 mt-1">
-                                        Mustafa Kemal Atatürk Cd. No:1 D:5<br />
-                                        Kreuzberg, Berlin 10999<br />
-                                        Almanya
-                                    </div>
-                                </div>
-                            </label>
-                        </div>
-
-                        {/* Step 2: Shipping Method */}
-                        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-                            <div className="flex items-center justify-between mb-4">
-                                <h2 className="text-lg font-semibold flex items-center gap-2">
-                                    <div className="w-6 h-6 rounded-full bg-gray-900 text-white flex items-center justify-center text-sm">2</div>
-                                    Kargo Seçeneği
-                                </h2>
-                            </div>
-
-                            <div className="space-y-3">
-                                <label className={`flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-colors ${selectedShipping === "dhl" ? "border-[#2E9E5C] bg-green-50/30" : "hover:bg-gray-50"}`}>
-                                    <div className="flex items-center gap-3">
-                                        <input
-                                            type="radio"
-                                            name="shipping"
-                                            checked={selectedShipping === "dhl"}
-                                            onChange={() => setSelectedShipping("dhl")}
-                                            className="text-[#2E9E5C] focus:ring-[#2E9E5C]"
-                                        />
-                                        <div>
-                                            <div className="font-medium text-gray-900">DHL Paket</div>
-                                            <div className="text-xs text-gray-500">2-3 iş günü, Sigortalı</div>
+                        {/* Product Summary */}
+                        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                            <h2 className="text-sm font-black text-gray-900 uppercase tracking-wide mb-4">Artikel</h2>
+                            <div className="flex gap-4">
+                                <div className="relative w-24 h-28 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                                    {product.images[0] ? (
+                                        <Image src={product.images[0].url} alt={product.title} fill className="object-cover" />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center text-gray-300">
+                                            <Package className="w-8 h-8" />
                                         </div>
+                                    )}
+                                </div>
+                                <div className="flex-1">
+                                    <h3 className="font-bold text-gray-900">{product.title}</h3>
+                                    <p className="text-sm text-gray-500 mt-1">Verkäufer: {sellerName}</p>
+                                    <div className="flex items-center gap-3 mt-2 text-xs text-gray-500">
+                                        {product.brand && <span className="font-bold uppercase">{product.brand}</span>}
+                                        {product.size && (
+                                            <>
+                                                <span className="text-gray-300">&bull;</span>
+                                                <span>Größe {product.size}</span>
+                                            </>
+                                        )}
                                     </div>
-                                    <span className="font-semibold text-gray-900">€4.99</span>
-                                </label>
-
-                                <label className={`flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-colors ${selectedShipping === "hermes" ? "border-[#2E9E5C] bg-green-50/30" : "hover:bg-gray-50"}`}>
-                                    <div className="flex items-center gap-3">
-                                        <input
-                                            type="radio"
-                                            name="shipping"
-                                            checked={selectedShipping === "hermes"}
-                                            onChange={() => setSelectedShipping("hermes")}
-                                            className="text-[#2E9E5C] focus:ring-[#2E9E5C]"
-                                        />
-                                        <div>
-                                            <div className="font-medium text-gray-900">Hermes PaketShop</div>
-                                            <div className="text-xs text-gray-500">3-5 iş günü, Teslim Noktasına</div>
-                                        </div>
-                                    </div>
-                                    <span className="font-semibold text-gray-900">€3.79</span>
-                                </label>
+                                    <p className="text-lg font-black text-berlin-green mt-2">€{price.toFixed(2).replace(".", ",")}</p>
+                                </div>
                             </div>
                         </div>
 
-                        {/* Step 3: Payment */}
-                        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-                            <div className="flex items-center justify-between mb-4">
-                                <h2 className="text-lg font-semibold flex items-center gap-2">
-                                    <div className="w-6 h-6 rounded-full bg-gray-900 text-white flex items-center justify-center text-sm">3</div>
-                                    Ödeme Yöntemi
-                                </h2>
-                            </div>
+                        {/* Checkout Form (Client Component) */}
+                        <CheckoutForm productId={product.id} price={price} />
 
-                            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-4">
-                                <div className="flex items-center gap-3 mb-4">
-                                    <CreditCard className="w-5 h-5 text-gray-600" />
-                                    <span className="font-medium text-gray-900">Kredi Kartı</span>
-                                </div>
-                                <div className="space-y-3">
-                                    <input type="text" placeholder="Kart Numarası" className="input-field bg-white" defaultValue="**** **** **** 4242" />
-                                    <div className="grid grid-cols-2 gap-3">
-                                        <input type="text" placeholder="SKT (AA/YY)" className="input-field bg-white" defaultValue="12/26" />
-                                        <input type="text" placeholder="CVC" className="input-field bg-white" defaultValue="***" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="flex items-center gap-2 text-xs text-gray-500">
-                                <Shield className="w-3 h-3 text-[#2E9E5C]" />
-                                Ödemeniz SSL ile şifrelenir ve güvendedir.
+                        {/* Legal Notices */}
+                        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 space-y-4">
+                            <h2 className="text-sm font-black text-gray-900 uppercase tracking-wide">Rechtliche Hinweise</h2>
+                            <div className="text-xs text-gray-500 leading-relaxed space-y-3">
+                                <p>
+                                    <strong>Widerrufsrecht:</strong> Sie haben das Recht, binnen 14 Tagen ohne Angabe von Gründen diesen
+                                    Vertrag zu widerrufen. Die Widerrufsfrist beträgt 14 Tage ab dem Tag, an dem Sie oder ein von Ihnen
+                                    benannter Dritter die Ware in Besitz genommen haben.
+                                </p>
+                                <p>
+                                    <strong>Preise:</strong> Alle angegebenen Preise sind Endpreise inkl. gesetzlicher MwSt.
+                                    Versandkosten werden separat ausgewiesen.
+                                </p>
+                                <p>
+                                    Mit Ihrer Bestellung erklären Sie sich mit unseren{" "}
+                                    <a href="/agb" className="text-berlin-green underline">AGB</a>,{" "}
+                                    <a href="/datenschutz" className="text-berlin-green underline">Datenschutzbestimmungen</a> und der{" "}
+                                    <a href="/widerruf" className="text-berlin-green underline">Widerrufsbelehrung</a> einverstanden.
+                                </p>
                             </div>
                         </div>
-
                     </div>
 
                     {/* Sidebar - Order Summary */}
                     <div className="lg:col-span-1">
-                        <div className="bg-white rounded-xl shadow-sm border border-gray-200 sticky top-24">
+                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 sticky top-24">
                             <div className="p-6 border-b border-gray-100">
-                                <h3 className="font-semibold text-gray-900 mb-4">Sipariş Özeti</h3>
-                                <div className="flex gap-3 mb-4">
-                                    <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
-                                        <Image src={product.image} alt={product.title} fill className="object-cover" />
+                                <h3 className="font-black text-gray-900 uppercase tracking-wide text-sm mb-4">Kostenübersicht</h3>
+                                <div className="space-y-3 text-sm">
+                                    <div className="flex justify-between text-gray-600">
+                                        <span>Artikelpreis</span>
+                                        <span className="font-bold text-gray-900">€{price.toFixed(2).replace(".", ",")}</span>
                                     </div>
-                                    <div>
-                                        <p className="text-sm font-medium text-gray-900 line-clamp-2">{product.title}</p>
-                                        <p className="text-xs text-gray-500 mt-1">Satıcı: {product.seller}</p>
+                                    <div className="flex justify-between text-gray-600">
+                                        <span className="flex items-center gap-1">
+                                            <Truck className="w-3 h-3" />
+                                            Versand (DHL)
+                                        </span>
+                                        <span className="font-bold text-gray-900">€4,99</span>
+                                    </div>
+                                    <div className="flex justify-between text-gray-600">
+                                        <span className="flex items-center gap-1">
+                                            <Shield className="w-3 h-3 text-berlin-green" />
+                                            Käuferschutz
+                                        </span>
+                                        <span className="font-bold text-gray-900">€{Math.max(0.70, price * 0.05).toFixed(2).replace(".", ",")}</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="p-6 space-y-3">
-                                <div className="flex justify-between text-sm text-gray-600">
-                                    <span>Ürün Fiyatı</span>
-                                    <span>€{product.price.toFixed(2)}</span>
-                                </div>
-                                <div className="flex justify-between text-sm text-gray-600">
-                                    <span>Kargo</span>
-                                    <span>€{product.shipping.toFixed(2)}</span>
-                                </div>
-                                <div className="flex justify-between text-sm text-gray-600">
-                                    <span className="flex items-center gap-1">
-                                        Alıcı Koruması
-                                        <Shield className="w-3 h-3 text-[#2E9E5C]" />
+                            <div className="p-6">
+                                <div className="flex justify-between items-center mb-4">
+                                    <span className="font-black text-gray-900 uppercase tracking-wide text-sm">Gesamtbetrag</span>
+                                    <span className="text-xl font-black text-berlin-green">
+                                        €{(price + 4.99 + Math.max(0.70, price * 0.05)).toFixed(2).replace(".", ",")}
                                     </span>
-                                    <span>€{product.protectionFee.toFixed(2)}</span>
+                                </div>
+                                <p className="text-[10px] text-gray-400">inkl. MwSt. gem. § 19 UStG</p>
+
+                                {/* Käuferschutz Info */}
+                                <div className="mt-4 p-3 bg-berlin-green/5 rounded-lg border border-berlin-green/20">
+                                    <div className="flex items-center gap-2 mb-1">
+                                        <Shield className="w-4 h-4 text-berlin-green" />
+                                        <span className="text-xs font-bold text-berlin-green">Käuferschutz inklusive</span>
+                                    </div>
+                                    <p className="text-[10px] text-gray-500">
+                                        Ihr Geld ist geschützt. Erhalten Sie den Artikel nicht, bekommen Sie Ihr Geld zurück.
+                                    </p>
                                 </div>
 
-                                <div className="border-t border-gray-100 pt-3 mt-3 flex justify-between font-bold text-lg text-gray-900">
-                                    <span>Toplam</span>
-                                    <span>€{total.toFixed(2)}</span>
-                                </div>
-
-                                <button
-                                    onClick={handlePayment}
-                                    disabled={isProcessing}
-                                    className="btn-primary w-full mt-6 py-3 text-lg relative"
-                                >
-                                    {isProcessing ? (
-                                        <span className="flex items-center justify-center gap-2">
-                                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                            Verarbeitung...
+                                {/* Climate Smart */}
+                                <div className="mt-3 p-3 bg-css-orange/5 rounded-lg border border-css-orange/20">
+                                    <div className="flex items-center gap-2">
+                                        <Leaf className="w-4 h-4 text-berlin-green" />
+                                        <span className="text-[10px] text-gray-500">
+                                            <strong className="text-berlin-green">Climate Smart:</strong> ~3,6 kg CO₂ gespart
                                         </span>
-                                    ) : (
-                                        "Zahlungspflichtig bestellen"
-                                    )}
-                                </button>
-
-                                <p className="text-xs text-center text-gray-400 mt-4">
-                                    "Ödemeyi Tamamla" butonuna basarak <a href="#" className="underline">Kullanıcı Sözleşmesi</a>'ni kabul etmiş olursunuz.
-                                </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

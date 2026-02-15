@@ -5,14 +5,24 @@ import { Heart } from "lucide-react";
 import { redirect } from "next/navigation";
 
 export default async function FavoritesPage() {
-    const { userId } = await auth();
+    const { userId: clerkId } = await auth();
 
-    if (!userId) {
+    if (!clerkId) {
+        redirect("/sign-in");
+    }
+
+    // Look up internal DB user by Clerk ID
+    const dbUser = await prisma.user.findUnique({
+        where: { clerkId },
+        select: { id: true },
+    });
+
+    if (!dbUser) {
         redirect("/sign-in");
     }
 
     const favorites = await prisma.favorite.findMany({
-        where: { userId },
+        where: { userId: dbUser.id },
         include: {
             product: {
                 select: {
@@ -57,8 +67,8 @@ export default async function FavoritesPage() {
             <div className="container px-4 md:px-6">
                 <div className="flex items-center justify-between mb-8">
                     <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-                        <Heart className="w-6 h-6 text-[#2E9E5C] fill-current" />
-                        Favorilerim
+                        <Heart className="w-6 h-6 text-css-orange fill-current" />
+                        Merkliste
                         <span className="text-gray-400 text-lg font-normal">({formattedProducts.length})</span>
                     </h1>
                 </div>

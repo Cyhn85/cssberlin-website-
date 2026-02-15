@@ -323,7 +323,7 @@ export function InboxClient({ initialChats, currentUserId }: InboxClientProps) {
                                         <button
                                             type="submit"
                                             disabled={!messageText.trim()}
-                                            className="p-2.5 bg-[var(--css-green)] text-white rounded-full hover:bg-[#153020] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
+                                            className="p-2.5 bg-[var(--css-green)] text-white rounded-full hover:bg-berlin-green/80 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
                                         >
                                             <Send className="w-5 h-5" />
                                         </button>

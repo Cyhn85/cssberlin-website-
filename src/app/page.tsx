@@ -1,61 +1,129 @@
 import { prisma } from "@/lib/prisma";
+import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, Filter, SlidersHorizontal, Leaf, Droplets, Factory, ChevronRight } from "lucide-react";
+import { ProductGrid } from "@/components/product-grid";
+
+const climateSlides = [
+    {
+        text: "Second-Hand spart bis zu 73% Wasser im Vergleich zu Neuproduktion",
+        source: "WRAP Research 2024",
+        href: "/nachhaltigkeit",
+        icon: "droplets",
+    },
+    {
+        text: "Fast Fashion verursacht 10% der globalen CO₂-Emissionen",
+        source: "UN Environment Programme",
+        href: "/nachhaltigkeit",
+        icon: "factory",
+    },
+    {
+        text: "Jetzt verkaufen — bis zu 90% des Erlöses gehen an dich!",
+        source: "CSS Berlin",
+        href: "/sell",
+        icon: "leaf",
+    },
+];
 
 export default async function HomePage() {
-  // Mevcut Prisma sorgunuz korunuyor
-  const products = await prisma.product.findMany({
-    where: { status: "AVAILABLE" },
-    orderBy: { createdAt: "desc" },
-    take: 8,
-    include: { images: { take: 1 } },
-  });
+    const { userId: clerkId } = await auth();
 
-  return (
-    <div className="w-full flex flex-col">
-      {/* Hero Section */}
-      <section className="bg-[#1a3b28] text-white py-16 md:py-24">
-        <div className="page-container text-center flex flex-col items-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 mb-6">
-            <Sparkles className="w-4 h-4 text-green-400" />
-            <span className="text-[10px] font-bold tracking-widest uppercase">Vintage Market 2026</span>
-          </div>
-          <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-6 leading-none">
-            BERLIN<br /><span className="text-green-400">VINTAGE</span>
-          </h1>
-          <p className="text-lg text-green-100/70 mb-10 max-w-xl mx-auto">
-            Nachhaltige Mode aus Berlin-Spandau. Entdecke einzigartige Schätze.
-          </p>
-          <div className="flex gap-4">
-            <Link href="/catalog" className="bg-white text-[#1a3b28] px-10 py-4 rounded-full font-black hover:scale-105 transition-all">
-              SHOPPEN
-            </Link>
-          </div>
-        </div>
-      </section>
+    const products = await prisma.product.findMany({
+        where: { status: "AVAILABLE" },
+        orderBy: { createdAt: "desc" },
+        take: 12,
+        include: { images: { take: 1 } },
+    });
 
-      {/* Product Grid */}
-      <section className="page-container py-20">
-        <h2 className="text-3xl font-black text-[#1a3b28] mb-12">Frisch Eingetroffen</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-          {products.map((product) => (
-            <Link href={`/items/${product.id}`} key={product.id} className="group">
-              <div className="aspect-[3/4] bg-gray-100 rounded-3xl overflow-hidden relative shadow-sm">
-                {product.images[0] && (
-                  <img src={product.images[0].url} alt={product.title} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" />
-                )}
-                <div className="absolute top-4 right-4 bg-white/95 backdrop-blur px-3 py-1 rounded-lg font-black text-sm shadow-sm text-[#1a3b28]">
-                  €{Number(product.price).toFixed(2)}
+    // Fetch user's favorited product IDs
+    let favoritedIds: string[] = [];
+    if (clerkId) {
+        const dbUser = await prisma.user.findUnique({
+            where: { clerkId },
+            select: { id: true },
+        });
+        if (dbUser) {
+            const favs = await prisma.favorite.findMany({
+                where: { userId: dbUser.id },
+                select: { productId: true },
+            });
+            favoritedIds = favs.map((f) => f.productId);
+        }
+    }
+
+    const serializedProducts = products.map((p) => ({
+        id: p.id,
+        title: p.title,
+        price: Number(p.price),
+        brand: p.brand,
+        size: p.size,
+        condition: p.condition,
+        image: p.images[0]?.url || null,
+        isFavorited: favoritedIds.includes(p.id),
+    }));
+
+    return (
+        <div className="w-full flex flex-col bg-white">
+
+            {/* BANNER SECTION: Climate Info */}
+            <section className="page-container pt-6 pb-4">
+                <div className="w-full">
+                    {/* Climate Info */}
+                    <div className="bg-gradient-to-br from-berlin-green/5 to-berlin-green/10 border border-berlin-green/20 rounded-xl p-5 overflow-hidden relative w-full">
+                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-berlin-green/60 mb-3">Climate Smart Solutions</p>
+                        <div className="space-y-3">
+                            {climateSlides.map((slide, i) => (
+                                <Link
+                                    key={i}
+                                    href={slide.href}
+                                    className="flex items-start gap-3 group"
+                                >
+                                    <div className="w-8 h-8 rounded-lg bg-berlin-green/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        {slide.icon === "droplets" && <Droplets className="w-4 h-4 text-berlin-green" />}
+                                        {slide.icon === "factory" && <Factory className="w-4 h-4 text-css-orange" />}
+                                        {slide.icon === "leaf" && <Leaf className="w-4 h-4 text-berlin-green" />}
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <p className="text-xs font-bold text-gray-800 leading-snug group-hover:text-berlin-green transition-colors">{slide.text}</p>
+                                        <p className="text-[9px] text-gray-400 mt-0.5">{slide.source}</p>
+                                    </div>
+                                    <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-berlin-green transition-colors flex-shrink-0 mt-1" />
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
                 </div>
-              </div>
-              <div className="mt-4 px-2">
-                <h3 className="font-bold text-gray-900 truncate">{product.title}</h3>
-                <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-widest font-bold">{product.brand || "Vintage"}</p>
-              </div>
-            </Link>
-          ))}
+            </section>
+
+            {/* Product Feed */}
+            <main className="page-container py-8 md:py-12">
+                <div className="flex items-center justify-between mb-8 border-b border-gray-100 pb-6">
+                    <h2 className="text-2xl md:text-4xl font-black text-berlin-green italic uppercase tracking-tighter">
+                        Frisch Eingetroffen
+                    </h2>
+                    <div className="flex gap-3">
+                        <Link href="/catalog" className="flex items-center gap-2 px-4 py-2 bg-css-orange text-berlin-green rounded-sm text-[10px] font-black uppercase tracking-widest hover:bg-berlin-green hover:text-white transition-colors duration-300">
+                            <Filter className="w-3 h-3" /> Filter
+                        </Link>
+                        <button type="button" className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-sm text-[10px] font-black uppercase tracking-widest hover:border-css-orange transition-colors">
+                            <SlidersHorizontal className="w-3 h-3" /> Sortieren
+                        </button>
+                    </div>
+                </div>
+
+                <ProductGrid products={serializedProducts} />
+
+                {/* View All Button */}
+                <div className="mt-16 flex justify-center">
+                    <Link
+                        href="/catalog"
+                        className="group flex items-center gap-4 bg-css-orange text-berlin-green px-10 py-4 rounded-lg font-black uppercase tracking-[0.2em] text-xs hover:bg-berlin-green hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                    >
+                        Alle Produkte Ansehen
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+                    </Link>
+                </div>
+            </main>
         </div>
-      </section>
-    </div>
-  );
+    );
 }

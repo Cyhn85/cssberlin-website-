@@ -1,28 +1,107 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-:root {
-  --background: #fdfbf7;
-  --foreground: #1a1a1a;
-  --header-bg: #000000;
-  /* Tam siyah header için */
+@theme {
+  --color-berlin-green: #0f7b3f;
+  --color-css-orange: #e05e00;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-montserrat), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
-body {
-  background-color: var(--background);
-  color: var(--foreground);
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  /* Sağa kaymayı kesin olarak engeller */
+@layer base {
+  :root {
+    --background: #fdfbf7;
+    --foreground: #1a1a1a;
+    --css-orange: #e05e00;
+    --css-green: #0f7b3f;
+    --css-cream: #fdfbf7;
+  }
+
+  body {
+    @apply bg-[var(--background)] text-[var(--foreground)] antialiased;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
 }
 
-/* Sayfayı her ekranda tam ortalayan ana kapsayıcı */
-.page-container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto !important;
-  /* Ortalamayı zorlar */
-  padding: 0 1.5rem;
+@layer utilities {
+  .page-container {
+    @apply w-full max-w-[1240px] mx-auto px-6 md:px-8;
+  }
+
+  .btn-primary {
+    @apply bg-css-orange text-berlin-green font-black px-6 py-3 rounded-lg uppercase tracking-widest text-xs hover:bg-berlin-green hover:text-white transition-colors duration-300;
+  }
+
+  .btn-secondary {
+    @apply border border-gray-200 text-gray-700 font-bold px-6 py-3 rounded-lg text-xs hover:bg-gray-50 transition-colors;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-berlin-green focus:border-transparent;
+  }
+
+  .card {
+    @apply bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow;
+  }
+
+  .text-shadow-sm {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+
+    100% {
+      transform: translateX(-25%);
+    }
+  }
+
+  .animate-marquee {
+    animation: marquee 30s linear infinite;
+  }
+
+  .pause-animation:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes header-shimmer {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  .animate-header-bg {
+    background: linear-gradient(
+      135deg,
+      #0f7b3f 0%,
+      #1a9e4a 25%,
+      #0f7b3f 50%,
+      #0a6632 75%,
+      #0f7b3f 100%
+    );
+    background-size: 400% 400%;
+    animation: header-shimmer 12s ease infinite;
+  }
+
+  .animate-footer-bg {
+    background: linear-gradient(
+      135deg,
+      #0a6632 0%,
+      #0f7b3f 25%,
+      #0a6632 50%,
+      #085528 75%,
+      #0a6632 100%
+    );
+    background-size: 400% 400%;
+    animation: header-shimmer 12s ease infinite;
+  }
 }
