@@ -9,6 +9,7 @@ from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import datetime, timedelta
 import jwt
+import secrets
 from passlib.context import CryptContext
 import os
 from dotenv import load_dotenv
@@ -217,6 +218,92 @@ async def get_me_with_token(token: str, db: AsyncSession = Depends(get_db)):
         "email": user.email,
         "first_name": user.first_name,
         "last_name": user.last_name,
+    }
+
+
+# ─── Magic Link ─────────────────────────────────────────────
+# Geçici bellek içi token deposu (production'da Redis/DB kullanılmalı)
+_magic_tokens: dict = {}
+MAGIC_LINK_EXPIRE_MINUTES = 15
+FRONTEND_URL = os.getenv("FRONTEND_URL", "https://cssberlin.de")
+
+
+class MagicLinkRequest(BaseModel):
+    email: EmailStr
+
+
+class MagicLinkVerify(BaseModel):
+    token: str
+
+
+@router.post("/magic-link")
+async def request_magic_link(data: MagicLinkRequest, db: AsyncSession = Depends(get_db)):
+    """Magic Link email gönder."""
+    from email_service import send_magic_link_email
+
+    # Kullanıcıyı bul veya oluştur
+    result = await db.execute(select(User).where(User.email == data.email))
+    user = result.scalar_one_or_none()
+
+    if not user:
+        # Yeni kullanıcı oluştur (magic link ile otomatik kayıt)
+        user = User(
+            email=data.email,
+            hashed_password=get_password_hash(secrets.token_urlsafe(32)),
+            first_name=data.email.split("@")[0],
+            last_name="",
+            is_active=True,
+            is_verified=True,
+        )
+        db.add(user)
+        await db.commit()
+        await db.refresh(user)
+
+    # Token oluştur
+    token = secrets.token_urlsafe(32)
+    expire = datetime.utcnow() + timedelta(minutes=MAGIC_LINK_EXPIRE_MINUTES)
+    _magic_tokens[token] = {"email": data.email, "expire": expire}
+
+    # Magic link oluştur
+    magic_link = f"{FRONTEND_URL}/magic-login.html?token={token}"
+
+    # Email gönder
+    user_name = user.first_name if user.first_name else None
+    send_magic_link_email(to_email=data.email, magic_link=magic_link, user_name=user_name)
+
+    return {"success": True, "message": "Magic link gönderildi! Email kutunuzu kontrol edin."}
+
+
+@router.post("/magic-link/verify")
+async def verify_magic_link(data: MagicLinkVerify, db: AsyncSession = Depends(get_db)):
+    """Magic Link token doğrula ve JWT döndür."""
+    token_data = _magic_tokens.get(data.token)
+
+    if not token_data:
+        raise HTTPException(status_code=400, detail="Geçersiz magic link token.")
+
+    if datetime.utcnow() > token_data["expire"]:
+        del _magic_tokens[data.token]
+        raise HTTPException(status_code=400, detail="Magic link süresi doldu. Yeni link isteyin.")
+
+    email = token_data["email"]
+    del _magic_tokens[data.token]  # Tek kullanım
+
+    # Kullanıcıyı bul
+    result = await db.execute(select(User).where(User.email == email))
+    user = result.scalar_one_or_none()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı.")
+
+    # JWT token üret
+    access_token = create_access_token(data={"sub": user.email})
+
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "user_name": user.first_name,
+        "email": user.email,
     }
 
 
