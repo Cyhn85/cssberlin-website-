@@ -105,9 +105,31 @@
 
 ---
 
+## ✅ TAMAMLANAN İŞLEMLER (2026-02-28 — Devam)
+
+### 5. Email Template Güncelleme
+- ✅ Turuncu→Yeşil gradient (header, button, footer)
+- ✅ "Climate Smart Solutions" badge: koyu yeşil bg + turuncu border + açık yeşil yazı
+- ✅ Commit: 81c6056 | Push: pensive-bohr
+
+### 6. magic-login.html Backend Entegrasyonu
+- ✅ localStorage token kontrolü KALDIRILDI (güvenlik açığı)
+- ✅ Backend `/api/auth/magic-link/verify` endpoint'i kullanılıyor
+- ✅ JWT token localStorage'a kaydediliyor (cssberlin_jwt + auth_token)
+- ✅ Her iki versiyon güncellendi: root + frontend/
+- ✅ Commit: 4fe8636 | Hetzner'e kopyalandı
+
+### 7. Hetzner Disk Temizliği
+- ✅ /opt/fbref/ silindi (639MB)
+- ✅ /opt/fbref-predictions/ silindi (184MB)
+- ✅ /var/www/cssberlin_backup* silindi (132MB)
+- ✅ Disk: %78 → %75 (9GB boş)
+
+---
+
 ## 🔄 DEVAM EDEN İŞLEMLER
 
-### 5. SSL Sertifikası (Sonraki Adım)
+### 8. SSL Sertifikası (Sonraki Adım)
 ```bash
 apt install certbot python3-certbot-nginx -y
 certbot --nginx -d cssberlin.de -d www.cssberlin.de
@@ -115,14 +137,18 @@ certbot --nginx -d cssberlin.de -d www.cssberlin.de
 - [ ] Let's Encrypt SSL kurulumu
 - [ ] HTTPS yönlendirmesi
 
-### 6. Frontend Deploy
-- [ ] `/var/www/cssberlin/` güncellenmesi (script.js API URL)
-- [ ] Cloudflare Pages deploy (alternatif)
+### 9. Cloudflare Pages Temizliği
+- [ ] cssberlin-website2 sil
+- [ ] cssberlin1 sil
+- [ ] cssberlinfull sil
+- [ ] cssberlin-son sil
+- [ ] cssberlin Worker sil
 
-### 7. Test
-- [ ] Magic Link email testi (production)
-- [ ] https://cssberlin.de açılıyor mu?
+### 10. Test
+- ✅ Magic Link email testi (production) — BAŞARILI
+- ✅ https://cssberlin.de açılıyor (HTTP 200)
 - [ ] /api/products çalışıyor mu?
+- [ ] Tam akış: Magic Link → verify → login → index.html
 
 ---
 
@@ -206,18 +232,18 @@ docker run -d \
 
 | Metrik | Değer |
 |--------|-------|
-| Disk kullanımı | %78 (28GB/37GB) |
+| Disk kullanımı | %75 (27GB/38GB) |
 | RAM kullanımı | %28 |
 | CPU yükü | 0.0 |
 | Çalışan container | 1 (cssberlin-backend-v2) |
 
-### Disk Temizleme Planı (Beklemede)
+### Disk Temizleme Durumu
 | Klasör | Boyut | Durum |
 |--------|-------|-------|
-| /opt/fbref/ | 639M | ❌ Silinecek |
-| /opt/fbref-predictions/ | 185M | ❌ Silinecek |
+| /opt/fbref/ | 639M | ✅ Silindi |
+| /opt/fbref-predictions/ | 185M | ✅ Silindi |
 | /opt/google/ | 379M | ❓ İncelenecek |
-| /var/www/cssberlin_backup* | 116M | ❌ Silinecek |
+| /var/www/cssberlin_backup* | ~132M | ✅ Silindi |
 
 ---
 
@@ -244,6 +270,7 @@ docker run -d \
 
 ---
 
-**Son Güncelleme:** 2026-02-28
+**Son Güncelleme:** 2026-02-28 (14:00)
 **Aktif Branch:** pensive-bohr
 **Sunucu:** Hetzner (195.201.146.224)
+**Commit:** 4fe8636 (magic-login backend entegrasyon)
