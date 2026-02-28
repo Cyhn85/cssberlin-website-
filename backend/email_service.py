@@ -58,32 +58,58 @@ def send_magic_link_email(to_email: str, magic_link: str, user_name: str = None)
     html = f"""
 <!DOCTYPE html>
 <html>
-<body style="font-family:Arial,sans-serif;background:#f3f4f6;margin:0;padding:20px;">
-<div style="max-width:560px;margin:0 auto;background:#fff;border-radius:12px;overflow:hidden;">
-  <div style="background:linear-gradient(135deg,#1a1a2e,#16213e);padding:40px;text-align:center;">
-    <h1 style="color:#fff;margin:0;font-size:28px;">CSS Berlin</h1>
-    <p style="color:#a78bfa;margin:8px 0 0;">Climate Smart Solutions</p>
+<body style="font-family:Arial,sans-serif;background:#f0fdf4;margin:0;padding:20px;">
+<div style="max-width:560px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+
+  <!-- HEADER: Turuncu → Yeşil gradient -->
+  <div style="background:linear-gradient(135deg,#f97316,#22c55e);padding:40px;text-align:center;">
+    <h1 style="color:#fff;margin:0;font-size:32px;font-weight:900;letter-spacing:1px;text-shadow:0 2px 4px rgba(0,0,0,0.3);">CSS Berlin</h1>
+    <!-- CLIMATE SMART SOLUTIONS: koyu zemin, turuncu cerceve, yeşil arka plan -->
+    <div style="display:inline-block;background:#166534;border:2px solid #f97316;border-radius:8px;padding:6px 18px;margin-top:12px;">
+      <p style="color:#bbf7d0;margin:0;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">
+        Climate Smart Solutions
+      </p>
+    </div>
   </div>
+
+  <!-- İÇERİK -->
   <div style="padding:40px;">
-    <h2 style="color:#1f2937;">Merhaba {name},</h2>
-    <p style="color:#4b5563;">Hesabiniza giris yapmak icin asagidaki butona tiklayin.</p>
-    <div style="text-align:center;margin:32px 0;">
+    <h2 style="color:#14532d;margin-bottom:8px;">Merhaba {name},</h2>
+    <p style="color:#374151;font-size:15px;line-height:1.6;">
+      Hesabiniza guvenli giris yapmak icin asagidaki butona tiklayin.
+    </p>
+
+    <!-- BUTON -->
+    <div style="text-align:center;margin:36px 0;">
       <a href="{magic_link}"
-         style="background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;
-                padding:16px 40px;border-radius:8px;text-decoration:none;
-                font-size:16px;font-weight:bold;">
+         style="background:linear-gradient(135deg,#f97316,#22c55e);
+                color:#fff;padding:18px 48px;border-radius:10px;
+                text-decoration:none;font-size:17px;font-weight:800;
+                box-shadow:0 4px 12px rgba(249,115,22,0.4);
+                display:inline-block;letter-spacing:0.5px;">
         Giris Yap
       </a>
     </div>
-    <p style="color:#6b7280;font-size:14px;">Bu baglanti 15 dakika gecerlidir.</p>
-    <p style="color:#9ca3af;font-size:13px;">Bu emaili siz istemediyseniz dikkate almayin.</p>
+
+    <!-- BİLGİ KUTULARI -->
+    <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:16px;margin-top:8px;">
+      <p style="color:#166534;font-size:13px;margin:0;text-align:center;">
+        Bu baglanti <strong>15 dakika</strong> gecerlidir.
+      </p>
+    </div>
+    <p style="color:#9ca3af;font-size:12px;margin-top:16px;text-align:center;">
+      Bu emaili siz istemediyseniz dikkate almayin.
+    </p>
   </div>
-  <div style="background:#f9fafb;padding:24px;text-align:center;">
-    <p style="color:#6b7280;font-size:13px;margin:0;">CSS Berlin — Sicheres Anmelden</p>
-    <p style="color:#9ca3af;font-size:12px;margin:4px 0 0;">
+
+  <!-- FOOTER -->
+  <div style="background:linear-gradient(135deg,#f97316,#22c55e);padding:20px;text-align:center;">
+    <p style="color:#fff;font-size:13px;margin:0;font-weight:700;">CSS Berlin — Sicheres Anmelden</p>
+    <p style="color:rgba(255,255,255,0.85);font-size:11px;margin:4px 0 0;">
       &copy; 2026 CSS Berlin — Climate Smart Solutions
     </p>
   </div>
+
 </div>
 </body>
 </html>
