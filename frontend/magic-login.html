@@ -35,12 +35,12 @@
         }
 
         .magic-login-icon.loading {
-            background: linear-gradient(135deg, #E8854C 0%, #FF9F5A 100%);
+            background: linear-gradient(135deg, #f97316 0%, #22c55e 100%);
             animation: pulse 1.5s ease-in-out infinite;
         }
 
         .magic-login-icon.success {
-            background: linear-gradient(135deg, #2D5016 0%, #4a7c24 100%);
+            background: linear-gradient(135deg, #f97316 0%, #22c55e 100%);
         }
 
         .magic-login-icon.error {
@@ -202,19 +202,18 @@
     </div>
 
     <!-- Footer -->
-    <footer class="footer" style="background: linear-gradient(135deg, #FF8C42 0%, #2D5016 100%); padding: 24px 0;">
-        <div style="max-width: 1400px; margin: 0 auto; padding: 0 32px; text-align: center; color: rgba(255,255,255,0.8); font-size: 12px;">
-            &copy; 2025 CSS Berlin GmbH - Climate Smart Solutions
+    <footer class="footer" style="background: linear-gradient(135deg, #f97316 0%, #22c55e 100%); padding: 24px 0;">
+        <div style="max-width: 1400px; margin: 0 auto; padding: 0 32px; text-align: center; color: rgba(255,255,255,0.9); font-size: 12px;">
+            &copy; 2026 CSS Berlin — Climate Smart Solutions
         </div>
     </footer>
 
-    <!-- Scripts -->
-    <script src="api-config.js"></script>
-    <script src="api-client.js"></script>
-    <script src="email-service.js"></script>
-    <script src="auth-gate.js"></script>
-
     <script>
+        // Backend API URL
+        const API_BASE = window.location.origin.includes('localhost')
+            ? 'http://localhost:8001'
+            : 'https://cssberlin.de';
+
         // Process magic link on page load
         document.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -225,75 +224,49 @@
                 return;
             }
 
-            // Validate token
             setTimeout(() => {
                 validateMagicLink(token);
-            }, 1500); // Show loading for 1.5 seconds
+            }, 1200);
         });
 
-        function validateMagicLink(token) {
-            // Get stored magic tokens
-            const magicTokens = JSON.parse(localStorage.getItem('cssberlin_magic_tokens') || '[]');
-            const tokenIndex = magicTokens.findIndex(t => t.token === token);
+        async function validateMagicLink(token) {
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/magic-link/verify`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: token })
+                });
 
-            if (tokenIndex === -1) {
-                showError('Dieser Anmelde-Link ist ungültig.');
-                return;
+                const data = await response.json();
+
+                if (!response.ok) {
+                    const msg = data.detail || 'Dieser Anmelde-Link ist ungültig oder abgelaufen.';
+                    showError(msg);
+                    return;
+                }
+
+                // Basarili — JWT ve kullanici bilgilerini kaydet
+                if (data.access_token) {
+                    localStorage.setItem('cssberlin_jwt', data.access_token);
+                    localStorage.setItem('auth_token', data.access_token);
+
+                    const sessionUser = {
+                        firstName: data.user_name || (data.email ? data.email.split('@')[0] : 'Nutzer'),
+                        lastName: '',
+                        email: data.email || '',
+                        loginMethod: 'magic_link',
+                        loggedInAt: new Date().toISOString()
+                    };
+                    localStorage.setItem('cssberlin_current_user', JSON.stringify(sessionUser));
+                    localStorage.setItem('cssberlin_user_name', sessionUser.firstName);
+                }
+
+                showSuccess();
+
+            } catch (error) {
+                console.error('Magic link error:', error);
+                showError('Verbindungsfehler. Bitte versuchen Sie es erneut.');
             }
-
-            const tokenData = magicTokens[tokenIndex];
-
-            // Check if already used
-            if (tokenData.used) {
-                showError('Dieser Anmelde-Link wurde bereits verwendet.');
-                return;
-            }
-
-            // Check if expired
-            if (Date.now() > tokenData.expiresAt) {
-                showError('Dieser Anmelde-Link ist abgelaufen. Bitte fordern Sie einen neuen an.');
-                return;
-            }
-
-            // Mark token as used
-            magicTokens[tokenIndex].used = true;
-            localStorage.setItem('cssberlin_magic_tokens', JSON.stringify(magicTokens));
-
-            // Find or create user
-            const users = JSON.parse(localStorage.getItem('cssberlin_users') || '[]');
-            let user = users.find(u => u.email === tokenData.email);
-
-            if (!user) {
-                // Create new user with magic link
-                user = {
-                    id: 'user_' + Date.now(),
-                    firstName: tokenData.email.split('@')[0],
-                    lastName: '',
-                    email: tokenData.email,
-                    createdAt: new Date().toISOString(),
-                    wishlist: [],
-                    negotiations: [],
-                    loginMethod: 'magic_link'
-                };
-                users.push(user);
-                localStorage.setItem('cssberlin_users', JSON.stringify(users));
-            }
-
-            // Login user
-            const sessionUser = {
-                id: user.id,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                picture: user.picture || null,
-                loginMethod: 'magic_link'
-            };
-
-            localStorage.setItem('cssberlin_current_user', JSON.stringify(sessionUser));
-            localStorage.setItem('auth_token', 'magic_' + Date.now());
-
-            // Show success
-            showSuccess();
         }
 
         function showSuccess() {
